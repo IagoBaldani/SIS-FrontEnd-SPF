@@ -137,6 +137,7 @@ body {
 .dataConclusão {
   width: 28%;
   padding: 0rem 1rem;
+  background-color: #FFF;
   border: 1px solid #CCC;
   border-radius: 5px;
   box-shadow: 4px 4px 4px #ccc;
