@@ -66,8 +66,8 @@
         </div>
 
         <div class="card-central-inferior" id="dataSelecionada">
-          <div class="card">
-            <div class="card-body" style="height: 100%; width: 100%">
+          <div class="card" style="height: 100%; width: 100%">
+            <div class="card-body">
               <h3 id="txt-saida-card-central" class="card-title">R$ 5000</h3>
               <h6>Investimento total em instrutores no periodo</h6>
             </div>
@@ -75,10 +75,10 @@
         </div>
 
         <div class="card-right-inferior" id="dataSelecionada">
-          <div class="card" style="height: auto; width: 100%">
+          <div class="card" style="height: 100%; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-right" class="card-title">R$ 5000</h3>
-              <h6 id="txt-cards-valor-total">Investimento total do periodo</h6>
+              <h3 style="color: #090b2e" class="card-title">R$ 5000</h3>
+              <h6>Investimento total em instrutores no periodo</h6>
             </div>
           </div>
         </div>
@@ -208,7 +208,6 @@ body {
 .card-left-inferior,
 .card-central-inferior,
 .card-right-inferior {
-  border: 1px solid #bcb3b3;
   min-height: 275px !important;
   box-shadow: 4px 4px 4px #ccc;
   border-radius: 5px;
@@ -230,10 +229,6 @@ h3 {
 
 #txt-saida-card-central {
   color: #ffb600;
-}
-
-#txt-saida-card-right {
-  color: #090b2e;
 }
 
 h6 {
@@ -700,10 +695,6 @@ h6 {
     display: inline-block;
     width: 30.5%;
     margin-left: 2%;
-  }
-
-  .card-left-superior {
-    height: 100%;
   }
 
   .selecioneData {
