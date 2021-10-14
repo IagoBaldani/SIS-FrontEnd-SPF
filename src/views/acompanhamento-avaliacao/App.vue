@@ -48,9 +48,8 @@
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
 
-
                     <table class="table table-bordered tabela">
-                        
+
                         <tbody>
                             <tr v-for="avaliacao in avaliacoes" v-bind:key="avaliacao">
                                 <th scope="row" class="w-50px titulo">{{avaliacao.id}}</th>
@@ -60,7 +59,6 @@
                                 </td>
                             </tr>
 
-                            
                         </tbody>
                     </table>
                 </div>
@@ -148,7 +146,7 @@
                 </div>
                 <div class="row mt-5">
                     <div class="col-lg-6">
-                        <button type="submit" 
+                        <button type="submit"
                             class="btn btn-danger sis-red-btn mt-3 fw-bold fs-5 w-100">CONFIRMAR</button>
                     </div>
                     <div class="col-lg-6">
@@ -164,46 +162,46 @@
 import Header from '@/components/Header.vue'
 
 export default {
-    name: 'App',
-    components: {
-        Header
-    },
-    data() {
-        return {
-            avaliacoes: [
-                {
-                    id: 1,
-                    tecnica: 10,
-                    comportamental: 9,
-                    moduloAgeis: 8.5,
-                    lideranca: 9.5,
-                    negocios:10
-                },
-                {
-                    id: 2,
-                    tecnica: 9,
-                    comportamental: 3,
-                    moduloAgeis: 2,
-                    lideranca: 7,
-                    negocios: 6
-                },
-                {
-                    id: 3,
-                    tecnica: 2.5,
-                    comportamental: 10,
-                    moduloAgeis: 7,
-                    lideranca: 7,
-                    negocios: 7
-                },
-            ],
-            avaliacaoModal: ''
+  name: 'App',
+  components: {
+    Header
+  },
+  data () {
+    return {
+      avaliacoes: [
+        {
+          id: 1,
+          tecnica: 10,
+          comportamental: 9,
+          moduloAgeis: 8.5,
+          lideranca: 9.5,
+          negocios: 10
+        },
+        {
+          id: 2,
+          tecnica: 9,
+          comportamental: 3,
+          moduloAgeis: 2,
+          lideranca: 7,
+          negocios: 6
+        },
+        {
+          id: 3,
+          tecnica: 2.5,
+          comportamental: 10,
+          moduloAgeis: 7,
+          lideranca: 7,
+          negocios: 7
         }
-    },
-    methods: {
-        carregaModal(avaliacao) {
-            this.avaliacaoModal = avaliacao;
-        }
+      ],
+      avaliacaoModal: ''
     }
+  },
+  methods: {
+    carregaModal (avaliacao) {
+      this.avaliacaoModal = avaliacao
+    }
+  }
 }
 </script>
 
@@ -322,13 +320,13 @@ export default {
 }
 
 .upload-img {
-    vertical-align: top; padding-top: 3px; margin-right: 1em; 
+    vertical-align: top; padding-top: 3px; margin-right: 1em;
     width: 13px
 }
 
 .ellipsis-overflow {
-    white-space: nowrap; 
-    overflow: hidden; 
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 

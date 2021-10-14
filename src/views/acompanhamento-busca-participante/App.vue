@@ -24,7 +24,7 @@
                     <div class="aviso">
                         <h4 class="titulo fw-bold"> Não foi encontrado nenhum resultado com os parâmetros informados </h4>
                         <button @click="recarregaLista()" class="mt-3 form-control recarregar">RECARREGAR LISTA</button>
-                    </div> 
+                    </div>
                     <div class="scroll-tabela">
                         <table class="table table-bordered tabela">
                             <tbody>
@@ -55,169 +55,166 @@
 import Header from '@/components/Header.vue'
 
 export default {
-    name: 'App',
-    components: {
-        Header
-    },
-    data() {
-        return {
-            participantes:[
-                {
-                    id: 1,
-                    nome : 'Felipe',
-                    programa : 'Java'
-                },
+  name: 'App',
+  components: {
+    Header
+  },
+  data () {
+    return {
+      participantes: [
+        {
+          id: 1,
+          nome: 'Felipe',
+          programa: 'Java'
+        },
 
-                {
-                    id: 2,
-                    nome : 'Iago',
-                    programa : 'Mainframe'
-                },
+        {
+          id: 2,
+          nome: 'Iago',
+          programa: 'Mainframe'
+        },
 
-                {
-                    id: 3,
-                    nome : 'Rubens',
-                    programa : 'Java'
-                },
+        {
+          id: 3,
+          nome: 'Rubens',
+          programa: 'Java'
+        },
 
-                {
-                    id: 4,
-                    nome : 'Lucas',
-                    programa : 'Java'
-                },
+        {
+          id: 4,
+          nome: 'Lucas',
+          programa: 'Java'
+        },
 
-                {
-                    id: 5,
-                    nome : 'Melo',
-                    programa : 'Mainframe'
-                },
+        {
+          id: 5,
+          nome: 'Melo',
+          programa: 'Mainframe'
+        },
 
-                {
-                    id: 6,
-                    nome : 'Gabriel',
-                    programa : 'Java'
-                }
-            ],
-            programas:[
-                {
-                    id: 1,
-                    nome : 'Java'
-                },
-
-                {
-                    id: 2,
-                    nome : 'Mainframe'
-                },
-
-                {
-                    id: 3,
-                    nome : '.Net'
-                },
-            ]
+        {
+          id: 6,
+          nome: 'Gabriel',
+          programa: 'Java'
         }
-    },
-
-    methods: {
-        trataPrograma(linha){
-            var programaTxt = linha.querySelector("#info-programa").textContent;
-            let programa = 0;
-
-            if(programaTxt == "Java"){
-                return programa = 1;
-            }
-            else if(programaTxt == "Mainframe"){
-                return programa = 2;
-            }
-
-            else if(programaTxt == ".Net"){
-                return programa = 3;
-            }
-        
-            return programa = 0;
+      ],
+      programas: [
+        {
+          id: 1,
+          nome: 'Java'
         },
-        pegaDados(){
-            let linhas = document.querySelectorAll("#participante");
-            let arrayDadosDasLinhas = [];
 
-            linhas.forEach( linha => {
-                let dadosLinha = [];
-                let nome = linha.querySelector("#info-nome").textContent;
-                
-                let programa = this.trataPrograma(linha);
-
-                dadosLinha.push(nome, programa);
-                arrayDadosDasLinhas.push(dadosLinha);
-            });
-
-            console.log(arrayDadosDasLinhas);
-            return arrayDadosDasLinhas;
+        {
+          id: 2,
+          nome: 'Mainframe'
         },
-        verifica(dadosLinhas, programaProcurado){
-            let arrayBoolLinhas = []; 
 
-            dadosLinhas.forEach(dadosLinha => {
-                let boolLinha = [];
-                
-                // Verificando se o programa procurado consta na tabela
-                if(programaProcurado == dadosLinha[1] || programaProcurado == 0){
-                    boolLinha.push(true);
-                }
-                else{
-                    boolLinha.push(false);
-                }
-
-                arrayBoolLinhas.push(boolLinha);
-            });
-
-            console.log(arrayBoolLinhas);
-            return arrayBoolLinhas;
-        },
-        mudaVisibilidade(arrayBoolLinhas, linhas){
-            let i; 
-            var contador = 0;
-            let aviso = document.querySelector(".aviso");
-            var qtdLinhas = linhas.length;
-
-            for(i = 0; i < linhas.length; i++){
-                if(arrayBoolLinhas[i][0]){
-                    linhas[i].style.display = "";
-                }
-                else{
-                    linhas[i].style.display = "none";
-                    contador++;
-                }
-            }
-
-            if(qtdLinhas == contador){
-                aviso.style.display = "flex";
-            }
-            else{
-                aviso.style.display = "none";
-            }
-        },
-        filtraDados(){
-            const dadosLinhas = this.pegaDados();
-
-            let programaProcurado = document.querySelector("#filtro-programa").value;
-            let linhasNl = document.querySelectorAll("#participante");
-    
-            var linhasArray = Array.prototype.slice.call(linhasNl);
-
-            let arrayBoolLinhas = this.verifica(dadosLinhas, programaProcurado);
-    
-            this.mudaVisibilidade(arrayBoolLinhas, linhasArray);
-        },
-        recarregaLista(){
-            let linhas = document.querySelectorAll("#participante");
-            let aviso = document.querySelector(".aviso");
-
-            linhas.forEach(linha =>{
-                linha.style.display = "";
-            });
-
-            aviso.style.display = "none";
+        {
+          id: 3,
+          nome: '.Net'
         }
+      ]
     }
+  },
+
+  methods: {
+    trataPrograma (linha) {
+      var programaTxt = linha.querySelector('#info-programa').textContent
+      let programa = 0
+
+      if (programaTxt == 'Java') {
+        programa = 1
+        return programa
+      } else if (programaTxt == 'Mainframe') {
+        programa = 2
+        return programa
+      } else if (programaTxt == '.Net') {
+        programa = 3
+        return programa
+      }
+
+      return programa
+    },
+    pegaDados () {
+      let linhas = document.querySelectorAll('#participante')
+      let arrayDadosDasLinhas = []
+
+      linhas.forEach(linha => {
+        let dadosLinha = []
+        let nome = linha.querySelector('#info-nome').textContent
+
+        let programa = this.trataPrograma(linha)
+
+        dadosLinha.push(nome, programa)
+        arrayDadosDasLinhas.push(dadosLinha)
+      })
+
+      console.log(arrayDadosDasLinhas)
+      return arrayDadosDasLinhas
+    },
+    verifica (dadosLinhas, programaProcurado) {
+      let arrayBoolLinhas = []
+
+      dadosLinhas.forEach(dadosLinha => {
+        let boolLinha = []
+
+        // Verificando se o programa procurado consta na tabela
+        if (programaProcurado == dadosLinha[1] || programaProcurado == 0) {
+          boolLinha.push(true)
+        } else {
+          boolLinha.push(false)
+        }
+
+        arrayBoolLinhas.push(boolLinha)
+      })
+
+      console.log(arrayBoolLinhas)
+      return arrayBoolLinhas
+    },
+    mudaVisibilidade (arrayBoolLinhas, linhas) {
+      let i
+      var contador = 0
+      let aviso = document.querySelector('.aviso')
+      var qtdLinhas = linhas.length
+
+      for (i = 0; i < linhas.length; i++) {
+        if (arrayBoolLinhas[i][0]) {
+          linhas[i].style.display = ''
+        } else {
+          linhas[i].style.display = 'none'
+          contador++
+        }
+      }
+
+      if (qtdLinhas == contador) {
+        aviso.style.display = 'flex'
+      } else {
+        aviso.style.display = 'none'
+      }
+    },
+    filtraDados () {
+      const dadosLinhas = this.pegaDados()
+
+      let programaProcurado = document.querySelector('#filtro-programa').value
+      let linhasNl = document.querySelectorAll('#participante')
+
+      var linhasArray = Array.prototype.slice.call(linhasNl)
+
+      let arrayBoolLinhas = this.verifica(dadosLinhas, programaProcurado)
+
+      this.mudaVisibilidade(arrayBoolLinhas, linhasArray)
+    },
+    recarregaLista () {
+      let linhas = document.querySelectorAll('#participante')
+      let aviso = document.querySelector('.aviso')
+
+      linhas.forEach(linha => {
+        linha.style.display = ''
+      })
+
+      aviso.style.display = 'none'
+    }
+  }
 }
 </script>
 
@@ -259,7 +256,6 @@ h2 {
 
 }
 
-
 /*Tabela de acompanhmento*/
 .tabela{
     border: 1px solid #c2bcbc !important;
@@ -293,7 +289,6 @@ td {
     max-height:340px;
 }
 
-
 /*Botão de buscar*/
 .botao {
     font-weight: bold !important;
@@ -321,7 +316,7 @@ td {
 }
 
 .recarregar:hover{
-    background-color: #141863 !important; 
+    background-color: #141863 !important;
 }
 
 .aviso{
