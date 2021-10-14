@@ -1,0 +1,370 @@
+<template>
+    <Header/>
+    <main>
+        <div class="container-fluid">
+            <div class="row justify-content-evenly mt-5 mb-3">
+                <div class="titulo col-lg-4">
+                    <h3 class="fw-bold">Registrar Feedback:</h3>
+                </div>
+                <div class="col-lg-7 d-flex justify-content-center align-items-center">
+                    <div class="d-block justify-content-center">
+                        <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
+                        <h4 class="fw-bold text-center nomeCol">Nome do Colaborador</h4>
+                    </div>
+                    <img src="../../assets/imgs/perfil.svg" class="perfil-img" />
+                </div>
+
+            </div>
+            <div class="row justify-content-evenly">
+
+                <div class="col-lg-4">
+                    <form>
+                        <div class="mb-3">
+                            <p for="anotacao" class="form-label fw-bold mb-0 titulo">Data do Feedback</p>
+                            <input type="date" class="form-control" id="anotacao"
+                                placeholder="Digite a data do feedback">
+                        </div>
+                        <div class="mb-3">
+                            <label for="anotacoes" class="form-label mb-0 fw-bold titulo">Anotações</label>
+                            <textarea rows="8" class="form-control mb-3" id="anotacoes"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <!--<input class="input-file" type="file">-->
+                            <input type="file" class="form-control" id="inputGroupFile02">
+                        </div>
+                        <button class="btn-registrar mt-4 " type="submit" method="POST">REGISTRAR</button>
+                    </form>
+                </div>
+                <div class="col-lg-7">
+                    <div class="master-table">
+
+                        <table class="table table-bordered tabela">
+
+                            <tbody>
+                                <tr v-for="feedback in feedbacks" :key="feedback">
+                                    <td scope="row">{{feedback.id}}</td>
+                                    <td>{{feedback.anotacoes}}</td>
+                                    <td @click="carregaModal(feedback)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
+                                        <img class="imgicon" name="imglogo" src="../../assets/imgs/visibility_white_24dp.svg"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Primeiro Modal -->
+
+        <div class="modal fade " id="anotmodal">
+
+            <div class="modal-dialog" role="document">
+
+                <div class="modal-content p-5">
+                    <div class="row mb-5">
+                        <div class="col">
+                            <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Feedback {{feedbackModal.id}}:</h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h4 class="fw-bold titulo">Data do Feedback:</h4>
+                            <p class="nomeCol">{{feedbackModal.data}}</p>
+                            <h4 class="fw-bold titulo">Anotações do feedback</h4>
+                            <textarea v-model="feedbackModal.anotacoes" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <button class="btn-registrar mt-5" data-bs-toggle="modal"
+                                data-bs-target="#exmodal">DELETAR FEEDBACK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Segundo Modal -->
+
+        <div class="modal fade " id="exmodal">
+
+            <div class="modal-dialog" role="document">
+
+                <div class="modal-content p-5">
+                    <div class="row mb-5">
+                        <div class="col">
+                            <h2 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Deseja deletar registro do feedback?</h2>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h4 class="fw-bold titulo">Data do Feedback:</h4>
+                            <p class="nomeCol">{{feedbackModal.data}}</p>
+                            <h4 class="fw-bold titulo">Anotações do feedback</h4>
+                            <textarea v-model="feedbackModal.anotacoes" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
+                        </div>
+                    </div>
+                     <div class="row">
+                        <div class="col-lg-6">
+                            <div>
+                                 <button type="submit" class="btn btn-primary mt-2 fw-bold botao" data-bs-toggle="modal"
+                                data-bs-target="#exmodal">CONFIRMAR</button>
+                             </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div>
+                                <button type="submit" class="btn btn-primary mt-2 fw-bold botaocanc" data-bs-toggle="modal"
+                                data-bs-target="#exmodal">CANCELAR</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</template>
+
+<script>
+import Header from '@/components/Header.vue'
+
+export default {
+  name: 'App',
+  components: {
+    Header
+  },
+  data () {
+    return {
+      feedbacks: [
+        {
+          id: 1,
+          data: '12/08/2021',
+          anotacoes: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
+        },
+        {
+          id: 2,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        },
+        {
+          id: 3,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        },
+        {
+          id: 4,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        },
+        {
+          id: 5,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        },
+        {
+          id: 6,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        },
+        {
+          id: 7,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        },
+        {
+          id: 8,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        },
+        {
+          id: 9,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        },
+        {
+          id: 10,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        },
+        {
+          id: 11,
+          data: '12/08/2021',
+          anotacoes: 'Teste de anotacao para feedback'
+        }
+      ],
+      feedbackModal: ''
+    }
+  },
+  methods: {
+    carregaModal (feedback) {
+      this.feedbackModal = feedback
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+body{
+    background-color: #EBEBEB !important;
+}
+.h4{
+    color:  #737373;
+}
+
+.container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding: 1.5em;
+}
+/*inputs*/
+.input-file{
+    width:100%;
+    background-color: white;
+}
+
+textarea fieldset {
+    width:100%;
+
+}
+
+/*Style table*/
+
+.master-table {
+    overflow-y: scroll;
+    width: 100%;
+    height:68.5%;
+}
+.tabela {
+    border: 1px solid #BCB3B3 !important;
+    text-align: center;
+    color: #737373;
+    font-family: 'Montserrat', sans-serif;
+    background-color: white;
+    font-weight: normal;
+}
+table tbody td:first-child {
+    width: 5%;
+    font-weight:bolder ;
+}
+
+table tbody td:nth-child(2){
+    max-width: 200px;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+
+#tdcomlink {
+    background-color: #FFB700;
+    width:5%;
+}
+
+#tdcomlink:hover{
+    cursor: pointer;
+}
+
+/*Style Modal*/
+
+div.modal-dialog {
+    max-width:960px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+div.modal-content {
+    background-color: #EBEBEB;
+}
+div.modal-content.row {
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+div#esp {
+    margin-top: 271px;
+    margin-left: 147px;
+}
+textarea  {
+    width:100%;
+
+}
+#msgdel {
+    text-align: center;
+    font-size: 40px;
+    font-weight: bolder;
+}
+/*Buttons*/
+.btn-registrar{
+    margin-bottom: 0;
+    width:100%;
+    padding: 5px 5px;
+    background-color: #AB0045;
+    color: white;
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+    border-style: none;
+    font-size: 20px;
+
+}
+
+.btn-registrar:hover{
+    background-color: #9a0045;
+    transition: 300ms;
+}
+
+.btn-registrar.btn-cancelar{
+    background-color:#FFB600!important;
+    align-items: flex-end;
+}
+
+.btn-cancelar:hover{
+    background-color: #dd9700 !important;
+    transition: 300ms!important;
+}
+.disc{
+    width:100%;
+}
+.imgicon{
+    /* height:80%;
+    width:80%; */
+    background-color: #FFB700;
+}
+
+.divimg{
+    background-color: darkblue;
+}
+
+#btn-anot-modal{
+    width: 100%;
+}
+
+.titulo{
+    color: #090B2E;
+}
+
+.nomeCol{
+    color: #737373;
+}
+
+.textarea{
+    resize: none;
+    border: none !important;
+    border-style: none !important;
+    background-color: #EBEBEB;
+}
+
+.botao{
+    background-color: #AB0045 !important;
+    border-style: none !important;
+    width: 25.9em !important;
+    border-radius: 2px !important;
+}
+
+.botaocanc{
+    background-color: #FFB700 !important;
+    border-style: none !important;
+    width: 25.9em !important;
+    border-radius: 2px !important;
+}
+</style>
