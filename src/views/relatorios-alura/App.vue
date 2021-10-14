@@ -417,6 +417,11 @@ export default {
     }
 
     /* Botões gerar pdf e xlsx */
+    .btn-danger {
+      background-color: #AB0045;
+      border-color: none;
+    }
+
     #btn-pdf{
         position: absolute;
         margin-right: 15px;
