@@ -44,12 +44,12 @@
                                     {{ programa.status }}
                                 </td>
                                 <td class="imagem rounded" width="50">
-                                    <a href="/dados-programa-cadastro_edicao">
+                                    <a :href="'/dados-programa-cadastro_edicao?id=' + programa.id + '&tipo=edicao'">
                                         <img src="@/assets/imgs/settings_white_24dp.svg"/>
                                     </a>
                                 </td>
                                 <td class="imagem-coluna rounded" width="50">
-                                    <a href="/dados-programa-visualizacao">
+                                    <a :href="'/dados-programa-visualizacao?id=' + programa.id">
                                         <img src="@/assets/imgs/school_white_24dp.svg">
                                     </a>
                                 </td>
@@ -64,8 +64,9 @@
                     <input value="BUSCAR" type="button" class="mt-5 form-control submit" @click="filtraDados"/>
                 </div>
                 <div class="col-xl-7 justify-content-end d-flex">
-                    <a href="/dados-programa-cadastro_edicao"
-                       class="mt-5 form-control cadastro d-flex justify-content-center"> NOVO CADASTRO </a>
+                    <a href="/dados-programa-cadastro_edicao?tipo=cadastro"
+                       class="mt-5 form-control cadastro d-flex justify-content-center"> NOVO CADASTRO
+                    </a>
                 </div>
             </div>
         </div>

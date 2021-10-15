@@ -15,7 +15,7 @@
               </div>
             </div>
           </a>
-          <a href="">
+          <a href="/acompanhamento-busca-participante">
             <div class="btn-container">
               <div class="icon-btn-container acompanhamento">
                 <img src="@/assets/imgs/preview_white_24dp.svg" />
@@ -23,7 +23,7 @@
               <div class="txt-btn-container acompanhamento">Acompanhamento</div>
             </div>
           </a>
-          <a href="">
+          <a href="/relatorios-gerencial">
             <div class="btn-container">
               <div class="icon-btn-container relatorios">
                 <img src="@/assets/imgs/assessment_white_24dp.svg" />
@@ -31,7 +31,7 @@
               <div class="txt-btn-container relatorios">Relatórios</div>
             </div>
           </a>
-          <a href="">
+          <a href="/investimento-folha">
             <div class="btn-container">
               <div class="icon-btn-container investimentos">
                 <img src="@/assets/imgs/payments_white_24dp.svg" />
@@ -39,7 +39,7 @@
               <div class="txt-btn-container investimentos">Investimentos</div>
             </div>
           </a>
-          <a href="">
+          <a href="/processo-seletivo-busca-por-vagas">
             <div class="btn-container">
               <div class="icon-btn-container processoSeletivo">
                 <img src="@/assets/imgs/group_add_white_24dp.svg" />
@@ -47,6 +47,16 @@
               <div class="txt-btn-container processoSeletivo">
                 Processos <br />
                 seletivos
+              </div>
+            </div>
+          </a>
+          <a href="">
+            <div class="btn-container">
+              <div class="icon-btn-container cargo">
+                <img src="@/assets/imgs/group_add_white_24dp.svg" />
+              </div>
+              <div class="txt-btn-container cargo">
+                Cargos
               </div>
             </div>
           </a>
@@ -144,10 +154,10 @@ h2 {
   background: linear-gradient(45deg, #ab0045, #ec005f);
 }
 
-.icon-btn-container.acompanhamento {
+.icon-btn-container.acompanhamento, .icon-btn-container.cargo{
   background-color: #ffb600;
 }
-.txt-btn-container.acompanhamento {
+.txt-btn-container.acompanhamento, .txt-btn-container.cargo {
   background: linear-gradient(45deg, #c79007, #ffb600);
 }
 

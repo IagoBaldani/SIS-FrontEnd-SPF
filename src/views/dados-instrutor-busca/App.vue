@@ -55,20 +55,13 @@
                       {{ instrutor.status }}
                     </td>
                     <td class="imagem rounded" width="50">
-                      <a
-                        href="/dados-instrutor-cadastro_edicao"
-                      >
-                        <img
-                          src="@/assets/imgs/manage_accounts_white_24dp.svg"
-                          alt="Imagem"
-                        />
+                      <a :href="'/dados-instrutor-cadastro_edicao?id='+ instrutor.id + '&tipo=edicao'">
+                        <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem"/>
                       </a>
                     </td>
                     <td class="imagem-coluna rounded" width="50">
-                      <a href="/dados-instrutor-visualizacao">
-                        <img
-                          src="@/assets/imgs/account_circle_white_24dp.svg"
-                        />
+                      <a :href="'/dados-instrutor-visualizacao?id=' + instrutor.id">
+                        <img src="@/assets/imgs/account_circle_white_24dp.svg" />
                       </a>
                     </td>
                   </tr>
@@ -85,7 +78,7 @@
           </div>
           <div class="col-xl-7 justify-content-end d-flex">
             <a
-              href="/dados-instrutor-cadastro_edicao"
+              href="/dados-instrutor-cadastro_edicao?tipo=cadastro"
               class="mt-5 form-control cadastro d-flex justify-content-center"
             >
               NOVO CADASTRO
@@ -319,7 +312,7 @@ a{
 .cadastro{
     background-color: #FFB700 !important;
     max-width: 432px !important;
-    
+
 }
 
 .ativo{
@@ -351,7 +344,7 @@ a{
     height: 59vh;
 }
 
-.aviso{ 
+.aviso{
     display: none ;
     align-items: center;
     flex-direction: column;
