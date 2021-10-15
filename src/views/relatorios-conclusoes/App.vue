@@ -247,11 +247,15 @@ body {
 
 /* Reponsividade da tela --------------------------------------*/
 
-@media (min-width: 1024px) {
+@media (max-width: 1024px) {
   .partAtiv,.partEfetivados,
   .dataConclusão {
-    max-width: 28%;
+    min-width: 28%;
   }
+
+  #data-conclusão {
+     font-size: 37px;
+   }
 }
 
 @media (max-width: 768px) {
@@ -262,11 +266,11 @@ body {
   }
 
   #part-ativos,#part-efetivados {
-    font-size: 50px;
+    font-size: 45px;
   }
 
    #data-conclusão {
-     font-size: 40px;
+     font-size: 35px;
    }
 
   .buttons {
@@ -279,9 +283,28 @@ body {
    .titulo h5, .titulo h6 {
     font-size: 20px;
   }
+
+  main .descricao {
+    font-size: 15px;
+  }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 600px) {
+  .partAtivos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .partAtiv,.partEfetivados,
+  .dataConclusão {
+    width: 80%;
+    margin-bottom: 1rem;
+  }
+
+}
+
+@media (max-width: 420px) {
   .partAtivos {
     display: flex;
     flex-direction: column;
@@ -289,7 +312,7 @@ body {
 
   .partAtiv,.partEfetivados,
   .dataConclusão {
-    width: 100%;
+    width: 80%;
     margin-bottom: 1rem;
   }
 

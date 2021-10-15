@@ -258,7 +258,7 @@ h6 {
 #bottonConsultaData {
   background-color: #ffffff;
   margin-left: 5%;
-  width: 465;
+  width: 45%;
   color: #090b2e;
   height: 4rem;
   border-radius: 7px;
@@ -411,7 +411,7 @@ h6 {
   }
 
   #bottonConsultaData {
-    margin-left: 29%;
+    margin-left: 28%;
   }
 
   /*Botões de relatorio*/
@@ -491,7 +491,7 @@ h6 {
       margin-left: 92px;
   }
   #bottonConsultaData {
-    margin-left: 30%;
+    width: 45%;
   }
 
   #botao_pdf,
@@ -534,9 +534,9 @@ h6 {
     margin-left: 30%;
   }
 
-  #bottonConsultaData {
+  /* #bottonConsultaData {
     margin-left: 190px;
-  }
+  } */
 }
 
 @media (min-width: 768px) {
@@ -588,7 +588,9 @@ h6 {
   }
 
   #bottonConsultaData {
-    margin-left: 271px;
+    /* margin-left: 271px; */
+    width: 30%;
+    text-align: center;
   }
 
   #botao_pdf,

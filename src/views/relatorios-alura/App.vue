@@ -180,7 +180,6 @@ export default {
 
 .container{
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     padding: 1.5em;
