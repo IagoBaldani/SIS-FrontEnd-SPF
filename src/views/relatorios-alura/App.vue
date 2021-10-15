@@ -180,7 +180,6 @@ export default {
 
 .container{
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     padding: 1.5em;
@@ -417,6 +416,11 @@ export default {
     }
 
     /* Botões gerar pdf e xlsx */
+    .btn-danger {
+      background-color: #AB0045;
+      border-color: none;
+    }
+
     #btn-pdf{
         position: absolute;
         margin-right: 15px;
