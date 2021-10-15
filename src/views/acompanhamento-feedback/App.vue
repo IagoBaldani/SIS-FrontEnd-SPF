@@ -212,6 +212,12 @@ body{
     color:  #737373;
 }
 
+.perfil-img {
+    height: 80px;
+    border-radius: 50%;
+    margin-left: 20px;
+}
+
 .container{
     width: 100%;
     height: 100%;

@@ -225,7 +225,6 @@ export default {
 .perfil-img {
     height: 80px;
     border-radius: 50%;
-    border: solid 2px #000000;
     margin-left: 20px;
 }
 
@@ -349,7 +348,7 @@ export default {
 }
 
 .eye-img {
-    width: 32px;
+    width: 1.5em !important;
 }
 
 .modal-size {
