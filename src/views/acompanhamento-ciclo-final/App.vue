@@ -11,7 +11,7 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
                     </div>
-                    <img src="../../assets/imgs/perfil.svg" class="perfil-img"/>
+                    <img src="@/assets/imgs/perfil.svg" class="perfil-img"/>
                 </div>
             </div>
             <div class="row justify-content-evenly">
@@ -49,7 +49,7 @@
                             <input id="file" type="file" accept="application/pdf" class="none" />
                             <label for="file" class="btn-file d-flex justify-content-between">
                                 <div class="w-100">
-                                    <img src="../../assets/imgs/upload.svg"
+                                    <img src="@/assets/imgs/upload.svg"
                                     class="upload-img"/>
                                     <div class= "d-inline-block w-75" >
                                         <p id="nome-arquivo" class="ellipsis-overflow mb-0">Faça upload do comprovante</p>
@@ -225,7 +225,6 @@ export default {
 .perfil-img {
     height: 80px;
     border-radius: 50%;
-    border: solid 2px #000000;
     margin-left: 20px;
 }
 
@@ -349,7 +348,7 @@ export default {
 }
 
 .eye-img {
-    width: 32px;
+    width: 1.5em !important;
 }
 
 .modal-size {

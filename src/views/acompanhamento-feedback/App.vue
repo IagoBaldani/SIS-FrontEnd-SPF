@@ -11,7 +11,7 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold text-center nomeCol">Nome do Colaborador</h4>
                     </div>
-                    <img src="../../assets/imgs/perfil.svg" class="perfil-img" />
+                    <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
 
             </div>
@@ -45,7 +45,7 @@
                                     <td scope="row">{{feedback.id}}</td>
                                     <td>{{feedback.anotacoes}}</td>
                                     <td @click="carregaModal(feedback)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
-                                        <img class="imgicon" name="imglogo" src="../../assets/imgs/visibility_white_24dp.svg"></td>
+                                        <img class="imgicon" name="imglogo" src="@/assets/imgs/visibility_white_24dp.svg"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -210,6 +210,12 @@ body{
 }
 .h4{
     color:  #737373;
+}
+
+.perfil-img {
+    height: 80px;
+    border-radius: 50%;
+    margin-left: 20px;
 }
 
 .container{

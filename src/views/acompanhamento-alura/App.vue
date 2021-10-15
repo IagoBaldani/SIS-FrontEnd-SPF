@@ -12,7 +12,7 @@
                             <h3 class="fw-bold text-center titulo">Participante selecionado:</h3>
                             <h4 class="fw-bold grey-font text-center nome-participante">João da Silva Almeida</h4>
                         </div>
-                        <img src="../../assets/imgs/perfil.svg" class="rounded-circle" width="70" height="70" alt="Perfil" />
+                        <img src="@/assets/imgs/perfil.svg" class="rounded-circle" width="70" height="70" alt="Perfil" />
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                                         id="olho" class="td-button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"><img
-                                        src="../../assets/imgs/visibility_white_24dp.svg" /></td>
+                                        src="@/assets/imgs/visibility_white_24dp.svg" /></td>
                                 </tr>
                             </tbody>
                         </table>

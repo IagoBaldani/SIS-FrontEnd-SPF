@@ -13,7 +13,7 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
                     </div>
-                    <img src="../../assets/imgs/perfil.svg" class="perfil-img" />
+                    <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
             </div>
 
@@ -55,7 +55,7 @@
                                 <th scope="row" class="w-50px titulo">{{avaliacao.id}}</th>
                                 <td class="text-align-left">{{avaliacao.tecnica}} / {{avaliacao.comportamental}} / {{avaliacao.moduloAgeis}} / {{avaliacao.lideranca}} / {{avaliacao.negocios}}</td>
                                 <td @click="carregaModal(avaliacao)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalDeletar">
-                                    <img src="../../assets/imgs/visibility_white_24dp.svg" class="eye-img">
+                                    <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
                                 </td>
                             </tr>
 
@@ -252,7 +252,6 @@ export default {
 .perfil-img {
     height: 80px;
     border-radius: 50%;
-    border: solid 2px #000000;
     margin-left: 20px;
 }
 
@@ -376,7 +375,7 @@ export default {
 }
 
 .eye-img {
-    width: 32px;
+    width: 1.5em !important;
 }
 
 .modal-size {
