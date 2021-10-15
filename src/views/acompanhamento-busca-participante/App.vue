@@ -32,7 +32,7 @@
                                     <th scope="row" class="titulo" id="info-id">{{participante.id}}</th>
                                     <td id="info-nome">{{participante.nome}}</td>
                                     <td id="info-programa">{{participante.programa}}</td>
-                                    <td id="logoBoneco"><a href="../acompanhamento-gerencial"><img src="../../assets/imgs/account_circle_white_24dp.svg"></a></td>
+                                    <td id="logoBoneco"><a href="../acompanhamento-gerencial"><img src="@/assets/imgs/account_circle_white_24dp.svg"></a></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -13,7 +13,7 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
                     </div>
-                    <img src="../../assets/imgs/perfil.svg" class="perfil-img" />
+                    <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
                             <input id="file" class="none" type="file" accept="application/pdf"/>
                             <label for="file" class="btn-file d-flex justify-content-between">
                                 <div class="w-100">
-                                    <img src="../../assets/imgs/upload.svg" class="upload-img"/>
+                                    <img src="@/assets/imgs/upload.svg" class="upload-img"/>
                                     <div class= "d-inline-block w-75">
                                         <p id="nome-arquivo" class="ellipsis-overflow mb-0 titulo">Faça upload do comprovante</p>
                                     </div>
@@ -75,7 +75,7 @@
                                 <td>{{conclusao.dataAlteracao}}</td>
                                 <td>{{conclusao.status}}</td>
                                 <td @click="carregaModal(conclusao)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalCiclo">
-                                    <img src="../../assets/imgs/visibility_white_24dp.svg" class="eye-img">
+                                    <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
                                 </td>
                             </tr>
                         </tbody>
