@@ -11,7 +11,12 @@
         <img src="@/assets/imgs/LOGO_SIS_2.png" />
       </div>
 
-      <a href="javascript:history.back()">
+      <a v-if="page === 'home'" href="/login">
+        <div class="rollback btn-header">
+          <img src="@/assets/imgs/outline_logout_white_24dp.png" />
+        </div>
+      </a>
+      <a v-else href="javascript:history.back()">
         <div class="rollback btn-header">
           <img src="@/assets/imgs/arrow_back_white_24dp.svg" />
         </div>
@@ -22,7 +27,10 @@
 
 <script>
 export default {
-  name: 'Header'
+  name: 'Header',
+  props: {
+    page: String
+  }
 }
 </script>
 
