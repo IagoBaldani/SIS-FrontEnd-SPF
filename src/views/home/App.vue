@@ -1,5 +1,5 @@
 <template>
-  <Header/>
+  <Header  page="home"/>
   <main>
     <section>
       <div class="container">
