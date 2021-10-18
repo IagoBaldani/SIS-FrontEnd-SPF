@@ -37,8 +37,11 @@
                             <input type="date" class="form-control" id="data-alteracao">
                         </div>
                         <div class="mb-3">
-                            <label for="salario" class="form-label fw-bold h5 titulo">Salário</label>
-                            <input type="text" class="form-control" id="salario" placeholder="1500,00">
+                            <label for="cargo" class="form-label fw-bold h5 titulo">Cargo</label>
+                            <select class="form-select" id="filtro-programa">
+                            <option value="0" id="cargo" selected disabled>Selecione o Cargo</option>
+                            <option value="1" >Estagiário</option>
+                        </select>
                         </div>
 
                         <div class="mb-3">
