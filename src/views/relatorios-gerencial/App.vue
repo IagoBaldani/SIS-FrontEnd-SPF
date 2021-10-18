@@ -649,6 +649,12 @@ main .modal_table-imagem img {
 }
 
 /* ---------- @media dados_gerais ---------- */
+@media (min-width: 375px) {
+  main .card {
+    width: 100%;
+  }
+}
+
 @media (min-width: 425px) {
   main .dados_gerais-main {
     width: 100%;
