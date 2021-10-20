@@ -65,8 +65,8 @@
           <button class="mt-5 form-control submit" @click="filtraDados()">BUSCAR</button>
         </div>
         <div class="col-xl-7 justify-content-end d-flex">
-          <a href="/dados-participante-cadastro_edicao?tipo=cadastro"
-             class="mt-5 form-control cadastro d-flex justify-content-center"> NOVO CADASTRO </a>
+          <a href="/dados-participante-selecao-cadastro"
+             class="mt-5 form-control cadastro d-flex justify-content-center">SELEÇÃO PARA NOVO CADASTRO </a>
         </div>
       </div>
     </div>

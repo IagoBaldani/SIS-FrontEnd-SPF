@@ -8,8 +8,10 @@
           <h3 class="fw-bold titulo">Dados do participante:</h3>
         </div>
         <div class="col-xl-4"></div>
-        <div class="col-xl-2">
-          <h2 class="titulo secundario"> Status: <span v-bind:class="(participante.status === 'Ativo')?'ativo':'inativo'"> {{participante.status}} </span></h2>
+        <div class="col-xl-2" >
+          <h2 class="titulo secundario" v-if="tipo =='edicao'">
+            Status: <span v-bind:class="(participante.status === 'Ativo')?'ativo':'inativo'"> {{participante.status}} </span>
+          </h2>
         </div>
       </div>
       <div class="row justify-content-evenly">
@@ -17,11 +19,15 @@
           <form>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputName">Nome</label>
-              <input v-model="modelNome" class="form-control" id="inputName" placeholder="Miguel Felisberto Firmino" type="text">
+              <input class="form-control disabledTextInput" id="inputName" :placeholder="participante.nome" type="text" disabled>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo" for="inputCpf">CPF</label>
+              <input class="form-control disabledTextInput" id="inputCpf" :placeholder="participante.cpf" type="text" disabled>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputContato">Contato</label>
-              <input v-model="modelContato" class="form-control" id="inputContato" placeholder="(xx) xxxxx-xxxx" type="tel">
+              <input class="form-control disabledTextInput" id="inputContato" :placeholder="participante.contato" type="tel" disabled>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Fonte recrutamento</label>
@@ -100,13 +106,9 @@
           </form>
         </div>
         <div class="col-xl-2">
-          <form>
             <div class="text-center text-md-left">
               <img src="@/assets/imgs/perfil.svg" class="rounded-circle" alt="">
             </div>
-            <label for='selecao-arquivo'  class="editar btn submit form-control mt-4"> EDITAR </label>
-            <input class="input-arquivo" id='selecao-arquivo' type='file' accept="image/*">
-          </form>
         </div>
       </div>
       <div class="row justify-content-evenly">
@@ -137,6 +139,7 @@
             <div class="">
               <ul class="fw-bold subtitulo text-start">Informações gerais:
                 <li>Nome: <span class="titulo"> {{participante.nome}} </span></li>
+                <li>CPF: <span class="titulo"> {{participante.cpf}} </span></li>
                 <li>Contato: <span class="titulo"> {{participante.contato}} </span></li>
                 <li>Fonte de recrutamento: <span class="titulo"> {{participante.fonteRecrutamento}} </span></li>
                 <li>Nota na prova lógica: <span class="titulo"> {{participante.notaProvaLogica}}</span> </li>
@@ -174,7 +177,10 @@ export default {
   },
   data () {
     return {
+      // Esse dado virá pela URL
+      tipo: '',
       programas: [
+        // Esses dados virão da API
         {
           id: 1,
           nome: 'Java',
@@ -200,8 +206,16 @@ export default {
           termino: '10/12/2022'
         }
       ],
+      // Esses dados virão da API do PortalSIS
+      participanteApi: {
+        nome: 'Teste',
+        cpf: '190.738.908-87',
+        contato: '(14)99999-8999'
+      },
+      // Parte dos dados será preenchida pela API e parte será pela API PortalSIS
       participante: {
         nome: '',
+        cpf: '',
         contato: '',
         fonteRecrutamento: '',
         notaProvaLogica: '',
@@ -220,18 +234,15 @@ export default {
   },
   methods: {
     enviarDados () {
-      this.participante.nome = this.modelNome
-      this.participante.contato = this.modelContato
       this.participante.fonteRecrutamento = this.modelFonteRecrutamento
       this.participante.notaProvaLogica = this.modelNotaLogica
       this.participante.instituicaoEnsino = this.modelInstituicaoEnsino
       this.participante.curso = this.modelCurso
-      this.participante.salario = this.modelSalario
       this.participante.terminoGraduacao = formataDataParaExibicao(this.modelTerminoGraduacao)
-      this.participante.cargo = formataCargo(this.modelCargo)
       this.participante.programaSelecionado.nomeETurma = this.modelPrograma
       this.participante.observacao = this.modelObservacao
     },
+
     exibeDadosPrograma (programas) {
       let elProgramas = document.querySelectorAll('#programa')
       let arrayOptions = []
@@ -246,14 +257,15 @@ export default {
             let nomeETurma = `${programas[i].nome} - ${programas[i].turma}`
 
             if (nomeETurma === option[0]) {
-              document.querySelector('#coordenador').value = programas[i].coordenador
-              document.querySelector('#inicioPrograma').value = programas[i].inicio
-              document.querySelector('#terminoPrograma').value = programas[i].termino
+              document.querySelector('#coordenador').placeholder = programas[i].coordenador
+              document.querySelector('#inicioPrograma').placeholder = programas[i].inicio
+              document.querySelector('#terminoPrograma').placeholder = programas[i].termino
             }
           }
         }
       })
     },
+
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -270,7 +282,15 @@ export default {
     }
   },
   beforeMount () {
-    console.log(this.pegaDadosUrl())
+    const dadosUrl = this.pegaDadosUrl()
+
+    if (dadosUrl.tipo == 'edicao') {
+      this.tipo = dadosUrl.tipo
+    }
+
+    this.participante.nome = this.participanteApi.nome
+    this.participante.cpf = this.participanteApi.cpf
+    this.participante.contato = this.participanteApi.contato
   }
 }
 
@@ -281,16 +301,6 @@ function formataDataParaExibicao (data) {
   return dataFormatada
 }
 
-function formataCargo (cargo) {
-  switch (cargo) {
-    case 'ESTAGIARIO':
-      return 'Estagiário'
-    case 'JOVEM_APRENDIZ':
-      return 'Jovem aprendiz'
-    case 'TRAINEE':
-      return 'Trainee'
-  }
-}
 </script>
 
 <style>
@@ -323,7 +333,7 @@ body{
   color: #737373;
 }
 
-#disabledTextInput{
+.disabledTextInput{
   background-color: #D3CACA;
   border: 1px solid #BCB3B3;
 }

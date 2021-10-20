@@ -54,6 +54,12 @@ module.exports = {
       title: 'Participante - Cadastro e Edição',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-cadastro_edicao']
     },
+    'dados-participante-selecao-cadastro': {
+      entry: './src/views/dados-participante-selecao-cadastro/main.js',
+      template: 'public/index.html',
+      title: 'Participante - Seleção para cadastro',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-selecao-cadastro']
+    },
     'dados-instrutor-visualizacao': {
       entry: './src/views/dados-instrutor-visualizacao/main.js',
       template: 'public/index.html',
@@ -71,6 +77,12 @@ module.exports = {
       template: 'public/index.html',
       title: 'Instrutor - Cadastro e Edição',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-cadastro_edicao']
+    },
+    'dados-instrutor-selecao-cadastro': {
+      entry: './src/views/dados-instrutor-selecao-cadastro/main.js',
+      template: 'public/index.html',
+      title: 'Instrutor - Seleção para cadastro',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-selecao-cadastro']
     },
     'acompanhamento-feedback': {
       entry: './src/views/acompanhamento-feedback/main.js',

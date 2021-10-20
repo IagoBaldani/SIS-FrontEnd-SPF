@@ -14,45 +14,33 @@
                 <div class="col-xl-4">
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Nome</label>
-                            <input class="form-control"
-                                   required
-                                   placeholder="Nome"
-                                   type="text"
-                                   v-model="modelNome"
-                            />
+                            <input class="form-control" id="disabledTextInput" :placeholder="informacoes.nome" type="text" disabled/>
                         </div>
                        <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo" for="inputContato">Contato</label>
-                            <input class="form-control" id="inputContato" required placeholder="(xx) xxxxx-xxxx" type="tel" v-model="modelContato" />
+                            <input class="form-control" id="disabledTextInput" :placeholder="informacoes.contato" type="tel" disabled/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo" for="inputContato">CPF</label>
-                            <input class="form-control" id="inputCpf" required placeholder="xxx.xxx.xxx-xx" type="text" v-model="modelCpf"  />
+                            <input class="form-control" id="disabledTextInput" :placeholder="informacoes.cpf" type="text" disabled/>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold mb-0 titulo">Email
-                                corporativo</label>
-                            <input class="form-control" id="inputEmail" placeholder="seunome@sisconsultoria.com.br"
-                                type="email" required v-model="modelEmail"/>
+                            <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
+                            <input class="form-control" id="disabledTextInput" :placeholder="informacoes.email" type="email" disabled/>
                         </div>
                 </div>
                 <div class="col-xl-4">
 
                 </div>
                 <div class="col-xl-2">
-                    <form>
-                        <div class=" text-center text-md-left">
-                          <img src="@/assets/imgs/perfil.svg" class="rounded-circle" alt="">
-                        </div>
-                        <label for='selecao-arquivo'  class="editar btn submit form-control mt-4"> EDITAR </label>
-                        <input class="input-arquivo" id="selecao-arquivo" type="file"/>
-                    </form>
+                  <div class=" text-center text-md-left">
+                    <img src="@/assets/imgs/perfil.svg" class="rounded-circle" alt="">
+                  </div>
                 </div>
             </div>
             <div class="mt-5 row justify-content-evenly">
                 <div class="col-xl-4">
-                    <button type="button" class="btn submit form-control" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal" @click.prevent="enviarDados">
+                    <button type="button" class="btn submit form-control" @click="enviarDados">
                         CONFIRMAR
                     </button>
                 </div>
@@ -60,43 +48,7 @@
                 <div class="col-xl-2"></div>
             </div>
         </div>
-        <!-- fim do formulário -->
     </main>
-
-    <!-- modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-xl modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body d-flex justify-content-between">
-                    <div>
-                        <h1 class="modal-title form-label fw-bold mb-0 titulo"> Deseja confirmar os seguintes dados?
-                        </h1>
-                    </div>
-                    <div class="conteudomodal d-flex flex-column justify-content-center mb-0" id="instrutor-modal">
-                        <div class="mt-3">
-                            <ul class="fw-bold subtitulo text-start">Informações gerais:
-                                <li>Nome: <span class="titulo"> {{ informacoes.nome }} </span> </li>
-                                <li>Contato: <span class="titulo"> {{ informacoes.contato }} </span></li>
-                                <li>CPF: <span class="titulo"> {{ informacoes.cpf }} </span></li>
-                              <li>Email: <span class="titulo"> {{ informacoes.email }} </span></li>
-                            </ul>
-                        </div>
-                        </div>
-                        <div class="mt-3 modal-footer border-0 justify-content-around">
-                            <div>
-                                <button type="button" class="btn submit-modal">CONFIRMAR</button>
-                            </div>
-                            <div>
-                                <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>-
-    </div>
 </template>
 
 <script>
@@ -109,20 +61,19 @@ export default {
   },
   data () {
     return {
+      // Esses dados serão oriundos da API do PortalSIS
       informacoes: {
-        nome: '',
-        cpf: '',
-        contato: '',
-        email: ''
+        nome: 'Kaiqui',
+        cpf: '123123123',
+        contato: '(11)99999-9999',
+        email: 'kaiquilopes@sisconsultoria.com.br'
       }
     }
   },
   methods: {
     enviarDados () {
-      this.informacoes.nome = this.modelNome
-      this.informacoes.contato = this.modelContato
-      this.informacoes.cpf = this.modelCpf
-      this.informacoes.email = this.modelEmail
+      // Pega os dados da API do PortalSIS, cria um objeto e envia os dados para nossa API
+      alert('Instrutor cadastrado com sucesso!')
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -167,6 +118,11 @@ body{
 
 textarea{
     resize: none !important;
+}
+
+#disabledTextInput{
+  background-color: #D3CACA;
+  border: 1px solid #BCB3B3;
 }
 
 .download{

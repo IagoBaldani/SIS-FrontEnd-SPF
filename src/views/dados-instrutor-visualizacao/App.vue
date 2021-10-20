@@ -189,11 +189,6 @@ textarea{
     transform: rotate(180deg) !important;
 }
 
-#disabledTextInput{
-    background-color: #D3CACA;
-    border: 1px solid #BCB3B3;
-}
-
 .modal-body, .modal-header, .modal-footer {
     text-align: center;
     background-color: #EBEBEB

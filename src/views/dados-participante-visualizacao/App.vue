@@ -20,6 +20,10 @@
               <input class="form-control disabledTextInput" v-bind:value="participante.nome" type="text">
             </div>
             <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo">CPF</label>
+              <input class="form-control disabledTextInput" v-bind:value="participante.cpf" type="text">
+            </div>
+            <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Contato</label>
               <input class="form-control disabledTextInput" v-bind:value="participante.contato" type="tel" disabled readonly>
             </div>
@@ -143,8 +147,10 @@ export default {
   data () {
     return {
       participante: {
+        // Esses dados serão obtidos pela nossa API
         id: 1,
         nome: 'Miguel Felisberto',
+        cpf: '112.123.849-90',
         contato: '(14)99999-9999',
         fonteRecrutamento: 'Palestra via faculdade',
         notaProvaLogica: '10',
@@ -185,6 +191,7 @@ export default {
   },
   beforeMount () {
     console.log(this.pegaDadosUrl())
+    // Aqui você faz a requisição para API e pega os dados para exibição
   }
 }
 </script>

@@ -5,7 +5,7 @@
       <div class="container-fluid">
         <div class="row justify-content-evenly mt-4 mb-3">
           <div class="titulo col-xl-4">
-            <h3 class="fw-bold">Busca por instrutor:</h3>
+            <h3 class="fw-bold">Seleção para instrutor:</h3>
           </div>
           <div class="col-xl-7 d-flex justify-content-center"></div>
         </div>
@@ -21,11 +21,13 @@
               />
             </div>
             <div class="mb-3">
-              <select class="form-select mt-4" id="filtro-status">
-                <option disabled selected value="0">Status</option>
-                <option value="1">Ativo</option>
-                <option value="2">Inativo</option>
-              </select>
+              <input
+                name="filtro"
+                type="text"
+                class="form-control mt-4"
+                id="filtro-cargo"
+                placeholder="Cargo"
+              />
             </div>
           </div>
           <div class="col-xl-7" id="instrutores">
@@ -46,21 +48,9 @@
                   <tr id="instrutor" v-for="instrutor in instrutores" :key="instrutor">
                     <th scope="row" width="50">{{ instrutor.id }}</th>
                     <td id="info-nome">{{ instrutor.nome }}</td>
-                    <td
-                      id="info-status"
-                      v-bind:class="
-                        instrutor.status == 'Ativo' ? 'ativo' : 'inativo'
-                      "
-                    >
-                      {{ instrutor.status }}
-                    </td>
-                    <td class="imagem rounded" width="50">
-                      <a :href="'/dados-instrutor-cadastro_edicao?id='+ instrutor.id + '&tipo=edicao'">
-                        <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem"/>
-                      </a>
-                    </td>
+                    <td id="info-cargo">{{ instrutor.cargo }}</td>
                     <td class="imagem-coluna rounded" width="50">
-                      <a :href="'/dados-instrutor-visualizacao?id=' + instrutor.id">
+                      <a :href="'/dados-instrutor-cadastro_edicao?id=' + instrutor.id">
                         <img src="@/assets/imgs/account_circle_white_24dp.svg" />
                       </a>
                     </td>
@@ -76,14 +66,7 @@
               BUSCAR
             </button>
           </div>
-          <div class="col-xl-7 justify-content-end d-flex">
-            <a
-              href="/dados-instrutor-selecao-cadastro"
-              class="mt-5 form-control cadastro d-flex justify-content-center"
-            >
-              SELEÇÃO PARA NOVO CADASTRO
-            </a>
-          </div>
+          <div class="col-xl-7"></div>
         </div>
       </div>
     </main>
@@ -104,27 +87,27 @@ export default {
         {
           id: 1,
           nome: 'Kaiqui Lopes',
-          status: 'Ativo'
+          cargo: 'Analista Java Sr'
         },
         {
           id: 2,
           nome: 'Luciana Neuber',
-          status: 'Ativo'
+          cargo: 'Coordenador - Programa de Formação'
         },
         {
           id: 3,
           nome: 'Kaiqui Lopes',
-          status: 'Ativo'
+          cargo: 'Analista Java Sr'
         },
         {
           id: 4,
           nome: 'Luciana Neuber',
-          status: 'Inativo'
+          cargo: 'Coordenador - Programa de Formação'
         },
         {
           id: 5,
           nome: 'Kaiqui Lopes',
-          status: 'Inativo'
+          cargo: 'Analista Java Sr'
         }
       ]
     }
@@ -134,7 +117,7 @@ export default {
       const dadosLinhas = this.pegaDados()
 
       let nomeProcurado = document.querySelector('#filtro-nome').value
-      let statusProcurado = document.querySelector('#filtro-status').value
+      let cargoProcurado = document.querySelector('#filtro-cargo').value
       let linhasN1 = document.querySelectorAll('#instrutor')
 
       var linhasArray = Array.prototype.slice.call(linhasN1)
@@ -142,7 +125,7 @@ export default {
       let arrayBoolLinhas = this.verifica(
         dadosLinhas,
         nomeProcurado,
-        statusProcurado
+        cargoProcurado
       )
 
       this.mudaVisibilidade(arrayBoolLinhas, linhasArray)
@@ -155,44 +138,32 @@ export default {
       linhas.forEach((linha) => {
         let dadosLinha = []
         let nome = linha.querySelector('#info-nome').textContent
-        let status = this.trataStatus(linha)
+        let cargo = linha.querySelector('#info-cargo').textContent
 
-        dadosLinha.push(nome, status)
+        dadosLinha.push(nome, cargo)
         arrayDadosDasLinhas.push(dadosLinha)
       })
 
       return arrayDadosDasLinhas
     },
 
-    trataStatus (item) {
-      let statusTxt = item.querySelector('#info-status').textContent
-      let status = 0
-
-      if (statusTxt == 'Ativo') {
-        return (status = 1)
-      } else if (statusTxt == 'Inativo') {
-        return (status = 2)
-      }
-
-      return status
-    },
-
-    verifica (dadosLinhas, nomeProcurado, statusProcurado) {
+    verifica (dadosLinhas, nomeProcurado, cargoProcurado) {
       let arrayBoolLinhas = []
-      let expressao = new RegExp(nomeProcurado, 'i')
+      let expressaoNome = new RegExp(nomeProcurado, 'i')
+      let expressaoCargo = new RegExp(cargoProcurado, 'i')
 
       dadosLinhas.forEach((dadosLinha) => {
         let boolLinha = []
 
         // Verificando se o nome procurado consta na tabela
-        if (expressao.test(dadosLinha[0]) || nomeProcurado == '') {
+        if (expressaoNome.test(dadosLinha[0]) || nomeProcurado == '') {
           boolLinha.push(true)
         } else {
           boolLinha.push(false)
         }
 
-        // Verificando se o status procurado consta na tabela
-        if (statusProcurado == dadosLinha[1] || statusProcurado == 0) {
+        // Verificando se o cargo procurado consta na tabela
+        if (expressaoCargo.test(dadosLinha[1]) || cargoProcurado == '') {
           boolLinha.push(true)
         } else {
           boolLinha.push(false)
@@ -209,7 +180,6 @@ export default {
       var contador = 0
       let aviso = document.querySelector('.aviso')
       var qtdLinhas = linhas.length
-      console.log(linhas)
 
       for (i = 0; i < linhas.length; i++) {
         if (arrayBoolLinhas[i][0] && arrayBoolLinhas[i][1]) {
