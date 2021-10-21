@@ -9,29 +9,27 @@
                 </div>
                 <div class="col-xl-4"></div>
                 <div class="col-xl-2 d-flex justify-content-center">
-                    <h2 class="titulo secundario"> Status: <span v-bind:class="(instrutor.status == 'Ativo')?'ativo':'inativo'"> {{instrutor.status}} </span></h2>
+                    <h2 class="titulo secundario"> Status: <span v-bind:class="(instrutor.status == '1')?'ativo':'inativo'"> {{(instrutor.status == 1)?'Ativo':'Inativo'}}</span></h2>
                 </div>
             </div>
             <fieldset disabled>
                 <div class="row justify-content-evenly">
                     <div class="col-xl-4">
                         <div class="mb-3">
-                            <label class="form-label fw-bold mb-0 titulo" for="inputName">Nome</label>
-                            <input class="form-control" id="disabledTextInput"  v-bind:value="instrutor.nome" type="text">
+                            <label class="form-label fw-bold mb-0 titulo">Nome</label>
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.nome" type="text">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold mb-0 titulo" for="inputContato">Contato</label>
-                            <input class="form-control" id="disabledTextInput" v-bind:value="instrutor.contato" type="tel" disabled readonly>
+                            <label class="form-label fw-bold mb-0 titulo">Telefone</label>
+                            <input class="form-control disabledTextInput"  v-bind:value="instrutor.telefone" type="tel" disabled readonly>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold mb-0 titulo" for="inputContato">CPF</label>
-                            <input class="form-control" id="disabledTextInput" v-bind:value="instrutor.cpf" type="text">
+                            <label class="form-label fw-bold mb-0 titulo">CPF</label>
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.cpf" type="text">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold mb-0 titulo" for="inputNotaLogica">Email
-                                corporativo</label>
-                            <input class="form-control" id="disabledTextInput"
-                            v-bind:value="instrutor.email" type="email">
+                            <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.email" type="email">
                         </div>
                     </div>
                     <div class="col-xl-4">
@@ -92,6 +90,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -101,15 +100,19 @@ export default {
   data () {
     return {
       instrutor: {
-        nome: 'Kaiqui Lopes',
-        contato: '(11)99999-9999',
-        cpf: '222.222.222-22',
-        email: 'kaiquilopes@sisconsultoria.com.br',
-        status: 'Ativo'
       }
     }
   },
   methods: {
+    getInstrutor (cpf) {
+      axios.get(`http://localhost:8081/api/instrutor/${cpf}`)
+        .then(res => {
+          this.instrutor = res.data
+        })
+        .catch(erro => {
+          alert(`Erro: ${erro}`)
+        })
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -126,7 +129,9 @@ export default {
     }
   },
   beforeMount () {
-    console.log(this.pegaDadosUrl())
+    const dadosUrl = this.pegaDadosUrl()
+
+    this.getInstrutor(dadosUrl.id)
   }
 }
 </script>
@@ -172,21 +177,13 @@ body{
     color: #737373;
 }
 
-#disabledTextInput{
-    background-color: #D3CACA;
-    border: 1px solid #BCB3B3;
-}
-
-.aprovado::placeholder{
-    color: #19B200 !important;
+.disabledTextInput{
+    background-color: #D3CACA !important;
+    border: 1px solid #BCB3B3 !important;
 }
 
 textarea{
     resize: none !important;
-}
-
-.download{
-    transform: rotate(180deg) !important;
 }
 
 .modal-body, .modal-header, .modal-footer {

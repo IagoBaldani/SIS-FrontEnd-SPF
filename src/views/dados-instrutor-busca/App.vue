@@ -44,23 +44,13 @@
               <table class="table table-bordered tabela mt-4">
                 <tbody align="center">
                   <tr id="instrutor" v-for="instrutor in instrutores" :key="instrutor">
-                    <th scope="row" width="50">{{ instrutor.id }}</th>
-                    <td id="info-nome">{{ instrutor.nome }}</td>
-                    <td
-                      id="info-status"
-                      v-bind:class="
-                        instrutor.status == 'Ativo' ? 'ativo' : 'inativo'
-                      "
-                    >
-                      {{ instrutor.status }}
-                    </td>
-                    <td class="imagem rounded" width="50">
-                      <a :href="'/dados-instrutor-cadastro_edicao?id='+ instrutor.id + '&tipo=edicao'">
-                        <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem"/>
-                      </a>
+                    <th scope="row" width="50">{{ instrutor.cpf }}</th>
+                    <td id="info-nome">{{ instrutor.telefone }}</td>
+                    <td id="info-status" v-bind:class="instrutor.status == '1' ? 'ativo' : 'inativo'">
+                      {{ (instrutor.status == '1'?'Ativo':'Inativo')}}
                     </td>
                     <td class="imagem-coluna rounded" width="50">
-                      <a :href="'/dados-instrutor-visualizacao?id=' + instrutor.id">
+                      <a :href="'/dados-instrutor-visualizacao?id=' + instrutor.cpf">
                         <img src="@/assets/imgs/account_circle_white_24dp.svg" />
                       </a>
                     </td>
@@ -92,6 +82,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -100,36 +91,19 @@ export default {
   },
   data () {
     return {
-      instrutores: [
-        {
-          id: 1,
-          nome: 'Kaiqui Lopes',
-          status: 'Ativo'
-        },
-        {
-          id: 2,
-          nome: 'Luciana Neuber',
-          status: 'Ativo'
-        },
-        {
-          id: 3,
-          nome: 'Kaiqui Lopes',
-          status: 'Ativo'
-        },
-        {
-          id: 4,
-          nome: 'Luciana Neuber',
-          status: 'Inativo'
-        },
-        {
-          id: 5,
-          nome: 'Kaiqui Lopes',
-          status: 'Inativo'
-        }
-      ]
+      instrutores: {}
     }
   },
   methods: {
+    getInstrutor () {
+      axios.get('http://localhost:8081/api/instrutor')
+        .then(res => {
+          this.instrutores = res.data
+        })
+        .catch(erro => {
+          alert(`Erro na requisição (${erro})`)
+        })
+    },
     filtraDados () {
       const dadosLinhas = this.pegaDados()
 
@@ -237,6 +211,9 @@ export default {
 
       aviso.style.display = 'none'
     }
+  },
+  beforeMount () {
+    this.getInstrutor()
   }
 }
 </script>
