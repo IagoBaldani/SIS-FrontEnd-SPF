@@ -46,18 +46,8 @@
                   <tr id="instrutor" v-for="instrutor in instrutores" :key="instrutor">
                     <th scope="row" width="50">{{ instrutor.cpf }}</th>
                     <td id="info-nome">{{ instrutor.telefone }}</td>
-                    <td
-                      id="info-status"
-                      v-bind:class="
-                        instrutor.status == '1' ? 'ativo' : 'inativo'
-                      "
-                    >
+                    <td id="info-status" v-bind:class="instrutor.status == '1' ? 'ativo' : 'inativo'">
                       {{ (instrutor.status == '1'?'Ativo':'Inativo')}}
-                    </td>
-                    <td class="imagem rounded" width="50">
-                      <a :href="'/dados-instrutor-cadastro_edicao?id='+ instrutor.cpf + '&tipo=edicao'">
-                        <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem"/>
-                      </a>
                     </td>
                     <td class="imagem-coluna rounded" width="50">
                       <a :href="'/dados-instrutor-visualizacao?id=' + instrutor.cpf">

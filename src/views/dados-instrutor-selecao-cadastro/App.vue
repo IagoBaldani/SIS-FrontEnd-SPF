@@ -50,7 +50,7 @@
                     <td id="info-nome">{{ instrutor.nome }}</td>
                     <td id="info-cargo">{{ instrutor.cargo }}</td>
                     <td class="imagem-coluna rounded" width="50">
-                      <a :href="'/dados-instrutor-cadastro_edicao?id=' + instrutor.id">
+                      <a :href="'/dados-instrutor-cadastro?id=' + instrutor.id">
                         <img src="@/assets/imgs/account_circle_white_24dp.svg" />
                       </a>
                     </td>

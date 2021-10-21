@@ -14,19 +14,19 @@
                 <div class="col-xl-4">
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Nome</label>
-                            <input class="form-control" id="disabledTextInput" :placeholder="informacoes.nome" type="text" disabled/>
+                            <input class="form-control disabledTextInput" :placeholder="instrutor.nome" type="text" disabled/>
                         </div>
                        <div class="mb-3">
-                            <label class="form-label fw-bold mb-0 titulo" for="inputContato">Contato</label>
-                            <input class="form-control" id="disabledTextInput" :placeholder="informacoes.contato" type="tel" disabled/>
+                            <label class="form-label fw-bold mb-0 titulo">Contato</label>
+                            <input class="form-control disabledTextInput" :placeholder="instrutor.telefone" type="tel" disabled/>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold mb-0 titulo" for="inputContato">CPF</label>
-                            <input class="form-control" id="disabledTextInput" :placeholder="informacoes.cpf" type="text" disabled/>
+                            <label class="form-label fw-bold mb-0 titulo">CPF</label>
+                            <input class="form-control disabledTextInput" :placeholder="instrutor.cpf" type="text" disabled/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
-                            <input class="form-control" id="disabledTextInput" :placeholder="informacoes.email" type="email" disabled/>
+                            <input class="form-control disabledTextInput" :placeholder="instrutor.email" type="email" disabled/>
                         </div>
                 </div>
                 <div class="col-xl-4">
@@ -53,6 +53,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -62,18 +63,22 @@ export default {
   data () {
     return {
       // Esses dados serão oriundos da API do PortalSIS
-      informacoes: {
-        nome: 'Kaiqui',
-        cpf: '123123123',
-        contato: '(11)99999-9999',
-        email: 'kaiquilopes@sisconsultoria.com.br'
-      }
+      instrutor: {}
     }
   },
   methods: {
     enviarDados () {
       // Pega os dados da API do PortalSIS, cria um objeto e envia os dados para nossa API
       alert('Instrutor cadastrado com sucesso!')
+    },
+    getInstrutor (cpf) {
+      axios.get(`http://localhost:8081/api/instrutor/${cpf}`)
+        .then(res => {
+          this.instrutor = res.data
+        })
+        .catch(erro => {
+          alert(`Erro: ${erro}`)
+        })
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -91,7 +96,9 @@ export default {
     }
   },
   beforeMount () {
-    console.log(this.pegaDadosUrl())
+    const dadosUrl = this.pegaDadosUrl()
+
+    this.getInstrutor(dadosUrl.id)
   }
 }
 </script>
@@ -110,6 +117,11 @@ body{
 }
 .titulo{
     color: #090B2E;
+    font-weight: bold;
+}
+
+.secundario{
+  font-size: 20px;
 }
 
 .subtitulo{
@@ -120,13 +132,9 @@ textarea{
     resize: none !important;
 }
 
-#disabledTextInput{
-  background-color: #D3CACA;
-  border: 1px solid #BCB3B3;
-}
-
-.download{
-    transform: rotate(180deg) !important;
+.disabledTextInput{
+  background-color: #D3CACA !important;
+  border: 1px solid #BCB3B3 !important;
 }
 
 .modal-body, .modal-header, .modal-footer {
@@ -174,9 +182,15 @@ textarea{
     height: 80vh !important;
 }
 
-.erro{
-    color: darkred;
-    font-weight: bold;
+.ativo, .inativo{
+  margin-left: 1em;
+}
+
+.ativo{
+  color: green;
+}
+.inativo{
+  color: darkred;
 }
 
 .rounded-circle{
