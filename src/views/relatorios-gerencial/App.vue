@@ -3,13 +3,15 @@
   <main id="mainModal">
     <!-- Início Select Relatório -->
     <section class="relatorio_main container">
-
-      <form action="" method="GET">
+      <form id="formSelect" action="" method="">
         <label class="relatorio_titulo"
           >Relatórios:
 
           <!-- Select Programa de formação -->
-          <select name="formacao" required id="select1"
+          <select
+            name="formacao"
+            required
+            id="select1"
             class="form-select p-2 mb-3"
             aria-label="Default select example"
             v-on:click="totalFormacoes"
@@ -17,7 +19,13 @@
             <option name="formacao" class="relatorio_opcao" disabled selected>
               Programa de formação
             </option>
-            <option class="relatorio_opcao" v-for="(formacoes,id) in formacoesTotal" :key="id">{{ formacoes.nomeFormacao }}</option>
+            <option
+              class="relatorio_opcao"
+              v-for="(formacoes, id) in formacoesTotal"
+              :key="id"
+            >
+              {{ formacoes.nomeFormacao }}
+            </option>
           </select>
 
           <!-- Select Turma -->
@@ -46,14 +54,20 @@
               Escopo do relatório
             </option>
             <option class="relatorio_opcao">Alura</option>
-            <option class="relatorio_opcao" value="2">Avaliações</option>
-            <option class="relatorio_opcao" value="3">Conclusões</option>
-            <option class="relatorio_opcao" value="4">Investimentos</option>
+            <option class="relatorio_opcao">Avaliações</option>
+            <option class="relatorio_opcao">Conclusões</option>
+            <option class="relatorio_opcao">Investimentos</option>
           </select>
         </label>
-        <!-- Select Botão -->
-        <input id="botao" type="submit" class="relatorio_button" value="BUSCAR"/>
 
+        <!-- Select Botão -->
+        <input
+          v-on:click="redirecionamento"
+          id="botao"
+          type="submit"
+          class="relatorio_button"
+          value="BUSCAR"
+        />
       </form>
     </section>
     <!-- Fim Select Relatório -->
@@ -67,7 +81,9 @@
         <!-- Card - Participantes ativos -->
         <div class="card mb-2">
           <div class="card-body dados_gerais-card">
-            <h3 class="dados_gerais-h3 dados_gerais-h3-1" >{{ numeroTotalDeCadaLista[0] }}</h3>
+            <h3 class="dados_gerais-h3 dados_gerais-h3-1">
+              {{ numeroTotalDeCadaLista[0] }}
+            </h3>
             <img
               v-on:click="participantesAtivos"
               data-bs-toggle="modal"
@@ -86,7 +102,9 @@
         <!-- Card - Participantes efetivados -->
         <div class="card mb-2">
           <div class="card-body dados_gerais-card">
-            <h3 class="dados_gerais-h3 dados_gerais-h3-2">{{ numeroTotalDeCadaLista[1] }}</h3>
+            <h3 class="dados_gerais-h3 dados_gerais-h3-2">
+              {{ numeroTotalDeCadaLista[1] }}
+            </h3>
             <img
               v-on:click="participantesEfetivados"
               data-bs-toggle="modal"
@@ -105,7 +123,9 @@
         <!-- Card - Programas de formação em andamento -->
         <div class="card mb-2">
           <div class="card-body dados_gerais-card">
-            <h3 class="dados_gerais-h3 dados_gerais-h3-3">{{ numeroTotalDeCadaLista[2] }}</h3>
+            <h3 class="dados_gerais-h3 dados_gerais-h3-3">
+              {{ numeroTotalDeCadaLista[2] }}
+            </h3>
             <img
               v-on:click="totalFormacoes"
               data-bs-toggle="modal"
@@ -187,11 +207,16 @@
                 id="participante"
               >
                 <tbody>
-                  <tr v-for="(ativos,id) in participantesAtivosComFiltro" :key="id">
+                  <tr
+                    v-for="(ativos, id) in participantesAtivosComFiltro"
+                    :key="id"
+                  >
                     <td class="modal_table-th-2col">
                       {{ ativos.nomeParticipante }}
                     </td>
-                    <td class="modal_table-th-3col">{{ ativos.programaFormacao }}</td>
+                    <td class="modal_table-th-3col">
+                      {{ ativos.programaFormacao }}
+                    </td>
                     <td class="modal_table-imagem rounded">
                       <a href="#"
                         ><img src="@/assets/imgs/usuario.svg" alt="Imagem"
@@ -279,9 +304,16 @@
             <div class="modal_table-scroll">
               <table class="modal_table-1 table table-bordered">
                 <tbody>
-                  <tr v-for="(efetivados,id) in participantesEfetivadosComFiltro" :key="id">
-                    <td class="modal_table-th-2col">{{ efetivados.nomeParticipante }}</td>
-                    <td class="modal_table-th-3col">{{ efetivados.programaFormacao }}</td>
+                  <tr
+                    v-for="(efetivados, id) in participantesEfetivadosComFiltro"
+                    :key="id"
+                  >
+                    <td class="modal_table-th-2col">
+                      {{ efetivados.nomeParticipante }}
+                    </td>
+                    <td class="modal_table-th-3col">
+                      {{ efetivados.programaFormacao }}
+                    </td>
                     <td class="modal_table-imagem rounded">
                       <a href="#"
                         ><img src="@/assets/imgs/usuario.svg" alt="Imagem"
@@ -366,7 +398,7 @@
             <div class="modal_table-scroll">
               <table class="modal_table-1 table table-bordered" id="formacoes">
                 <tbody>
-                  <tr v-for="(formacoes,id) in formacoesComFiltro" :key="id">
+                  <tr v-for="(formacoes, id) in formacoesComFiltro" :key="id">
                     <td>{{ formacoes.nomeFormacao }}</td>
                     <td class="modal_table-imagem-forAndamento rounded">
                       <a href="#"
@@ -429,7 +461,9 @@ export default {
     participantesAtivosComFiltro () {
       if (this.filtroAtivos) {
         let exp = new RegExp(this.filtroAtivos.trim(), 'i')
-        return this.AtivosParticipantes.filter(ativos => exp.test(ativos.nomeParticipante))
+        return this.AtivosParticipantes.filter((ativos) =>
+          exp.test(ativos.nomeParticipante)
+        )
       } else {
         return this.AtivosParticipantes
       }
@@ -437,7 +471,9 @@ export default {
     participantesEfetivadosComFiltro () {
       if (this.filtroEfetivados) {
         let exp = new RegExp(this.filtroEfetivados.trim(), 'i')
-        return this.efetivadosParticipantes.filter(efetivados => exp.test(efetivados.nomeParticipante))
+        return this.efetivadosParticipantes.filter((efetivados) =>
+          exp.test(efetivados.nomeParticipante)
+        )
       } else {
         return this.efetivadosParticipantes
       }
@@ -445,35 +481,61 @@ export default {
     formacoesComFiltro () {
       if (this.filtroFormacoes) {
         let exp = new RegExp(this.filtroFormacoes.trim(), 'i')
-        return this.formacoesTotal.filter(formacoes => exp.test(formacoes.nomeFormacao))
+        return this.formacoesTotal.filter((formacoes) =>
+          exp.test(formacoes.nomeFormacao)
+        )
       } else {
         return this.formacoesTotal
       }
     }
-    // },
-    // methods: {
-    //   participantesAtivos: function () {
-    //     axios
-    //       .get('http://localhost:8080/relatorios/participantesAtivos')
-    //       .then(response => {
-    //         this.AtivosParticipantes = response.data
-    //       })
-    //   },
-    //   participantesEfetivados: function () {
-    //     axios
-    //       .get('http://localhost:8080/relatorios/participantesEfetivados')
-    //       .then(response => {
-    //         this.efetivadosParticipantes = response.data
-    //       })
-    //   },
-    //   totalFormacoes: function () {
-    //     axios
-    //       .get('http://localhost:8080/relatorios/FormacoesEmAndamento')
-    //       .then(response => {
-    //         this.formacoesTotal = response.data
-    //       })
-    //   }
-    // }
+  },
+  methods: {
+    redirecionamento: function () {
+      var valorDoSelect = document.getElementById('select3').value
+      var formulario = document.getElementById('formSelect')
+      if (valorDoSelect == 'Alura') {
+        formulario.action = encodeURI('http://localhost:8080/relatorios-alura')
+        formulario.submit()
+      } else if (valorDoSelect == 'Avaliações') {
+        formulario.action = encodeURI(
+          'http://localhost:8080/relatorios-avaliacoes'
+        )
+        formulario.submit()
+      } else if (valorDoSelect == 'Conclusões') {
+        formulario.action = encodeURI(
+          'http://localhost:8080/relatorios-conclusoes'
+        )
+        formulario.submit()
+      } else if (valorDoSelect == 'Investimentos') {
+        formulario.action = encodeURI(
+          'http://localhost:8080/relatorios-investimentos'
+        )
+        formulario.submit()
+      }
+    }
+  //   participantesAtivos: function () {
+  //     axios
+  //       .get('http://localhost:8080/relatorios/participantesAtivos')
+  //       .then(response => {
+  //         this.AtivosParticipantes = response.data
+  //       })
+  //   },
+  //   participantesEfetivados: function () {
+  //     axios
+  //       .get('http://localhost:8080/relatorios/participantesEfetivados')
+  //       .then(response => {
+  //         this.efetivadosParticipantes = response.data
+  //       })
+  //   },
+  //   totalFormacoes: function () {
+  //     axios
+  //       .get('http://localhost:8080/relatorios/FormacoesEmAndamento')
+  //       .then(response => {
+  //         this.formacoesTotal = response.data
+  //       })
+  //   }
+  // }
+  // },
   }
 }
 </script>
@@ -481,10 +543,10 @@ export default {
 <style>
 /* ---------- Classes dados_gerais ---------- */
 main .dados_gerais-divCard {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 
 .dados_gerais-main .card {
   box-shadow: 4px 4px 4px #ccc;
@@ -541,8 +603,8 @@ main .dados_gerais-divCard {
 }
 
 main .card-body {
-    flex: 1 1 auto;
-    padding: 0rem 1rem;
+  flex: 1 1 auto;
+  padding: 0rem 1rem;
 }
 
 /* ---------- Classes modal ---------- */
@@ -607,7 +669,8 @@ main .modal_table-imagem img {
   width: 37px !important;
 }
 
-.modal .modal_table-imagem-forAndamento, .modal_table-imagem-forAndamento img {
+.modal .modal_table-imagem-forAndamento,
+.modal_table-imagem-forAndamento img {
   width: 37px;
   padding: 0;
 }
@@ -757,8 +820,8 @@ main .modal_table-imagem img {
     font-size: 0.7rem;
   }
   main #modal_table-th-2 {
-  padding-left: 5px;
-}
+    padding-left: 5px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -766,7 +829,7 @@ main .modal_table-imagem img {
     width: 50%;
   }
   main #modal_table-th-2 {
-  padding-left: 55px;
+    padding-left: 55px;
   }
   main table th {
     font-size: 0.8rem;
@@ -787,8 +850,8 @@ main .modal_table-imagem img {
     margin-top: 210px;
   }
   main #modal_table-th-2 {
-  padding-left: 130px;
-}
+    padding-left: 130px;
+  }
 
   main table th {
     font-size: 1.2rem;

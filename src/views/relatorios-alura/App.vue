@@ -170,6 +170,10 @@ export default {
     height: 50px;
 }
 
+.btn-danger {
+  background-color: #AB0045;
+}
+
 .home.btn-header{
     background-color: #FFB700;
 }
