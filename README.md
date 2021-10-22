@@ -1,4 +1,4 @@
-# telas-spf-2
+# SIS-FrontEnd-SPF
 
 ## Project setup
 ```
