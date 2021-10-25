@@ -38,6 +38,7 @@ export default {
       })
         .then(response => {
           Cookie.set('login_token', response.data.token)
+          window.location.href = 'http://localhost:8080/home'
         })
         .catch(erro => {
           alert('Dados incorretos. Por favor, tente novamente.')
