@@ -1,25 +1,49 @@
 <template>
-  <body>
     <div class="container">
       <div class="form-login">
-        <form class="formulario" method="POST">
+        <form class="formulario" @submit.stop.prevent="submit">
           <h2>Faça seu login</h2>
           <h3>(Credenciais SIS)</h3>
 
-          <input class="input" type="email" name="email" placeholder="Email" />
-          <input class="input" type="password" name="senha" placeholder="Senha"/>
+          <input v-model="usuario" class="input" type="text" placeholder="Usuário" />
+          <input v-model="senha" class="input" type="password" placeholder="Senha"/>
           <a href="">Esqueceu sua senha?</a>
 
-          <input class="submit" type="submit" value="CONFIRMAR" />
+          <input class="submit" type="submit" value="CONFIRMAR"/>
         </form>
       </div>
     </div>
-  </body>
 </template>
 
 <script>
+import axios from 'axios'
+import Cookie from 'js-cookie'
+
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+      usuario: '',
+      senha: ''
+    }
+  },
+  created () {
+    Cookie.remove('login_token')
+  },
+  methods: {
+    submit () {
+      axios.post('http://localhost:8081/auth', {
+        usuario: this.usuario,
+        senha: this.senha
+      })
+        .then(response => {
+          Cookie.set('login_token', response.data.token)
+        })
+        .catch(erro => {
+          alert('Dados incorretos. Por favor, tente novamente.')
+        })
+    }
+  }
 }
 </script>
 
