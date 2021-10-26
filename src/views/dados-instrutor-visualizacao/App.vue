@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-xl-4"></div>
                 <div class="col-xl-2 d-flex justify-content-center">
-                    <h2 class="titulo secundario"> Status: <span v-bind:class="(instrutor.status == '1')?'ativo':'inativo'"> {{(instrutor.status == 1)?'Ativo':'Inativo'}}</span></h2>
+                    <h2 class="titulo secundario"> Status: <span v-bind:class="(instrutor.status == 'ATIVO')?'ativo':'inativo'"> {{(instrutor.status == 'ATIVO')?'Ativo':'Inativo'}}</span></h2>
                 </div>
             </div>
             <fieldset disabled>
@@ -46,9 +46,13 @@
             </fieldset>
             <div class="mt-5 row justify-content-evenly">
                 <div class="col-xl-4 ">
-                    <button type="button" class="btn submit form-control" data-bs-toggle="modal"
+                    <button v-if="instrutor.status == 'ATIVO'" type="button" class="btn submit form-control" data-bs-toggle="modal"
                         data-bs-target="#exampleModal">
                         DESATIVAR INSTRUTOR
+                    </button>
+                    <button v-else type="button" class="btn submit form-control" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        ATIVAR INSTRUTOR
                     </button>
                     <!--<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">DESATIVAR PARTICIPANTE</button>-->
                 </div>
@@ -68,7 +72,10 @@
                 </div>
                 <div class="modal-body d-flex justify-content-between">
                     <div>
-                        <h1 class="modal-title form-label fw-bold mb-0 titulo"> Deseja confirmar a desativação do
+                        <h1 v-if="instrutor.status == 'ATIVO'" class="modal-title form-label fw-bold mb-0 titulo"> Deseja confirmar a desativação do
+                            seguinte instrutor? </h1>
+
+                        <h1 v-else class="modal-title form-label fw-bold mb-0 titulo"> Deseja confirmar a ativação do
                             seguinte instrutor? </h1>
                     </div>
                     <div class="conteudomodal" id="instrutor-modal">
@@ -77,7 +84,7 @@
                 </div>
                 <div class="modal-footer border-0 justify-content-around">
                     <div>
-                        <button type="button" class="btn submit-modal">CONFIRMAR</button>
+                        <button type="button" class="btn submit-modal" @click= "alteraStatus">CONFIRMAR</button>
                     </div>
                     <div>
                         <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
@@ -113,6 +120,20 @@ export default {
           alert(`Erro: ${erro}`)
         })
     },
+
+    alteraStatus () {
+      let cpf = this.instrutor.cpf
+      console.log(cpf)
+      axios.put(`http://localhost:8081/api/instrutor/status/altera/${cpf}`)
+        .then(res => {
+          this.instrutor = res.data
+        })
+        .catch(erro => {
+          alert(`Erro: ${erro}`) 
+        })
+      window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+    },
+    
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
