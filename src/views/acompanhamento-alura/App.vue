@@ -10,7 +10,7 @@
                     <div class="col-lg-7 d-flex justify-content-center align-items-center">
                         <div class="d-block justify-content-center">
                             <h3 class="fw-bold text-center titulo">Participante selecionado:</h3>
-                            <h4 class="fw-bold grey-font text-center nome-participante">João da Silva Almeida</h4>
+                            <h4 class="fw-bold grey-font text-center nome-participante">{{participante.nome}}</h4>
                         </div>
                         <img src="@/assets/imgs/perfil.svg" class="rounded-circle" width="70" height="70" alt="Perfil" />
                     </div>
@@ -169,6 +169,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -177,51 +178,49 @@ export default {
   },
   data () {
     return {
-      registros: [
-        {
-          id: 1,
-          mesSemana: '1/1',
-          dataReg: '29/04/2021',
-          mesAvaliado: '1',
-          semanaAvaliada: '1',
-          horasMinimas: '30 Horas',
-          quantidadeDeHoras: '60 horas'
-        },
-        {
-          id: 2,
-          mesSemana: '2/3',
-          dataReg: '23/02/2021',
-          mesAvaliado: '2',
-          semanaAvaliada: '3',
-          horasMinimas: '30 Horas',
-          quantidadeDeHoras: '60 horas'
-        },
-        {
-          id: 3,
-          mesSemana: '2/1',
-          dataReg: '19/01/2021',
-          mesAvaliado: '2',
-          semanaAvaliada: '1',
-          horasMinimas: '30 Horas',
-          quantidadeDeHoras: '60 horas'
-        },
-        {
-          id: 4,
-          mesSemana: '3/2',
-          dataReg: '24/05/2021',
-          mesAvaliado: '3',
-          semanaAvaliada: '2',
-          horasMinimas: '30 Horas',
-          quantidadeDeHoras: '60 horas'
-        }
-      ],
+      registros: [],
+      participante: {},
+      id: {},
       registroModal: ''
     }
   },
+  created () {
+    this.getParticipanteNome()
+  },
   methods: {
+    getParticipanteNome (id) {
+      axios
+        .get(`http://localhost:8082/gerencial/${id}`)
+        .then((response) => {
+          this.participante = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    pegaDadosUrl () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+
+      return data
+    },
     carregaModal (registro) {
       this.registroModal = registro
     }
+  },
+  beforeMount () {
+    const idUrl = this.pegaDadosUrl()
+    this.id = idUrl.id
+    this.getParticipanteNome(idUrl.id)
   }
 }
 </script>

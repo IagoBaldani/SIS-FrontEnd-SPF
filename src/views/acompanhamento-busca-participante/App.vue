@@ -29,10 +29,10 @@
                         <table class="table table-bordered tabela">
                             <tbody>
                                 <tr id="participante" v-for="participante in participantes" v-bind:key="participante">
-                                    <th scope="row" class="titulo" id="info-id">{{participante.id}}</th>
+                                    <th scope="row" class="titulo" id="info-id">{{participante.cpf}}</th>
                                     <td id="info-nome">{{participante.nome}}</td>
                                     <td id="info-programa">{{participante.programa}}</td>
-                                    <td id="logoBoneco"><a href="../acompanhamento-gerencial"><img src="@/assets/imgs/account_circle_white_24dp.svg"></a></td>
+                                    <td id="logoBoneco"><a :href="'../acompanhamento-gerencial?id=' + participante.cpf"><img src="@/assets/imgs/account_circle_white_24dp.svg"></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -53,6 +53,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -61,63 +62,38 @@ export default {
   },
   data () {
     return {
-      participantes: [
-        {
-          id: 1,
-          nome: 'Felipe',
-          programa: 'Java'
-        },
-
-        {
-          id: 2,
-          nome: 'Iago',
-          programa: 'Mainframe'
-        },
-
-        {
-          id: 3,
-          nome: 'Rubens',
-          programa: 'Java'
-        },
-
-        {
-          id: 4,
-          nome: 'Lucas',
-          programa: 'Java'
-        },
-
-        {
-          id: 5,
-          nome: 'Melo',
-          programa: 'Mainframe'
-        },
-
-        {
-          id: 6,
-          nome: 'Gabriel',
-          programa: 'Java'
-        }
-      ],
-      programas: [
-        {
-          id: 1,
-          nome: 'Java'
-        },
-
-        {
-          id: 2,
-          nome: 'Mainframe'
-        },
-
-        {
-          id: 3,
-          nome: '.Net'
-        }
-      ]
+      participantes: [],
+      programas: []
     }
+  },
+  created () {
+    this.getParticipantes()
+    this.getFormacoes()
   },
 
   methods: {
+    getParticipantes () {
+      axios
+        .get('http://localhost:8082/busca/participantes/ativo')
+        .then((response) => {
+          this.participantes = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    getFormacoes () {
+      axios
+        .get('http://localhost:8082/busca/participantes/programa/em_andamento')
+        .then((response) => {
+          this.programas = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
     trataPrograma (linha) {
       var programaTxt = linha.querySelector('#info-programa').textContent
       let programa = 0
