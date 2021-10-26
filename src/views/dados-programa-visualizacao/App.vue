@@ -158,6 +158,14 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -166,6 +174,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       programa: {
         nome: 'Java',
         inicio: '20/07/2021',
@@ -175,6 +184,10 @@ export default {
         status: 'Em andamento'
       }
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
+    console.log(this.pegaDadosUrl())
   },
   methods: {
     pegaDadosUrl () {
@@ -191,11 +204,7 @@ export default {
 
       return data
     }
-  },
-  beforeMount () {
-    console.log(this.pegaDadosUrl())
   }
-
 }
 </script>
 

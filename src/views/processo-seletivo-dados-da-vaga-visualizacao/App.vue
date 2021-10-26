@@ -172,10 +172,37 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
+
 export default {
   name: 'App',
   components: {
     Header
+  },
+  data () {
+    return {
+      responseStatus: '',
+      candidato: {
+        id: 1,
+        formacao: 'Formação Java',
+        dataInicio: 'dd/MM/yyyy',
+        dataTermino: 'dd/MM/yyyy',
+        qtdEstagiarios: 20,
+        qtdTrainees: 30,
+        qtdAprendizes: 5,
+        participantesTotais: 55
+      }
+    }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   },
   methods: {
     modal () {
@@ -190,21 +217,6 @@ export default {
       cancelar.addEventListener('click', () => {
         modal.removeAttribute('style')
       })
-    }
-  },
-
-  data () {
-    return {
-      candidato: {
-        id: 1,
-        formacao: 'Formação Java',
-        dataInicio: 'dd/MM/yyyy',
-        dataTermino: 'dd/MM/yyyy',
-        qtdEstagiarios: 20,
-        qtdTrainees: 30,
-        qtdAprendizes: 5,
-        participantesTotais: 55
-      }
     }
   }
 }

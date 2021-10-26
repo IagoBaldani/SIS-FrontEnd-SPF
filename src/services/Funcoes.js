@@ -8,10 +8,12 @@ export default {
     await axios.get(`http://localhost:8081/auth/${token}`)
       .then(response => {
         this.responseStatus = response.data
+        console.log('AUTENTICADO')
       })
 
     if (this.responseStatus == 'ERRO') {
       window.location.href = 'http://localhost:8080/login'
+      console.log('NÃO AUTENTICADO')
     }
   }
 }
