@@ -60,6 +60,12 @@ module.exports = {
       title: 'Participante - Seleção para cadastro',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-selecao-cadastro']
     },
+    'dados-participante-arquivos': {
+      entry: './src/views/dados-participante-arquivos/main.js',
+      template: 'public/index.html',
+      title: 'Participante - Envio de arquivos',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-arquivos']
+    },
     'dados-instrutor-visualizacao': {
       entry: './src/views/dados-instrutor-visualizacao/main.js',
       template: 'public/index.html',
