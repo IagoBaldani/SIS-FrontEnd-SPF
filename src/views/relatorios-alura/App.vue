@@ -104,7 +104,14 @@
 
 <script>
 import Header from '@/components/Header.vue'
-// import axios from 'axios'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -113,6 +120,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       relatorio: {},
       mostrarFuncionarioMaiorQntHoras: false,
       mostrarFuncionarioMenorQntHoras: false
@@ -127,6 +135,9 @@ export default {
   //   //     // eslint-disable-next-line no-return-assign
   //   //     .then(res => this.relatorio = res.data)
   //   // }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   }
 }
 </script>

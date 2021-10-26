@@ -73,6 +73,14 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes.js'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -81,6 +89,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       candidato: {
         id: 1,
         nome: 'Gustavo de Oliveira Juliano',
@@ -94,7 +103,11 @@ export default {
         observacoes: 'Observações feitas através do Vue'
       }
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   }
+
 }
 </script>
 

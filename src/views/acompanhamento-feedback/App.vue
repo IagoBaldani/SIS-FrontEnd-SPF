@@ -127,6 +127,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',
@@ -135,6 +136,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       feedbacks: [
         {
           id: 1,
@@ -194,6 +196,9 @@ export default {
       ],
       feedbackModal: ''
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   },
   methods: {
     carregaModal (feedback) {

@@ -169,6 +169,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',
@@ -177,6 +178,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       registros: [
         {
           id: 1,
@@ -217,6 +219,9 @@ export default {
       ],
       registroModal: ''
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   },
   methods: {
     carregaModal (registro) {

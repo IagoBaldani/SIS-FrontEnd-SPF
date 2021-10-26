@@ -169,6 +169,14 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -177,7 +185,7 @@ export default {
   },
   data () {
     return {
-      // Esse dado virá pela URL
+      responseStatus: '',
       tipo: '',
       programas: [
         // Esses dados virão da API
@@ -238,11 +246,16 @@ export default {
       this.participante.notaProvaLogica = this.modelNotaLogica
       this.participante.instituicaoEnsino = this.modelInstituicaoEnsino
       this.participante.curso = this.modelCurso
-      this.participante.terminoGraduacao = formataDataParaExibicao(this.modelTerminoGraduacao)
+      this.participante.terminoGraduacao = this.formataDataParaExibicao(this.modelTerminoGraduacao)
       this.participante.programaSelecionado.nomeETurma = this.modelPrograma
       this.participante.observacao = this.modelObservacao
     },
+    formataDataParaExibicao (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
 
+      return dataFormatada
+    },
     exibeDadosPrograma (programas) {
       let elProgramas = document.querySelectorAll('#programa')
       let arrayOptions = []
@@ -265,7 +278,6 @@ export default {
         }
       })
     },
-
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -282,6 +294,7 @@ export default {
     }
   },
   beforeMount () {
+    Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
 
     if (dadosUrl.tipo == 'edicao') {
@@ -292,13 +305,6 @@ export default {
     this.participante.cpf = this.participanteApi.cpf
     this.participante.contato = this.participanteApi.contato
   }
-}
-
-function formataDataParaExibicao (data) {
-  const dataPreForm = new Date(data)
-  const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
-  return dataFormatada
 }
 
 </script>

@@ -12,15 +12,16 @@
     "bootstrap": "^5.1.1",
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
+    "js-cookie": "^3.0.1",
     "util": "^0.12.4",
     "utils": "^0.3.1",
     "vue": "^3.2.19",
-    "vue-router": "^3.5.2"
+    "vue-router": "^4.0.0-0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "^4.5.13",
+    "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-standard": "^5.1.2",

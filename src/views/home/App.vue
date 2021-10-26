@@ -68,11 +68,20 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',
   components: {
     Header
+  },
+  data () {
+    return {
+      responseStatus: ''
+    }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   }
 }
 </script>
