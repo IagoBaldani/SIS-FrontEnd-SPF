@@ -76,6 +76,14 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -84,6 +92,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       programas: [
         {
           id: 1,
@@ -106,6 +115,9 @@ export default {
       ]
     }
   },
+  beforeMount () {
+    Funcoes.verificaToken()
+  },
   methods: {
     filtraDados () {
       let dadosLinhas = this.pegaDados()
@@ -119,7 +131,6 @@ export default {
       const arrayBoolLinhas = this.verifica(dadosLinhas, nomeProcurado, statusProcurado)
       this.mudaVisibilidade(arrayBoolLinhas, linhas)
     },
-
     pegaDados () {
       let linhas = document.querySelectorAll('.programa')
       let arrayDadosDasLinhas = []
@@ -135,7 +146,6 @@ export default {
 
       return arrayDadosDasLinhas
     },
-
     trataStatus (item) {
       let statusTxt = item.querySelector('#info-status').textContent
       let status = 0
@@ -149,7 +159,6 @@ export default {
 
       return status
     },
-
     verifica (dadosLinhas, nomeProcurado, statusProcurado) {
       let arrayBoolLinhas = []
       let expressao = new RegExp(nomeProcurado, 'i')
@@ -174,7 +183,6 @@ export default {
 
       return arrayBoolLinhas
     },
-
     mudaVisibilidade (arrayBoolLinhas, linhas) {
       let i
       var contador = 0
@@ -196,7 +204,6 @@ export default {
         aviso.style.display = 'none'
       }
     },
-
     recarregaLista () {
       let linhas = document.querySelectorAll('.programa')
       let aviso = document.querySelector('.aviso')

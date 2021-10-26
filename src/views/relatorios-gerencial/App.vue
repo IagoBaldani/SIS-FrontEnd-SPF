@@ -433,7 +433,16 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
 // import axios from 'axios'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
+
 export default {
   name: 'App',
   components: {
@@ -441,6 +450,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       numeroTotalDeCadaLista: [],
       AtivosParticipantes: [],
       efetivadosParticipantes: [],
@@ -449,6 +459,9 @@ export default {
       filtroEfetivados: '',
       filtroFormacoes: ''
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   },
   // mounted () {
   //   axios

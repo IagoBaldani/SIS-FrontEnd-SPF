@@ -134,6 +134,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',
@@ -142,6 +143,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       conclusoes: [
         {
           id: 1,
@@ -178,6 +180,9 @@ export default {
       ],
       conclusaoModal: ''
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   },
   methods: {
     carregaModal (conclusao) {

@@ -110,7 +110,15 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
 // import axios from 'axios'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -119,11 +127,15 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       relatorioParticipante: '',
       relatorioInstrutores: '',
       dataSelecionada: ''
 
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   }
   // created () {
   //   this.investimentosParticipantes()

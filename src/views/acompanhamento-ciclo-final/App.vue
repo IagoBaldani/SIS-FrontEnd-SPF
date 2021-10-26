@@ -125,6 +125,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',
@@ -169,6 +170,9 @@ export default {
       ],
       conclusaoModal: ''
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   },
   methods: {
     carregaModal (conclusao) {

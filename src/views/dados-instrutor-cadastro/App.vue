@@ -54,6 +54,14 @@
 <script>
 import Header from '@/components/Header.vue'
 import axios from 'axios'
+import Cookie from 'js-cookie'
+import Funcoes from '../../services/Funcoes'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -62,9 +70,15 @@ export default {
   },
   data () {
     return {
-      // Esses dados serão oriundos da API do PortalSIS
+      responseStatus: '',
       instrutor: {}
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
+    const dadosUrl = this.pegaDadosUrl()
+
+    this.getInstrutor(dadosUrl.id)
   },
   methods: {
     enviarDados () {
@@ -72,7 +86,7 @@ export default {
       alert('Instrutor cadastrado com sucesso!')
     },
     getInstrutor (cpf) {
-      axios.get(`http://localhost:8081/api/instrutor/${cpf}`)
+      axios.get(`http://localhost:8081/api/instrutor/${cpf}`, config)
         .then(res => {
           this.instrutor = res.data
         })
@@ -94,11 +108,6 @@ export default {
 
       return data
     }
-  },
-  beforeMount () {
-    const dadosUrl = this.pegaDadosUrl()
-
-    this.getInstrutor(dadosUrl.id)
   }
 }
 </script>

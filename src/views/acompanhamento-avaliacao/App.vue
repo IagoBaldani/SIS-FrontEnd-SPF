@@ -160,6 +160,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',
@@ -168,6 +169,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       avaliacoes: [
         {
           id: 1,
@@ -196,6 +198,9 @@ export default {
       ],
       avaliacaoModal: ''
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   },
   methods: {
     carregaModal (avaliacao) {

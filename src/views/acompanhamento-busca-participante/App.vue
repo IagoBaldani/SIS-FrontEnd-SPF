@@ -53,6 +53,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',
@@ -61,6 +62,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       participantes: [
         {
           id: 1,
@@ -116,7 +118,9 @@ export default {
       ]
     }
   },
-
+  beforeMount () {
+    Funcoes.verificaToken()
+  },
   methods: {
     trataPrograma (linha) {
       var programaTxt = linha.querySelector('#info-programa').textContent
@@ -219,6 +223,7 @@ export default {
 </script>
 
 <style scoped>
+
 .participantes  {
     color: #090B2E ;
     padding: 1.1em;

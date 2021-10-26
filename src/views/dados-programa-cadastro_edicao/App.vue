@@ -135,6 +135,14 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -143,6 +151,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       coordenadores: [
         {
           id: 1,
@@ -162,11 +171,15 @@ export default {
       }
     }
   },
+  beforeMount () {
+    Funcoes.verificaToken()
+    console.log(this.pegaDadosUrl())
+  },
   methods: {
     enviarDados () {
       this.programa.nome = this.modelNome
-      this.programa.inicio = formataDataParaExibicao(this.modelInicio)
-      this.programa.termino = formataDataParaExibicao(this.modelTermino)
+      this.programa.inicio = this.formataDataParaExibicao(this.modelInicio)
+      this.programa.termino = this.formataDataParaExibicao(this.modelTermino)
       this.programa.coordenador = this.modelCoordenador
       this.programa.turma = this.modelTurma
     },
@@ -183,18 +196,14 @@ export default {
       })
 
       return data
+    },
+    formataDataParaExibicao (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+
+      return dataFormatada
     }
-  },
-  beforeMount () {
-    console.log(this.pegaDadosUrl())
   }
-}
-
-function formataDataParaExibicao (data) {
-  const dataPreForm = new Date(data)
-  const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
-  return dataFormatada
 }
 
 </script>
