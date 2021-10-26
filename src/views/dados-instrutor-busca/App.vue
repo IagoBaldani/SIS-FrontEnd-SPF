@@ -45,9 +45,9 @@
                 <tbody align="center">
                   <tr id="instrutor" v-for="instrutor in instrutores" :key="instrutor">
                     <th scope="row" width="50">{{ instrutor.cpf }}</th>
-                    <td id="info-nome">{{ instrutor.telefone }}</td>
-                    <td id="info-status" v-bind:class="instrutor.status == '1' ? 'ativo' : 'inativo'">
-                      {{ (instrutor.status == '1'?'Ativo':'Inativo')}}
+                    <td id="info-nome">{{ instrutor.nome }}</td>
+                    <td id="info-status" v-bind:class="instrutor.status == 'ATIVO' ? 'ativo' : 'inativo'">
+                      {{ (instrutor.status == 'ATIVO'?'Ativo':'Inativo')}}
                     </td>
                     <td class="imagem-coluna rounded" width="50">
                       <a :href="'/dados-instrutor-visualizacao?id=' + instrutor.cpf">
