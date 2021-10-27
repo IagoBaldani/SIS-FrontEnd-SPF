@@ -11,7 +11,7 @@
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
-                        <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
+                        <h4 class="fw-bold grey-font text-center">{{participante.nome}}</h4>
                     </div>
                     <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
@@ -53,7 +53,7 @@
                         <tbody>
                             <tr v-for="avaliacao in avaliacoes" v-bind:key="avaliacao">
                                 <th scope="row" class="w-50px titulo">{{avaliacao.id}}</th>
-                                <td class="text-align-left">{{avaliacao.tecnica}} / {{avaliacao.comportamental}} / {{avaliacao.moduloAgeis}} / {{avaliacao.lideranca}} / {{avaliacao.negocios}}</td>
+                                <td class="text-align-left">{{avaliacao.notaTecnica}} / {{avaliacao.notaComportamental}} / {{avaliacao.notaPraticasAgeis}} / {{avaliacao.notaLideranca}} / {{avaliacao.notaNegocios}}</td>
                                 <td @click="carregaModal(avaliacao)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalDeletar">
                                     <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
                                 </td>
@@ -80,25 +80,25 @@
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Técnica:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.tecnica}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaTecnica}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comportamental:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.comportamental}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaComportamental}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo práticas ágeis:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.moduloAgeis}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaPraticasAgeis}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo liderança:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.lideranca}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaLideranca}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo negócios:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.negocios}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaNegocios}}</p>
                         </div>
                     </div>
                 </div>
@@ -160,6 +160,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -168,38 +169,61 @@ export default {
   },
   data () {
     return {
-      avaliacoes: [
-        {
-          id: 1,
-          tecnica: 10,
-          comportamental: 9,
-          moduloAgeis: 8.5,
-          lideranca: 9.5,
-          negocios: 10
-        },
-        {
-          id: 2,
-          tecnica: 9,
-          comportamental: 3,
-          moduloAgeis: 2,
-          lideranca: 7,
-          negocios: 6
-        },
-        {
-          id: 3,
-          tecnica: 2.5,
-          comportamental: 10,
-          moduloAgeis: 7,
-          lideranca: 7,
-          negocios: 7
-        }
-      ],
-      avaliacaoModal: ''
+      avaliacoes: [],
+      avaliacaoModal: '',
+      participante: {}
     }
   },
+
+  beforeMount () {
+    const dadosUrl = this.pegaDadosUrl()
+    this.id = dadosUrl.id
+    this.getParticipanteNome(dadosUrl.id)
+    this.getAvaliacao(dadosUrl.id)
+  },
+
   methods: {
     carregaModal (avaliacao) {
       this.avaliacaoModal = avaliacao
+    },
+
+    pegaDadosUrl () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+
+      return data
+    },
+
+    getParticipanteNome (id) {
+      axios
+        .get(`http://localhost:8081/api/gerencial/${id}`)
+        .then((response) => {
+          this.participante = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    getAvaliacao (id) {
+      axios
+        .get(`http://localhost:8081/api/avaliacao/${id}`)
+        .then((response) => {
+          this.avaliacoes = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
 }

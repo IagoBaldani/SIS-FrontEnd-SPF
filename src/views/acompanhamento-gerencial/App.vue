@@ -30,14 +30,17 @@ export default {
       id: {}
     }
   },
-  created () {
-    this.getParticipanteNome()
+
+  beforeMount () {
+    const dadosUrl = this.pegaDadosUrl()
+    this.id = dadosUrl.id
+    this.getParticipanteNome(dadosUrl.id)  
   },
 
   methods: {
     getParticipanteNome (id) {
       axios
-        .get(`http://localhost:8082/gerencial/${id}`)
+        .get(`http://localhost:8081/api/gerencial/${id}`)
         .then((response) => {
           this.participante = response.data
         })
@@ -59,12 +62,8 @@ export default {
 
       return data
     }
-  },
-  beforeMount () {
-    const idUrl = this.pegaDadosUrl()
-    this.id = idUrl.id
-    this.getParticipanteNome(idUrl.id)
   }
+  
 }
 </script>
 

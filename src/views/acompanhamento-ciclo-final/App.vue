@@ -9,7 +9,7 @@
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
-                        <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
+                        <h4 class="fw-bold grey-font text-center">{{participante.nome}}</h4>
                     </div>
                     <img src="@/assets/imgs/perfil.svg" class="perfil-img"/>
                 </div>
@@ -125,6 +125,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -133,46 +134,46 @@ export default {
   },
   data () {
     return {
-      conclusoes: [
-        {
-          id: 1,
-          status: 'Progressiva',
-          reajuste: 'Não',
-          salario: 1500.00,
-          comprovante: 'comprovante.pdf',
-          dataAlteracao: '20/09/2021'
-        },
-        {
-          id: 2,
-          status: 'Progressiva',
-          reajuste: 'Não',
-          salario: 1500.00,
-          comprovante: 'comprovante.pdf',
-          dataAlteracao: '20/10/2021'
-        },
-        {
-          id: 3,
-          status: 'Progressiva',
-          reajuste: 'Não',
-          salario: 1500.00,
-          comprovante: 'comprovante.pdf',
-          dataAlteracao: '18/11/2021'
-        },
-        {
-          id: 4,
-          status: 'Final',
-          reajuste: 'Sim',
-          salario: 2700.00,
-          comprovante: 'comprovante.pdf',
-          dataAlteracao: '30/12/2021'
-        }
-      ],
-      conclusaoModal: ''
+      participante: {}
     }
   },
+
+  beforeMount () {
+    const dadosUrl = this.pegaDadosUrl()
+    this.id = dadosUrl.id
+    this.getParticipanteNome(dadosUrl.id)
+  },
+
   methods: {
     carregaModal (conclusao) {
       this.conclusaoModal = conclusao
+    },
+    
+    pegaDadosUrl () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+
+      return data
+    },
+
+    getParticipanteNome (id) {
+      axios
+        .get(`http://localhost:8081/api/gerencial/${id}`)
+        .then((response) => {
+          this.participante = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
 }

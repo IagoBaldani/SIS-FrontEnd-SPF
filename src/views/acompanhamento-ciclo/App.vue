@@ -75,7 +75,7 @@
                         <tbody>
                             <tr v-for="conclusao in conclusoes" v-bind:key="conclusao">
                                 <th scope="row" class="titulo">{{conclusao.id}}</th>
-                                <td>{{conclusao.dataAlteracao}}</td>
+                                <td>{{conclusao.dataRegistro}}</td>
                                 <td>{{conclusao.status}}</td>
                                 <td @click="carregaModal(conclusao)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalCiclo">
                                     <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
@@ -83,7 +83,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <a href="../acompanhamento-ciclo-final" class="w-50">
+                    <a :href="'../acompanhamento-ciclo-final?id=' + id" class="w-50">
                     <button type="button" class="btn btn-warning sis-yellow-btn fw-bold fs-5 w-100">REGISTRAR ÚLTIMO
                         CICLO</button></a>
                 </div>
@@ -105,15 +105,15 @@
                     <div class="col-lg-7">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Reajuste salarial:</h4>
-                            <p class="grey-font h4">{{conclusaoModal.reajuste}}</p>
+                            <p class="grey-font h4">{{conclusaoModal.resultado}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/conclusão:</h4>
                             <p class="grey-font h4 text-decoration-underline">{{conclusaoModal.comprovante}}</p>
                         </div>
                         <div class="mb-4">
-                            <h4 class="fw-bold titulo">Salário:</h4>
-                            <p class="grey-font h4">{{conclusaoModal.salario}}</p>
+                            <h4 class="fw-bold titulo">Cargo:</h4>
+                            <p class="grey-font h4">{{conclusaoModal.cargoPrograma}}</p>
                         </div>
                     </div>
                     <div class="col-lg-5">
@@ -123,7 +123,7 @@
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data da alteração:</h4>
-                            <p class="grey-font h4">{{conclusaoModal.dataAlteracao}}</p>
+                            <p class="grey-font h4">{{conclusaoModal.dataRegistro}}</p>
                         </div>
                     </div>
                 </div>
@@ -134,6 +134,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -142,46 +143,61 @@ export default {
   },
   data () {
     return {
-      conclusoes: [
-        {
-          id: 1,
-          status: 'Progressiva',
-          reajuste: 'Não',
-          salario: 1500.00,
-          comprovante: 'comprovante.pdf',
-          dataAlteracao: '20/09/2021'
-        },
-        {
-          id: 2,
-          status: 'Progressiva',
-          reajuste: 'Não',
-          salario: 1500.00,
-          comprovante: 'comprovante.pdf',
-          dataAlteracao: '20/10/2021'
-        },
-        {
-          id: 3,
-          status: 'Progressiva',
-          reajuste: 'Não',
-          salario: 1500.00,
-          comprovante: 'comprovante.pdf',
-          dataAlteracao: '18/11/2021'
-        },
-        {
-          id: 4,
-          status: 'Final',
-          reajuste: 'Sim',
-          salario: 2700.00,
-          comprovante: 'comprovante.pdf',
-          dataAlteracao: '30/12/2021'
-        }
-      ],
-      conclusaoModal: ''
+      conclusoes: [],
+      conclusaoModal: '',
+      id: {}
     }
   },
+
+  beforeMount () {
+    const dadosUrl = this.pegaDadosUrl()
+    this.id = dadosUrl.id
+    this.getParticipanteNome(dadosUrl.id)
+    this.getCiclo(dadosUrl.id)
+  },
+
   methods: {
     carregaModal (conclusao) {
       this.conclusaoModal = conclusao
+    },
+
+    pegaDadosUrl () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+
+      return data
+    },
+
+    getParticipanteNome (id) {
+      axios
+        .get(`http://localhost:8081/api/gerencial/${id}`)
+        .then((response) => {
+          this.participante = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    getCiclo (id) {
+      axios
+        .get(`http://localhost:8081/api/conclusao/${id}`)
+        .then((response) => {
+          this.conclusoes = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
 }

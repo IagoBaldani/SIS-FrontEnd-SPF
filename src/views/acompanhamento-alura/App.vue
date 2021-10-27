@@ -54,9 +54,9 @@
                             </thead>
                             <tbody>
                                 <tr v-for="registro in registros" v-bind:key="registro">
-                                    <th scope="row" class=" text-center titulo" id="info-id">{{registro.id}}</th>
-                                    <td class="text-center campo-tabela">{{registro.mesSemana}}</td>
-                                    <td class="text-center campo-tabela">{{registro.dataReg}}</td>
+                                    <th scope="row" class=" text-center titulo" id="info-id">{{registro.codigoAlura}}</th>
+                                    <td class="text-center campo-tabela">{{registro.mesAvaliado}}/{{registro.semanaAvaliada}}</td>
+                                    <td class="text-center campo-tabela">{{registro.dataRegistro}}</td>
                                     <td @click="carregaModal(registro)"
                                         id="olho" class="td-button"
                                         data-bs-toggle="modal"
@@ -91,17 +91,17 @@
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Horas Semanais:</h3>
-                            <p class="">{{registroModal.horasMinimas}}</p>
+                            <p class="">{{registroModal.hrMinSemana}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Data do registro:</h3>
-                            <p class="">{{registroModal.dataReg}}</p>
+                            <p class="">{{registroModal.dataRegistro}}</p>
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Quantidade de horas totais:</h3>
-                            <p class="">{{registroModal.quantidadeDeHoras}}</p>
+                            <p class="">{{registroModal.qtdHoras}}</p>
                         </div>
                     </div>
                 </div>
@@ -184,13 +184,18 @@ export default {
       registroModal: ''
     }
   },
-  created () {
-    this.getParticipanteNome()
+  
+  beforeMount () {
+    const dadosUrl = this.pegaDadosUrl()
+    this.id = dadosUrl.id
+    this.getParticipanteNome(dadosUrl.id)
+    this.getAlura(dadosUrl.id)
   },
+
   methods: {
     getParticipanteNome (id) {
       axios
-        .get(`http://localhost:8082/gerencial/${id}`)
+        .get(`http://localhost:8081/api/gerencial/${id}`)
         .then((response) => {
           this.participante = response.data
           console.log(response.data)
@@ -199,6 +204,19 @@ export default {
           console.log(error)
         })
     },
+
+    getAlura (id) {
+      axios
+        .get(`http://localhost:8081/api/alura/${id}`)
+        .then((response) => {
+          this.registros = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -216,11 +234,6 @@ export default {
     carregaModal (registro) {
       this.registroModal = registro
     }
-  },
-  beforeMount () {
-    const idUrl = this.pegaDadosUrl()
-    this.id = idUrl.id
-    this.getParticipanteNome(idUrl.id)
   }
 }
 </script>

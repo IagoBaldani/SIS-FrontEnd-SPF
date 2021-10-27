@@ -9,7 +9,7 @@
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
-                        <h4 class="fw-bold text-center nomeCol">Nome do Colaborador</h4>
+                        <h4 class="fw-bold text-center nomeCol">{{participante.nome}}</h4>
                     </div>
                     <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
@@ -43,7 +43,7 @@
                             <tbody>
                                 <tr v-for="feedback in feedbacks" :key="feedback">
                                     <td scope="row">{{feedback.id}}</td>
-                                    <td>{{feedback.anotacoes}}</td>
+                                    <td>{{feedback.anotacao}}</td>
                                     <td @click="carregaModal(feedback)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
                                         <img class="imgicon" name="imglogo" src="@/assets/imgs/visibility_white_24dp.svg"></td>
                                 </tr>
@@ -127,6 +127,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -135,69 +136,61 @@ export default {
   },
   data () {
     return {
-      feedbacks: [
-        {
-          id: 1,
-          data: '12/08/2021',
-          anotacoes: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
-        },
-        {
-          id: 2,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        },
-        {
-          id: 3,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        },
-        {
-          id: 4,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        },
-        {
-          id: 5,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        },
-        {
-          id: 6,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        },
-        {
-          id: 7,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        },
-        {
-          id: 8,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        },
-        {
-          id: 9,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        },
-        {
-          id: 10,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        },
-        {
-          id: 11,
-          data: '12/08/2021',
-          anotacoes: 'Teste de anotacao para feedback'
-        }
-      ],
-      feedbackModal: ''
+      feedbacks: [],
+      feedbackModal: '',
+      participante: {}
     }
   },
+
+  beforeMount () {
+    const dadosUrl = this.pegaDadosUrl()
+    this.id = dadosUrl.id
+    this.getParticipanteNome(dadosUrl.id)
+    this.getFeedback(dadosUrl.id)
+  },
+
   methods: {
     carregaModal (feedback) {
       this.feedbackModal = feedback
+    },
+
+    getParticipanteNome (id) {
+      axios
+        .get(`http://localhost:8081/api/gerencial/${id}`)
+        .then((response) => {
+          this.participante = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    getFeedback (id) {
+      axios
+        .get(`http://localhost:8081/api/feedback/${id}`)
+        .then((response) => {
+          this.feedbacks = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    pegaDadosUrl () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+
+      return data
     }
   }
 }

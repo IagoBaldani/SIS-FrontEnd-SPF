@@ -66,7 +66,7 @@ export default {
       programas: []
     }
   },
-  created () {
+  beforeMount () {
     this.getParticipantes()
     this.getFormacoes()
   },
@@ -74,7 +74,7 @@ export default {
   methods: {
     getParticipantes () {
       axios
-        .get('http://localhost:8082/busca/participantes/ativo')
+        .get('http://localhost:8081/api/busca/participantes/ativo')
         .then((response) => {
           this.participantes = response.data
         })
@@ -85,7 +85,7 @@ export default {
 
     getFormacoes () {
       axios
-        .get('http://localhost:8082/busca/participantes/programa/em_andamento')
+        .get('http://localhost:8081/api/busca/participantes/programa/em_andamento')
         .then((response) => {
           this.programas = response.data
         })
