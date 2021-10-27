@@ -84,9 +84,10 @@ export default {
     enviarDados () {
       // Pega os dados da API do PortalSIS, cria um objeto e envia os dados para nossa API
       alert('Instrutor cadastrado com sucesso!')
+      window.location.href = 'http://localhost:8080/dados-instrutor-selecao-cadastro'
     },
     getInstrutor (cpf) {
-      axios.get(`http://localhost:8081/api/instrutor/${cpf}`, config)
+      axios.get(`http://localhost:8081/api/mock/instrutor/${cpf}`, config)
         .then(res => {
           this.instrutor = res.data
         })
