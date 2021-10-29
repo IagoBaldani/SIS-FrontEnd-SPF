@@ -108,8 +108,8 @@
                             <ul class="fw-bold subtitulo text-start">
                                 Informações gerais:
                                 <li>Nome: <span class="titulo"> {{ programa.nome }} </span></li>
-                                <li>Início do Programa: <span class="titulo">{{ programa.inicio }}</span></li>
-                                <li>Término do Programa: <span class="titulo">{{ programa.termino }}</span></li>
+                                <li>Início do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programa.inicio)}}</span></li>
+                                <li>Término do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programa.termino)}}</span></li>
                                 <li>Instrutor: <span class="titulo">{{ programa.instrutor }}</span></li>
                                 <li>Turma: <span class="titulo">{{ programa.turma }}</span></li>
                             </ul>
@@ -158,7 +158,7 @@ export default {
         nome: '',
         inicio: '',
         termino: '',
-        instrutor: '',
+        instrutorCpf: '',
         turma: ''
       }
     }
@@ -173,10 +173,10 @@ export default {
   },
   methods: {
     postPrograma () {
-      axios.post('http://localhost:8081/api/instrutor', this.programa, config)
+      axios.post('http://localhost:8081/api/programa', this.programa, config)
         .then(response => {
           if (response.status == 200) {
-            window.location.href = '/dados-participante-busca'
+            window.location.href = '/dados-programa-busca'
           }
         })
         .catch(error => {
@@ -194,8 +194,8 @@ export default {
     },
     enviarDados () {
       this.programa.nome = this.modelNome
-      this.programa.inicio = this.formataDataParaExibicao(this.modelInicio)
-      this.programa.termino = this.formataDataParaExibicao(this.modelTermino)
+      this.programa.inicio = this.modelInicio
+      this.programa.termino = this.modelTermino
       this.programa.instrutor = this.modelInstrutor
       this.programa.turma = this.modelTurma
     },
