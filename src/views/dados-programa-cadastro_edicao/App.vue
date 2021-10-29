@@ -46,14 +46,14 @@
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label fw-bold mb-0 titulo">Coordenador</label>
-                        <select class="form-select" id="coordenadores" v-model="modelCoordenador">
+                        <select class="form-select" id="instrutores" v-model="modelInstrutor">
                             <option
                                 id="coordenador"
-                                v-for="coordenador in coordenadores"
-                                v-bind:value="coordenador.nome"
-                                v-bind:key="coordenador"
+                                v-for="instrutor in instrutores"
+                                v-bind:value="instrutor.cpf"
+                                v-bind:key="instrutor"
                             >
-                                {{ coordenador.nome }}
+                                {{ instrutor.nome }}
                             </option>
                         </select>
                     </div>
@@ -110,13 +110,13 @@
                                 <li>Nome: <span class="titulo"> {{ programa.nome }} </span></li>
                                 <li>Início do Programa: <span class="titulo">{{ programa.inicio }}</span></li>
                                 <li>Término do Programa: <span class="titulo">{{ programa.termino }}</span></li>
-                                <li>Instrutor: <span class="titulo">{{ programa.coordenador }}</span></li>
+                                <li>Instrutor: <span class="titulo">{{ programa.instrutor }}</span></li>
                                 <li>Turma: <span class="titulo">{{ programa.turma }}</span></li>
                             </ul>
                         </div>
                         <div class="mt-3 modal-footer border-0 justify-content-around">
                             <div>
-                                <button type="button" class="btn submit-modal">
+                                <button type="button" class="btn submit-modal" @click="postPrograma">
                                     CONFIRMAR
                                 </button>
                             </div>
@@ -137,6 +137,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import Cookie from 'js-cookie'
+import axios from 'axios'
 
 let config = {
   headers: {
@@ -152,35 +153,50 @@ export default {
   data () {
     return {
       responseStatus: '',
-      coordenadores: [
-        {
-          id: 1,
-          nome: 'Kaiqui Lopes'
-        },
-        {
-          id: 2,
-          nome: 'Luciana Neuber'
-        }
-      ],
+      instrutores: [],
       programa: {
         nome: '',
         inicio: '',
         termino: '',
-        coordenador: '',
+        instrutor: '',
         turma: ''
       }
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-    console.log(this.pegaDadosUrl())
+    const dadosUrl = this.pegaDadosUrl()
+
+    if (dadosUrl.tipo != 'edicao') {
+      this.getInstrutor()
+    }
   },
   methods: {
+    postPrograma () {
+      axios.post('http://localhost:8081/api/instrutor', this.programa, config)
+        .then(response => {
+          if (response.status == 200) {
+            window.location.href = '/dados-participante-busca'
+          }
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
+    getInstrutor () {
+      axios.get('http://localhost:8081/api/instrutor', config)
+        .then(response => {
+          this.instrutores = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
     enviarDados () {
       this.programa.nome = this.modelNome
       this.programa.inicio = this.formataDataParaExibicao(this.modelInicio)
       this.programa.termino = this.formataDataParaExibicao(this.modelTermino)
-      this.programa.coordenador = this.modelCoordenador
+      this.programa.instrutor = this.modelInstrutor
       this.programa.turma = this.modelTurma
     },
     pegaDadosUrl () {

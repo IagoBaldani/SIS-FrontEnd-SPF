@@ -16,7 +16,7 @@
           <div class="mb-3">
             <select class="form-select mt-4" id="filtro-programa">
               <option disabled selected value="0">Programa de Formação</option>
-              <option id="programa" v-bind:value="programa.id" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
+              <option id="programa" v-bind:value="programa.id" v-for="programa in programas" v-bind:key="programa">{{programa.nome + " - " + programa.turma}}</option>
             </select>
           </div>
           <div class="mb-3">
@@ -38,12 +38,12 @@
             <table class="table table-bordered tabela mt-4 ">
               <tbody align="center">
               <tr id="participante" v-for="participante in participantes" v-bind:key="participante">
-                <th scope="row" width="50">{{participante.id}}</th>
+                <th scope="row" width="50">{{participante.cpf}}</th>
                 <td id="info-nome">{{participante.nome}}</td>
-                <td id="info-programa">{{participante.programa}}</td>
+                <td id="info-programa">{{participante.programa + " - " + participante.turmaPrograma}}</td>
                 <td id="info-status"
-                    v-bind:class="(participante.status == 'Ativo')?'ativo':'inativo'">
-                  {{participante.status}}</td>
+                    v-bind:class="(participante.status == 'ATIVO')?'ativo':'inativo'">
+                  {{(participante.status == 'ATIVO')?'Ativo':'Inativo'}}</td>
                 <td class="imagem rounded" width="50">
                   <a :href="'/dados-participante-cadastro_edicao?id=' + participante.id + '&tipo=edicao'">
                     <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem" />
@@ -77,6 +77,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import Cookie from 'js-cookie'
+import axios from 'axios'
 
 let config = {
   headers: {
@@ -92,58 +93,37 @@ export default {
   data () {
     return {
       responseStatus: '',
-      participantes: [
-        {
-          id: 1,
-          nome: 'Kaiqui Lopes',
-          programa: 'Java',
-          status: 'Ativo'
-        },
-        {
-          id: 2,
-          nome: 'Iago Baldani',
-          programa: 'Java',
-          status: 'Ativo'
-        },
-        {
-          id: 3,
-          nome: 'Leticia Angulo',
-          programa: 'Mainframe',
-          status: 'Ativo'
-        },
-        {
-          id: 4,
-          nome: 'Geovanni Santos',
-          programa: '.net',
-          status: 'Inativo'
-        },
-        {
-          id: 5,
-          nome: 'Pedro Xavier',
-          programa: 'Mainframe',
-          status: 'Inativo'
-        }
-      ],
-      programas: [
-        {
-          id: 1,
-          nome: 'Java'
-        },
-        {
-          id: 2,
-          nome: 'Mainframe'
-        },
-        {
-          id: 3,
-          nome: '.net'
-        }
-      ]
+      participantes: [],
+      programas: []
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
+
+    this.getParticipantes()
+    this.getProgramas()
   },
   methods: {
+    getParticipantes () {
+      axios.get('http://localhost:8081/api/participante', config)
+        .then(response => {
+          this.participantes = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
+
+    getProgramas () {
+      axios.get('http://localhost:8081/api/programa', config)
+        .then(response => {
+          this.programas = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
+
     filtraDados () {
       const dadosLinhas = this.pegaDados()
 
@@ -169,7 +149,6 @@ export default {
       programas.forEach(programa => {
         arrayProgramas.push(programa.textContent)
       })
-      console.log(arrayProgramas)
 
       linhas.forEach(linha => {
         let dadosLinha = []
@@ -182,7 +161,6 @@ export default {
         arrayDadosDasLinhas.push(dadosLinha)
       })
 
-      console.log(arrayDadosDasLinhas)
       return arrayDadosDasLinhas
     },
 
