@@ -100,7 +100,7 @@ export default {
   data () {
     return {
       responseStatus: '',
-      instrutores: {}
+      instrutores: []
     }
   },
   methods: {

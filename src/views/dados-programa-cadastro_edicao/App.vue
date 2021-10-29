@@ -173,10 +173,10 @@ export default {
   },
   methods: {
     postPrograma () {
-      axios.post('http://localhost:8081/api/instrutor', this.programa, config)
+      axios.post('http://localhost:8081/api/programa', this.programa, config)
         .then(response => {
           if (response.status == 200) {
-            window.location.href = '/dados-participante-busca'
+            window.location.href = '/dados-programa-busca'
           }
         })
         .catch(error => {

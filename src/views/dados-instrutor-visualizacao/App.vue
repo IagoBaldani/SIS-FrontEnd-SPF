@@ -17,19 +17,19 @@
                     <div class="col-xl-4">
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Nome</label>
-                            <input class="form-control disabledTextInput" v-bind:value="instrutor.nome" type="text">
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.nome" type="text" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Telefone</label>
-                            <input class="form-control disabledTextInput"  v-bind:value="instrutor.telefone" type="tel" disabled readonly>
+                            <input class="form-control disabledTextInput"  v-bind:value="instrutor.telefone" type="tel" disabled >
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
-                            <input class="form-control disabledTextInput" v-bind:value="instrutor.cpf" type="text">
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.cpf" type="text" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
-                            <input class="form-control disabledTextInput" v-bind:value="instrutor.email" type="email">
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.email" type="email" disabled>
                         </div>
                     </div>
                     <div class="col-xl-4">
