@@ -46,11 +46,11 @@
               <table class="table table-bordered tabela mt-4">
                 <tbody align="center">
                   <tr id="instrutor" v-for="instrutor in instrutores" :key="instrutor">
-                    <th scope="row" width="50">{{ instrutor.id }}</th>
+                    <th scope="row" width="50">{{ instrutor.cpf }}</th>
                     <td id="info-nome">{{ instrutor.nome }}</td>
                     <td id="info-cargo">{{ instrutor.cargo }}</td>
                     <td class="imagem-coluna rounded" width="50">
-                      <a :href="'/dados-instrutor-cadastro?id=' + instrutor.id">
+                      <a :href="'/dados-instrutor-cadastro?id=' + instrutor.cpf">
                         <img src="@/assets/imgs/account_circle_white_24dp.svg" />
                       </a>
                     </td>
@@ -76,6 +76,14 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
+import axios from 'axios'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -85,39 +93,26 @@ export default {
   data () {
     return {
       responseStatus: '',
-      instrutores: [
-        {
-          id: 1,
-          nome: 'Kaiqui Lopes',
-          cargo: 'Analista Java Sr'
-        },
-        {
-          id: 2,
-          nome: 'Luciana Neuber',
-          cargo: 'Coordenador - Programa de Formação'
-        },
-        {
-          id: 3,
-          nome: 'Kaiqui Lopes',
-          cargo: 'Analista Java Sr'
-        },
-        {
-          id: 4,
-          nome: 'Luciana Neuber',
-          cargo: 'Coordenador - Programa de Formação'
-        },
-        {
-          id: 5,
-          nome: 'Kaiqui Lopes',
-          cargo: 'Analista Java Sr'
-        }
-      ]
+      instrutores: []
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
+
+    this.getInstrutor()
   },
+  
   methods: {
+    getInstrutor () {
+      axios.get('http://localhost:8081/api/mock/instrutor', config)
+        .then(res => {
+          this.instrutores = res.data
+        })
+        .catch(erro => {
+          alert(`Erro na requisição (${erro})`)
+        })
+    },
+    
     filtraDados () {
       const dadosLinhas = this.pegaDados()
 

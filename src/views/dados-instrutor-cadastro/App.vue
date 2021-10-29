@@ -71,7 +71,13 @@ export default {
   data () {
     return {
       responseStatus: '',
-      instrutor: {}
+      instrutor: {},
+      instrutorForm: {
+        nome: '',
+        status: '',
+        cpf: '',
+        telefone: ''
+      }
     }
   },
   beforeMount () {
@@ -82,11 +88,21 @@ export default {
   },
   methods: {
     enviarDados () {
-      // Pega os dados da API do PortalSIS, cria um objeto e envia os dados para nossa API
-      alert('Instrutor cadastrado com sucesso!')
+      this.instrutorForm.nome = this.instrutor.nome
+      this.instrutorForm.status = 'ATIVO'
+      this.instrutorForm.cpf = this.instrutor.cpf
+      this.instrutorForm.telefone = this.instrutor.telefone
+      axios.post('http://localhost:8081/api/instrutor', this.instrutorForm, config)
+        .then(res => {
+          alert('Instrutor cadastrado com sucesso!')
+          window.location.href = 'http://localhost:8080/dados-instrutor-selecao-cadastro'
+        })
+        .catch(erro => {
+          alert(`Erro: ${erro}`)
+        })
     },
     getInstrutor (cpf) {
-      axios.get(`http://localhost:8081/api/instrutor/${cpf}`, config)
+      axios.get(`http://localhost:8081/api/mock/instrutor/${cpf}`, config)
         .then(res => {
           this.instrutor = res.data
         })
