@@ -40,8 +40,8 @@
                                 <td id="info-nome"> {{ programa.nome }}</td>
                                 <td>{{ programa.turma }}</td>
                                 <td id="info-status" class="info-status"
-                                    v-bind:class="(programa.status == 'Encerrado')?'encerrado':'em-andamento'">
-                                    {{ programa.status }}
+                                    v-bind:class="(programa.status == 'ENCERRADO')?'encerrado':'em-andamento'">
+                                    {{(programa.status == 'ENCERRADO')?'Encerrado':'Em andamento' }}
                                 </td>
                                 <td class="imagem rounded" width="50">
                                     <a :href="'/dados-programa-cadastro_edicao?id=' + programa.id + '&tipo=edicao'">
@@ -78,6 +78,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import Cookie from 'js-cookie'
+import axios from 'axios'
 
 let config = {
   headers: {
@@ -93,32 +94,23 @@ export default {
   data () {
     return {
       responseStatus: '',
-      programas: [
-        {
-          id: 1,
-          nome: 'Java',
-          turma: 'Turma I 2020',
-          status: 'Encerrado'
-        },
-        {
-          id: 2,
-          nome: 'BI',
-          turma: 'Turma I 2021',
-          status: 'Em andamento'
-        },
-        {
-          id: 3,
-          nome: 'Mainframe',
-          turma: 'Turma I 2021',
-          status: 'Em andamento'
-        }
-      ]
+      programas: []
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
+    this.getProgramas()
   },
   methods: {
+    getProgramas () {
+      axios.get('http://localhost:8081/api/programa', config)
+        .then(response => {
+          this.programas = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
     filtraDados () {
       let dadosLinhas = this.pegaDados()
 

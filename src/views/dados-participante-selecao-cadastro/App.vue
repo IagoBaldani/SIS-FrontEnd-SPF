@@ -46,11 +46,11 @@
               <table class="table table-bordered tabela mt-4">
                 <tbody align="center">
                 <tr id="participante" v-for="participante in participantes" :key="participante">
-                  <th scope="row" width="50">{{ participante.id }}</th>
+                  <th scope="row" width="50">{{ participante.cpf }}</th>
                   <td id="info-nome">{{ participante.nome }}</td>
                   <td id="info-cargo">{{ participante.cargo }}</td>
                   <td class="imagem-coluna rounded" width="50">
-                    <a :href="'/dados-participante-cadastro_edicao?id=' + participante.id">
+                    <a :href="'/dados-participante-cadastro_edicao?id=' + participante.cpf">
                       <img src="@/assets/imgs/account_circle_white_24dp.svg" />
                     </a>
                   </td>
@@ -77,6 +77,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import Cookie from 'js-cookie'
+import axios from 'axios'
 
 let config = {
   headers: {
@@ -92,39 +93,25 @@ export default {
   data () {
     return {
       responseStatus: '',
-      participantes: [
-        {
-          id: 1,
-          nome: 'Kaiqui Lopes',
-          cargo: 'Jovem Aprendiz'
-        },
-        {
-          id: 2,
-          nome: 'Iago Baldani',
-          cargo: 'Trainee'
-        },
-        {
-          id: 3,
-          nome: 'Leticia Angulo',
-          cargo: 'Estagiário'
-        },
-        {
-          id: 4,
-          nome: 'Geovanni Santos',
-          cargo: 'Estagiário'
-        },
-        {
-          id: 5,
-          nome: 'Pedro Xavier',
-          cargo: 'Trainee'
-        }
-      ]
+      participantes: []
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
+
+    this.getPartipantesApi()
   },
   methods: {
+    getPartipantesApi () {
+      axios.get('http://localhost:8081/api/mock/participante', config)
+        .then(response => {
+          this.participantes = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
+
     filtraDados () {
       const dadosLinhas = this.pegaDados()
 
