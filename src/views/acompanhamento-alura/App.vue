@@ -169,6 +169,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
 import axios from 'axios'
 
 export default {

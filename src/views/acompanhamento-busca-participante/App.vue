@@ -53,7 +53,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import axios from 'axios'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',
@@ -195,6 +195,7 @@ export default {
 </script>
 
 <style scoped>
+
 .participantes  {
     color: #090B2E ;
     padding: 1.1em;

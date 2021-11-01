@@ -196,6 +196,15 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
+
 export default {
   name: 'App',
   components: {
@@ -203,6 +212,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       formacoes: [
         {
           id: 1,
@@ -227,6 +237,9 @@ export default {
         qtdTotal: ''
       }
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   },
   methods: {
     escutaQuantidades () {
@@ -257,20 +270,21 @@ export default {
     },
     enviarDados () {
       this.informacoes.formacao = this.modelFormacao
-      this.informacoes.dataIni = formataDataParaExibicao(this.modelDataIni)
-      this.informacoes.dataFin = formataDataParaExibicao(this.modelDataFin)
+      this.informacoes.dataIni = this.formataDataParaExibicao(this.modelDataIni)
+      this.informacoes.dataFin = this.formataDataParaExibicao(this.modelDataFin)
       this.informacoes.qtdEstagiario = this.modelQtdEstagiarios
       this.informacoes.qtdAprendiz = this.modelQtdAprendizes
       this.informacoes.qtdTrainee = this.modelQtdTrainees
       this.informacoes.qtdTotal = document.querySelector('#qtdTotal').value
+    },
+    formataDataParaExibicao (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
     }
   }
 }
-function formataDataParaExibicao (data) {
-  const dataPreForm = new Date(data)
-  const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-  return dataFormatada
-}
+
 </script>
 
 <style>

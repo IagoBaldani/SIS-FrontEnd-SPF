@@ -270,6 +270,14 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -278,6 +286,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       participantes: [
         {
           nome: 'Marco Aguiar',
@@ -365,6 +374,9 @@ export default {
         }
       ]
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   },
   methods: {
     filtraDados () {

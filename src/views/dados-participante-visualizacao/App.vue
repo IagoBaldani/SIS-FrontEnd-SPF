@@ -138,6 +138,14 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -146,6 +154,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       participante: {
         // Esses dados serão obtidos pela nossa API
         id: 1,
@@ -190,6 +199,7 @@ export default {
     }
   },
   beforeMount () {
+    Funcoes.verificaToken()
     console.log(this.pegaDadosUrl())
     // Aqui você faz a requisição para API e pega os dados para exibição
   }

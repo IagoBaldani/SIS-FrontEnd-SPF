@@ -125,7 +125,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import axios from 'axios'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',

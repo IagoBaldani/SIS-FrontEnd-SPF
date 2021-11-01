@@ -40,8 +40,8 @@
                                 <td id="info-nome"> {{ programa.nome }}</td>
                                 <td>{{ programa.turma }}</td>
                                 <td id="info-status" class="info-status"
-                                    v-bind:class="(programa.status == 'Encerrado')?'encerrado':'em-andamento'">
-                                    {{ programa.status }}
+                                    v-bind:class="(programa.status == 'ENCERRADO')?'encerrado':'em-andamento'">
+                                    {{(programa.status == 'ENCERRADO')?'Encerrado':'Em andamento' }}
                                 </td>
                                 <td class="imagem rounded" width="50">
                                     <a :href="'/dados-programa-cadastro_edicao?id=' + programa.id + '&tipo=edicao'">
@@ -76,6 +76,15 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+import axios from 'axios'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -84,29 +93,24 @@ export default {
   },
   data () {
     return {
-      programas: [
-        {
-          id: 1,
-          nome: 'Java',
-          turma: 'Turma I 2020',
-          status: 'Encerrado'
-        },
-        {
-          id: 2,
-          nome: 'BI',
-          turma: 'Turma I 2021',
-          status: 'Em andamento'
-        },
-        {
-          id: 3,
-          nome: 'Mainframe',
-          turma: 'Turma I 2021',
-          status: 'Em andamento'
-        }
-      ]
+      responseStatus: '',
+      programas: []
     }
   },
+  beforeMount () {
+    Funcoes.verificaToken()
+    this.getProgramas()
+  },
   methods: {
+    getProgramas () {
+      axios.get('http://localhost:8081/api/programa', config)
+        .then(response => {
+          this.programas = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
     filtraDados () {
       let dadosLinhas = this.pegaDados()
 
@@ -119,7 +123,6 @@ export default {
       const arrayBoolLinhas = this.verifica(dadosLinhas, nomeProcurado, statusProcurado)
       this.mudaVisibilidade(arrayBoolLinhas, linhas)
     },
-
     pegaDados () {
       let linhas = document.querySelectorAll('.programa')
       let arrayDadosDasLinhas = []
@@ -135,7 +138,6 @@ export default {
 
       return arrayDadosDasLinhas
     },
-
     trataStatus (item) {
       let statusTxt = item.querySelector('#info-status').textContent
       let status = 0
@@ -149,7 +151,6 @@ export default {
 
       return status
     },
-
     verifica (dadosLinhas, nomeProcurado, statusProcurado) {
       let arrayBoolLinhas = []
       let expressao = new RegExp(nomeProcurado, 'i')
@@ -174,7 +175,6 @@ export default {
 
       return arrayBoolLinhas
     },
-
     mudaVisibilidade (arrayBoolLinhas, linhas) {
       let i
       var contador = 0
@@ -196,7 +196,6 @@ export default {
         aviso.style.display = 'none'
       }
     },
-
     recarregaLista () {
       let linhas = document.querySelectorAll('.programa')
       let aviso = document.querySelector('.aviso')
