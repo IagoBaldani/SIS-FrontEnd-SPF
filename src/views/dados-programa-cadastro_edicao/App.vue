@@ -45,7 +45,7 @@
                         />
                     </div>
                     <div class="mb-3 mt-3">
-                        <label class="form-label fw-bold mb-0 titulo">Coordenador</label>
+                        <label class="form-label fw-bold mb-0 titulo">Instrutor</label>
                         <select class="form-select" id="instrutores" v-model="modelInstrutor">
                             <option
                                 id="coordenador"
@@ -68,7 +68,6 @@
                             v-model="modelTurma"
                         />
                     </div>
-<!--                    <div class="erro"> Todos os campos são obrigatórios </div>-->
                 </div>
                 <div class="col-xl-4"></div>
                 <div class="col-xl-2"></div>
@@ -107,11 +106,11 @@
                         <div class="mt-3">
                             <ul class="fw-bold subtitulo text-start">
                                 Informações gerais:
-                                <li>Nome: <span class="titulo"> {{ programa.nome }} </span></li>
-                                <li>Início do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programa.inicio)}}</span></li>
-                                <li>Término do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programa.termino)}}</span></li>
-                                <li>Instrutor: <span class="titulo">{{ programa.instrutor }}</span></li>
-                                <li>Turma: <span class="titulo">{{ programa.turma }}</span></li>
+                                <li>Nome: <span class="titulo"> {{ programaForm.nome }} </span></li>
+                                <li>Início do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.inicio)}}</span></li>
+                                <li>Término do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.termino)}}</span></li>
+                                <li>Instrutor: <span class="titulo">{{ programaForm.instrutorCpf }}</span></li>
+                                <li>Turma: <span class="titulo">{{ programaForm.turma }}</span></li>
                             </ul>
                         </div>
                         <div class="mt-3 modal-footer border-0 justify-content-around">
@@ -154,7 +153,8 @@ export default {
     return {
       responseStatus: '',
       instrutores: [],
-      programa: {
+      programa: {},
+      programaForm: {
         nome: '',
         inicio: '',
         termino: '',
@@ -166,14 +166,19 @@ export default {
   beforeMount () {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
+    let id = dadosUrl.id
 
     if (dadosUrl.tipo != 'edicao') {
       this.getInstrutor()
+    } else {
+      this.getPrograma(id)
+      this.getInstrutor()
+      this.carregaDados()
     }
   },
   methods: {
     postPrograma () {
-      axios.post('http://localhost:8081/api/programa', this.programa, config)
+      axios.post('http://localhost:8081/api/programa', this.programaForm, config)
         .then(response => {
           if (response.status == 200) {
             window.location.href = '/dados-programa-busca'
@@ -184,7 +189,7 @@ export default {
         })
     },
     getInstrutor () {
-      axios.get('http://localhost:8081/api/instrutor', config)
+      axios.get('http://localhost:8081/api/instrutor/status/ATIVO', config)
         .then(response => {
           this.instrutores = response.data
         })
@@ -192,12 +197,28 @@ export default {
           alert(error)
         })
     },
+
+    getPrograma (id) {
+      axios.get(`http://localhost:8081/api/programa/${id}`, config)
+        .then(response => {
+          this.programa = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
     enviarDados () {
-      this.programa.nome = this.modelNome
-      this.programa.inicio = this.modelInicio
-      this.programa.termino = this.modelTermino
-      this.programa.instrutor = this.modelInstrutor
-      this.programa.turma = this.modelTurma
+      this.programaForm.nome = this.modelNome
+      this.programaForm.inicio = this.modelInicio
+      this.programaForm.termino = this.modelTermino
+      this.programaForm.instrutorCpf = this.modelInstrutor
+      this.programaForm.turma = this.modelTurma
+    },
+    carregaDados () {
+      this.modelNome = this.programaForm.nome
+      this.modelInicio = this.programaForm.inicio
+      this.modelTermino = this.programaForm.termino
+      this.modelTurma = this.programaForm.turma
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
