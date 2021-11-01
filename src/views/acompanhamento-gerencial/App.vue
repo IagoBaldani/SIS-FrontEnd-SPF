@@ -18,6 +18,14 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
+import axios from 'axios'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -34,7 +42,8 @@ export default {
   beforeMount () {
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
-    this.getParticipanteNome(dadosUrl.id)  
+    this.getParticipanteNome(dadosUrl.id)
+    Funcoes.verificaToken()
   },
 
   methods: {
