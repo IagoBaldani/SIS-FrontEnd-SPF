@@ -11,7 +11,7 @@
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
-                        <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
+                        <h4 class="fw-bold grey-font text-center">{{ participante.nome }}</h4>
                     </div>
                     <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
@@ -24,24 +24,24 @@
                         <fieldset class="mb-3">
                             <legend class="form-label fw-bold h5 titulo">Resultado (Reajuste salarial)</legend>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="sim" id="sim" class="me-2 ">
+                                <input type="radio" name="reajuste" value="REAJUSTE_SALARIO" id="sim" class="me-2 " v-model="form.resultado">
                                 <label for="sim" class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="nao" id="nao" class="me-2" checked>
+                                <input type="radio" name="reajuste" value="NAO_REAJUSTE_SALARIO" id="nao" v-model="form.resultado" class="me-2" checked>
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
                         <div class="mb-3">
                             <label for="data-alteracao" class="form-label fw-bold h5 titulo">Data da alteração</label>
-                            <input type="date" class="form-control" id="data-alteracao">
+                            <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao">
                         </div>
                         <div class="mb-3">
                             <label for="cargo" class="form-label fw-bold h5 titulo">Cargo</label>
-                            <select class="form-select" id="filtro-programa">
-                            <option value="0" id="cargo" selected disabled>Selecione o Cargo</option>
-                            <option value="1" >Estagiário</option>
-                        </select>
+                            <select class="form-select" id="filtro-programa" v-model="form.cargo">
+                                <!--<option value="0" id="cargo" selected disabled>Selecione o Cargo</option>-->
+                                <option :value="cargo.id" v-for="cargo in cargos" :key="cargo.id">{{ cargo.cargo }}</option>
+                            </select>
                         </div>
 
                         <div class="mb-3">
@@ -58,7 +58,7 @@
                             </label>
 
                         </div>
-                        <button type="submit"
+                        <button type="submit" @click="postForm(participante.id)"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
                     </form>
                 </div>
@@ -98,7 +98,7 @@
             <div class="modal-content p-5 grey-background">
                 <div class="row mb-5">
                     <div class="col">
-                        <h2 class="modal-title fw-bold" id="exampleModalLabel">Conclusão de ciclo: 1</h2>
+                        <h2 class="modal-title fw-bold" id="exampleModalLabel">Conclusão de ciclo: {{ conclusaoModal.id }}</h2>
                     </div>
                 </div>
                 <div class="row">
@@ -152,8 +152,17 @@ export default {
   data () {
     return {
       conclusoes: [],
+      cargos: [],
       conclusaoModal: '',
-      id: {}
+      id: {},
+      participante: {},
+
+      form: {
+        resultado: '',
+        dataAlteracao: '',
+        cargo: '',
+        comprovante: ''
+      }
     }
   },
 
@@ -162,6 +171,7 @@ export default {
     this.id = dadosUrl.id
     this.getParticipanteNome(dadosUrl.id)
     this.getCiclo(dadosUrl.id)
+    this.getCargos()
     Funcoes.verificaToken()
   },
 
@@ -190,7 +200,17 @@ export default {
         .get(`http://localhost:8081/api/gerencial/${id}`)
         .then((response) => {
           this.participante = response.data
-          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    getCargos () {
+      axios 
+        .get('http://localhost:8081/api/remuneracao/lista')
+        .then((response) => {
+          this.cargos = response.data
         })
         .catch((error) => {
           console.log(error)
@@ -202,6 +222,16 @@ export default {
         .get(`http://localhost:8081/api/conclusao/${id}`)
         .then((response) => {
           this.conclusoes = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    postForm (id) {
+      axios
+        .post(`http://localhost:8081/api/conclusao/registrocicloprogressivo/${id}`, this.form, config)
+        .then((response) => {
           console.log(response.data)
         })
         .catch((error) => {
