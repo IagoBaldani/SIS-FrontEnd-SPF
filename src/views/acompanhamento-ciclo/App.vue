@@ -28,7 +28,7 @@
                                 <label for="sim" class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="NAO_REAJUSTE_SALARIO" id="nao" v-model="form.resultado" class="me-2" checked>
+                                <input type="radio" name="reajuste" value="NAO_REAJUSTE_SALARIO" id="nao" v-model="form.resultado" class="me-2">
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
@@ -40,7 +40,7 @@
                             <label for="cargo" class="form-label fw-bold h5 titulo">Cargo</label>
                             <select class="form-select" id="filtro-programa" v-model="form.cargo">
                                 <!--<option value="0" id="cargo" selected disabled>Selecione o Cargo</option>-->
-                                <option :value="cargo.id" v-for="cargo in cargos" :key="cargo.id">{{ cargo.cargo }}</option>
+                                <option :value="cargo.cargo" v-for="cargo in cargos" :key="cargo.id">{{ cargo.cargo }}</option>
                             </select>
                         </div>
 
@@ -58,7 +58,7 @@
                             </label>
 
                         </div>
-                        <button type="submit" @click="postForm(participante.id)"
+                        <button type="button" @click="postForm(participante.id)"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
                     </form>
                 </div>
@@ -75,7 +75,7 @@
                         <tbody>
                             <tr v-for="conclusao in conclusoes" v-bind:key="conclusao">
                                 <th scope="row" class="titulo">{{conclusao.id}}</th>
-                                <td>{{conclusao.dataRegistro}}</td>
+                                <td>{{formataDataParaMostrar(conclusao.dataRegistro)}}</td>
                                 <td>{{conclusao.status}}</td>
                                 <td @click="carregaModal(conclusao)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalCiclo">
                                     <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
@@ -123,7 +123,7 @@
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data da alteração:</h4>
-                            <p class="grey-font h4">{{conclusaoModal.dataRegistro}}</p>
+                            <p class="grey-font h4">{{formataDataParaMostrar(conclusaoModal.dataRegistro)}}</p>
                         </div>
                     </div>
                 </div>
@@ -180,6 +180,22 @@ export default {
       this.conclusaoModal = conclusao
     },
 
+    formataDataParaCadastro (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = ('0' + (dataPreForm.getDate() + 1)).slice(-2) + '/' + 
+        ('0' + (dataPreForm.getMonth() + 1)).slice(-2) + '/' + 
+        dataPreForm.getFullYear()
+
+      return dataFormatada
+    },
+
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+
+      return dataFormatada
+    },
+
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -228,18 +244,22 @@ export default {
         })
     },
 
-    postForm (id) {
+    postForm () {
       axios
-        .post(`http://localhost:8081/api/conclusao/registrocicloprogressivo/${id}`, this.form, config)
-        .then((response) => {
-          console.log(response.data)
-        })
-        .catch((error) => {
-          console.log(error)
+        .post(`http://localhost:8081/api/conclusao/registrocicloprogressivo/${this.id}`, { 
+          resultado: this.form.resultado,
+          dataAlteracao: this.formataDataParaCadastro(this.form.dataAlteracao),
+          cargo: this.form.cargo,
+          comprovante: this.form.comprovante
+        },
+        config)
+        .then((response) => { 
+          this.getCiclo(this.id)
         })
     }
   }
 }
+
 </script>
 
 <style scoped>
