@@ -58,7 +58,7 @@
                             </label>
 
                         </div>
-                        <button type="button" @click="postForm(participante.id)"
+                        <button type="button" @click="postForm()"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
                     </form>
                 </div>

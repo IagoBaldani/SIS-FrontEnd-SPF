@@ -20,21 +20,21 @@
                         <fieldset class="mb-3">
                             <legend class="form-label fw-bold h5 titulo">Resultado (Efetivado)</legend>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="sim" id="sim" class="me-2 ">
+                                <input type="radio" name="reajuste" value="EFETIVADO" id="sim" class="me-2" v-model="form.resultado">
                                 <label for="sim" class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="nao" id="nao" class="me-2" checked>
+                                <input type="radio" name="reajuste" value="NAO_EFETIVADO" id="nao" class="me-2" v-model="form.resultado">
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
                         <div class="mb-3">
                             <label for="data-alteracao" class="form-label fw-bold h5 titulo">Data</label>
-                            <input type="date" class="form-control" id="data-alteracao">
+                            <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao">
                         </div>
                         <div class="mb-3">
                             <label for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
-                            <input type="text" class="form-control" id="cargo-efetivado" placeholder="Analista Desenvolvedor Java">
+                            <input type="text" class="form-control" id="cargo-efetivado" placeholder="Analista Desenvolvedor Java" v-model="form.cargoEfetivado">
                         </div>
                         <div class="mb-3">
                             <label for="salario" class="form-label fw-bold h5 titulo">Salário</label>
@@ -60,7 +60,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="observacoes" class="form-label fw-bold h5 titulo">Observações</label>
-                            <textarea class="form-control h-198px" id="observacoes" ></textarea>
+                            <textarea class="form-control h-198px" id="observacoes" v-model="form.campoObservacao" ></textarea>
                         </div>
                     </form>
                 </div>
@@ -86,11 +86,11 @@
                     <div class="col-lg-7">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Reajuste salarial</h4>
-                            <p class="grey-font h4">Sim</p>
+                            <p class="grey-font h4">{{ form.resultado }}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data da alteração</h4>
-                            <p class="grey-font h4">20/09/2021</p>
+                            <p class="grey-font h4">{{formataDataParaMostrar(form.dataAlteracao)}}</p>
                         </div>
 
                         <div class="mb-4">
@@ -112,7 +112,7 @@
                 </div>
                 <div class="row d-flex">
                     <div class="col-lg-6">
-                        <button type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100">CONFIRMAR</button>
+                        <button @click="postForm()" type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100">CONFIRMAR</button>
                     </div>
                     <div class="col-lg-6">
                         <button type="submit" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100">CANCELAR</button>
@@ -142,7 +142,15 @@ export default {
   },
   data () {
     return {
-      participante: {}
+      participante: {},
+
+      form: {
+        resultado: '',
+        dataAlteracao: '',
+        cargoEfetivado: '',
+        comprovante: '',
+        campoObservacao: ''
+      }
     }
   },
 
@@ -156,6 +164,22 @@ export default {
   methods: {
     carregaModal (conclusao) {
       this.conclusaoModal = conclusao
+    },
+    
+    formataDataParaCadastro (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = ('0' + (dataPreForm.getDate() + 1)).slice(-2) + '/' + 
+        ('0' + (dataPreForm.getMonth() + 1)).slice(-2) + '/' + 
+        dataPreForm.getFullYear()
+
+      return dataFormatada
+    },
+
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+
+      return dataFormatada
     },
     
     pegaDadosUrl () {
@@ -183,6 +207,18 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+
+    postForm () {
+      axios
+        .post(`http://localhost:8081/api/conclusao/registrociclofinal/${this.id}`, { 
+          resultado: this.form.resultado,
+          dataAlteracao: this.formataDataParaCadastro(this.form.dataAlteracao),
+          cargoEfetivado: this.form.cargoEfetivado,
+          comprovante: this.form.comprovante,
+          campoObservacao: this.form.campoObservacao
+        },
+        config)
     }
   }
 }
