@@ -21,18 +21,18 @@
                     <form>
                         <div class="mb-3">
                             <p for="anotacao" class="form-label fw-bold mb-0 titulo">Data do Feedback</p>
-                            <input type="date" class="form-control" id="anotacao"
+                            <input v-model="form.data" type="date" class="form-control" id="anotacao"
                                 placeholder="Digite a data do feedback">
                         </div>
                         <div class="mb-3">
                             <label for="anotacoes" class="form-label mb-0 fw-bold titulo">Anotações</label>
-                            <textarea rows="8" class="form-control mb-3" id="anotacoes"></textarea>
+                            <textarea v-model="form.anotacoes" rows="8" class="form-control mb-3" id="anotacoes"></textarea>
                         </div>
                         <div class="input-group">
                             <!--<input class="input-file" type="file">-->
                             <input type="file" class="form-control" id="inputGroupFile02">
                         </div>
-                        <button class="btn-registrar mt-4 " type="submit" method="POST">REGISTRAR</button>
+                        <button class="btn-registrar mt-4 " type="button" @click="postForm()" >REGISTRAR</button>
                     </form>
                 </div>
                 <div class="col-lg-7">
@@ -69,9 +69,9 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <h4 class="fw-bold titulo">Data do Feedback:</h4>
-                            <p class="nomeCol">{{feedbackModal.data}}</p>
+                            <p class="nomeCol">{{formataDataParaMostrar(feedbackModal.data)}}</p>
                             <h4 class="fw-bold titulo">Anotações do feedback</h4>
-                            <textarea v-model="feedbackModal.anotacoes" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
+                            <textarea v-model="feedbackModal.anotacao" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -100,9 +100,9 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <h4 class="fw-bold titulo">Data do Feedback:</h4>
-                            <p class="nomeCol">{{feedbackModal.data}}</p>
+                            <p class="nomeCol">{{formataDataParaMostrar(feedbackModal.data)}}</p>
                             <h4 class="fw-bold titulo">Anotações do feedback</h4>
-                            <textarea v-model="feedbackModal.anotacoes" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
+                            <textarea v-model="feedbackModal.anotacao" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
                     </div>
                      <div class="row">
@@ -146,15 +146,19 @@ export default {
     return {
       feedbacks: [],
       feedbackModal: '',
-      participante: {}
+      participante: {},
+      form: {
+        data: '',
+        anotacoes: ''
+      },
+      id: {}
     }
   },
 
   beforeMount () {
-    const dadosUrl = this.pegaDadosUrl()
-    this.id = dadosUrl.id
-    this.getParticipanteNome(dadosUrl.id)
-    this.getFeedback(dadosUrl.id)
+    this.id = this.pegaDadosUrl().id
+    this.getParticipanteNome()
+    this.getFeedback()
     Funcoes.verificaToken()
   },
 
@@ -163,9 +167,25 @@ export default {
       this.feedbackModal = feedback
     },
 
-    getParticipanteNome (id) {
+    formataDataParaCadastro (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = ('0' + (dataPreForm.getDate() + 1)).slice(-2) + '/' + 
+        ('0' + (dataPreForm.getMonth() + 1)).slice(-2) + '/' + 
+        dataPreForm.getFullYear()
+
+      return dataFormatada
+    },
+
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+
+      return dataFormatada
+    },
+
+    getParticipanteNome () {
       axios
-        .get(`http://localhost:8081/api/gerencial/${id}`)
+        .get(`http://localhost:8081/api/gerencial/${this.id}`)
         .then((response) => {
           this.participante = response.data
           console.log(response.data)
@@ -175,9 +195,9 @@ export default {
         })
     },
 
-    getFeedback (id) {
+    getFeedback () {
       axios
-        .get(`http://localhost:8081/api/feedback/${id}`)
+        .get(`http://localhost:8081/api/feedback/${this.id}`)
         .then((response) => {
           this.feedbacks = response.data
           console.log(response.data)
@@ -186,6 +206,21 @@ export default {
           console.log(error)
         })
     },
+
+    postForm () {
+      console.log(this.form.data)
+      axios
+        .post(`http://localhost:8081/api/feedback/novo/${this.id}`, { 
+          data: this.form.data,
+          anotacoes: this.form.anotacoes
+        }, config)
+        .then((response) => {
+          this.getFeedback()
+        })
+        .catch((error) => {
+          console.log(error)
+        }) 
+    }, 
 
     pegaDadosUrl () {
       var query = location.search.slice(1)

@@ -105,13 +105,13 @@
                     <div class="col-lg-7">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Reajuste salarial:</h4>
-                            <p class="grey-font h4">{{conclusaoModal.resultado}}</p>
+                            <p class="grey-font h4">{{(conclusaoModal.resultado == 'REAJUSTE_SALARIO') ? 'Sim' : 'Não'}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/conclusão:</h4>
                             <p class="grey-font h4 text-decoration-underline">{{conclusaoModal.comprovante}}</p>
                         </div>
-                        <div class="mb-4">
+                        <div class="mb-4" v-if="conclusaoModal.status == 'PROGRESSIVA'" >
                             <h4 class="fw-bold titulo">Cargo:</h4>
                             <p class="grey-font h4">{{conclusaoModal.cargoPrograma}}</p>
                         </div>
@@ -119,7 +119,7 @@
                     <div class="col-lg-5">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Status:</h4>
-                            <p class="grey-font h4">{{conclusaoModal.status}}</p>
+                            <p class="grey-font h4">{{(conclusaoModal.status == 'PROGRESSIVA') ? 'Progressiva' : 'Final'}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data da alteração:</h4>
@@ -255,6 +255,9 @@ export default {
         config)
         .then((response) => { 
           this.getCiclo(this.id)
+        })
+        .catch((error) => {
+          console.log(error)
         })
     }
   }

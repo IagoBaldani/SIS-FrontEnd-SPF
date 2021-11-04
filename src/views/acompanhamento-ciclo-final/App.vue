@@ -219,6 +219,9 @@ export default {
           campoObservacao: this.form.campoObservacao
         },
         config)
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
 }
