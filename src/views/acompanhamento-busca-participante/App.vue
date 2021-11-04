@@ -28,8 +28,8 @@
                     <div class="scroll-tabela">
                         <table class="table table-bordered tabela">
                             <tbody>
-                                <tr id="participante" v-for="participante in participantes" v-bind:key="participante">
-                                    <th scope="row" class="titulo" id="info-id">{{participante.cpf}}</th>
+                                <tr id="participante" v-for="(participante, index) in participantes" v-bind:key="participante">
+                                    <th scope="row" class="titulo" id="info-id">{{++index}}</th>
                                     <td id="info-nome">{{participante.nome}}</td>
                                     <td id="info-programa">{{participante.programa}}</td>
                                     <td id="logoBoneco"><a :href="'../acompanhamento-gerencial?id=' + participante.cpf"><img src="@/assets/imgs/account_circle_white_24dp.svg"></a></td>

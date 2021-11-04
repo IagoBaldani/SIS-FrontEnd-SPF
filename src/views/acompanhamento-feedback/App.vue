@@ -41,8 +41,8 @@
                         <table class="table table-bordered tabela">
 
                             <tbody>
-                                <tr v-for="feedback in feedbacks" :key="feedback">
-                                    <td scope="row">{{feedback.id}}</td>
+                                <tr v-for="(feedback, index) in feedbacks" :key="feedback">
+                                    <td scope="row">{{++index}}</td>
                                     <td>{{feedback.anotacao}}</td>
                                     <td @click="carregaModal(feedback)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
                                         <img class="imgicon" name="imglogo" src="@/assets/imgs/visibility_white_24dp.svg"></td>
@@ -165,15 +165,6 @@ export default {
   methods: {
     carregaModal (feedback) {
       this.feedbackModal = feedback
-    },
-
-    formataDataParaCadastro (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = ('0' + (dataPreForm.getDate() + 1)).slice(-2) + '/' + 
-        ('0' + (dataPreForm.getMonth() + 1)).slice(-2) + '/' + 
-        dataPreForm.getFullYear()
-
-      return dataFormatada
     },
 
     formataDataParaMostrar (data) {

@@ -21,25 +21,25 @@
                     <form>
                         <div class="mb-3">
                             <label for="qtdHoras" class="form-label fw-bold mb-0 titulo">Quantidade de Horas</label>
-                            <input name="qtdHoras" type="number" required class="form-control campo" placeholder="60">
+                            <input name="qtdHoras" v-model="form.qtdHoras" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="mAvaliado" class="form-label fw-bold mb-0 titulo">Mês avaliado</label>
-                            <input name="mAvaliado" type="number" required class="form-control campo" placeholder="1">
+                            <input name="mAvaliado" v-model="form.mesAvaliado" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="sAvaliada" class="form-label fw-bold mb-0 titulo">Semana avaliada</label>
-                            <input name="sAvaliada" type="number" required class="form-control campo" placeholder="1">
+                            <input name="sAvaliada"  v-model="form.semanaAvaliada" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="dtRegistro" class="form-label fw-bold mb-0 titulo">Data do Registro</label>
-                            <input name="dtRegistro" type="date" required class="form-control campo">
+                            <input name="dtRegistro"  v-model="form.dataRegistro" type="date" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="hMinima" class="form-label fw-bold mb-0 titulo">Horas mínimas semanais</label>
-                            <input name="hMinima" type="number" required class="form-control campo" placeholder="30">
+                            <input name="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
                         </div>
-                        <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
+                        <button type="button" @click="postForm()"  class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
                     </form>
                 </div>
                 <div  class="col-lg-7">
@@ -53,10 +53,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="registro in registros" v-bind:key="registro">
-                                    <th scope="row" class=" text-center titulo" id="info-id">{{registro.codigoAlura}}</th>
+                                <tr v-for="(registro, index ) in registros" :key="registro"  >
+                                    <th scope="row" class=" text-center titulo" id="info-id">{{++index}}</th>
                                     <td class="text-center campo-tabela">{{registro.mesAvaliado}}/{{registro.semanaAvaliada}}</td>
-                                    <td class="text-center campo-tabela">{{registro.dataRegistro}}</td>
+                                    <td class="text-center campo-tabela">{{this.formataDataParaMostrar(registro.dataRegistro)}}</td>
                                     <td @click="carregaModal(registro)"
                                         id="olho" class="td-button"
                                         data-bs-toggle="modal"
@@ -97,7 +97,7 @@
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Data do registro:</h3>
-                            <p class="">{{registroModal.dataRegistro}}</p>
+                            <p class="">{{this.formataDataParaMostrar(registroModal.dataRegistro)}}</p>
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Quantidade de horas totais:</h3>
@@ -136,17 +136,17 @@
                         </div>
                         <div class="mb-4">
                             <h4 class=" titulo fw-bold">Horas Semanais:</h4>
-                            <p class="">{{registroModal.horasMinimas}}</p>
+                            <p class="">{{registroModal.hrMinSemana}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data do registro:</h4>
-                            <p class="">{{registroModal.dataReg}}</p>
+                            <p class="">{{this.formataDataParaMostrar(registroModal.dataRegistro)}}</p>
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Quantidade de horas totais:</h3>
-                            <p class="">{{registroModal.quantidadeDeHoras}}</p>
+                            <p class="">{{registroModal.qtdHoras}}</p>
                         </div>
                     </div>
                 </div>
@@ -189,37 +189,59 @@ export default {
       registros: [],
       participante: {},
       id: {},
-      registroModal: ''
-    }
+      registroModal: '',
+      form: {
+        qtdHoras: '',
+        mesAvaliado: '',
+        semanaAvaliada: '',
+        dataRegistro: '',
+        hrMinSemana: ''
+      }
+    } 
   },
   
   beforeMount () {
-    const dadosUrl = this.pegaDadosUrl()
-    this.id = dadosUrl.id
-    this.getParticipanteNome(dadosUrl.id)
-    this.getAlura(dadosUrl.id)
+    this.id = this.pegaDadosUrl().id
+    this.getParticipanteNome()
+    this.getAlura()
     Funcoes.verificaToken()
   },
 
   methods: {
-    getParticipanteNome (id) {
+    getParticipanteNome () {
       axios
-        .get(`http://localhost:8081/api/gerencial/${id}`)
+        .get(`http://localhost:8081/api/gerencial/${this.id}`)
         .then((response) => {
           this.participante = response.data
-          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    
+    postForm () {
+      axios
+        .post(`http://localhost:8081/api/alura/novo/${this.id}`, this.form, config)
+        .then((response) => {
+          this.getAlura()
         })
         .catch((error) => {
           console.log(error)
         })
     },
 
-    getAlura (id) {
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+
+      return dataFormatada
+    },
+
+    getAlura () {
       axios
-        .get(`http://localhost:8081/api/alura/${id}`)
+        .get(`http://localhost:8081/api/alura/${this.id}`)
         .then((response) => {
           this.registros = response.data
-          console.log(response.data)
         })
         .catch((error) => {
           console.log(error)

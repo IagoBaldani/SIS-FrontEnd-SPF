@@ -24,11 +24,11 @@
                         <fieldset class="mb-3">
                             <legend class="form-label fw-bold h5 titulo">Resultado (Reajuste salarial)</legend>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="REAJUSTE_SALARIO" id="sim" class="me-2 " v-model="form.resultado">
-                                <label for="sim" class="me-5">Sim</label>
+                                <input type="radio"  name="reajuste" value="REAJUSTE_SALARIO" id="sim" class="me-2 " v-model="form.resultado">
+                                <label for="sim"  class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="NAO_REAJUSTE_SALARIO" id="nao" v-model="form.resultado" class="me-2">
+                                <input type="radio"  name="reajuste" value="NAO_REAJUSTE_SALARIO" id="nao" v-model="form.resultado" class="me-2">
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
@@ -73,11 +73,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="conclusao in conclusoes" v-bind:key="conclusao">
-                                <th scope="row" class="titulo">{{conclusao.id}}</th>
+                            <tr v-for="(conclusao, index) in conclusoes" v-bind:key="conclusao">
+                                <th scope="row" class="titulo">{{++index}}</th>
                                 <td>{{formataDataParaMostrar(conclusao.dataRegistro)}}</td>
                                 <td>{{conclusao.status}}</td>
-                                <td @click="carregaModal(conclusao)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalCiclo">
+                                <td @click="carregaModal(conclusao, index)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalCiclo">
                                     <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
                                 </td>
                             </tr>
@@ -98,7 +98,7 @@
             <div class="modal-content p-5 grey-background">
                 <div class="row mb-5">
                     <div class="col">
-                        <h2 class="modal-title fw-bold" id="exampleModalLabel">Conclusão de ciclo: {{ conclusaoModal.id }}</h2>
+                        <h2 class="modal-title fw-bold" id="exampleModalLabel">Conclusão de ciclo: {{ indiceModal}}</h2>
                     </div>
                 </div>
                 <div class="row">
@@ -162,7 +162,8 @@ export default {
         dataAlteracao: '',
         cargo: '',
         comprovante: ''
-      }
+      },
+      indiceModal: {}
     }
   },
 
@@ -176,19 +177,11 @@ export default {
   },
 
   methods: {
-    carregaModal (conclusao) {
+    carregaModal (conclusao, index) {
       this.conclusaoModal = conclusao
+      this.indiceModal = index
     },
-
-    formataDataParaCadastro (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = ('0' + (dataPreForm.getDate() + 1)).slice(-2) + '/' + 
-        ('0' + (dataPreForm.getMonth() + 1)).slice(-2) + '/' + 
-        dataPreForm.getFullYear()
-
-      return dataFormatada
-    },
-
+    
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
@@ -248,7 +241,7 @@ export default {
       axios
         .post(`http://localhost:8081/api/conclusao/registrocicloprogressivo/${this.id}`, { 
           resultado: this.form.resultado,
-          dataAlteracao: this.formataDataParaCadastro(this.form.dataAlteracao),
+          dataAlteracao: this.form.dataAlteracao,
           cargo: this.form.cargo,
           comprovante: this.form.comprovante
         },

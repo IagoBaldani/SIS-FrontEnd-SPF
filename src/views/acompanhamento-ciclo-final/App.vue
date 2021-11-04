@@ -36,10 +36,6 @@
                             <label for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
                             <input type="text" class="form-control" id="cargo-efetivado" placeholder="Analista Desenvolvedor Java" v-model="form.cargoEfetivado">
                         </div>
-                        <div class="mb-3">
-                            <label for="salario" class="form-label fw-bold h5 titulo">Salário</label>
-                            <input type="text" class="form-control" id="salario" placeholder="1500,00">
-                        </div>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column justify-content-between">
@@ -59,7 +55,7 @@
                             </label>
                         </div>
                         <div class="mb-3">
-                            <label for="observacoes" class="form-label fw-bold h5 titulo">Observações</label>
+                            <label for="observacoes"  class="form-label fw-bold h5 titulo">Observações</label>
                             <textarea class="form-control h-198px" id="observacoes" v-model="form.campoObservacao" ></textarea>
                         </div>
                     </form>
@@ -91,11 +87,6 @@
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data da alteração</h4>
                             <p class="grey-font h4">{{formataDataParaMostrar(form.dataAlteracao)}}</p>
-                        </div>
-
-                        <div class="mb-4">
-                            <h4 class="fw-bold titulo">Salário</h4>
-                            <p class="grey-font h4">2700,00</p>
                         </div>
                     </div>
                     <div class="col-lg-5">
@@ -165,15 +156,6 @@ export default {
     carregaModal (conclusao) {
       this.conclusaoModal = conclusao
     },
-    
-    formataDataParaCadastro (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = ('0' + (dataPreForm.getDate() + 1)).slice(-2) + '/' + 
-        ('0' + (dataPreForm.getMonth() + 1)).slice(-2) + '/' + 
-        dataPreForm.getFullYear()
-
-      return dataFormatada
-    },
 
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
@@ -213,7 +195,7 @@ export default {
       axios
         .post(`http://localhost:8081/api/conclusao/registrociclofinal/${this.id}`, { 
           resultado: this.form.resultado,
-          dataAlteracao: this.formataDataParaCadastro(this.form.dataAlteracao),
+          dataAlteracao: this.form.dataAlteracao,
           cargoEfetivado: this.form.cargoEfetivado,
           comprovante: this.form.comprovante,
           campoObservacao: this.form.campoObservacao
