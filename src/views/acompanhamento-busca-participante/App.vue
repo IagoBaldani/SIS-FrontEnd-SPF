@@ -11,21 +11,16 @@
             </div>
             <!--ComboBox de Programa de formação-->
             <div class="row justify-content-evenly mb-5">
-                <div class="col-lg-4">
+                <form class="col-lg-4 d-flex flex-column justify-content-between">
                     <div class="comboBox w-100" id="programas">
-                        <select class="form-select" id="filtro-programa">
+                        <select class="form-select" id="filtro-programa" v-model="programaSelecionado">
                             <option value="0" class="programa-form" selected disabled>Programa de formação</option>
-                            <option :value="programa" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
+                            <option :value="programa.nome" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
                         </select>
                     </div>
-                </div>
-                 <!--Botão de Buscar-->
-                <div class="row justify-content-evenly">
-                    <div class="col-lg-4">
-                        <button @click="filtraDados()" type="button" value="BUSCAR" class="btn w-100 fs-5 btn-primary botao">BUSCAR</button>
-                    </div>
-                    <div class="col-lg-7"></div>
-                </div>
+                    <button @click="filtraDados()" type="button" value="BUSCAR" class="btn w-100 fs-5 mt-3 btn-primary botao">BUSCAR</button>
+                </form>
+
                 <!--scroll(barra de rolagem) e a tabela de busca de participantes-->
                 <div class="col-lg-7" id="participantes">
                     <div class="aviso">
@@ -33,7 +28,7 @@
                         <button @click="recarregaLista()" class="mt-3 form-control recarregar">RECARREGAR LISTA</button>
                     </div>
                     <div class="scroll-tabela">
-                        <table class="table table-bordered tabela">
+                        <table class="table mb-0 table-bordered tabela">
                             <tbody>
                                 <tr id="participante" v-for="(participante, index) in participantes" v-bind:key="participante">
                                     <th scope="row" class="titulo" id="info-id">{{++index}}</th>
@@ -95,23 +90,6 @@ export default {
         })
     },
 
-    trataPrograma (linha) {
-      var programaTxt = linha.querySelector('#info-programa').textContent
-      let programa = 0
-
-      if (programaTxt == 'Java') {
-        programa = 1
-        return programa
-      } else if (programaTxt == 'Mainframe') {
-        programa = 2
-        return programa
-      } else if (programaTxt == '.Net') {
-        programa = 3
-        return programa
-      }
-
-      return programa
-    },
     pegaDados () {
       let linhas = document.querySelectorAll('#participante')
       let arrayDadosDasLinhas = []
@@ -120,13 +98,11 @@ export default {
         let dadosLinha = []
         let nome = linha.querySelector('#info-nome').textContent
 
-        let programa = this.trataPrograma(linha)
+        let programa = linha.querySelector('#info-programa').textContent
 
         dadosLinha.push(nome, programa)
         arrayDadosDasLinhas.push(dadosLinha)
       })
-
-      console.log(arrayDadosDasLinhas)
       return arrayDadosDasLinhas
     },
     verifica (dadosLinhas, programaProcurado) {
