@@ -44,7 +44,7 @@
                                 <tr v-for="(feedback, index) in feedbacks" :key="feedback">
                                     <td scope="row">{{++index}}</td>
                                     <td>{{feedback.anotacao}}</td>
-                                    <td @click="carregaModal(feedback)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
+                                    <td @click="carregaModal(feedback, index)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
                                         <img class="imgicon" name="imglogo" src="@/assets/imgs/visibility_white_24dp.svg"></td>
                                 </tr>
                             </tbody>
@@ -62,7 +62,7 @@
                 <div class="modal-content p-5">
                     <div class="row mb-5">
                         <div class="col">
-                            <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Feedback {{feedbackModal.id}}:</h2>
+                            <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Feedback: {{indiceModal}}</h2>
                         </div>
                     </div>
 
@@ -128,14 +128,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import axios from 'axios'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -151,7 +144,8 @@ export default {
         data: '',
         anotacoes: ''
       },
-      id: {}
+      id: {},     
+      indiceModal: {}
     }
   },
 
@@ -163,23 +157,11 @@ export default {
   },
 
   methods: {
-    carregaModal (feedback) {
-      this.feedbackModal = feedback
-    },
-
-    formataDataParaMostrar (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
-      return dataFormatada
-    },
-
     getParticipanteNome () {
-      axios
-        .get(`http://localhost:8081/api/gerencial/${this.id}`)
+      http
+        .get(`gerencial/${this.id}`)
         .then((response) => {
           this.participante = response.data
-          console.log(response.data)
         })
         .catch((error) => {
           console.log(error)
@@ -187,11 +169,10 @@ export default {
     },
 
     getFeedback () {
-      axios
-        .get(`http://localhost:8081/api/feedback/${this.id}`)
+      http
+        .get(`feedback/${this.id}`)
         .then((response) => {
           this.feedbacks = response.data
-          console.log(response.data)
         })
         .catch((error) => {
           console.log(error)
@@ -199,18 +180,25 @@ export default {
     },
 
     postForm () {
-      console.log(this.form.data)
-      axios
-        .post(`http://localhost:8081/api/feedback/novo/${this.id}`, { 
-          data: this.form.data,
-          anotacoes: this.form.anotacoes
-        }, config)
-        .then((response) => {
-          this.getFeedback()
-        })
-        .catch((error) => {
-          console.log(error)
-        }) 
+      let campos = document.querySelectorAll('input')
+      let campoVazio = 0
+      campos.forEach(element => {
+        if (!element.value) {
+          campoVazio = 1
+        }
+      })
+      if (campoVazio == 0) {
+        http
+          .post(`feedback/novo/${this.id}`, this.form)
+          .then((response) => {
+            this.getFeedback()
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      } else {
+        alert('Por favor, preencha todos os campos!')
+      }
     }, 
 
     pegaDadosUrl () {
@@ -226,6 +214,18 @@ export default {
       })
 
       return data
+    },
+
+    carregaModal (feedback, index) {
+      this.feedbackModal = feedback
+      this.indiceModal = index
+    },
+
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+
+      return dataFormatada
     }
   }
 }

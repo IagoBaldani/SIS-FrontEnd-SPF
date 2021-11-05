@@ -117,14 +117,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import axios from 'axios'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -141,18 +134,49 @@ export default {
         cargoEfetivado: '',
         comprovante: '',
         campoObservacao: ''
-      }
+      },
+      id: {}
     }
   },
 
   beforeMount () {
-    const dadosUrl = this.pegaDadosUrl()
-    this.id = dadosUrl.id
-    this.getParticipanteNome(dadosUrl.id)
+    this.id = this.pegaDadosUrl().id
+    this.getParticipanteNome()
     Funcoes.verificaToken()
   },
 
   methods: {
+    getParticipanteNome () {
+      http
+        .get(`gerencial/${this.id}`)
+        .then((response) => {
+          this.participante = response.data
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    postForm () {
+      let campos = document.querySelectorAll('input')
+      let campoVazio = 0
+      campos.forEach(element => {
+        if (!element.value) {
+          campoVazio = 1
+        }
+      })
+      if (campoVazio == 0) {
+        http
+          .post(`conclusao/registrociclofinal/${this.id}`, this.form)
+          .catch((error) => {
+            console.log(error)
+          })
+      } else {
+        alert('Por favor, preencha todos os campos!')
+      }   
+    },
+
     carregaModal (conclusao) {
       this.conclusaoModal = conclusao
     },
@@ -177,33 +201,6 @@ export default {
       })
 
       return data
-    },
-
-    getParticipanteNome (id) {
-      axios
-        .get(`http://localhost:8081/api/gerencial/${id}`)
-        .then((response) => {
-          this.participante = response.data
-          console.log(response.data)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    postForm () {
-      axios
-        .post(`http://localhost:8081/api/conclusao/registrociclofinal/${this.id}`, { 
-          resultado: this.form.resultado,
-          dataAlteracao: this.form.dataAlteracao,
-          cargoEfetivado: this.form.cargoEfetivado,
-          comprovante: this.form.comprovante,
-          campoObservacao: this.form.campoObservacao
-        },
-        config)
-        .catch((error) => {
-          console.log(error)
-        })
     }
   }
 }

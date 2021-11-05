@@ -98,7 +98,7 @@
             <div class="modal-content p-5 grey-background">
                 <div class="row mb-5">
                     <div class="col">
-                        <h2 class="modal-title fw-bold" id="exampleModalLabel">Conclusão de ciclo: {{ indiceModal}}</h2>
+                        <h2 class="modal-title fw-bold titulo " id="exampleModalLabel">Conclusão de ciclo: {{ indiceModal}}</h2>
                     </div>
                 </div>
                 <div class="row">
@@ -135,14 +135,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import axios from 'axios'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -168,15 +161,69 @@ export default {
   },
 
   beforeMount () {
-    const dadosUrl = this.pegaDadosUrl()
-    this.id = dadosUrl.id
-    this.getParticipanteNome(dadosUrl.id)
-    this.getCiclo(dadosUrl.id)
+    this.id = this.pegaDadosUrl().id
+    this.getParticipanteNome()
+    this.getCiclo()
     this.getCargos()
     Funcoes.verificaToken()
   },
 
   methods: {
+    getParticipanteNome () {
+      http
+        .get(`gerencial/${this.id}`)
+        .then((response) => {
+          this.participante = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    getCargos () {
+      http 
+        .get('remuneracao/lista')
+        .then((response) => {
+          this.cargos = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    getCiclo () {
+      http
+        .get(`conclusao/${this.id}`)
+        .then((response) => {
+          this.conclusoes = response.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    postForm () {
+      let campos = document.querySelectorAll('input')
+      let campoVazio = 0
+      campos.forEach(element => {
+        if (!element.value) {
+          campoVazio = 1
+        }
+      })
+      if (campoVazio == 0) {
+        http
+          .post(`conclusao/registrocicloprogressivo/${this.id}`, this.form)
+          .then((response) => { 
+            this.getCiclo()
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      } else {
+        alert('Por favor, preencha todos os campos!')
+      }    
+    },
+
     carregaModal (conclusao, index) {
       this.conclusaoModal = conclusao
       this.indiceModal = index
@@ -202,56 +249,6 @@ export default {
       })
 
       return data
-    },
-
-    getParticipanteNome (id) {
-      axios
-        .get(`http://localhost:8081/api/gerencial/${id}`)
-        .then((response) => {
-          this.participante = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    getCargos () {
-      axios 
-        .get('http://localhost:8081/api/remuneracao/lista')
-        .then((response) => {
-          this.cargos = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    getCiclo (id) {
-      axios
-        .get(`http://localhost:8081/api/conclusao/${id}`)
-        .then((response) => {
-          this.conclusoes = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    postForm () {
-      axios
-        .post(`http://localhost:8081/api/conclusao/registrocicloprogressivo/${this.id}`, { 
-          resultado: this.form.resultado,
-          dataAlteracao: this.form.dataAlteracao,
-          cargo: this.form.cargo,
-          comprovante: this.form.comprovante
-        },
-        config)
-        .then((response) => { 
-          this.getCiclo(this.id)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
     }
   }
 }

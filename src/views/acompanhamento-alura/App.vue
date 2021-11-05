@@ -39,7 +39,7 @@
                             <label for="hMinima" class="form-label fw-bold mb-0 titulo">Horas mínimas semanais</label>
                             <input name="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
                         </div>
-                        <button type="button" @click="postForm()"  class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
+                        <button type="button" @click="postForm()" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
                     </form>
                 </div>
                 <div  class="col-lg-7">
@@ -57,7 +57,7 @@
                                     <th scope="row" class=" text-center titulo" id="info-id">{{++index}}</th>
                                     <td class="text-center campo-tabela">{{registro.mesAvaliado}}/{{registro.semanaAvaliada}}</td>
                                     <td class="text-center campo-tabela">{{this.formataDataParaMostrar(registro.dataRegistro)}}</td>
-                                    <td @click="carregaModal(registro)"
+                                    <td @click="carregaModal(registro, index)"
                                         id="olho" class="td-button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"><img
@@ -76,7 +76,7 @@
             <div class="modal-content p-5 conteudoModal" >
                 <div class="row mb-5">
                     <div class="col">
-                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Registro do acompanhamento: {{registroModal.id}}</h2>
+                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Registro do acompanhamento: {{indiceModal}}</h2>
                     </div>
                 </div>
                 <div class="row mb-5">
@@ -170,14 +170,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import axios from 'axios'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -196,7 +189,8 @@ export default {
         semanaAvaliada: '',
         dataRegistro: '',
         hrMinSemana: ''
-      }
+      },
+      indiceModal: {}
     } 
   },
   
@@ -209,8 +203,8 @@ export default {
 
   methods: {
     getParticipanteNome () {
-      axios
-        .get(`http://localhost:8081/api/gerencial/${this.id}`)
+      http
+        .get(`gerencial/${this.id}`)
         .then((response) => {
           this.participante = response.data
         })
@@ -220,10 +214,32 @@ export default {
     },
     
     postForm () {
-      axios
-        .post(`http://localhost:8081/api/alura/novo/${this.id}`, this.form, config)
+      let campos = document.querySelectorAll('input')
+      let campoVazio = 0
+      campos.forEach(element => {
+        if (!element.value) {
+          campoVazio = 1
+        }
+      })
+      if (campoVazio == 0) {
+        http
+          .post(`alura/novo/${this.id}`, this.form)
+          .then((response) => {
+            this.getAlura()
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      } else {
+        alert('Por favor, preencha todos os campos!')
+      }
+    },
+
+    getAlura () {
+      http
+        .get(`alura/${this.id}`)
         .then((response) => {
-          this.getAlura()
+          this.registros = response.data
         })
         .catch((error) => {
           console.log(error)
@@ -235,17 +251,6 @@ export default {
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
 
       return dataFormatada
-    },
-
-    getAlura () {
-      axios
-        .get(`http://localhost:8081/api/alura/${this.id}`)
-        .then((response) => {
-          this.registros = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
     },
 
     pegaDadosUrl () {
@@ -262,8 +267,9 @@ export default {
 
       return data
     },
-    carregaModal (registro) {
+    carregaModal (registro, index) {
       this.registroModal = registro
+      this.indiceModal = index
     }
   }
 }

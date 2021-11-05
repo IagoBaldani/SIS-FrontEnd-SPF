@@ -15,9 +15,16 @@
                     <div class="comboBox w-100" id="programas">
                         <select class="form-select" id="filtro-programa">
                             <option value="0" class="programa-form" selected disabled>Programa de formação</option>
-                            <option :value="programa.id" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
+                            <option :value="programa" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
                         </select>
                     </div>
+                </div>
+                 <!--Botão de Buscar-->
+                <div class="row justify-content-evenly">
+                    <div class="col-lg-4">
+                        <button @click="filtraDados()" type="button" value="BUSCAR" class="btn w-100 fs-5 btn-primary botao">BUSCAR</button>
+                    </div>
+                    <div class="col-lg-7"></div>
                 </div>
                 <!--scroll(barra de rolagem) e a tabela de busca de participantes-->
                 <div class="col-lg-7" id="participantes">
@@ -39,14 +46,6 @@
                     </div>
                 </div>
             </div>
-
-            <!--Botão de Buscar-->
-            <div class="row justify-content-evenly">
-                <div class="col-lg-4">
-                    <button @click="filtraDados()" type="button" value="BUSCAR" class="btn w-100 fs-5 btn-primary botao">BUSCAR</button>
-                </div>
-                <div class="col-lg-7"></div>
-            </div>
         </div>
     </main>
 </template>
@@ -54,14 +53,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import axios from 'axios'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -82,8 +74,8 @@ export default {
 
   methods: {
     getParticipantes () {
-      axios
-        .get('http://localhost:8081/api/busca/participantes/ativo')
+      http
+        .get('busca/participantes/ativo')
         .then((response) => {
           this.participantes = response.data
         })
@@ -93,8 +85,8 @@ export default {
     },
 
     getFormacoes () {
-      axios
-        .get('http://localhost:8081/api/busca/participantes/programa/em_andamento')
+      http
+        .get('busca/participantes/programa/em_andamento')
         .then((response) => {
           this.programas = response.data
         })
