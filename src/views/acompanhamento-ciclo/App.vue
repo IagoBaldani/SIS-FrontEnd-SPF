@@ -166,6 +166,7 @@ export default {
     this.getCiclo()
     this.getCargos()
     Funcoes.verificaToken()
+    this.formatoUpload()
   },
 
   methods: {
@@ -249,10 +250,21 @@ export default {
       })
 
       return data
+    },
+    formatoUpload () {
+      var texto = document.querySelector('#nome-arquivo')
+      let file = document.getElementById('file')
+      var xis = document.querySelector('#btn-close')
+      file.addEventListener('change', (event) => {
+        if (file.files.length == 0) {
+          texto.textContent = 'Faça upload do comprovante'
+        } else {
+          texto.textContent = file.files[0].name
+        }
+      })
     }
   }
 }
-
 </script>
 
 <style scoped>

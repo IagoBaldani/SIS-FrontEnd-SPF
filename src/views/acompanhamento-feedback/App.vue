@@ -191,6 +191,7 @@ export default {
         http
           .post(`feedback/novo/${this.id}`, this.form)
           .then((response) => {
+            alert('Feedback incluido com sucesso')
             this.getFeedback()
           })
           .catch((error) => {
