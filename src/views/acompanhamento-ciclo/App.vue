@@ -46,7 +46,7 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
-                            <input id="file" class="none" type="file" accept="application/pdf"/>
+                            <input id="file" @change="formatoUpload()" class="none" type="file" accept="application/pdf"/>
                             <label for="file" class="btn-file d-flex justify-content-between">
                                 <div class="w-100">
                                     <img src="@/assets/imgs/upload.svg" class="upload-img"/>
@@ -98,7 +98,7 @@
             <div class="modal-content p-5 grey-background">
                 <div class="row mb-5">
                     <div class="col">
-                        <h2 class="modal-title fw-bold titulo " id="exampleModalLabel">Conclusão de ciclo: {{ indiceModal}}</h2>
+                        <h2 class="modal-title fw-bold titulo " id="exampleModalLabel">Conclusão de ciclo: {{ indiceModal }}</h2>
                     </div>
                 </div>
                 <div class="row">
@@ -166,7 +166,6 @@ export default {
     this.getCiclo()
     this.getCargos()
     Funcoes.verificaToken()
-    this.formatoUpload()
   },
 
   methods: {
@@ -254,14 +253,11 @@ export default {
     formatoUpload () {
       var texto = document.querySelector('#nome-arquivo')
       let file = document.getElementById('file')
-      var xis = document.querySelector('#btn-close')
-      file.addEventListener('change', (event) => {
-        if (file.files.length == 0) {
-          texto.textContent = 'Faça upload do comprovante'
-        } else {
-          texto.textContent = file.files[0].name
-        }
-      })
+      if (file.files.length == 0) {
+        texto.textContent = 'Faça upload do comprovante'
+      } else {
+        texto.textContent = file.files[0].name
+      }
     }
   }
 }

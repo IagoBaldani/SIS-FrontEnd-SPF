@@ -42,7 +42,7 @@
                     <form>
                         <div class="mb-3">
                             <label for="file" class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
-                            <input id="file" type="file" accept="application/pdf" class="none" />
+                            <input id="file" @change="formatoUpload()" type="file" accept="application/pdf" class="none" />
                             <label for="file" class="btn-file d-flex justify-content-between">
                                 <div class="w-100">
                                     <img src="@/assets/imgs/upload.svg"
@@ -201,6 +201,16 @@ export default {
       })
 
       return data
+    },
+
+    formatoUpload () {
+      var texto = document.querySelector('#nome-arquivo')
+      let file = document.getElementById('file')
+      if (file.files.length == 0) {
+        texto.textContent = 'Faça upload do comprovante'
+      } else {
+        texto.textContent = file.files[0].name
+      }
     }
   }
 }
