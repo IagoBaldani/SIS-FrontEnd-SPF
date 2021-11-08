@@ -77,14 +77,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import Cookie from 'js-cookie'
-import axios from 'axios'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -103,7 +96,7 @@ export default {
   },
   methods: {
     getProgramas () {
-      axios.get('http://localhost:8081/api/programa', config)
+      http.get('programa')
         .then(response => {
           this.programas = response.data
         })

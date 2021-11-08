@@ -82,15 +82,8 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import axios from 'axios'
 import Funcoes from '../../services/Funcoes'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -105,7 +98,7 @@ export default {
   },
   methods: {
     getInstrutor () {
-      axios.get('http://localhost:8081/api/instrutor', config)
+      http.get('instrutor')
         .then(res => {
           this.instrutores = res.data
         })
