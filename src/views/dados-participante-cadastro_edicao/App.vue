@@ -156,14 +156,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import Cookie from 'js-cookie'
-import axios from 'axios'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -284,7 +277,7 @@ export default {
     }
 
     // Chamada da API MOCK
-    axios.get(`http://localhost:8081/api/mock/participante/${dadosUrl.id}`, config)
+    http.get(`mock/participante/${dadosUrl.id}`)
       .then(response => {
         this.participante.nome = response.data.nome
         this.participante.cpf = response.data.cpf

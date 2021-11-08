@@ -135,14 +135,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import Cookie from 'js-cookie'
-import axios from 'axios'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -178,7 +171,7 @@ export default {
   },
   methods: {
     postPrograma () {
-      axios.post('http://localhost:8081/api/programa', this.programaForm, config)
+      http.post('programa', this.programaForm)
         .then(response => {
           if (response.status == 200) {
             window.location.href = '/dados-programa-busca'
@@ -189,7 +182,7 @@ export default {
         })
     },
     getInstrutor () {
-      axios.get('http://localhost:8081/api/instrutor/status/ATIVO', config)
+      http.get('instrutor/status/ATIVO')
         .then(response => {
           this.instrutores = response.data
         })
@@ -199,7 +192,7 @@ export default {
     },
 
     getPrograma (id) {
-      axios.get(`http://localhost:8081/api/programa/${id}`, config)
+      http.get(`programa/${id}`)
         .then(response => {
           this.programa = response.data
         })
