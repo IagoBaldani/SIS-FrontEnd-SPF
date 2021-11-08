@@ -30,7 +30,8 @@
                         </div>
                         <div class="input-group">
                             <!--<input class="input-file" type="file">-->
-                            <input type="file" class="form-control" id="inputGroupFile02">
+                             <input @change="salvaArquivo()" type="file" class="form-control" id="disc" 
+                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                         </div>
                         <button class="btn-registrar mt-4 " type="button" @click="postForm()" >REGISTRAR</button>
                     </form>
@@ -71,7 +72,7 @@
                             <h4 class="fw-bold titulo">Data do Feedback:</h4>
                             <p class="nomeCol">{{formataDataParaMostrar(feedbackModal.data)}}</p>
                             <h4 class="fw-bold titulo">Anotações do feedback</h4>
-                            <textarea v-model="feedbackModal.anotacao" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
+                            <textarea v-model="feedbackModal.anotacao" disabled class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -109,7 +110,7 @@
                         <div class="col-lg-6">
                             <div>
                                  <button type="submit" class="btn btn-primary mt-2 fw-bold botao" data-bs-toggle="modal"
-                                data-bs-target="#exmodal">CONFIRMAR</button>
+                                data-bs-target="#exmodal" @click="deleteById()" >CONFIRMAR</button>
                              </div>
                         </div>
                         <div class="col-lg-6">
@@ -142,7 +143,8 @@ export default {
       participante: {},
       form: {
         data: '',
-        anotacoes: ''
+        anotacoes: '',
+        disc: {}
       },
       id: {},     
       indiceModal: {}
@@ -191,7 +193,6 @@ export default {
         http
           .post(`feedback/novo/${this.id}`, this.form)
           .then((response) => {
-            alert('Feedback incluido com sucesso')
             this.getFeedback()
           })
           .catch((error) => {
@@ -201,6 +202,17 @@ export default {
         alert('Por favor, preencha todos os campos!')
       }
     }, 
+
+    deleteById () {
+      http  
+        .delete(`/feedback/deletar/${this.feedbackModal.id}`)
+        .then((response) => {
+          this.getFeedback()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
 
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -225,11 +237,17 @@ export default {
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
       return dataFormatada
+    },
+
+    salvaArquivo () {
+      var disc = document.getElementById('disc').files[0]
+      this.form.disc = new FormData()
+      this.form.disc.append('disc', disc)
     }
   }
 }
+
 </script>
 
 <style scoped>

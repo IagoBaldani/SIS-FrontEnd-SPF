@@ -56,7 +56,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="observacoes"  class="form-label fw-bold h5 titulo">Observações</label>
-                            <textarea class="form-control h-198px" id="observacoes" v-model="form.campoObservacao" ></textarea>
+                            <textarea class="form-control h-113px" id="observacoes" v-model="form.campoObservacao" ></textarea>
                         </div>
                     </form>
                 </div>
@@ -103,7 +103,7 @@
                 </div>
                 <div class="row d-flex">
                     <div class="col-lg-6">
-                        <button @click="postForm()" type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100">CONFIRMAR</button>
+                        <button @click="postForm()"  type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100">CONFIRMAR</button>
                     </div>
                     <div class="col-lg-6">
                         <button type="submit" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100">CANCELAR</button>
@@ -174,7 +174,8 @@ export default {
           })
       } else {
         alert('Por favor, preencha todos os campos!')
-      }   
+      } 
+      location.href = `../acompanhamento-ciclo/App.vue?id=${this.id}`  
     },
 
     carregaModal (conclusao) {
@@ -352,8 +353,8 @@ export default {
     display: none;
 }
 
-.h-198px {
-    height: 198px;
+.h-113px {
+    height: 113px;
 }
 
 .sis-red-btn {

@@ -153,12 +153,12 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div>
-                            <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botao">CONFIRMAR</button>
+                            <button type="submit"  @click="deleteById()" class="btn btn-primary mt-2 fw-bold w-100 botao" data-bs-dismiss="modal" >CONFIRMAR</button>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div>
-                            <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botaocanc">CANCELAR</button>
+                            <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botaocanc" data-bs-dismiss="modal" >CANCELAR</button>
                         </div>
                     </div>
                 </div>
@@ -235,6 +235,16 @@ export default {
       }
     },
 
+    deleteById () {
+      http
+        .delete(`alura/deletar/${this.registroModal.codigoAlura}`)
+        .then((response) => {
+          this.getAlura()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
     getAlura () {
       http
         .get(`alura/${this.id}`)
