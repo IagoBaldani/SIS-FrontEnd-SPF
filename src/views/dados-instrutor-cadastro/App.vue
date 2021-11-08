@@ -95,7 +95,7 @@ export default {
         })
     },
     getInstrutor (cpf) {
-      http.get(`mock/instrutor/${cpf}`, config)
+      http.get(`mock/instrutor/${cpf}`)
         .then(res => {
           this.instrutor = res.data
         })

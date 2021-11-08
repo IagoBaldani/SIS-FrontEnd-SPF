@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     getInstrutor (cpf) {
-      http.get(`instrutor/${cpf}`, config)
+      http.get(`instrutor/${cpf}`)
         .then(res => {
           this.instrutor = res.data
         })
