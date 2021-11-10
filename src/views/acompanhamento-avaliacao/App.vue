@@ -62,7 +62,7 @@
                             <tr v-for="(avaliacao, index) in avaliacoes" v-bind:key="avaliacao">
                                 <th scope="row" class="w-50px titulo">{{++index}}</th>
                                 <td class="text-align-left">Técnica: {{avaliacao.notaTecnica}} | Ágeis {{avaliacao.notaPraticasAgeis}} | Liderança: {{avaliacao.notaLideranca}} | Negócios: {{avaliacao.notaNegocios}} | Comportamental: {{avaliacao.notaComportamental}}</td>
-                                <td @click="carregaModal(avaliacao)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalDeletar">
+                                <td @click="carregaModal(avaliacao, index)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalDeletar">
                                     <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
                                 </td>
                             </tr>
@@ -81,7 +81,7 @@
             <div class="modal-content p-5 conteudoModal">
                 <div class="row mb-5">
                     <div class="col">
-                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Série de avaliações: {{avaliacaoModal.id}}</h2>
+                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Série de avaliações: {{indiceModal}}</h2>
                     </div>
                 </div>
                 <div class="row mb-5">
@@ -130,35 +130,35 @@
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Técnica:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.tecnica}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaTecnica}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comportamental:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.comportamental}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaComportamental}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo práticas ágeis:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.moduloAgeis}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaPraticasAgeis}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo liderança:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.lideranca}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaLideranca}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo negócios:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.negocios}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.notaNegocios}}</p>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-5">
                     <div class="col-lg-6">
                         <button type="submit"
-                            class="btn btn-danger sis-red-btn mt-3 fw-bold fs-5 w-100">CONFIRMAR</button>
+                            class="btn btn-danger sis-red-btn mt-3 fw-bold fs-5 w-100" @click="deleteById()" data-bs-dismiss="modal">CONFIRMAR</button>
                     </div>
                     <div class="col-lg-6">
-                        <button type="submit" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100">CANCELAR</button>
+                        <button type="submit" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100" data-bs-dismiss="modal">CANCELAR</button>
                     </div>
                 </div>
             </div>
@@ -305,7 +305,8 @@ export default {
           responsabilidade: '',
           sociabilidade: ''
         }
-      }
+      },
+      indiceModal: {}
     }
   },
 
@@ -317,8 +318,9 @@ export default {
   },
 
   methods: {
-    carregaModal (avaliacao) {
+    carregaModal (avaliacao, index) {
       this.avaliacaoModal = avaliacao
+      this.indiceModal = index
     },
 
     pegaDadosUrl () {
@@ -363,6 +365,17 @@ export default {
     postForm () {
       http
         .post(`avaliacao/novo/${this.id}`, this.form)
+        .then((response) => {
+          this.getAvaliacao()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    deleteById () {
+      http
+        .delete(`avaliacao/deletar/${this.avaliacaoModal.id}`)
         .then((response) => {
           this.getAvaliacao()
         })
