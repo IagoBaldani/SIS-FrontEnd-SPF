@@ -23,26 +23,34 @@
                     <form>
                         <div class="mb-3">
                             <label for="tecnica" class="form-label fw-bold h5 titulo">Técnica</label>
-                            <input type="text" class="form-control" id="tecnica" placeholder="10">
-                        </div>
-                        <div class="mb-3">
-                            <label for="comportamental" class="form-label fw-bold h5 titulo">Comportamental</label>
-                            <input type="text" class="form-control" id="comportamental" placeholder="10">
+                            <input type="number" class="form-control" id="tecnica" v-model="form.notaTecnica" step=".01" min="0" max="10">
                         </div>
                         <div class="mb-3">
                             <label for="praticas-ageis" class="form-label fw-bold h5 titulo">Módulo práticas ágeis</label>
-                            <input type="text" class="form-control" id="praticas-ageis" placeholder="10">
+                            <input type="number" class="form-control" id="praticas-ageis" v-model="form.notaPraticasAgeis" step=".01" min="0.00" max="10.00">
                         </div>
                         <div class="mb-3">
                             <label for="lideranca" class="form-label fw-bold h5 titulo">Módulo liderança</label>
-                            <input type="text" class="form-control" id="lideranca" placeholder="10">
+                            <input type="number" class="form-control" id="lideranca" v-model="form.notaLideranca" step=".01" min="0" max="10">
                         </div>
                         <div class="mb-3">
                             <label for="negocios" class="form-label fw-bold h5 titulo">Módulo negócios</label>
-                            <input type="text" class="form-control" id="negocios" placeholder="10">
+                            <input type="number" class="form-control" id="negocios" v-model="form.notaNegocios" step=".01" min="0" max="10">
+                        </div>
+                        <div class="mb-3">
+                            <label for="comportamental" class="form-label fw-bold h5 titulo">Comportamental</label>
+                            <div class="input-group mb-3">
+                                <input type="number" disabled class="form-control" 
+                                    id="comportamental" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary botao-adc" type="button" 
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalComportamental">+</button>
+                                </div>
+                            </div>
                         </div>
 
-                        <button type="submit"
+                        <button type="button" @click="postForm()"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
                     </form>
                 </div>
@@ -51,9 +59,9 @@
                     <table class="table table-bordered tabela">
 
                         <tbody>
-                            <tr v-for="avaliacao in avaliacoes" v-bind:key="avaliacao">
-                                <th scope="row" class="w-50px titulo">{{avaliacao.id}}</th>
-                                <td class="text-align-left">{{avaliacao.notaTecnica}} / {{avaliacao.notaComportamental}} / {{avaliacao.notaPraticasAgeis}} / {{avaliacao.notaLideranca}} / {{avaliacao.notaNegocios}}</td>
+                            <tr v-for="(avaliacao, index) in avaliacoes" v-bind:key="avaliacao">
+                                <th scope="row" class="w-50px titulo">{{++index}}</th>
+                                <td class="text-align-left">Técnica: {{avaliacao.notaTecnica}} | Ágeis {{avaliacao.notaPraticasAgeis}} | Liderança: {{avaliacao.notaLideranca}} | Negócios: {{avaliacao.notaNegocios}} | Comportamental: {{avaliacao.notaComportamental}}</td>
                                 <td @click="carregaModal(avaliacao)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalDeletar">
                                     <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
                                 </td>
@@ -156,19 +164,114 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalComportamental" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 conteudoModal scroll-modal">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Teste de desempenho:</h2>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <form class="col-lg-6">
+                        <div class="comboBox w-100 mb-3" id="avaliacao-comportamental">
+                            <label class="form-label fw-bold h5 titulo">Avaliação:</label>
+                            <select class="form-select" id="filtro-avaliacao-comportamental" v-model="form.avaliacaoDesempenhoForm.avaliacao">
+                                <option :value="'FORAM_SUPERADAS'">Foram superadas</option>
+                                <option :value="'FORAM_ATENDIDAS_PLENAMENTE'">Foram atendidas plenamente</option>
+                                <option :value="'FORAM_ATENDIDAS_PARCIALMENTE'">Foram atendidas parcialmente</option>
+                                <option :value="'NAO_FORAM_ATENDIDAS'">Não foram atendidas</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adaptacao" class="form-label fw-bold h5 titulo">Adaptação:</label>
+                            <input type="number" class="form-control" id="adaptacao" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.adaptacao">
+                        </div>
+                        <div class="mb-3">
+                            <label for="tecnica" class="form-label fw-bold h5 titulo">Capacitação Técnica:</label>
+                            <input type="number" class="form-control" id="tecnica" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.capTecnica">
+                        </div>
+                        <div class="mb-3">
+                            <label for="aprendizagem" class="form-label fw-bold h5 titulo">Aprendizagem prática:</label>
+                            <input type="number" class="form-control" id="aprendizagem" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.apPratica">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cooperacao" class="form-label fw-bold h5 titulo">Cooperação:</label>
+                            <input type="number" class="form-control" id="cooperacao" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.cooperacao">
+                        </div>
+                        <div class="mb-3">
+                            <label for="disciplina" class="form-label fw-bold h5 titulo">Disciplina</label>
+                            <input type="number" class="form-control" id="disciplina" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.disciplina">
+                        </div>
+                        <div class="mb-3">
+                            <label for="responsabilidade" class="form-label fw-bold h5 titulo">Responsabilidade:</label>
+                            <input type="number" class="form-control" id="responsabilidade" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.responsabilidade">
+                        </div>
+                    </form>
+                    <form class="col-lg-6">
+                        <div class="comboBox w-100 mb-3" id="parecer">
+                            <label class="form-label fw-bold h5 titulo">Parecer:</label>
+                            <select class="form-select" id="filtro-parecer" v-model="form.avaliacaoDesempenhoForm.parecer">
+                                <option :value="'APROVADO'">aprovado</option>
+                                <option :value="'REPROVADO'">reprovado</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="qualidade" class="form-label fw-bold h5 titulo">Qualidade:</label>
+                            <input type="number" class="form-control" id="qualidade" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.qualidade">
+                        </div>
+                        <div class="mb-3">
+                            <label for="comunicabilidade" class="form-label fw-bold h5 titulo">Comunicabilidade:</label>
+                            <input type="number" class="form-control" id="comunicabilidade" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.comunicabilidade">
+                        </div>
+                        <div class="mb-3">
+                            <label for="dedicacao" class="form-label fw-bold h5 titulo">Dedicação:</label>
+                            <input type="number" class="form-control" id="dedicacao" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.dedicacao">
+                        </div>
+                        <div class="mb-3">
+                            <label for="iniciativa" class="form-label fw-bold h5 titulo">Iniciativa:</label>
+                            <input type="number" class="form-control" id="iniciativa" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.iniciativa">
+                        </div>
+                        <div class="mb-3">
+                            <label for="organizacao" class="form-label fw-bold h5 titulo">Organização:</label>
+                            <input type="number" class="form-control" id="organizacao" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.organizacao">
+                        </div>
+                        <div class="mb-3">
+                            <label for="sociabilidade" class="form-label fw-bold h5 titulo">Sociabilidade:</label>
+                            <input type="number" class="form-control" id="sociabilidade" step=".01" min="0" max="4"
+                                v-model="form.avaliacaoDesempenhoForm.sociabilidade">
+                        </div>
+                    </form>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-6">
+                        <button  type="button" data-bs-toggle="modal" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100">CONFIRMAR</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button type="button" data-bs-toggle="modal" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100">CANCELAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import axios from 'axios'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -179,15 +282,37 @@ export default {
     return {
       avaliacoes: [],
       avaliacaoModal: '',
-      participante: {}
+      participante: {},
+      id: {},
+      form: {
+        notaTecnica: '',
+        notaPraticasAgeis: '',
+        notaLideranca: '',
+        notaNegocios: '',
+        avaliacaoDesempenhoForm: {
+          avaliacao: '',
+          parecer: '',
+          adaptacao: '',
+          qualidade: '',
+          capTecnica: '',
+          comunicabilidade: '',
+          apPratica: '',
+          dedicacao: '',
+          cooperacao: '',
+          iniciativa: '',
+          disciplina: '',
+          organizacao: '',
+          responsabilidade: '',
+          sociabilidade: ''
+        }
+      }
     }
   },
 
   beforeMount () {
-    const dadosUrl = this.pegaDadosUrl()
-    this.id = dadosUrl.id
-    this.getParticipanteNome(dadosUrl.id)
-    this.getAvaliacao(dadosUrl.id)
+    this.id = this.pegaDadosUrl().id
+    this.getParticipanteNome()
+    this.getAvaliacao()
     Funcoes.verificaToken()
   },
 
@@ -211,9 +336,9 @@ export default {
       return data
     },
 
-    getParticipanteNome (id) {
-      axios
-        .get(`http://localhost:8081/api/gerencial/${id}`)
+    getParticipanteNome () {
+      http
+        .get(`gerencial/${this.id}`)
         .then((response) => {
           this.participante = response.data
           console.log(response.data)
@@ -223,12 +348,23 @@ export default {
         })
     },
 
-    getAvaliacao (id) {
-      axios
-        .get(`http://localhost:8081/api/avaliacao/${id}`)
+    getAvaliacao () {
+      http
+        .get(`avaliacao/${this.id}`)
         .then((response) => {
           this.avaliacoes = response.data
           console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+
+    postForm () {
+      http
+        .post(`avaliacao/novo/${this.id}`, this.form)
+        .then((response) => {
+          this.getAvaliacao()
         })
         .catch((error) => {
           console.log(error)
@@ -325,6 +461,13 @@ export default {
     cursor: pointer;
 }
 
+.botao-adc {
+  font-size: 2em;
+  line-height: .75!important;
+  background: #FFB700;
+  color: #444444
+}
+
 .radio-item input[type=radio]:checked + label:after {
   border-radius: 0;
   width: 0;
@@ -360,6 +503,11 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.scroll-modal {
+    overflow-y: scroll;
+    max-height: 500px;
 }
 
 .clear-file {
