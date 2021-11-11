@@ -38,10 +38,10 @@
                             <input type="number" class="form-control" id="negocios" v-model="form.notaNegocios" step=".01" min="0" max="10">
                         </div>
                         <div class="mb-3">
-                            <label for="comportamental" class="form-label fw-bold h5 titulo">Comportamental</label>
+                            <label for="comportamental" class="form-label fw-bold h5 titulo" >Comportamental</label>
                             <div class="input-group mb-3">
                                 <input type="number" disabled class="form-control" 
-                                    id="comportamental" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                    id="comportamental" aria-label="Recipient's username" aria-describedby="basic-addon2" :value="getMedia().toFixed(2)">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary botao-adc" type="button" 
                                         data-bs-toggle="modal"
@@ -61,12 +61,11 @@
                         <tbody>
                             <tr v-for="(avaliacao, index) in avaliacoes" v-bind:key="avaliacao">
                                 <th scope="row" class="w-50px titulo">{{++index}}</th>
-                                <td class="text-align-left">Técnica: {{avaliacao.notaTecnica}} | Ágeis {{avaliacao.notaPraticasAgeis}} | Liderança: {{avaliacao.notaLideranca}} | Negócios: {{avaliacao.notaNegocios}} | Comportamental: {{avaliacao.notaComportamental}}</td>
+                                <td class="text-align-left">Técnica: {{avaliacao.notaTecnica}} | Ágeis {{avaliacao.notaPraticasAgeis}} | Liderança: {{avaliacao.notaLideranca}} | Negócios: {{avaliacao.notaNegocios}} | Comportamental: {{avaliacao.notaComportamental.media}}</td>
                                 <td @click="carregaModal(avaliacao, index)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalDeletar">
                                     <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -92,8 +91,14 @@
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comportamental:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.notaComportamental}}</p>
+                            <div>
+                              <p class="grey-font h4 d-inline marginEye">{{avaliacaoModal.notaComportamental.media}}</p>
+                              <button class="btn btn-outline-secondary botao-adc" type="button" 
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#serievisu" @click="carregaModal(avaliacaoModal)"><img src="@/assets/imgs/visibility_white_24dp.svg"></button>
+                            </div>
                         </div>
+                      
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo práticas ágeis:</h4>
                             <p class="grey-font h4">{{avaliacaoModal.notaPraticasAgeis}}</p>
@@ -219,8 +224,8 @@
                         <div class="comboBox w-100 mb-3" id="parecer">
                             <label class="form-label fw-bold h5 titulo">Parecer:</label>
                             <select class="form-select" id="filtro-parecer" v-model="form.avaliacaoDesempenhoForm.parecer">
-                                <option :value="'APROVADO'">aprovado</option>
-                                <option :value="'REPROVADO'">reprovado</option>
+                                <option :value="'APROVADO'">Aprovado</option>
+                                <option :value="'REPROVADO'">Reprovado</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -257,7 +262,7 @@
                 </div>
                 <div class="row d-flex">
                     <div class="col-lg-6">
-                        <button  type="button" data-bs-toggle="modal" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100">CONFIRMAR</button>
+                        <button  type="button" data-bs-toggle="modal" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100" @click="getMedia()">CONFIRMAR</button>
                     </div>
                     <div class="col-lg-6">
                         <button type="button" data-bs-toggle="modal" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100">CANCELAR</button>
@@ -266,6 +271,69 @@
             </div>
         </div>
     </div>
+
+<!-- MODAL VISUALIZACAO-->
+    <div class="modal fade" id="serievisu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 conteudoModal scroll-modal">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Teste de desempenho:</h2>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <form class="col-lg-6">
+                        <div class="comboBox w-100 mb-3" id="avaliacao-comportamental">
+                            <label class="form-label fw-bold h5 titulo">Avaliação: {{modalDesempenho.avaliacao}}</label>
+                        <!-- <label class="form-label fw-bold h5 titulo">Avaliação: {{modalDesempenho.avaliacao.replaceAll('_',' ').tolowerCase().toUpperCase(modalDesempenho.avaliacao[0])}}</label> -->
+                        </div>
+                        <div class="mb-3">
+                            <label for="adaptacao" class="form-label fw-bold h5 titulo">Nota Adaptação: {{ modalDesempenho.adaptacao}}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tecnica" class="form-label fw-bold h5 titulo">Nota Capacitação Técnica: {{ modalDesempenho.capTecnica }}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="aprendizagem" class="form-label fw-bold h5 titulo">Nota Aprendizagem Prática: {{modalDesempenho.apPratica}}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cooperacao" class="form-label fw-bold h5 titulo">Cooperação: {{modalDesempenho.cooperacao}}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="disciplina" class="form-label fw-bold h5 titulo">Disciplina: {{modalDesempenho.disciplina}}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="responsabilidade" class="form-label fw-bold h5 titulo">Responsabilidade: {{modalDesempenho.responsabilidade}}</label>
+                        </div>
+                    </form>
+                    <form class="col-lg-6">
+                        <div class="comboBox w-100 mb-3" id="parecer">
+                        <label class="form-label fw-bold h5 titulo">Parecer: {{modalDesempenho.parecer}} </label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="qualidade" class="form-label fw-bold h5 titulo">Qualidade: {{modalDesempenho.qualidade}}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comunicabilidade" class="form-label fw-bold h5 titulo">Comunicabilidade: {{modalDesempenho.comunicabilidade}}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dedicacao" class="form-label fw-bold h5 titulo">Dedicação: {{modalDesempenho.dedicacao}}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="iniciativa" class="form-label fw-bold h5 titulo">Iniciativa: {{modalDesempenho.iniciativa}}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="organizacao" class="form-label fw-bold h5 titulo">Organização: {{modalDesempenho.organizacao}}</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sociabilidade" class="form-label fw-bold h5 titulo">Sociabilidade: {{modalDesempenho.sociabilidade}}</label>
+                        </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+        </div>
+  
 </template>
 
 <script>
@@ -284,6 +352,7 @@ export default {
       avaliacaoModal: '',
       participante: {},
       id: {},
+      media: {},
       form: {
         notaTecnica: '',
         notaPraticasAgeis: '',
@@ -306,7 +375,8 @@ export default {
           sociabilidade: ''
         }
       },
-      indiceModal: {}
+      indiceModal: {},
+      modalDesempenho: {}
     }
   },
 
@@ -321,6 +391,7 @@ export default {
     carregaModal (avaliacao, index) {
       this.avaliacaoModal = avaliacao
       this.indiceModal = index
+      this.modalDesempenho = this.avaliacaoModal.notaComportamental
     },
 
     pegaDadosUrl () {
@@ -382,6 +453,21 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+    getMedia () {
+      this.media = (this.form.avaliacaoDesempenhoForm.qualidade + 
+        this.form.avaliacaoDesempenhoForm.adaptacao +
+        this.form.avaliacaoDesempenhoForm.capTecnica +
+        this.form.avaliacaoDesempenhoForm.comunicabilidade + 
+        this.form.avaliacaoDesempenhoForm.apPratica +
+        this.form.avaliacaoDesempenhoForm.dedicacao +
+        this.form.avaliacaoDesempenhoForm.cooperacao +
+        this.form.avaliacaoDesempenhoForm.iniciativa +
+        this.form.avaliacaoDesempenhoForm.disciplina + 
+        this.form.avaliacaoDesempenhoForm.organizacao +
+        this.form.avaliacaoDesempenhoForm.responsabilidade +
+        this.form.avaliacaoDesempenhoForm.sociabilidade) / 12
+      return this.media
     }
   }
 }
@@ -591,5 +677,9 @@ export default {
 
 .conteudoModal{
     background-color: #EBEBEB !important;
+}
+
+.marginEye {
+  margin-right: 157px;
 }
 </style>

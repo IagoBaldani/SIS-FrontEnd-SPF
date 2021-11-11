@@ -15,6 +15,7 @@
                     <div class="comboBox w-100" id="programas">
                         <select class="form-select" id="filtro-programa" v-model="programaSelecionado">
                             <option value="0" class="programa-form" selected disabled>Programa de formação</option>
+                            <option :value="''">Nenhum</option>
                             <option :value="programa.nome" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
                         </select>
                     </div>
