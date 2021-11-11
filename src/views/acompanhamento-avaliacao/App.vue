@@ -92,7 +92,7 @@
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comportamental:</h4>
                             <div>
-                              <p class="grey-font h4 d-inline marginEye">{{avaliacaoModal.notaComportamental.media}}</p>
+                              <p class="grey-font h4 d-inline marginEye">{{modalDesempenho.media}}</p>
                               <button class="btn btn-outline-secondary botao-adc" type="button" 
                                         data-bs-toggle="modal"
                                         data-bs-target="#serievisu" @click="carregaModal(avaliacaoModal)"><img src="@/assets/imgs/visibility_white_24dp.svg"></button>
@@ -139,7 +139,7 @@
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comportamental:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.notaComportamental}}</p>
+                            <p class="grey-font h4">{{modalDesempenho.media}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo práticas ágeis:</h4>
@@ -381,10 +381,10 @@ export default {
   },
 
   beforeMount () {
+    Funcoes.verificaToken()
     this.id = this.pegaDadosUrl().id
     this.getParticipanteNome()
     this.getAvaliacao()
-    Funcoes.verificaToken()
   },
 
   methods: {
