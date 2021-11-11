@@ -74,6 +74,9 @@
                             <h4 class="fw-bold titulo">Anotações do feedback</h4>
                             <textarea v-model="feedbackModal.anotacao" disabled class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
+                        <div class="col-lg-6" >
+                            <a @click="teste()" id="oioi" class="btn-registrar mt-5"> download </a>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
@@ -212,6 +215,21 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+
+    download () {
+      
+    },
+
+    teste () {
+      const blob = new Blob([this.feedbackModal.disc], { type: 'octet-stream' })
+      const href = URL.createObjectURL(blob)
+      var guilherme = document.getElementById('oioi')  
+      guilherme = Object.assign(guilherme, {
+        href,
+        download: 'teste.txt'
+      })
+      // URL.revokeObjectURL(href)
     },
 
     pegaDadosUrl () {
