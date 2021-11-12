@@ -193,8 +193,17 @@ export default {
         }
       })
       if (campoVazio == 0) {
+        var formData = new FormData()
+        var disc = document.getElementById('disc').files[0]
+        formData.append('data', this.form.data)
+        formData.append('anotacoes', this.form.anotacoes)
+        formData.append('disc', disc)
         http
-          .post(`feedback/novo/${this.id}`, this.form)
+          .post(`feedback/novo/${this.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data' 
+            }
+          })
           .then((response) => {
             this.getFeedback()
           })
@@ -265,13 +274,12 @@ export default {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
-    },
-
-    salvaArquivo () {
-      var disc = document.getElementById('disc').files[0]
-      this.form.disc = new FormData()
-      this.form.disc.append('disc', disc)
     }
+    // salvaArquivo () {
+    //   var disc = document.getElementById('disc').files[0]
+    //   this.form.disc = new FormData()
+    //   this.form.disc.append('disc', disc)
+    // }
   }
 }
 

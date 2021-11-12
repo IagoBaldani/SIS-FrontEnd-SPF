@@ -46,7 +46,7 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
-                            <input id="file" @change="formatoUpload()" class="none" type="file" accept="application/pdf"/>
+                            <input id="file" @change="formatoUpload()" class="none"  type="file" accept="application/pdf"/>
                             <label for="file" class="btn-file d-flex justify-content-between">
                                 <div class="w-100">
                                     <img src="@/assets/imgs/upload.svg" class="upload-img"/>
@@ -211,8 +211,18 @@ export default {
         }
       })
       if (campoVazio == 0) {
+        var formData = new FormData()
+        var comprovanteRematricula = document.getElementById('file').files[0] 
+        formData.append('resultado', this.form.resultado)
+        formData.append('dataAlteracao', this.form.dataAlteracao)
+        formData.append('cargo', this.form.cargo)
+        formData.append('comprovante', comprovanteRematricula)
         http
-          .post(`conclusao/registrocicloprogressivo/${this.id}`, this.form)
+          .post(`conclusao/registrocicloprogressivo/${this.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data' 
+            }
+          })
           .then((response) => { 
             this.getCiclo()
           })
