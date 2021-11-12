@@ -167,8 +167,19 @@ export default {
         }
       })
       if (campoVazio == 0) {
+        var formData = new FormData()
+        var comprovanteRematricula = document.getElementById('file').files[0] 
+        formData.append('resultado', this.form.resultado)
+        formData.append('dataAlteracao', this.form.dataAlteracao)
+        formData.append('cargoEfetivado', this.form.cargoEfetivado)
+        formData.append('comprovante', this.form.comprovanteRematricula)
+        formData.append('campoObservacao', this.form.campoObservacao)
         http
-          .post(`conclusao/registrociclofinal/${this.id}`, this.form)
+          .post(`conclusao/registrociclofinal/${this.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data' 
+            }
+          })
           .catch((error) => {
             console.log(error)
           })
