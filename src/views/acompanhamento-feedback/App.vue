@@ -75,7 +75,7 @@
                             <textarea v-model="feedbackModal.anotacao" disabled class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
                         <div class="col-lg-6" >
-                            <a @click="teste()" id="oioi" class="btn-registrar mt-5"> download </a>
+                            <a @click="download()" id="oioi" class="btn-registrar mt-5"> download </a>
                         </div>
                     </div>
                     <div class="row">
@@ -218,19 +218,28 @@ export default {
     },
 
     download () {
-      
+      http
+        .get(`/feedback/download/${this.feedbackModal.id}`, {
+          responseType: 'blob'
+        })
+        .then((response) => {
+          console.log(response.data)
+          var FILE = window.URL.createObjectURL(new Blob([response.data]), { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })  
+          var docUrl = document.getElementById('oioi')
+          docUrl.href = FILE
+          docUrl.setAttribute('download')
+        })         
     },
 
-    teste () {
-      const blob = new Blob([this.feedbackModal.disc], { type: 'octet-stream' })
-      const href = URL.createObjectURL(blob)
-      var guilherme = document.getElementById('oioi')  
-      guilherme = Object.assign(guilherme, {
-        href,
-        download: 'teste.txt'
-      })
-      // URL.revokeObjectURL(href)
-    },
+    // teste () {
+    //   const blob = new Blob([this.feedbackModal.disc], { type: 'application/octet-stream' })
+    //   const href = URL.createObjectURL(blob)
+    //   var arquivo = document.getElementById('oioi')  
+    //   arquivo = Object.assign(arquivo, {
+    //     href,
+    //     download: 'teste.csv'
+    //   })
+    // },
 
     pegaDadosUrl () {
       var query = location.search.slice(1)
