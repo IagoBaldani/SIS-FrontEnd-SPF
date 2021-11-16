@@ -11,7 +11,6 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold grey-font text-center">{{participante.nome}}</h4>
                     </div>
-                    <img src="@/assets/imgs/perfil.svg" class="perfil-img"/>
                 </div>
             </div>
             <div class="row justify-content-evenly">

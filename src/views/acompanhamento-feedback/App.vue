@@ -11,7 +11,6 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold text-center nomeCol">{{participante.nome}}</h4>
                     </div>
-                    <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
 
             </div>
@@ -75,7 +74,8 @@
                             <textarea v-model="feedbackModal.anotacao" disabled class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
                         <div class="col-lg-6" >
-                            <a @click="download()" id="oioi" class="btn-registrar mt-5"> download </a>
+                            <h4 class="fw-bold titulo mb-3" >Download DISC:</h4>
+                            <a @click="download()" id="oioi" class="btn-registrar pointer" > DOWNLOAD</a>
                         </div>
                     </div>
                     <div class="row">
@@ -429,5 +429,10 @@ textarea  {
     border-style: none !important;
     width: 25.9em !important;
     border-radius: 2px !important;
+}
+
+.pointer {
+  cursor: pointer;
+  background-color: #FFB700 !important
 }
 </style>

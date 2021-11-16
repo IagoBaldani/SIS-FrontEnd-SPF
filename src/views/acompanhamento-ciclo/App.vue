@@ -13,10 +13,8 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold grey-font text-center">{{ participante.nome }}</h4>
                     </div>
-                    <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
             </div>
-
             <!-- LINHA DE BAIXO (FORMULÁRIO, TABELA E BOTÕES) -->
             <div class="row justify-content-evenly">
                 <div class="col-lg-4">
@@ -109,7 +107,7 @@
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/conclusão:</h4>
-                            <p class="grey-font h4 text-decoration-underline">{{conclusaoModal.comprovante}}</p>
+                            <p  class="grey-font h4 text-decoration-underline pointer" @onclick="download()">comprovante.pdf</p>
                         </div>
                         <div class="mb-4" v-if="conclusaoModal.status == 'PROGRESSIVA'" >
                             <h4 class="fw-bold titulo">Cargo:</h4>
@@ -260,6 +258,7 @@ export default {
 
       return data
     },
+
     formatoUpload () {
       var texto = document.querySelector('#nome-arquivo')
       let file = document.getElementById('file')
@@ -268,6 +267,10 @@ export default {
       } else {
         texto.textContent = file.files[0].name
       }
+    },
+
+    download () {
+      location.href = `http://localhost:8081/api/acompanhamento/download/${this.conclusaoModal.id}`
     }
   }
 }
@@ -465,5 +468,9 @@ export default {
 
 .conteudoModal{
     background-color: #EBEBEB !important;
+}
+
+.pointer {
+  cursor: pointer;
 }
 </style>
