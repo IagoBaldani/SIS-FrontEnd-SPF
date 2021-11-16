@@ -227,28 +227,8 @@ export default {
     },
 
     download () {
-      http
-        .get(`/feedback/download/${this.feedbackModal.id}`, {
-          responseType: 'blob'
-        })
-        .then((response) => {
-          console.log(response.data)
-          var FILE = window.URL.createObjectURL(new Blob([response.data]), { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })  
-          var docUrl = document.getElementById('oioi')
-          docUrl.href = FILE
-          docUrl.setAttribute('download')
-        })         
+      location.href = `http://localhost:8081/api/feedback/download/${this.feedbackModal.id}`
     },
-
-    // teste () {
-    //   const blob = new Blob([this.feedbackModal.disc], { type: 'application/octet-stream' })
-    //   const href = URL.createObjectURL(blob)
-    //   var arquivo = document.getElementById('oioi')  
-    //   arquivo = Object.assign(arquivo, {
-    //     href,
-    //     download: 'teste.csv'
-    //   })
-    // },
 
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -275,11 +255,6 @@ export default {
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
     }
-    // salvaArquivo () {
-    //   var disc = document.getElementById('disc').files[0]
-    //   this.form.disc = new FormData()
-    //   this.form.disc.append('disc', disc)
-    // }
   }
 }
 
