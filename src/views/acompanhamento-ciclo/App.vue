@@ -107,7 +107,7 @@
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/conclusão:</h4>
-                            <p  class="grey-font h4 text-decoration-underline pointer" @onclick="download()">comprovante.pdf</p>
+                            <p  class="grey-font h4 text-decoration-underline pointer" @click="download()">comprovante.pdf</p>
                         </div>
                         <div class="mb-4" v-if="conclusaoModal.status == 'PROGRESSIVA'" >
                             <h4 class="fw-bold titulo">Cargo:</h4>
@@ -270,7 +270,8 @@ export default {
     },
 
     download () {
-      location.href = `http://localhost:8081/api/acompanhamento/download/${this.conclusaoModal.id}`
+      console.log('DOWNLOADANDO')
+      location.href = `http://localhost:8081/api/conclusao/download/${this.conclusaoModal.id}`
     }
   }
 }

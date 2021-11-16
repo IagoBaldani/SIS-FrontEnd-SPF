@@ -91,7 +91,7 @@
                     <div class="col-lg-5">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/ conclusão</h4>
-                            <p class="grey-font h4 text-decoration-underline">comprovante.pdf</p>
+                            <p class="grey-font h4 text-decoration-underline" @click="download()">comprovante.pdf</p>
                         </div>
                     </div>
                 </div>
@@ -171,7 +171,7 @@ export default {
         formData.append('resultado', this.form.resultado)
         formData.append('dataAlteracao', this.form.dataAlteracao)
         formData.append('cargoEfetivado', this.form.cargoEfetivado)
-        formData.append('comprovante', this.form.comprovanteRematricula)
+        formData.append('comprovante', comprovanteRematricula)
         formData.append('campoObservacao', this.form.campoObservacao)
         http
           .post(`conclusao/registrociclofinal/${this.id}`, formData, {
@@ -222,6 +222,11 @@ export default {
       } else {
         texto.textContent = file.files[0].name
       }
+    },
+
+    download () {
+      console.log('DOWNLOADANDO')
+      location.href = `http://localhost:8081/api/conclusao/download/${this.conclusaoModal.id}`
     }
   }
 }

@@ -29,7 +29,7 @@
                         </div>
                         <div class="input-group">
                             <!--<input class="input-file" type="file">-->
-                             <input @change="salvaArquivo()" type="file" class="form-control" id="disc" 
+                             <input type="file" class="form-control" id="disc" 
                              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                         </div>
                         <button class="btn-registrar mt-4 " type="button" @click="postForm()" >REGISTRAR</button>
