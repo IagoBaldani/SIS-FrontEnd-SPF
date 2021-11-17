@@ -33,9 +33,6 @@
 
                 </div>
                 <div class="col-xl-2">
-                  <div class=" text-center text-md-left">
-                    <img src="@/assets/imgs/perfil.svg" class="rounded-circle" alt="">
-                  </div>
                 </div>
             </div>
             <div class="mt-5 row justify-content-evenly">
@@ -95,7 +92,7 @@ export default {
         })
     },
     getInstrutor (cpf) {
-      http.get(`mock/instrutor/${cpf}`)
+      http.get(`instrutor/${cpf}`)
         .then(res => {
           this.instrutor = res.data
         })

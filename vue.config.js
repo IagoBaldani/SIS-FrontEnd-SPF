@@ -84,12 +84,6 @@ module.exports = {
       title: 'Instrutor - Cadastro',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-cadastro']
     },
-    'dados-instrutor-selecao-cadastro': {
-      entry: './src/views/dados-instrutor-selecao-cadastro/main.js',
-      template: 'public/index.html',
-      title: 'Instrutor - Seleção para cadastro',
-      chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-selecao-cadastro']
-    },
     'acompanhamento-feedback': {
       entry: './src/views/acompanhamento-feedback/main.js',
       template: 'public/index.html',

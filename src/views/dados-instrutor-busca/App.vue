@@ -68,10 +68,10 @@
           </div>
           <div class="col-xl-7 justify-content-end d-flex">
             <a
-              href="/dados-instrutor-selecao-cadastro"
+              href="/dados-instrutor-cadastro"
               class="mt-5 form-control cadastro d-flex justify-content-center"
             >
-              SELEÇÃO PARA NOVO CADASTRO
+              NOVO CADASTRO
             </a>
           </div>
         </div>
