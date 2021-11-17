@@ -58,6 +58,9 @@
                         </div>
                         <button type="button" @click="postForm()"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
+                        <p class="none h4" id="aguarde">Enviando formulário, aguarde...</p>
+                        <p class="none h4 enviado" id="enviado">Formulário enviado</p>
+                        <p class="erro h4 none" id="preencha">Preencha todos os campos!</p>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
@@ -209,6 +212,8 @@ export default {
         }
       })
       if (campoVazio == 0) {
+        document.querySelector('#preencha').classList.add('none')
+        document.querySelector('#aguarde').classList.remove('none')
         var formData = new FormData()
         var comprovanteRematricula = document.getElementById('file').files[0] 
         formData.append('resultado', this.form.resultado)
@@ -223,12 +228,17 @@ export default {
           })
           .then((response) => { 
             this.getCiclo()
+            document.querySelector('#aguarde').classList.add('none')
+            document.querySelector('#enviado').classList.remove('none')
+            setTimeout(function () {
+              document.querySelector('#enviado').classList.add('none')
+            }, 2000)
           })
           .catch((error) => {
             console.log(error)
           })
       } else {
-        alert('Por favor, preencha todos os campos!')
+        document.querySelector('#preencha').classList.remove('none')
       }    
     },
 
@@ -411,6 +421,14 @@ export default {
 
 .none {
     display: none;
+}
+
+.erro {
+  color: red;
+}
+
+.enviado {
+  color: green
 }
 
 .h-198px {
