@@ -191,7 +191,7 @@ export default {
 
     getCiclo () {
       http
-        .get(`conclusao/${this.id}`)
+        .get(`ciclo/${this.id}`)
         .then((response) => {
           this.conclusoes = response.data
         })
@@ -216,7 +216,7 @@ export default {
         formData.append('cargo', this.form.cargo)
         formData.append('comprovante', comprovanteRematricula)
         http
-          .post(`conclusao/registrocicloprogressivo/${this.id}`, formData, {
+          .post(`ciclo/registrocicloprogressivo/${this.id}`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data' 
             }
@@ -270,8 +270,7 @@ export default {
     },
 
     download () {
-      console.log('DOWNLOADANDO')
-      location.href = `http://localhost:8081/api/conclusao/download/${this.conclusaoModal.id}`
+      location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
     }
   }
 }

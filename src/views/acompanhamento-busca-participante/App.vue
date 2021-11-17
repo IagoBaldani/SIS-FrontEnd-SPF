@@ -71,7 +71,7 @@ export default {
   methods: {
     getParticipantes () {
       http
-        .get('busca/participantes/ativo')
+        .get('busca/participantes')
         .then((response) => {
           this.participantes = response.data
         })
@@ -82,7 +82,7 @@ export default {
 
     getFormacoes () {
       http
-        .get('busca/participantes/programa/em_andamento')
+        .get('busca/programa')
         .then((response) => {
           this.programas = response.data
         })
