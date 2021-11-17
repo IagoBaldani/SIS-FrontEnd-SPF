@@ -174,7 +174,7 @@ export default {
         formData.append('comprovante', comprovanteRematricula)
         formData.append('campoObservacao', this.form.campoObservacao)
         http
-          .post(`conclusao/registrociclofinal/${this.id}`, formData, {
+          .post(`ciclo/registrociclofinal/${this.id}`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data' 
             }
@@ -225,8 +225,7 @@ export default {
     },
 
     download () {
-      console.log('DOWNLOADANDO')
-      location.href = `http://localhost:8081/api/conclusao/download/${this.conclusaoModal.id}`
+      location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
     }
   }
 }
