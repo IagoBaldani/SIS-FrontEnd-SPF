@@ -33,6 +33,9 @@
                              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                         </div>
                         <button class="btn-registrar mt-4 " type="button" @click="postForm()" >REGISTRAR</button>
+                        <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
+                        <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
+                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
                     </form>
                 </div>
                 <div class="col-lg-7">
@@ -193,6 +196,8 @@ export default {
         }
       })
       if (campoVazio == 0) {
+        document.querySelector('#preencha').classList.add('none')
+        document.querySelector('#aguarde').classList.remove('none')
         var formData = new FormData()
         var disc = document.getElementById('disc').files[0]
         formData.append('data', this.form.data)
@@ -206,12 +211,17 @@ export default {
           })
           .then((response) => {
             this.getFeedback()
+            document.querySelector('#aguarde').classList.add('none')
+            document.querySelector('#enviado').classList.remove('none')
+            setTimeout(function () {
+              document.querySelector('#enviado').classList.add('none')
+            }, 2000)
           })
           .catch((error) => {
             console.log(error)
           })
       } else {
-        alert('Por favor, preencha todos os campos!')
+        document.querySelector('#preencha').classList.remove('none')
       }
     }, 
 
@@ -404,6 +414,18 @@ textarea  {
 
 .titulo{
     color: #090B2E;
+}
+
+.none {
+    display: none;
+}
+
+.erro {
+  color: red;
+}
+
+.enviado {
+  color: green
 }
 
 .nomeCol{
