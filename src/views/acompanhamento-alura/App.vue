@@ -12,7 +12,6 @@
                             <h3 class="fw-bold text-center titulo">Participante selecionado:</h3>
                             <h4 class="fw-bold grey-font text-center nome-participante">{{participante.nome}}</h4>
                         </div>
-                        <img src="@/assets/imgs/perfil.svg" class="rounded-circle" width="70" height="70" alt="Perfil" />
                     </div>
                 </div>
             </div>
@@ -40,6 +39,9 @@
                             <input name="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
                         </div>
                         <button type="button" @click="postForm()" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
+                        <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
+                        <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
+                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
                     </form>
                 </div>
                 <div  class="col-lg-7">
@@ -213,7 +215,7 @@ export default {
         })
     },
     
-    postForm () {
+    postForm () { 
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
       campos.forEach(element => {
@@ -222,16 +224,24 @@ export default {
         }
       })
       if (campoVazio == 0) {
+        document.querySelector('#preencha').classList.add('none')
+        document.querySelector('#aguarde').classList.remove('none')
         http
           .post(`alura/novo/${this.id}`, this.form)
           .then((response) => {
+            this.form = {}
             this.getAlura()
+            document.querySelector('#aguarde').classList.add('none')
+            document.querySelector('#enviado').classList.remove('none')
+            setTimeout(function () {
+              document.querySelector('#enviado').classList.add('none')
+            }, 2000)
           })
           .catch((error) => {
             console.log(error)
           })
       } else {
-        alert('Por favor, preencha todos os campos!')
+        document.querySelector('#preencha').classList.remove('none')
       }
     },
 
@@ -367,5 +377,17 @@ body {
 .botaocanc:hover{
     transition: 0.3s ease-in-out !important;
     background-color: #dd9700 !important;
+}
+
+.none {
+    display: none;
+}
+
+.erro {
+  color: red;
+}
+
+.enviado {
+  color: green
 }
 </style>

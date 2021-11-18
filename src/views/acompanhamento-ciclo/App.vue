@@ -226,7 +226,8 @@ export default {
               'Content-Type': 'multipart/form-data' 
             }
           })
-          .then((response) => { 
+          .then((response) => {
+            this.form = {}
             this.getCiclo()
             document.querySelector('#aguarde').classList.add('none')
             document.querySelector('#enviado').classList.remove('none')

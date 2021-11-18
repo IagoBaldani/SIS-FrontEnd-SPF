@@ -210,6 +210,7 @@ export default {
             }
           })
           .then((response) => {
+            this.form = {}
             this.getFeedback()
             document.querySelector('#aguarde').classList.add('none')
             document.querySelector('#enviado').classList.remove('none')

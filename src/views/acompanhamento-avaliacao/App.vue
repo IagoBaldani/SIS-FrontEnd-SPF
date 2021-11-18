@@ -13,7 +13,6 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold grey-font text-center">{{participante.nome}}</h4>
                     </div>
-                    <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
             </div>
 
@@ -50,8 +49,12 @@
                             </div>
                         </div>
 
-                        <button type="button" @click="postForm()"
-                            class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
+                        <button type="button" 
+                            class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100" @click="verificaForm()">REGISTRAR</button>
+                        <p id="verificaCampos" class="none" @click="postForm()"></p>
+                        <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
+                        <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
+                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
@@ -182,7 +185,7 @@
                     <form class="col-lg-6">
                         <div class="comboBox w-100 mb-3" id="avaliacao-comportamental">
                             <label class="form-label fw-bold h5 titulo">Avaliação:</label>
-                            <select class="form-select" id="filtro-avaliacao-comportamental" v-model="form.avaliacaoDesempenhoForm.avaliacao">
+                            <select class="form-select" id="inputModal" v-model="form.avaliacaoDesempenhoForm.avaliacao">
                                 <option :value="'FORAM_SUPERADAS'">Foram superadas</option>
                                 <option :value="'FORAM_ATENDIDAS_PLENAMENTE'">Foram atendidas plenamente</option>
                                 <option :value="'FORAM_ATENDIDAS_PARCIALMENTE'">Foram atendidas parcialmente</option>
@@ -260,9 +263,11 @@
                         </div>
                     </form>
                 </div>
+                <p class="erro h4 none mt-3" id="preenchaModal">Preencha todos os campos!</p>
                 <div class="row d-flex">
                     <div class="col-lg-6">
-                        <button  type="button" data-bs-toggle="modal" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100" @click="getMedia()">CONFIRMAR</button>
+                        <button  type="button" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100" @click="verificaFormModal()" >CONFIRMAR</button>
+                        <p data-bs-toggle="modal" id="fechaModal" class="none"></p>
                     </div>
                     <div class="col-lg-6">
                         <button type="button" data-bs-toggle="modal" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100">CANCELAR</button>
@@ -437,7 +442,13 @@ export default {
       http
         .post(`avaliacao/novo/${this.id}`, this.form)
         .then((response) => {
+          this.form = {}
           this.getAvaliacao()
+          document.querySelector('#aguarde').classList.add('none')
+          document.querySelector('#enviado').classList.remove('none')
+          setTimeout(function () {
+            document.querySelector('#enviado').classList.add('none')
+          }, 2000)
         })
         .catch((error) => {
           console.log(error)
@@ -468,6 +479,39 @@ export default {
         this.form.avaliacaoDesempenhoForm.responsabilidade +
         this.form.avaliacaoDesempenhoForm.sociabilidade) / 12
       return this.media
+    },
+
+    verificaFormModal () {
+      let campos = document.querySelectorAll('#modalComportamental input , #modalComportamental select') 
+      let campoVazio = 0
+      campos.forEach(element => {
+        if (!element.value) {
+          campoVazio = 1
+        }
+      })
+      if (campoVazio == 0) {
+        this.getMedia()
+        document.querySelector('#preenchaModal').classList.add('none')
+        document.getElementById('fechaModal').click()
+      } else {
+        document.querySelector('#preenchaModal').classList.remove('none')
+      }  
+    },
+
+    verificaForm () {
+      let campos = document.querySelectorAll('input') 
+      let campoVazio = 0
+      campos.forEach(element => {
+        if (!element.value) {
+          campoVazio = 1
+        }
+      })
+      if (campoVazio == 0) {
+        document.querySelector('#preencha').classList.add('none')
+        document.getElementById('verificaCampos').click()
+      } else {
+        document.querySelector('#preencha').classList.remove('none')
+      }  
     }
   }
 }
@@ -681,5 +725,17 @@ export default {
 
 .marginEye {
   margin-right: 157px;
+}
+
+.none {
+    display: none;
+}
+
+.erro {
+  color: red;
+}
+
+.enviado {
+  color: green
 }
 </style>

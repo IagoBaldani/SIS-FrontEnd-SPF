@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row justify-content-evenly mt-5 mb-3">
                 <div class="titulo col-lg-4">
-                    <h3 class="fw-bold">Registrar ciclo final:</h3>
+                    <h3 class="fw-bold" @click="teste()">Registrar ciclo final:</h3>
                 </div>
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
@@ -32,7 +32,7 @@
                             <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao">
                         </div>
                         <div class="mb-3">
-                            <label for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
+                            <label id="menes" for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
                             <input type="text" class="form-control" id="cargo-efetivado" placeholder="Analista Desenvolvedor Java" v-model="form.cargoEfetivado">
                         </div>
                     </form>
@@ -63,7 +63,14 @@
             <div class="row justify-content-evenly">
                 <div class="col-lg-4"></div>
                 <div class="col-lg-7 d-flex justify-content-end">
-                    <button type="submit" data-bs-toggle="modal" data-bs-target="#modalUltimoCiclo" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-50">REGISTRAR</button>
+                    <button type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-50" @click="teste()">REGISTRAR</button>
+                    <p id="abreModal" data-bs-toggle="modal" data-bs-target="#modalUltimoCiclo" class="none"></p>
+                </div>
+            </div>
+            <div class="row justify-content-evenly">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-7 d-flex justify-content-end">
+                    <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
                 </div>
             </div>
         </div>
@@ -105,7 +112,7 @@
                         <button @click="postForm()"  type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100">CONFIRMAR</button>
                     </div>
                     <div class="col-lg-6">
-                        <button type="submit" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100">CANCELAR</button>
+                        <button type="submit" data-bs-toggle="modal" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100">CANCELAR</button>
                     </div>
                 </div>
             </div>
@@ -158,33 +165,25 @@ export default {
     },
 
     postForm () {
-      let campos = document.querySelectorAll('input')
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0) {
-        var formData = new FormData()
-        var comprovanteRematricula = document.getElementById('file').files[0] 
-        formData.append('resultado', this.form.resultado)
-        formData.append('dataAlteracao', this.form.dataAlteracao)
-        formData.append('cargoEfetivado', this.form.cargoEfetivado)
-        formData.append('comprovante', comprovanteRematricula)
-        formData.append('campoObservacao', this.form.campoObservacao)
-        http
-          .post(`ciclo/registrociclofinal/${this.id}`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data' 
-            }
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      } else {
-        alert('Por favor, preencha todos os campos!')
-      } 
+      var formData = new FormData()
+      var comprovanteRematricula = document.getElementById('file').files[0] 
+      formData.append('resultado', this.form.resultado)
+      formData.append('dataAlteracao', this.form.dataAlteracao)
+      formData.append('cargoEfetivado', this.form.cargoEfetivado)
+      formData.append('comprovante', comprovanteRematricula)
+      formData.append('campoObservacao', this.form.campoObservacao)
+      http
+        .post(`ciclo/registrociclofinal/${this.id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data' 
+          }
+        })
+        .then((response) => {
+          this.form = {}
+        })
+        .catch((error) => {
+          console.log(error)
+        })
       location.href = `../acompanhamento-ciclo/App.vue?id=${this.id}`  
     },
 
@@ -226,6 +225,22 @@ export default {
 
     download () {
       location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
+    },
+
+    teste () {
+      let campos = document.querySelectorAll('input')
+      let campoVazio = 0
+      campos.forEach(element => {
+        if (!element.value) {
+          campoVazio = 1
+        }
+      })
+      if (campoVazio == 0) {
+        document.querySelector('#preencha').classList.add('none')
+        document.getElementById('abreModal').click()
+      } else {
+        document.querySelector('#preencha').classList.remove('none')
+      }     
     }
   }
 }
@@ -423,5 +438,17 @@ export default {
 
 .conteudoModal{
     background-color: #EBEBEB !important;
+}
+
+.none {
+    display: none;
+}
+
+.erro {
+  color: red;
+}
+
+.enviado {
+  color: green
 }
 </style>
