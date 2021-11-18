@@ -14,19 +14,19 @@
                 <div class="col-xl-4">
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Nome</label>
-                            <input class="form-control disabledTextInput" :placeholder="instrutor.nome" type="text" disabled/>
+                            <input class="form-control" id="inputNome"  placeholder="Nome" v-model="instrutor.nome" type="text" />
                         </div>
                        <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Contato</label>
-                            <input class="form-control disabledTextInput" :placeholder="instrutor.telefone" type="tel" disabled/>
+                            <input class="form-control" id="inputTelefone" placeholder="(xx)xxxxx-xxxx" v-model="instrutor.telefone" type="tel" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
-                            <input class="form-control disabledTextInput" :placeholder="instrutor.cpf" type="text" disabled/>
+                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" v-model="instrutor.cpf" type="text" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
-                            <input class="form-control disabledTextInput" :placeholder="instrutor.email" type="email" disabled/>
+                            <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutor.email" type="email" />
                         </div>
                 </div>
                 <div class="col-xl-4">
@@ -35,19 +35,73 @@
                 <div class="col-xl-2">
                 </div>
             </div>
-            <div class="mt-5 row justify-content-evenly">
+            <div class="mt-3 row justify-content-evenly" >
                 <div class="col-xl-4">
+                   <div for="exampleModal" class="confirmar">
+                     <div
+                        type="button"
+                        @onclick="acao()"
+                        @click.prevent="enviarDados()"
+                        class="bt"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                      >
                     <button type="button" class="btn submit form-control" @click="enviarDados">
                         CONFIRMAR
                     </button>
+                     </div>
+                   </div>
                 </div>
                 <div class="col-xl-4"></div>
                 <div class="col-xl-2"></div>
             </div>
         </div>
-    </main>
-</template>
 
+        <!-- Modal -->
+    <div
+      class="modal"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-xl modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body d-flex justify-content-between">
+            <div>
+              <h1 class="modal-title form-label fw-bold mb-0 titulo" v-if="instrutorForm.id == ''">
+                Deseja confirmar o cadastro?
+              </h1>
+              <h1 class="modal-title form-label fw-bold mb-0 titulo" v-else>
+                Deseja confirmar a edição do instrutor?
+              </h1>
+            </div>
+            <div class="conteudomodal">
+              <div class="col-xl-5 mb-3">
+                <h2 class="nome">Nome: {{ instrutorForm.nome }}</h2>
+                <h2 class="nome">Contato: {{ instrutorForm.telefone }}</h2>
+                <h2 class="nome">Cpf: {{ instrutorForm.cpf }}</h2>
+                <h2 class="nome">Email corporativo: {{ instrutorForm.email }}</h2>
+                
+              </div>
+              <div class="col-xl-2"></div>
+              <div class="col-xl-5 mt-5"></div>
+            </div>
+          </div>
+          <div class="modal-footer border-0 justify-content-around">
+            <div>
+              <button type="button" class="btn submit-modal" @click="processaRequisicoes">CONFIRMAR</button>
+            </div>
+            <div>
+              <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</template>
+ 
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
@@ -74,18 +128,20 @@ export default {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
 
-    this.getInstrutor(dadosUrl.id)
+    if (dadosUrl.tipo == 'edicao') {
+      this.getInstrutor(dadosUrl.id)
+    } 
   },
   methods: {
     enviarDados () {
-      this.instrutorForm.nome = this.instrutor.nome
+      this.instrutorForm.nome = document.querySelector('#inputNome').value
       this.instrutorForm.status = 'ATIVO'
-      this.instrutorForm.cpf = this.instrutor.cpf
-      this.instrutorForm.telefone = this.instrutor.telefone
+      this.instrutorForm.cpf = document.querySelector('#inputCpf').value
+      this.instrutorForm.telefone = document.querySelector('#inputTelefone').value
+      this.instrutorForm.email = document.querySelector('#inputEmail').value
       http.post('instrutor', this.instrutorForm)
         .then(res => {
-          alert('Instrutor cadastrado com sucesso!')
-          window.location.href = 'http://localhost:8080/dados-instrutor-selecao-cadastro'
+          window.location.href = 'http://localhost:8080/dados-instrutor-busca'
         })
         .catch(erro => {
           alert(`Erro: ${erro}`)
@@ -113,6 +169,31 @@ export default {
       })
 
       return data
+    }
+  },
+  processaRequisicoes () {
+    const dados = this.pegaDadosUrl()
+    let cpf = dados.cpf
+    let tipo = dados.tipo
+
+    if (tipo == 'edicao') {
+      http
+        .put(`instrutor/${cpf}`, this.instrutorForm)
+        .then(response => {
+          window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+        })
+        .catch(error => {
+          alert(error)
+        })
+    } else if (tipo == 'cadastro') {
+      http
+        .post('instrutor', this.instrutorForm)
+        .then(response => {
+          window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+        })
+        .catch(error => {
+          alert(error)
+        })
     }
   }
 }
@@ -152,14 +233,27 @@ textarea{
   border: 1px solid #BCB3B3 !important;
 }
 
+.modal {
+  display: none;
+}
+
+button .largura {
+  width: 100% !important;
+}
+
 .modal-body, .modal-header, .modal-footer {
     text-align: center;
-    background-color: #EBEBEB
+    background-color: var(--color-background-screen);
+}
+
+.modal-title {
+  margin-left: 75px;
 }
 
 .modal-body{
-    min-height: 55vh;
-    flex-direction: column;
+  min-height: 55vh;
+  flex-direction: column;
+  width: 100%;
 }
 
 .submit-modal, .cancel-modal{
@@ -167,6 +261,7 @@ textarea{
     font-weight: bold !important;
     border-radius: 5px !important;
     width: 350px;
+    height: 50px;
     font-size: 25px !important;
 }
 
@@ -183,10 +278,10 @@ textarea{
 }
 
 .conteudomodal {
-    display: flex;
-    justify-content: center;
-    min-height: 40vh;
-    font-size: 21px;
+  display: block;
+  text-align: left;
+  margin-left: 100px;
+  color: var(--color-blue-footer) !important;
 }
 
 .input-arquivo{

@@ -157,7 +157,6 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
-
 export default {
   name: 'App',
   components: {
@@ -222,27 +221,21 @@ export default {
       this.participante.programaSelecionado.nomeETurma = this.modelPrograma
       this.participante.observacao = this.modelObservacao
     },
-
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
       return dataFormatada
     },
-
     exibeDadosPrograma (programas) {
       let elProgramas = document.querySelectorAll('#programa')
       let arrayOptions = []
-
       elProgramas.forEach(elPrograma => {
         arrayOptions.push([elPrograma.value, elPrograma.selected])
       })
-
       arrayOptions.forEach(option => {
         if (option[1]) {
           for (let i = 0; i < programas.length; i++) {
             let nomeETurma = `${programas[i].nome} - ${programas[i].turma}`
-
             if (nomeETurma === option[0]) {
               document.querySelector('#coordenador').placeholder = programas[i].coordenador
               document.querySelector('#inicioPrograma').placeholder = programas[i].inicio
@@ -252,30 +245,25 @@ export default {
         }
       })
     },
-
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
       var data = {}
-
       partes.forEach(function (parte) {
         var chaveValor = parte.split('=')
         var chave = chaveValor[0]
         var valor = chaveValor[1]
         data[chave] = valor
       })
-
       return data
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
-
     if (dadosUrl.tipo == 'edicao') {
       this.tipo = dadosUrl.tipo
     }
-
     // Chamada da API MOCK
     http.get(`mock/participante/${dadosUrl.id}`)
       .then(response => {
@@ -288,58 +276,46 @@ export default {
       })
   }
 }
-
 </script>
 
 <style>
-
 body{
     background-color: #EBEBEB !important;
 }
-
 .titulo{
   color: #090B2E;
   font-weight: bold;
 }
-
 .secundario{
   font-size: 20px;
 }
-
 .ativo, .inativo{
   margin-left: 1em;
 }
-
 .ativo{
   color: green;
 }
 .inativo{
   color: darkred;
 }
-
 .subtitulo{
   color: #737373;
 }
-
 .disabledTextInput{
   background-color: #D3CACA;
   border: 1px solid #BCB3B3;
 }
-
 .download{
   transform: rotate(180deg) !important;
 }
-
 .modal-body, .modal-header, .modal-footer {
   text-align: center;
   background-color: #EBEBEB
 }
-
 .modal-body{
   min-height: 55vh;
   flex-direction: column;
 }
-
 .submit-modal, .cancel-modal{
   color: white !important;
   font-weight: bold !important;
@@ -347,42 +323,34 @@ body{
   width: 350px;
   font-size: 25px !important;
 }
-
 .submit, .submit-modal{
   color: white !important;
   font-weight: bold !important;
   background-color: #AB0045 !important;
 }
-
 .cancel, .cancel-modal{
   color: white !important;
   font-weight: bold !important;
   background-color: #FFB700 !important;
 }
-
 .input-arquivo{
   display: none;
 }
-
 .rounded-circle{
   width: 150px;
 }
-
 .conteudomodal {
   display: flex;
   justify-content: center;
   min-height: 40vh;
   font-size: 21px;
 }
-
 .envio-arquivo{
   cursor: pointer;
 }
-
 @media (max-width: 1200px) {
   .editar{
     margin-bottom: 3em;
   }
 }
-
 </style>

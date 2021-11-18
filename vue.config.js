@@ -78,11 +78,11 @@ module.exports = {
       title: 'Instrutor - Busca',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-busca']
     },
-    'dados-instrutor-cadastro': {
-      entry: './src/views/dados-instrutor-cadastro/main.js',
+    'dados-instrutor-cadastro_edicao': {
+      entry: './src/views/dados-instrutor-cadastro_edicao/main.js',
       template: 'public/index.html',
-      title: 'Instrutor - Cadastro',
-      chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-cadastro']
+      title: 'Instrutor - Cadastro - Edição',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-cadastro_edicao']
     },
     'acompanhamento-feedback': {
       entry: './src/views/acompanhamento-feedback/main.js',
