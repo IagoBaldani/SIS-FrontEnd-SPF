@@ -80,7 +80,7 @@
                 <h2 class="nome">Contato: {{ instrutorForm.telefone }}</h2>
                 <h2 class="nome">Cpf: {{ instrutorForm.cpf }}</h2>
                 <h2 class="nome">Email corporativo: {{ instrutorForm.email }}</h2>
-                
+
               </div>
               <div class="col-xl-2"></div>
               <div class="col-xl-5 mt-5"></div>
@@ -99,7 +99,7 @@
     </div>
   </main>
 </template>
- 
+
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
@@ -128,7 +128,7 @@ export default {
 
     if (dadosUrl.tipo == 'edicao') {
       this.getInstrutor(dadosUrl.id)
-    } 
+    }
   },
   methods: {
     enviarDados () {
@@ -162,41 +162,42 @@ export default {
       return data
     },
     processaRequisicoes () {
-    const dados = this.pegaDadosUrl()
-    let cpf = dados.cpf
-    let tipo = dados.tipo
+      const dados = this.pegaDadosUrl()
+      let cpf = dados.cpf
+      let tipo = dados.tipo
 
-    if (tipo == 'edicao') {
-      http
-        .put(`instrutor/${cpf}`, this.instrutorForm)
-        .then(response => {
+      if (tipo == 'edicao') {
+        http
+          .put(`instrutor/${cpf}`, this.instrutorForm)
+          .then(response => {
+            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+          })
+          .catch(error => {
+            alert(error)
+          })
+      } else if (tipo == 'cadastro') {
+        http
+          .post('instrutor', this.instrutorForm)
+          .then(response => {
+            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+          })
+          .catch(error => {
+            alert(error)
+          })
+      }
+    },
+    postForm () {
+      http.post('instrutor', this.instrutorForm)
+        .then(res => {
           window.location.href = 'http://localhost:8080/dados-instrutor-busca'
         })
-        .catch(error => {
-          alert(error)
-        })
-    } else if (tipo == 'cadastro') {
-      http
-        .post('instrutor', this.instrutorForm)
-        .then(response => {
-          window.location.href = 'http://localhost:8080/dados-instrutor-busca'
-        })
-        .catch(error => {
-          alert(error)
+        .catch(erro => {
+          alert(`Erro: ${erro}`)
         })
     }
-  },
-  postForm () {
-    http.post('instrutor', this.instrutorForm)
-      .then(res => {
-        window.location.href = 'http://localhost:8080/dados-instrutor-busca'
-      })
-      .catch(erro => {
-        alert(`Erro: ${erro}`)
-      })
-   }
   }
-  
+}
+
 </script>
 
 <style>
