@@ -46,11 +46,11 @@
               <table class="table table-bordered tabela mt-4">
                 <tbody align="center">
                   <tr id="instrutor" v-for="instrutor in instrutores" :key="instrutor">
-                    <th scope="row" width="50">{{ instrutor.cpf }}</th>
+                    <th scope="row" width="50">{{ instrutor.id }}</th>
                     <td id="info-nome">{{ instrutor.nome }}</td>
                     <td id="info-cargo">{{ instrutor.cargo }}</td>
                     <td class="imagem-coluna rounded" width="50">
-                      <a :href="'/dados-instrutor-cadastro?id=' + instrutor.cpf">
+                      <a :href="'/dados-instrutor-cadastro?id=' + instrutor.id">
                         <img src="@/assets/imgs/account_circle_white_24dp.svg" />
                       </a>
                     </td>
@@ -76,7 +76,6 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -86,26 +85,39 @@ export default {
   data () {
     return {
       responseStatus: '',
-      instrutores: []
+      instrutores: [
+        {
+          id: 1,
+          nome: 'Kaiqui Lopes',
+          cargo: 'Analista Java Sr'
+        },
+        {
+          id: 2,
+          nome: 'Luciana Neuber',
+          cargo: 'Coordenador - Programa de Formação'
+        },
+        {
+          id: 3,
+          nome: 'Kaiqui Lopes',
+          cargo: 'Analista Java Sr'
+        },
+        {
+          id: 4,
+          nome: 'Luciana Neuber',
+          cargo: 'Coordenador - Programa de Formação'
+        },
+        {
+          id: 5,
+          nome: 'Kaiqui Lopes',
+          cargo: 'Analista Java Sr'
+        }
+      ]
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-
-    this.getInstrutor()
   },
-  
   methods: {
-    getInstrutor () {
-      http.get('mock/instrutor')
-        .then(res => {
-          this.instrutores = res.data
-        })
-        .catch(erro => {
-          alert(`Erro na requisição (${erro})`)
-        })
-    },
-    
     filtraDados () {
       const dadosLinhas = this.pegaDados()
 

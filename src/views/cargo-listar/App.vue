@@ -5,7 +5,7 @@
       <!-- Título da Página -->
       <div class="row justify-content-evenly">
         <div class="col-lg-b6 mb-2 mt-2">
-          <h1 class="mt-3 mb-3">Busca por processos seletivos:</h1>
+          <h1 class="mt-3 mb-3">Busca por cargos:</h1>
         </div>
         <div class="col-lg-6"></div>
       </div>
@@ -18,7 +18,7 @@
                 type="text"
                 class="form-control mb-3"
                 id="filtrar-tabela"
-                placeholder="Processo seletivo Java"
+                placeholder="Estágiario 1"
                 @input="filtraDados"
               />
             </div>
@@ -41,40 +41,29 @@
             <!--  -->
             <table
               class="
-                table table-bordered 
+                table table-bordered
               "
             >
               <tbody class="processosSeletivos">
                 <tr
                   class="processo"
-                  v-for="processo in processosSeletivos"
-                  :key="processo"
+                  v-for="(cargo, index) in cargos"
+                  :key="cargo"
                 >
                   <th class="font-weight-normal" scope="row">
-                    {{ processo.id }}
+                    {{++index}}
                   </th>
-                  <td class="info-nome">{{ processo.processo }}</td>
-                  <td class="em-andamento" v-if="processo.status == 'EM_ANDAMENTO'">Em andamento</td>
-                  <td class="finalizado" v-if="processo.status == 'FINALIZADO'">
-                    Finalizado
-                  </td>
+                  <td class="info-nome">{{cargo.cargo}}</td>
                   <td>
-                    <a
-                      href="http://localhost:8080/processo-seletivo-dados-da-vaga-visualizacao"
-                    >
-                      <img
-                        src="../../assets/imgs/visibility_white_24dp.svg"
-                        alt=""
-                      />
+                    <a :href="'/cargo-visualizar?id=' + cargo.id">
+                      <img src="../../assets/imgs/visibility_white_24dp.svg" alt=""/>
                     </a>
                   </td>
                   <td>
-                    <img
-                      src="../../assets/imgs/settings_white_24dp.svg"
-                      alt=""
-                    />
+                    <a :href="'/cargo-cadastro-edicao?id=' + cargo.id + '&tipo=edicao'">
+                    <img src="../../assets/imgs/settings_white_24dp.svg" alt=""/>
+                    </a>
                   </td>
-                  <td><img src="../../assets/imgs/Pattern.svg" alt="" /></td>
                 </tr>
               </tbody>
             </table>
@@ -82,18 +71,20 @@
         </div>
       </div>
       <div class="row empty"></div>
-      <div class="mt-10"></div>
+      <div class="mt-8"></div>
       <div class="row justify-content-between">
         <!-- Botão de busca -->
         <div class="col-xl-4"></div>
         <!-- Botão de cadastro de nova vaga -->
         <div class="col-xl-4">
           <button
-            class="button-footer mb-3 mt-5  submit"
+            class="button-footer mb-3 mt-4 submit"
             id="cadastrar"
-            type="submit"
+            type="button"
           >
-            Cadastrar Nova Vaga
+          <a class="button-footer submit" :href="'/cargo-cadastro-edicao?tipo=cadastro'">
+            CADASTRAR NOVO CARGO
+          </a>
           </button>
         </div>
       </div>
@@ -102,135 +93,82 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
+import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
+import { http } from '@/services/config'
+
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Header,
+    Header
   },
 
-  data() {
+  data () {
     return {
-      processosSeletivos: [
-        {
-          id: 1,
-          processo: "Processo Seletivo Java",
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 2,
-          processo: "Processo Seletivo Python",
-          status: 'FINALIZADO'
-        },
-        {
-          id: 3,
-          processo: "Processo Seletivo Spring",
-          status: 'FINALIZADO'
-        },
-        {
-          id: 4,
-          processo: "Processo Seletivo Mainframe",
-          status: 'FINALIZADO'
-        },
-        {
-          id: 5,
-          processo: "Processo Seletivo Mobile",
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 6,
-          processo: "Processo Seletivo JavaScript",
-          status: 'FINALIZADO'
-        },
-        {
-          id: 7,
-          processo: "Processo Seletivo React Native",
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 8,
-          processo: "Processo Seletivo COBOL",
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 9,
-          processo: "Processo Seletivo React Native",
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 10,
-          processo: "Processo Seletivo React Native",
-          status: 'FINALIZADO'
-        },
-        {
-          id: 11,
-          processo: "Processo Seletivo React Native",
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 12,
-          processo: "Processo Seletivo React Native",
-          status: 'FINALIZADO'
-        },
-        {
-          id: 13,
-          processo: "Processo Seletivo React Native",
-          status: 'EM_ANDAMENTO'
-        }
-      ],
-    };
+      cargos: []
+    }
   },
   beforeMount () {
     Funcoes.verificaToken()
+    this.getLista()
   },
   methods: {
-    filtraDados() {
-      var aviso = document.querySelector(".aviso");
-      aviso.classList.add("invisivel");
-      var campoFiltro = document.querySelector("#filtrar-tabela");
+    filtraDados () {
+      var aviso = document.querySelector('.aviso')
+      aviso.classList.add('invisivel')
+      var campoFiltro = document.querySelector('#filtrar-tabela')
 
-      var listaDeValores = [];
+      var listaDeValores = []
 
-      console.log(campoFiltro.value);
-      var processos = document.querySelectorAll(".processo");
+      console.log(campoFiltro.value)
+      var processos = document.querySelectorAll('.processo')
 
       if (campoFiltro.value.length >= 0) {
         for (var i = 0; i < processos.length; i++) {
-          var processo = processos[i];
-          var tdNome = processo.querySelector(".info-nome");
-          var nome = tdNome.textContent;
+          var processo = processos[i]
+          var tdNome = processo.querySelector('.info-nome')
+          var nome = tdNome.textContent
 
-          var expressao = new RegExp(campoFiltro.value, "i");
+          var expressao = new RegExp(campoFiltro.value, 'i')
 
           if (!expressao.test(nome)) {
-            processo.classList.add("invisivel");
-            aviso.classList.remove("invisivel");
+            processo.classList.add('invisivel')
+            aviso.classList.remove('invisivel')
           } else {
-            processo.classList.remove("invisivel");
-            aviso.classList.add("invisivel");
+            processo.classList.remove('invisivel')
+            aviso.classList.add('invisivel')
 
-            listaDeValores.push(i);
+            listaDeValores.push(i)
           }
 
-          console.log(listaDeValores);
+          console.log(listaDeValores)
 
           if (!listaDeValores.length == 0) {
-            aviso.classList.add("invisivel");
+            aviso.classList.add('invisivel')
           } else {
-            aviso.classList.remove("invisivel");
+            aviso.classList.remove('invisivel')
           }
         }
       } else {
         for (var j = 0; j < processos.length; j++) {
-          var processo2 = processos[j];
-          processo2.classList.remove("invisivel");
-          aviso.classList.remove("invisivel");
+          var processo2 = processos[j]
+          processo2.classList.remove('invisivel')
+          aviso.classList.remove('invisivel')
         }
       }
     },
-  },
-};
+    getLista () {
+      http
+        .get('remuneracao/lista')
+        .then(response => {
+          this.cargos = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    }
+  }
+}
 </script>
 
 <style>
@@ -307,29 +245,16 @@ height: 59vh;
   font-size: 20px;
 }
 
-/* Table - Coluna em Andamento */
-.search-table tbody > tr > td:nth-child(3) {
-  text-align: center;
-  font-weight: 700;
-}
-
 /* Table - Coluna1  */
-.search-table tbody > tr > td:nth-child(4) {
+.search-table tbody > tr > td:nth-child(3) {
   background-color: var(--color-blue-principal);
   font-weight: 700;
   text-align: center;
 }
 
 /* Table - Coluna2  */
-.search-table tbody > tr > td:nth-child(5) {
+.search-table tbody > tr > td:nth-child(4) {
   background-color: var(--color-magenta-principal);
-  font-weight: 700;
-  text-align: center;
-}
-
-/* Table - Coluna3  */
-.search-table tbody > tr > td:nth-child(6) {
-  background-color: var(--color-yellow-principal);
   font-weight: 700;
   text-align: center;
 }
@@ -354,7 +279,6 @@ height: 59vh;
   color: var(--color-red-progress) !important;
 }
 
-
 /* Button do rodapé */
 
 .button-footer {
@@ -371,6 +295,10 @@ height: 59vh;
 .button-footer:hover {
   background-color: var(--color-yellow-principal);
   transition: 0.5s, 0.5s;
+}
+
+a:hover{
+  color: white;
 }
 
 #buscar {
@@ -412,6 +340,5 @@ height: 59vh;
 .recarregar:hover {
   background-color: #141863 !important;
 }
-
 
 </style>

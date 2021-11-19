@@ -4,7 +4,7 @@
     <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
       <div class="col-xl-4">
         <div>
-          <a class="btn mt-4" id="botaoFolha" href="/investimento-folha" role="button">FOLHA</a>
+          <a class="btn mt-4" href="/investimento-folha" id="botaoFolha" role="button">FOLHA</a>
           <a
             class="btn mt-4"
             id="botaoInstrutor"
@@ -56,49 +56,17 @@
             type="text"
             placeholder="Nome"
           />
-          <button class="btn btn-outline-success botaoselecionar" id="close-image" @click="filtraDados()">
+          <button
+            class="btn btn-outline-success botaoselecionar"
+            id="close-image"
+            @click="filtraDados()"
+          >
             <img src="../../assets/imgs/lupa.svg" />
           </button>
         </div>
       </div>
     </div>
-    <div class="table-wrapper-scroll-y my-custom-scrollbar">
-      <table class="table table-stripped mt-4">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Formação</th>
-            <th>Turma</th>
-            <th>MM/YY</th>
-            <th>MM/YY</th>
-            <th>MM/YY</th>
-          </tr>
-        </thead>
-        <tbody align="center">
-          <tr
-            id="participante"
-            v-for="participante in participantes"
-            v-bind:key="participante"
-          >
-            <td id="info-nome">{{ participante.nome }}</td>
-            <td id="info-programa">{{ participante.programa }}</td>
-            <td id="info-turma">{{ participante.turma }}</td>
-            <td id="info-salario">R$ 1500.00</td>
-            <td id="info-salario">R$ 1500.00</td>
-            <td id="info-salario">R$ 1500.00</td>
-          </tr>
-          <tr>
-            <th class="ultima" scope="rows">TOTAL</th>
-            <td class="ultima"></td>
-            <td class="ultima"></td>
-            <td class="ultima"></td>
-            <td class="ultima"></td>
-            <td class="ultima"></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-xl-12">
+    <div class="col-lg-12 mt-4" id="participantes">
       <div class="aviso">
         <h4 class="titulo fw-bold">
           Não foi encontrado nenhum resultado com os parâmetros informados
@@ -109,6 +77,44 @@
         >
           RECARREGAR LISTA
         </button>
+      </div>
+      <div class="table table-wrapper-scroll-y my-custom-scrollbar">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Formação</th>
+              <th>Turma</th>
+              <th>MM/YY</th>
+              <th>MM/YY</th>
+              <th>MM/YY</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              id="participante"
+              v-for="participante in participantes"
+              v-bind:key="participante"
+            >
+              <td id="info-nome">{{ participante.nome }}</td>
+              <td id="info-programa">{{ participante.programa }}</td>
+              <td id="info-turma">{{ participante.turma }}</td>
+              <td id="info-salario">{{ participante.salario }}</td>
+              <td id="info-salario">{{ participante.salario }}</td>
+              <td id="info-salario">{{ participante.salario }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th class="ultima">TOTAL</th>
+              <td class="ultima"></td>
+              <td class="ultima"></td>
+              <td class="ultima"></td>
+              <td class="ultima"></td>
+              <td class="ultima"></td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
     <div class="container overflow-hidden botoes">
@@ -179,7 +185,7 @@
             </div>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
               <div class="modalitens col-xl-6">
-                <label id="modalconteudo">Remuneração</label>
+                <label id="modalconteudo">Valor Hora</label>
                 <div class="input-group input-group-lg">
                   <input
                     type="text"
@@ -191,7 +197,7 @@
                 </div>
               </div>
               <div class="modalitens col-xl-6">
-                <label id="modalconteudo">Encargos</label>
+                <label id="modalconteudo">Horas Trabalhadas</label>
                 <div class="input-group input-group-lg">
                   <input
                     type="text"
@@ -204,20 +210,8 @@
               </div>
             </div>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-              <div class="modalitens col-xl-6">
-                <label id="modalconteudo">Benefícios</label>
-                <div class="input-group input-group-lg">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="R$"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
-                  />
-                </div>
-              </div>
-              <div class="modalitens col-xl-6">
-                <label id="modalconteudo">Total</label>
+              <div class="modalitens col-xl-12">
+                <label id="modalconteudo">Valor Total</label>
                 <div class="input-group input-group-lg">
                   <input
                     type="text"
@@ -264,211 +258,221 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue'
-import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
+import Header from "@/components/Header.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Header
+    Header,
   },
-  data () {
+  data() {
     return {
-      responseStatus: '',
       participantes: [
         {
-          nome: 'Marco Aguiar',
-          programa: 'Java',
-          turma: '01'
+          nome: "Marco Aguiar",
+          programa: "Java",
+          turma: "01",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Guiherme Souza',
-          programa: 'Java',
-          turma: '01'
+          nome: "Pedro Vieira",
+          programa: "Java",
+          turma: "02",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Pedro Lucas',
-          programa: 'Mobile',
-          turma: '02'
+          nome: "Marcelo Oliveira",
+          programa: "Mobile",
+          turma: "02",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Vinicius Melo',
-          programa: '.Net',
-          turma: '03'
+          nome: "Vania Silva",
+          programa: ".Net",
+          turma: "03",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Eduardo Lopes',
-          programa: 'Mobile',
-          turma: '03'
+          nome: "Luciana Silva",
+          programa: "Java",
+          turma: "01",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Leticia Matos',
-          programa: '.Net',
-          turma: '02'
+          nome: "Joao Godoy",
+          programa: "Mainframe",
+          turma: "02",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Bruno Henrique',
-          programa: 'Mainframe',
-          turma: '02'
-        }
+          nome: "Junior Paulo",
+          programa: "Java",
+          turma: "01",
+          salario: "R$ 1500.00",
+        },
       ],
       programas: [
         {
           id: 1,
-          nome: 'Infraestrutura'
+          nome: "Infraestrutura",
         },
         {
           id: 2,
-          nome: 'Java'
+          nome: "Java",
         },
         {
           id: 3,
-          nome: 'Mainframe'
+          nome: "Mainframe",
         },
         {
           id: 4,
-          nome: 'Mobile'
+          nome: "Mobile",
         },
         {
           id: 5,
-          nome: '.Net'
-        }
+          nome: ".Net",
+        },
       ],
       turmas: [
         {
           id: 1,
-          nome: '01'
+          nome: "01",
         },
         {
           id: 2,
-          nome: '02'
+          nome: "02",
         },
         {
           id: 3,
-          nome: '03'
-        }
-      ]
-    }
-  },
-  beforeMount () {
-    Funcoes.verificaToken()
+          nome: "03",
+        },
+      ],
+      salarios: [
+        {
+          id: 1,
+          nome: "	R$ 1500.00",
+        },
+      ],
+    };
   },
   methods: {
-    filtraDados () {
-      const dadosLinhas = this.pegaDados()
-      let nomeProcurado = document.querySelector('#filtro-nome').value
-      let programaProcurado = document.querySelector('#filtro-programa').value
-      let turmaProcurada = document.querySelector('#filtro-turma').value
-      let linhasNl = document.querySelectorAll('#participante')
-      var linhasArray = Array.prototype.slice.call(linhasNl)
+    filtraDados() {
+      const dadosLinhas = this.pegaDados();
+      let nomeProcurado = document.querySelector("#filtro-nome").value;
+      let programaProcurado = document.querySelector("#filtro-programa").value;
+      let turmaProcurada = document.querySelector("#filtro-turma").value;
+      let linhasNl = document.querySelectorAll("#participante");
+      var linhasArray = Array.prototype.slice.call(linhasNl);
       let arrayBoolLinhas = this.verifica(
         dadosLinhas,
         nomeProcurado,
         programaProcurado,
         turmaProcurada
-      )
-      this.mudaVisibilidade(arrayBoolLinhas, linhasArray)
+      );
+      this.mudaVisibilidade(arrayBoolLinhas, linhasArray);
     },
-    pegaDados () {
-      let linhas = document.querySelectorAll('#participante')
-      let programas = document.querySelectorAll('#programa')
-      let arrayProgramas = []
-      let arrayDadosDasLinhas = []
+    pegaDados() {
+      let linhas = document.querySelectorAll("#participante");
+      let programas = document.querySelectorAll("#programa");
+      let arrayProgramas = [];
+      let arrayDadosDasLinhas = [];
       programas.forEach((programa) => {
-        arrayProgramas.push(programa.textContent)
-      })
-      console.log(arrayProgramas)
+        arrayProgramas.push(programa.textContent);
+      });
+      console.log(arrayProgramas);
       linhas.forEach((linha) => {
-        let dadosLinha = []
-        let nome = linha.querySelector('#info-nome').textContent
-        let programa = this.trataPrograma(linha, arrayProgramas)
-        let turma = this.trataTurma(linha)
-        dadosLinha.push(nome, programa, turma)
-        arrayDadosDasLinhas.push(dadosLinha)
-      })
-      console.log(arrayDadosDasLinhas)
-      return arrayDadosDasLinhas
+        let dadosLinha = [];
+        let nome = linha.querySelector("#info-nome").textContent;
+        let programa = this.trataPrograma(linha, arrayProgramas);
+        let turma = this.trataTurma(linha);
+        dadosLinha.push(nome, programa, turma);
+        arrayDadosDasLinhas.push(dadosLinha);
+      });
+      console.log(arrayDadosDasLinhas);
+      return arrayDadosDasLinhas;
     },
-    trataTurma (linha) {
-      let turmaTxt = linha.querySelector('#info-turma').textContent
-      let turma = 0
-      if (turmaTxt == '01') {
-        turma = 1
-        return turma
-      } else if (turmaTxt == '02') {
-        turma = 2
-        return turma
-      } else if (turmaTxt == '03') {
-        turma = 3
-        return turma
+    trataTurma(linha) {
+      let turmaTxt = linha.querySelector("#info-turma").textContent;
+      let turma = 0;
+      if (turmaTxt == "01") {
+        turma = 1;
+        return turma;
+      } else if (turmaTxt == "02") {
+        turma = 2;
+        return turma;
+      } else if (turmaTxt == "03") {
+        turma = 3;
+        return turma;
       }
-      return turma
+      return turma;
     },
-    trataPrograma (linha, arrayProgramas) {
-      var programaTxt = linha.querySelector('#info-programa').textContent
-      let programaNum = 0
-      let i = 0
+    trataPrograma(linha, arrayProgramas) {
+      var programaTxt = linha.querySelector("#info-programa").textContent;
+      let programaNum = 0;
+      let i = 0;
       for (let i = 0; i < arrayProgramas.length; i++) {
         if (programaTxt == arrayProgramas[i]) {
-          programaNum = i + 1
-          return programaNum
+          programaNum = i + 1;
+          return programaNum;
         }
       }
-      return programaNum
+      return programaNum;
     },
-    verifica (dadosLinhas, nomeProcurado, programaProcurado, turmaProcurada) {
-      let arrayBoolLinhas = []
-      let expressao = new RegExp(nomeProcurado, 'i')
+    verifica(dadosLinhas, nomeProcurado, programaProcurado, turmaProcurada) {
+      let arrayBoolLinhas = [];
+      let expressao = new RegExp(nomeProcurado, "i");
       dadosLinhas.forEach((dadosLinha) => {
-        let boolLinha = []
+        let boolLinha = [];
         // Verificando se o nome procurado consta na tabela
-        if (expressao.test(dadosLinha[0]) || nomeProcurado == '') {
-          boolLinha.push(true)
+        if (expressao.test(dadosLinha[0]) || nomeProcurado == "") {
+          boolLinha.push(true);
         } else {
-          boolLinha.push(false)
+          boolLinha.push(false);
         }
         // Verificando se o programa procurado consta na tabela
         if (programaProcurado == dadosLinha[1] || programaProcurado == 0) {
-          boolLinha.push(true)
+          boolLinha.push(true);
         } else {
-          boolLinha.push(false)
+          boolLinha.push(false);
         }
         // Verificando se a turma procurada consta na tabela
         if (turmaProcurada == dadosLinha[2] || turmaProcurada == 0) {
-          boolLinha.push(true)
+          boolLinha.push(true);
         } else {
-          boolLinha.push(false)
+          boolLinha.push(false);
         }
-        arrayBoolLinhas.push(boolLinha)
-      })
-      return arrayBoolLinhas
+        arrayBoolLinhas.push(boolLinha);
+      });
+      return arrayBoolLinhas;
     },
-    mudaVisibilidade (arrayBoolLinhas, linhas) {
-      let i
-      var contador = 0
-      let aviso = document.querySelector('.aviso')
-      var qtdLinhas = linhas.length
+    mudaVisibilidade(arrayBoolLinhas, linhas) {
+      let i;
+      var contador = 0;
+      let aviso = document.querySelector(".aviso");
+      let tabela = document.querySelector(".table");
+      var qtdLinhas = linhas.length;
       for (i = 0; i < linhas.length; i++) {
         if (
           arrayBoolLinhas[i][0] &&
           arrayBoolLinhas[i][1] &&
           arrayBoolLinhas[i][2]
         ) {
-          linhas[i].style.display = ''
+          linhas[i].style.display = "";
         } else {
-          linhas[i].style.display = 'none'
-          contador++
+          linhas[i].style.display = "none";
+          contador++;
         }
       }
       if (qtdLinhas == contador) {
-        aviso.style.display = 'flex'
+        aviso.style.display = "flex";
+        tabela.style.display = "none";
       } else {
-        aviso.style.display = 'none'
+        aviso.style.display = "none";
+        tabela.style.display = "flex";
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
@@ -488,6 +492,7 @@ body {
 }
 
 #botaoInstrutor {
+  
   background: #ab0045;
   font-weight: bold;
   width: 180px;
@@ -504,16 +509,16 @@ body {
 }
 
 .botaoselecionar {
-    display: inline-block;
-    padding: 0px !important;
-    height: 38px;
-    margin: 0px !important;
-    border: none !important;
+  display: inline-block;
+  padding: 0px !important;
+  height: 38px;
+  margin: 0px !important;
+  border: none !important;
 }
 
 #close-image img {
-    display: inline-block;
-    height: 38px;
+  display: inline-block;
+  height: 38px;
 }
 
 #botaoAdicionarManualmente {
@@ -536,10 +541,6 @@ body {
   background: #63657a !important;
   color: #ffffff;
   text-align: left;
-}
-
-#tabela {
-  margin-top: 30px;
 }
 
 #info-nome,
@@ -596,7 +597,7 @@ body {
 }
 
 #close-image:hover {
-  background-color: #00B5;
+  background-color: #00b5;
 }
 
 .aviso {
@@ -606,7 +607,7 @@ body {
   justify-content: center;
   text-align: center;
   position: relative;
-  margin-top: 100px;
+  margin-top: 220px;
   margin-bottom: 200px;
 }
 

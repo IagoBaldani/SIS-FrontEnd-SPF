@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-12 mt-4" id="participantes">
+    <div class="col-lg-12 mt-4" id="participantes">
       <div class="aviso">
         <h4 class="titulo fw-bold">
           Não foi encontrado nenhum resultado com os parâmetros informados
@@ -79,8 +79,8 @@
           RECARREGAR LISTA
         </button>
       </div>
-      <div class="table-wrapper-scroll-y my-custom-scrollbar tabela">
-        <table class="table table-stripped tabela">
+      <div class="table table-wrapper-scroll-y my-custom-scrollbar">
+        <table class="table">
           <thead>
             <tr>
               <th>Nome</th>
@@ -91,7 +91,7 @@
               <th>MM/YY</th>
             </tr>
           </thead>
-          <tbody align="center">
+          <tbody>
             <tr
               id="participante"
               v-for="participante in participantes"
@@ -104,6 +104,8 @@
               <td id="info-salario">{{ participante.salario }}</td>
               <td id="info-salario">{{ participante.salario }}</td>
             </tr>
+          </tbody>
+          <tfoot>
             <tr>
               <th class="ultima">TOTAL</th>
               <td class="ultima"></td>
@@ -112,7 +114,7 @@
               <td class="ultima"></td>
               <td class="ultima"></td>
             </tr>
-          </tbody>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -269,227 +271,221 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue'
-import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
+import Header from "@/components/Header.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Header
+    Header,
   },
-  data () {
+  data() {
     return {
-      responseStatus: '',
       participantes: [
         {
-          nome: 'Marco Aguiar',
-          programa: 'Java',
-          turma: '01',
-          salario: 'R$ 1500.00'
+          nome: "Marco Aguiar",
+          programa: "Java",
+          turma: "01",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Matheus Andrade',
-          programa: 'Java',
-          turma: '02',
-          salario: 'R$ 1500.00'
+          nome: "Matheus Andrade",
+          programa: "Java",
+          turma: "02",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Lucas Machado',
-          programa: 'Mobile',
-          turma: '02',
-          salario: 'R$ 1500.00'
+          nome: "Lucas Machado",
+          programa: "Mobile",
+          turma: "02",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Miguel Vasconcelos',
-          programa: '.net',
-          turma: '03',
-          salario: 'R$ 1500.00'
+          nome: "Miguel Vasconcelos",
+          programa: ".Net",
+          turma: "03",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Patricia Moraes',
-          programa: 'Java',
-          turma: '01',
-          salario: 'R$ 1500.00'
+          nome: "Patricia Moraes",
+          programa: "Java",
+          turma: "01",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Ricardo Benevides',
-          programa: 'Mainframe',
-          turma: '02',
-          salario: 'R$ 1500.00'
+          nome: "Ricardo Benevides",
+          programa: "Mainframe",
+          turma: "02",
+          salario: "R$ 1500.00",
         },
         {
-          nome: 'Nicollas Andrade',
-          programa: 'Java',
-          turma: '01',
-          salario: 'R$ 1500.00'
-        }
+          nome: "Nicollas Andrade",
+          programa: "Java",
+          turma: "01",
+          salario: "R$ 1500.00",
+        },
       ],
       programas: [
         {
           id: 1,
-          nome: 'Infraestrutura'
+          nome: "Infraestrutura",
         },
         {
           id: 2,
-          nome: 'Java'
+          nome: "Java",
         },
         {
           id: 3,
-          nome: 'Mainframe'
+          nome: "Mainframe",
         },
         {
           id: 4,
-          nome: 'Mobile'
+          nome: "Mobile",
         },
         {
           id: 5,
-          nome: '.Net'
-        }
+          nome: ".Net",
+        },
       ],
       turmas: [
         {
           id: 1,
-          nome: '01'
+          nome: "01",
         },
         {
           id: 2,
-          nome: '02'
+          nome: "02",
         },
         {
           id: 3,
-          nome: '03'
-        }
+          nome: "03",
+        },
       ],
       salarios: [
         {
           id: 1,
-          nome: 'R$ 1500.00'
-        }
-      ]
-    }
-  },
-  beforeMount () {
-    Funcoes.verificaToken()
+          nome: "	R$ 1500.00",
+        },
+      ],
+    };
   },
   methods: {
-    filtraDados () {
-      const dadosLinhas = this.pegaDados()
-      let nomeProcurado = document.querySelector('#filtro-nome').value
-      let programaProcurado = document.querySelector('#filtro-programa').value
-      let turmaProcurada = document.querySelector('#filtro-turma').value
-      let linhasNl = document.querySelectorAll('#participante')
-      var linhasArray = Array.prototype.slice.call(linhasNl)
+    filtraDados() {
+      const dadosLinhas = this.pegaDados();
+      let nomeProcurado = document.querySelector("#filtro-nome").value;
+      let programaProcurado = document.querySelector("#filtro-programa").value;
+      let turmaProcurada = document.querySelector("#filtro-turma").value;
+      let linhasNl = document.querySelectorAll("#participante");
+      var linhasArray = Array.prototype.slice.call(linhasNl);
       let arrayBoolLinhas = this.verifica(
         dadosLinhas,
         nomeProcurado,
         programaProcurado,
         turmaProcurada
-      )
-      this.mudaVisibilidade(arrayBoolLinhas, linhasArray)
+      );
+      this.mudaVisibilidade(arrayBoolLinhas, linhasArray);
     },
-    pegaDados () {
-      let linhas = document.querySelectorAll('#participante')
-      let programas = document.querySelectorAll('#programa')
-      let arrayProgramas = []
-      let arrayDadosDasLinhas = []
+    pegaDados() {
+      let linhas = document.querySelectorAll("#participante");
+      let programas = document.querySelectorAll("#programa");
+      let arrayProgramas = [];
+      let arrayDadosDasLinhas = [];
       programas.forEach((programa) => {
-        arrayProgramas.push(programa.textContent)
-      })
-      console.log(arrayProgramas)
+        arrayProgramas.push(programa.textContent);
+      });
+      console.log(arrayProgramas);
       linhas.forEach((linha) => {
-        let dadosLinha = []
-        let nome = linha.querySelector('#info-nome').textContent
-        let programa = this.trataPrograma(linha, arrayProgramas)
-        let turma = this.trataTurma(linha)
-        dadosLinha.push(nome, programa, turma)
-        arrayDadosDasLinhas.push(dadosLinha)
-      })
-      console.log(arrayDadosDasLinhas)
-      return arrayDadosDasLinhas
+        let dadosLinha = [];
+        let nome = linha.querySelector("#info-nome").textContent;
+        let programa = this.trataPrograma(linha, arrayProgramas);
+        let turma = this.trataTurma(linha);
+        dadosLinha.push(nome, programa, turma);
+        arrayDadosDasLinhas.push(dadosLinha);
+      });
+      console.log(arrayDadosDasLinhas);
+      return arrayDadosDasLinhas;
     },
-    trataTurma (linha) {
-      let turmaTxt = linha.querySelector('#info-turma').textContent
-      let turma = 0
-      if (turmaTxt == '01') {
-        turma = 1
-        return turma
-      } else if (turmaTxt == '02') {
-        turma = 2
-        return turma
-      } else if (turmaTxt == '03') {
-        turma = 3
-        return turma
+    trataTurma(linha) {
+      let turmaTxt = linha.querySelector("#info-turma").textContent;
+      let turma = 0;
+      if (turmaTxt == "01") {
+        turma = 1;
+        return turma;
+      } else if (turmaTxt == "02") {
+        turma = 2;
+        return turma;
+      } else if (turmaTxt == "03") {
+        turma = 3;
+        return turma;
       }
-      return turma
+      return turma;
     },
-    trataPrograma (linha, arrayProgramas) {
-      var programaTxt = linha.querySelector('#info-programa').textContent
-      let programaNum = 0
-      let i = 0
+    trataPrograma(linha, arrayProgramas) {
+      var programaTxt = linha.querySelector("#info-programa").textContent;
+      let programaNum = 0;
+      let i = 0;
       for (let i = 0; i < arrayProgramas.length; i++) {
         if (programaTxt == arrayProgramas[i]) {
-          programaNum = i + 1
-          return programaNum
+          programaNum = i + 1;
+          return programaNum;
         }
       }
-      return programaNum
+      return programaNum;
     },
-    verifica (dadosLinhas, nomeProcurado, programaProcurado, turmaProcurada) {
-      let arrayBoolLinhas = []
-      let expressao = new RegExp(nomeProcurado, 'i')
+    verifica(dadosLinhas, nomeProcurado, programaProcurado, turmaProcurada) {
+      let arrayBoolLinhas = [];
+      let expressao = new RegExp(nomeProcurado, "i");
       dadosLinhas.forEach((dadosLinha) => {
-        let boolLinha = []
+        let boolLinha = [];
         // Verificando se o nome procurado consta na tabela
-        if (expressao.test(dadosLinha[0]) || nomeProcurado == '') {
-          boolLinha.push(true)
+        if (expressao.test(dadosLinha[0]) || nomeProcurado == "") {
+          boolLinha.push(true);
         } else {
-          boolLinha.push(false)
+          boolLinha.push(false);
         }
         // Verificando se o programa procurado consta na tabela
         if (programaProcurado == dadosLinha[1] || programaProcurado == 0) {
-          boolLinha.push(true)
+          boolLinha.push(true);
         } else {
-          boolLinha.push(false)
+          boolLinha.push(false);
         }
         // Verificando se a turma procurada consta na tabela
         if (turmaProcurada == dadosLinha[2] || turmaProcurada == 0) {
-          boolLinha.push(true)
+          boolLinha.push(true);
         } else {
-          boolLinha.push(false)
+          boolLinha.push(false);
         }
-        arrayBoolLinhas.push(boolLinha)
-      })
-      return arrayBoolLinhas
+        arrayBoolLinhas.push(boolLinha);
+      });
+      return arrayBoolLinhas;
     },
-    mudaVisibilidade (arrayBoolLinhas, linhas) {
-      let i
-      var contador = 0
-      let aviso = document.querySelector('.aviso')
-      let tabela = document.querySelector('.tabela')
-      var qtdLinhas = linhas.length
+    mudaVisibilidade(arrayBoolLinhas, linhas) {
+      let i;
+      var contador = 0;
+      let aviso = document.querySelector(".aviso");
+      let tabela = document.querySelector(".table");
+      var qtdLinhas = linhas.length;
       for (i = 0; i < linhas.length; i++) {
         if (
           arrayBoolLinhas[i][0] &&
           arrayBoolLinhas[i][1] &&
           arrayBoolLinhas[i][2]
         ) {
-          linhas[i].style.display = ''
+          linhas[i].style.display = "";
         } else {
-          linhas[i].style.display = 'none'
-          contador++
+          linhas[i].style.display = "none";
+          contador++;
         }
       }
       if (qtdLinhas == contador) {
-        aviso.style.display = 'flex'
-        tabela.style.display = 'none'
+        aviso.style.display = "flex";
+        tabela.style.display = "none";
       } else {
-        aviso.style.display = 'none'
-        tabela.style.display = 'flex'
+        aviso.style.display = "none";
+        tabela.style.display = "flex";
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
@@ -625,7 +621,6 @@ body {
   position: relative;
   margin-top: 220px;
   margin-bottom: 200px;
-
 }
 
 .recarregar {

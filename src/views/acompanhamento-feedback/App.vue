@@ -9,7 +9,7 @@
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
-                        <h4 class="fw-bold text-center nomeCol">{{participante.nome}}</h4>
+                        <h4 class="fw-bold text-center nomeCol">Nome do Colaborador</h4>
                     </div>
                 </div>
 
@@ -20,12 +20,12 @@
                     <form>
                         <div class="mb-3">
                             <p for="anotacao" class="form-label fw-bold mb-0 titulo">Data do Feedback</p>
-                            <input v-model="form.data" type="date" class="form-control" id="anotacao"
+                            <input type="date" class="form-control" id="anotacao"
                                 placeholder="Digite a data do feedback">
                         </div>
                         <div class="mb-3">
                             <label for="anotacoes" class="form-label mb-0 fw-bold titulo">Anotações</label>
-                            <textarea v-model="form.anotacoes" rows="8" class="form-control mb-3" id="anotacoes"></textarea>
+                            <textarea rows="8" class="form-control mb-3" id="anotacoes"></textarea>
                         </div>
                         <div class="input-group">
                             <!--<input class="input-file" type="file">-->
@@ -44,10 +44,10 @@
                         <table class="table table-bordered tabela">
 
                             <tbody>
-                                <tr v-for="(feedback, index) in feedbacks" :key="feedback">
-                                    <td scope="row">{{++index}}</td>
-                                    <td>{{feedback.anotacao}}</td>
-                                    <td @click="carregaModal(feedback, index)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
+                                <tr v-for="feedback in feedbacks" :key="feedback">
+                                    <td scope="row">{{feedback.id}}</td>
+                                    <td>{{feedback.anotacoes}}</td>
+                                    <td @click="carregaModal(feedback)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
                                         <img class="imgicon" name="imglogo" src="@/assets/imgs/visibility_white_24dp.svg"></td>
                                 </tr>
                             </tbody>
@@ -65,14 +65,14 @@
                 <div class="modal-content p-5">
                     <div class="row mb-5">
                         <div class="col">
-                            <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Feedback: {{indiceModal}}</h2>
+                            <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Feedback {{feedbackModal.id}}:</h2>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-lg-6">
                             <h4 class="fw-bold titulo">Data do Feedback:</h4>
-                            <p class="nomeCol">{{formataDataParaMostrar(feedbackModal.data)}}</p>
+                            <p class="nomeCol">{{feedbackModal.data}}</p>
                             <h4 class="fw-bold titulo">Anotações do feedback</h4>
                             <textarea v-model="feedbackModal.anotacao" disabled class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
@@ -107,9 +107,9 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <h4 class="fw-bold titulo">Data do Feedback:</h4>
-                            <p class="nomeCol">{{formataDataParaMostrar(feedbackModal.data)}}</p>
+                            <p class="nomeCol">{{feedbackModal.data}}</p>
                             <h4 class="fw-bold titulo">Anotações do feedback</h4>
-                            <textarea v-model="feedbackModal.anotacao" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
+                            <textarea v-model="feedbackModal.anotacoes" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
                     </div>
                      <div class="row">
@@ -135,7 +135,6 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -156,14 +155,9 @@ export default {
       indiceModal: {}
     }
   },
-
   beforeMount () {
-    this.id = this.pegaDadosUrl().id
-    this.getParticipanteNome()
-    this.getFeedback()
     Funcoes.verificaToken()
   },
-
   methods: {
     getParticipanteNome () {
       http

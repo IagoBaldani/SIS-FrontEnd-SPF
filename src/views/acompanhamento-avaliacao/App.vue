@@ -11,7 +11,7 @@
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
-                        <h4 class="fw-bold grey-font text-center">{{participante.nome}}</h4>
+                        <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Técnica:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.notaTecnica}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.tecnica}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comportamental:</h4>
@@ -104,17 +104,17 @@
                       
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo práticas ágeis:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.notaPraticasAgeis}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.moduloAgeis}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo liderança:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.notaLideranca}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.lideranca}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo negócios:</h4>
-                            <p class="grey-font h4">{{avaliacaoModal.notaNegocios}}</p>
+                            <p class="grey-font h4">{{avaliacaoModal.negocios}}</p>
                         </div>
                     </div>
                 </div>
@@ -384,14 +384,12 @@ export default {
       modalDesempenho: {} // // é usado para mostrar o registro especifico que foi escolhido da tabela no modal.
     }
   },
-
   beforeMount () {
     Funcoes.verificaToken()
     this.id = this.pegaDadosUrl().id
     this.getParticipanteNome()
     this.getAvaliacao()
   },
-
   methods: {
     carregaModal (avaliacao, index) {
       this.avaliacaoModal = avaliacao

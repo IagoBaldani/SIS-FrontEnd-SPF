@@ -15,25 +15,24 @@
               >Formação</label
             >
             <input
-              id="formacao"
               class="form-control"
-              list="turmas"
+              type="text"
               placeholder="Digite uma turma de Formação"
-              v-model="modelFormacao"
+              v-bind:value="formacoes.formacao"
+              id="inputFormacao"
             />
-            <datalist id="turmas">
-              <option v-for="formacao in formacoes" :key="formacao.turma" v-bind:value="formacao.turma"></option>
-            </datalist>
           </div>
           <div>
-            <label for="dataInicio" class="form-label mb-0 mt-3 titulo">Data início</label>
-            <input type="date" id="dataInicio" class="form-control" v-model="modelDataIni"/>
+            <label for="dataInicio" class="form-label mb-0 mt-3 titulo"
+              >Data início</label
+            >
+            <input type="date" name="dataInicio" class="form-control" v-bind:value="formacoes.dataIni" id="inputDataIni"/>
           </div>
           <div>
             <label for="dataTermino" class="form-label mb-0 mt-3 titulo"
               >Data término</label
             >
-            <input type="date" id="dataTermino" class="form-control" v-model="modelDataFin"/>
+            <input type="date" name="dataTermino" class="form-control" v-bind:value="formacoes.dataFin" id="inputDataFin"/>
           </div>
           <div>
             <label for="qtdEstagiarios" class="form-label mb-0 mt-3 titulo"
@@ -45,9 +44,9 @@
                 class="form-control"
                 placeholder="Número de estagiários"
                 name="qtdEstagiarios"
-                id="qtdEstagiarios"
+                id="inputQtdEstagiarios"
                 @input="escutaQuantidades"
-                v-model="modelQtdEstagiarios"
+                v-bind:value="formacoes.qtdEstagiario"
               />
             </div>
           </div>
@@ -61,9 +60,9 @@
                 class="form-control"
                 placeholder="Número de trainees"
                 name="qtdTrainees"
-                id="qtdTrainees"
+                id="inputQtdTrainees"
                 @input="escutaQuantidades"
-                v-model="modelQtdTrainees"
+                v-bind:value="formacoes.qtdTrainee"
               />
             </div>
           </div>
@@ -79,8 +78,8 @@
                 class="form-control"
                 placeholder="Número de aprendizes"
                 name="qtdAprendizes"
-                id="qtdAprendizes" @input="escutaQuantidades"
-                v-model="modelQtdAprendizes"
+                id="inputQtdAprendizes" @input="escutaQuantidades"
+                v-bind:value="formacoes.qtdAprendiz"
               />
             </div>
           </div>
@@ -93,10 +92,10 @@
                 name="qtdTotal"
                 type="text"
                 class="form-control"
-                id="qtdTotal"
+                id="inputQtdTotal"
                 placeholder="Quantidade total"
                 disabled readonly
-                v-model="modelQtdTotal"
+                v-bind:value="formacoes.qtdTotal"
               />
             </div>
           </fieldset>
@@ -151,29 +150,29 @@
             <div class="row">
               <div class="col">
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Formação: {{ informacoes.formacao }}</span>
+                  <span class="informacoes-modal">Formação: {{ formacoes.formacao }}</span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Data início: {{ informacoes.dataIni }} </span>
+                  <span class="informacoes-modal">Data início: {{ formacoes.dataIni }} </span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Data término: {{ informacoes.dataFin }}</span>
-                </div>
-                <div class="alinharDiv">
-                  <span class="informacoes-modal"
-                    >Quantidade de estagiários: {{ informacoes.qtdEstagiario }}</span
-                  >
-                </div>
-                <div class="alinharDiv">
-                  <span class="informacoes-modal">Quantidade de trainees: {{ informacoes.qtdTrainee }}</span>
+                  <span class="informacoes-modal">Data término: {{ formacoes.dataFin }}</span>
                 </div>
                 <div class="alinharDiv">
                   <span class="informacoes-modal"
-                    >Quantidade de aprendizes: {{ informacoes.qtdAprendiz }}</span
+                    >Quantidade de estagiários: {{ formacoes.qtdEstagiario }}</span
                   >
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Participantes totais: {{ informacoes.qtdTotal }}</span>
+                  <span class="informacoes-modal">Quantidade de trainees: {{ formacoes.qtdTrainee }}</span>
+                </div>
+                <div class="alinharDiv">
+                  <span class="informacoes-modal"
+                    >Quantidade de aprendizes: {{ formacoes.qtdAprendiz }}</span
+                  >
+                </div>
+                <div class="alinharDiv">
+                  <span class="informacoes-modal">Participantes totais: {{ formacoes.qtdTotal }}</span>
                 </div>
               </div>
             </div>
@@ -195,39 +194,16 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue'
-import Funcoes from '../../services/Funcoes'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
-
+import Header from "@/components/Header.vue";
+import Funcoes from '../../services/Funcoes';
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Header
+    Header,
   },
-  data () {
+  data() {
     return {
-      responseStatus: '',
-      formacoes: [
-        {
-          id: 1,
-          turma: 'Java - Turma 1 - 2021'
-        },
-        {
-          id: 2,
-          turma: 'MainFrame - Turma 1 - 2021'
-        },
-        {
-          id: 3,
-          turma: 'BI - Turma 1 - 2021'
-        }
-      ],
-      informacoes: {
+      formacoes: {
         formacao: '',
         dataIni: '',
         dataFin: '',
@@ -236,58 +212,61 @@ export default {
         qtdTrainee: '',
         qtdTotal: ''
       }
-    }
+    };
   },
   beforeMount () {
     Funcoes.verificaToken()
   },
   methods: {
     escutaQuantidades () {
-      let qtdAprendizes = document.querySelector('#qtdAprendizes').value
-      let qtdEstagiarios = document.querySelector('#qtdEstagiarios').value
-      let qtdTrainees = document.querySelector('#qtdTrainees').value
+      let qtdAprendizes = document.querySelector('#inputQtdAprendizes').value
+      let qtdEstagiarios = document.querySelector('#inputQtdEstagiarios').value
+      let qtdTrainees = document.querySelector('#inputQtdTrainees').value
       this.carregaQuantidade(qtdEstagiarios, qtdTrainees, qtdAprendizes)
     },
     carregaQuantidade (qtdE, qtdT, qtdA) {
-      qtdA = parseInt(qtdA)
-      qtdT = parseInt(qtdT)
-      qtdE = parseInt(qtdE)
+    qtdA = parseInt(qtdA)
+    qtdT = parseInt(qtdT)
+    qtdE = parseInt(qtdE)
 
-      if (isNaN(qtdE)) {
-        qtdE = 0
-      }
-      if (isNaN(qtdT)) {
-        qtdT = 0
-      }
-      if (isNaN(qtdA)) {
-        qtdA = 0
-      }
-
-      let qtdTotal = 0
-      qtdTotal += qtdE + qtdT + qtdA
-      let elQtdTotal = document.querySelector('#qtdTotal')
-      elQtdTotal.value = qtdTotal
-    },
-    enviarDados () {
-      this.informacoes.formacao = this.modelFormacao
-      this.informacoes.dataIni = this.formataDataParaExibicao(this.modelDataIni)
-      this.informacoes.dataFin = this.formataDataParaExibicao(this.modelDataFin)
-      this.informacoes.qtdEstagiario = this.modelQtdEstagiarios
-      this.informacoes.qtdAprendiz = this.modelQtdAprendizes
-      this.informacoes.qtdTrainee = this.modelQtdTrainees
-      this.informacoes.qtdTotal = document.querySelector('#qtdTotal').value
-    },
-    formataDataParaExibicao (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-      return dataFormatada
+    if (isNaN(qtdE)) {
+      qtdE = 0
     }
+    if (isNaN(qtdT)) {
+      qtdT = 0
+    }
+    if (isNaN(qtdA)) {
+      qtdA = 0
+    }
+
+    let qtdTotal = 0
+    qtdTotal += qtdE + qtdT + qtdA
+    let elQtdTotal = document.querySelector('#inputQtdTotal')
+    elQtdTotal.value = qtdTotal
+  },
+  enviarDados(){
+    this.formacoes.formacao = document.querySelector('#inputFormacao').value
+    this.formacoes.dataIni = formataDataParaExibicao(document.querySelector('#inputDataIni').value);
+    this.formacoes.dataFin = formataDataParaExibicao(document.querySelector('#inputDataFin').value);
+    this.formacoes.qtdEstagiario = document.querySelector('#inputQtdEstagiarios').value
+    this.formacoes.qtdAprendiz = document.querySelector('#inputQtdAprendizes').value
+    this.formacoes.qtdTrainee = document.querySelector('#inputQtdTrainees').value
+    this.formacoes.qtdTotal = document.querySelector('#inputQtdTotal').value
+  }
   }
 }
-
+function formataDataParaExibicao (data) {
+  const dataPreForm = new Date(data)
+  const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+  return dataFormatada
+  }
 </script>
 
+
 <style>
+body{
+  background-color: #ebebeb;
+}
 .titulo {
   color: #090b2e;
   font-weight: bold;
