@@ -16,6 +16,7 @@
       </div>
       <div class="row justify-content-evenly">
         <div class="col-xl-4">
+          <form>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputName">Nome</label>
               <input class="form-control disabledTextInput" id="inputName" :placeholder="participante.nome" type="text" disabled>
@@ -37,6 +38,13 @@
               <input v-model="modelNotaLogica" class="form-control" id="inputNotaLogica" placeholder="10/10" type="number" min="0" max="10">
             </div>
             <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo">DISC</label><br>
+              <label for='selecao-disc'  class="form-control envio-arquivo">
+                <img src="@/assets/imgs/file_download_black_24dp.svg" alt=""> disc.pdf
+              </label>
+              <input class="input-arquivo" id='selecao-disc' type='file' accept=".pdf">
+            </div>
+            <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputInstEnsino">Instituição de Ensino</label>
               <input v-model="modelInstituicaoEnsino" class="form-control" id="inputInstEnsino" placeholder="Fatec Ourinhos" type="text">
             </div>
@@ -44,8 +52,19 @@
               <label class="form-label fw-bold mb-0 titulo" for="inputCurso">Curso</label>
               <input v-model="modelCurso" class="form-control" id="inputCurso" placeholder="Análise e Desenvolvimento de Sistemas" type="text">
             </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo">TCE</label><br>
+              <label for='selecao-tce'  class="form-control envio-arquivo">
+                <img src="@/assets/imgs/file_download_black_24dp.svg" alt="">
+                tce.xlsx
+              </label>
+              <input class="input-arquivo" id='selecao-tce' type='file' accept=".xlsx">
+
+            </div>
+          </form>
         </div>
         <div class="col-xl-4">
+          <form>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputTerminoGraduacao">Término da graduação</label>
               <input v-model="modelTerminoGraduacao" class="form-control" id="inputTerminoGraduacao" placeholder="20/12/2021" type="date">
@@ -60,7 +79,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Salário</label>
-              <input v-model="modelSalario" class="form-control disabledTextInput" type="number" disabled>
+              <input v-model="modelSalario" class="form-control" type="number">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Programa de Formação - Turma</label>
@@ -84,6 +103,7 @@
               <label class="form-label fw-bold mb-0 titulo">Observação</label>
               <textarea v-model="modelObservacao" class="form-control" placeholder="Mensagem..." cols="20" rows="6" style="resize:none;"></textarea>
             </div>
+          </form>
         </div>
         <div class="col-xl-2">
             <div class="text-center text-md-left">
@@ -97,13 +117,7 @@
             CONFIRMAR
           </button>
         </div>
-        <div class="col-xl-4">
-          <a :href="'/dados-participante-arquivos?id=' + participante.cpf " >
-            <div class="btn cancel form-control mb-5">
-              ENVIAR ARQUIVOS
-            </div>
-          </a>
-        </div>
+        <div class="col-xl-4"></div>
         <div class="col-xl-2"></div>
       </div>
     </div>
@@ -156,7 +170,13 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -168,6 +188,7 @@ export default {
       responseStatus: '',
       tipo: '',
       programas: [
+        // Esses dados virão da API
         {
           id: 1,
           nome: 'Java',
@@ -193,6 +214,13 @@ export default {
           termino: '10/12/2022'
         }
       ],
+      // Esses dados virão da API do PortalSIS
+      participanteApi: {
+        nome: 'Teste',
+        cpf: '190.738.908-87',
+        contato: '(14)99999-8999'
+      },
+      // Parte dos dados será preenchida pela API e parte será pela API PortalSIS
       participante: {
         nome: '',
         cpf: '',
@@ -222,14 +250,12 @@ export default {
       this.participante.programaSelecionado.nomeETurma = this.modelPrograma
       this.participante.observacao = this.modelObservacao
     },
-
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
 
       return dataFormatada
     },
-
     exibeDadosPrograma (programas) {
       let elProgramas = document.querySelectorAll('#programa')
       let arrayOptions = []
@@ -252,7 +278,6 @@ export default {
         }
       })
     },
-
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -276,16 +301,9 @@ export default {
       this.tipo = dadosUrl.tipo
     }
 
-    // Chamada da API MOCK
-    http.get(`mock/participante/${dadosUrl.id}`)
-      .then(response => {
-        this.participante.nome = response.data.nome
-        this.participante.cpf = response.data.cpf
-        this.participante.contato = response.data.telefone
-      })
-      .catch(error => {
-        alert('Erro na chamada da API MOCK - ' + error)
-      })
+    this.participante.nome = this.participanteApi.nome
+    this.participante.cpf = this.participanteApi.cpf
+    this.participante.contato = this.participanteApi.contato
   }
 }
 

@@ -6,4 +6,5 @@ export const http = axios.create({
   headers: {
     Authorization: `Bearer ${Cookie.get('login_token')}`
   }
+
 })

@@ -53,8 +53,15 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
+import Cookie from 'js-cookie'
 import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -64,38 +71,22 @@ export default {
   data () {
     return {
       responseStatus: '',
-      instrutor: {},
-      instrutorForm: {
-        nome: '',
-        status: '',
-        cpf: '',
-        telefone: ''
-      }
+      instrutor: {}
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
-
+    console.log(dadosUrl)
     this.getInstrutor(dadosUrl.id)
   },
   methods: {
     enviarDados () {
-      this.instrutorForm.nome = this.instrutor.nome
-      this.instrutorForm.status = 'ATIVO'
-      this.instrutorForm.cpf = this.instrutor.cpf
-      this.instrutorForm.telefone = this.instrutor.telefone
-      http.post('instrutor', this.instrutorForm)
-        .then(res => {
-          alert('Instrutor cadastrado com sucesso!')
-          window.location.href = 'http://localhost:8080/dados-instrutor-selecao-cadastro'
-        })
-        .catch(erro => {
-          alert(`Erro: ${erro}`)
-        })
+      // Pega os dados da API do PortalSIS, cria um objeto e envia os dados para nossa API
+      alert('Instrutor cadastrado com sucesso!')
     },
     getInstrutor (cpf) {
-      http.get(`mock/instrutor/${cpf}`)
+      axios.get(`http://localhost:8081/api/instrutor/${cpf}`, config)
         .then(res => {
           this.instrutor = res.data
         })

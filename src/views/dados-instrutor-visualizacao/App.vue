@@ -17,19 +17,19 @@
                     <div class="col-xl-4">
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Nome</label>
-                            <input class="form-control disabledTextInput" v-bind:value="instrutor.nome" type="text" disabled>
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.nome" type="text">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Telefone</label>
-                            <input class="form-control disabledTextInput"  v-bind:value="instrutor.telefone" type="tel" disabled >
+                            <input class="form-control disabledTextInput"  v-bind:value="instrutor.telefone" type="tel" disabled readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
-                            <input class="form-control disabledTextInput" v-bind:value="instrutor.cpf" type="text" disabled>
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.cpf" type="text">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
-                            <input class="form-control disabledTextInput" v-bind:value="instrutor.email" type="email" disabled>
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.email" type="email">
                         </div>
                     </div>
                     <div class="col-xl-4">
@@ -97,8 +97,15 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import axios from 'axios'
 import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
 
 export default {
   name: 'App',
@@ -113,7 +120,7 @@ export default {
   },
   methods: {
     getInstrutor (cpf) {
-      http.get(`instrutor/${cpf}`)
+      axios.get(`http://localhost:8081/api/instrutor/${cpf}`, config)
         .then(res => {
           this.instrutor = res.data
         })
@@ -125,7 +132,7 @@ export default {
     alteraStatus () {
       let cpf = this.instrutor.cpf
       console.log(cpf)
-      http.put(`instrutor/status/altera/${cpf}`)
+      axios.put(`http://localhost:8081/api/instrutor/status/altera/${cpf}`)
         .then(res => {
           this.instrutor = res.data
         })

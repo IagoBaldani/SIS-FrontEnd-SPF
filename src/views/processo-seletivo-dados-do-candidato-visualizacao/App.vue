@@ -18,7 +18,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="contato" class="form-label mb-0 titulo">Contato</label>
-                                <input name="contato" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.contato">
+                                <input name="contato" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.telefone">
                             </div>
                             <div class="mb-3">
                                 <label for="fonteRecrutamento" class="form-label mb-0 titulo">Fonte de Recrutamento</label>
@@ -47,20 +47,19 @@
                         <fieldset disabled>
                             <div class="mb-3">
                                 <label for="provaPratica" class="form-label mb-0 titulo">Prova prática</label>
-                                <input name="provaPratica" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.provaPratica">
+                                <input name="provaPratica" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.testeLogico">
                             </div>
                             <div class="mb-3">
                                 <label for="disc" class="form-label mb-0 titulo">DISC</label>
-                                <input name="disc" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.disc">
+                                <input name="disc" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.notaDisc">
                             </div>
                             <div class="mb-3">
                                 <label for="curriculoCandidato" class="form-label mb-0 titulo">Currículo candidato</label><br>
                                 <a href=""><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">curriculo.pdf</a>
-
                             </div>
                             <div class="mb-3">
                                 <label for="observacoes" class="form-label mb-0 titulo">Observações</label>
-                                <textarea name="observacoes" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.observacoes" rows="8"></textarea>
+                                <textarea name="observacoes" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.observacao" rows="8"></textarea>
                             </div>
                         </fieldset>
                     </div>
@@ -73,14 +72,8 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import Funcoes from '../../services/Funcoes.js'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import Funcoes from '../../services/Funcoes'
+import { http } from '@/services/config'
 
 export default {
   name: 'App',
@@ -89,29 +82,49 @@ export default {
   },
   data () {
     return {
-      responseStatus: '',
-      candidato: {
-        id: 1,
-        nome: 'Gustavo de Oliveira Juliano',
-        contato: '(14)99706-2197',
-        fonteRecrutamento: 'Palestra via Faculdade',
-        dataAgendamento: '31/10/2021',
-        curso: 'Análise e Desenvolvimento de Sistemas',
-        status: 'APROVADO_1_FASE',
-        provaPratica: '10/10',
-        disc: 'D:10 I:10 S:10 C:10',
-        observacoes: 'Observações feitas através do Vue'
-      }
+      candidato: {}
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-  }
 
+    const dadosUrl = this.pegaDadosUrl()
+    let id = dadosUrl.id
+
+    this.getCandidato(id)
+  },
+  methods: {
+    getCandidato (id) {
+      http
+        .get(`candidato/${id}`)
+        .then(response => {
+          this.candidato = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
+    pegaDadosUrl () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+      return data
+    }
+  }
 }
 </script>
 
 <style>
+
+body{
+  background-color: #ebebeb;
+}
 
 .titulo{
     color: #090B2E;

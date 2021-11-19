@@ -9,7 +9,7 @@
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
-                        <h4 class="fw-bold grey-font text-center">{{participante.nome}}</h4>
+                        <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
                     </div>
                     <img src="@/assets/imgs/perfil.svg" class="perfil-img"/>
                 </div>
@@ -20,21 +20,25 @@
                         <fieldset class="mb-3">
                             <legend class="form-label fw-bold h5 titulo">Resultado (Efetivado)</legend>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="EFETIVADO" id="sim" class="me-2" v-model="form.resultado">
+                                <input type="radio" name="reajuste" value="sim" id="sim" class="me-2 ">
                                 <label for="sim" class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="NAO_EFETIVADO" id="nao" class="me-2" v-model="form.resultado">
+                                <input type="radio" name="reajuste" value="nao" id="nao" class="me-2" checked>
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
                         <div class="mb-3">
                             <label for="data-alteracao" class="form-label fw-bold h5 titulo">Data</label>
-                            <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao">
+                            <input type="date" class="form-control" id="data-alteracao">
                         </div>
                         <div class="mb-3">
                             <label for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
-                            <input type="text" class="form-control" id="cargo-efetivado" placeholder="Analista Desenvolvedor Java" v-model="form.cargoEfetivado">
+                            <input type="text" class="form-control" id="cargo-efetivado" placeholder="Analista Desenvolvedor Java">
+                        </div>
+                        <div class="mb-3">
+                            <label for="salario" class="form-label fw-bold h5 titulo">Salário</label>
+                            <input type="text" class="form-control" id="salario" placeholder="1500,00">
                         </div>
                     </form>
                 </div>
@@ -42,7 +46,7 @@
                     <form>
                         <div class="mb-3">
                             <label for="file" class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
-                            <input id="file" @change="formatoUpload()" type="file" accept="application/pdf" class="none" />
+                            <input id="file" type="file" accept="application/pdf" class="none" />
                             <label for="file" class="btn-file d-flex justify-content-between">
                                 <div class="w-100">
                                     <img src="@/assets/imgs/upload.svg"
@@ -55,8 +59,8 @@
                             </label>
                         </div>
                         <div class="mb-3">
-                            <label for="observacoes"  class="form-label fw-bold h5 titulo">Observações</label>
-                            <textarea class="form-control h-198px" id="observacoes" v-model="form.campoObservacao" ></textarea>
+                            <label for="observacoes" class="form-label fw-bold h5 titulo">Observações</label>
+                            <textarea class="form-control h-198px" id="observacoes" ></textarea>
                         </div>
                     </form>
                 </div>
@@ -82,11 +86,16 @@
                     <div class="col-lg-7">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Reajuste salarial</h4>
-                            <p class="grey-font h4">{{ form.resultado }}</p>
+                            <p class="grey-font h4">Sim</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data da alteração</h4>
-                            <p class="grey-font h4">{{formataDataParaMostrar(form.dataAlteracao)}}</p>
+                            <p class="grey-font h4">20/09/2021</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h4 class="fw-bold titulo">Salário</h4>
+                            <p class="grey-font h4">2700,00</p>
                         </div>
                     </div>
                     <div class="col-lg-5">
@@ -103,7 +112,7 @@
                 </div>
                 <div class="row d-flex">
                     <div class="col-lg-6">
-                        <button @click="postForm()" type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100">CONFIRMAR</button>
+                        <button type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100">CONFIRMAR</button>
                     </div>
                     <div class="col-lg-6">
                         <button type="submit" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100">CANCELAR</button>
@@ -117,7 +126,6 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -126,91 +134,49 @@ export default {
   },
   data () {
     return {
-      participante: {},
-
-      form: {
-        resultado: '',
-        dataAlteracao: '',
-        cargoEfetivado: '',
-        comprovante: '',
-        campoObservacao: ''
-      },
-      id: {}
+      conclusoes: [
+        {
+          id: 1,
+          status: 'Progressiva',
+          reajuste: 'Não',
+          salario: 1500.00,
+          comprovante: 'comprovante.pdf',
+          dataAlteracao: '20/09/2021'
+        },
+        {
+          id: 2,
+          status: 'Progressiva',
+          reajuste: 'Não',
+          salario: 1500.00,
+          comprovante: 'comprovante.pdf',
+          dataAlteracao: '20/10/2021'
+        },
+        {
+          id: 3,
+          status: 'Progressiva',
+          reajuste: 'Não',
+          salario: 1500.00,
+          comprovante: 'comprovante.pdf',
+          dataAlteracao: '18/11/2021'
+        },
+        {
+          id: 4,
+          status: 'Final',
+          reajuste: 'Sim',
+          salario: 2700.00,
+          comprovante: 'comprovante.pdf',
+          dataAlteracao: '30/12/2021'
+        }
+      ],
+      conclusaoModal: ''
     }
   },
-
   beforeMount () {
-    this.id = this.pegaDadosUrl().id
-    this.getParticipanteNome()
     Funcoes.verificaToken()
   },
-
   methods: {
-    getParticipanteNome () {
-      http
-        .get(`gerencial/${this.id}`)
-        .then((response) => {
-          this.participante = response.data
-          console.log(response.data)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    postForm () {
-      let campos = document.querySelectorAll('input')
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0) {
-        http
-          .post(`conclusao/registrociclofinal/${this.id}`, this.form)
-          .catch((error) => {
-            console.log(error)
-          })
-      } else {
-        alert('Por favor, preencha todos os campos!')
-      }   
-    },
-
     carregaModal (conclusao) {
       this.conclusaoModal = conclusao
-    },
-
-    formataDataParaMostrar (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
-      return dataFormatada
-    },
-    
-    pegaDadosUrl () {
-      var query = location.search.slice(1)
-      var partes = query.split('&')
-      var data = {}
-
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=')
-        var chave = chaveValor[0]
-        var valor = chaveValor[1]
-        data[chave] = valor
-      })
-
-      return data
-    },
-
-    formatoUpload () {
-      var texto = document.querySelector('#nome-arquivo')
-      let file = document.getElementById('file')
-      if (file.files.length == 0) {
-        texto.textContent = 'Faça upload do comprovante'
-      } else {
-        texto.textContent = file.files[0].name
-      }
     }
   }
 }

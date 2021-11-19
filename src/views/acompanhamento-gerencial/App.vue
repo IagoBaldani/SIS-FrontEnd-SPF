@@ -3,12 +3,12 @@
     <main>
         <section>
             <div class="container">
-                <h2> Participante selecionado: <span>{{ participante.nome }}</span></h2>
+                <h2> Participante selecionado: <span> João da Silva Almeida</span></h2>
                 <div class="area-btns">
-                    <a :href="'../acompanhamento-alura?id=' + id"> <div class="btn-container alura"> Alura </div> </a>
-                    <a :href="'../acompanhamento-feedback?id=' + id"> <div class="btn-container feedbacks"> Feedbacks </div> </a>
-                    <a :href="'../acompanhamento-avaliacao?id=' + id"> <div class="btn-container avaliacoes"> Avaliações </div> </a>
-                    <a :href="'../acompanhamento-ciclo?id=' + id"> <div class="btn-container conclusoes"> Conclusões </div> </a>
+                    <a href="../acompanhamento-alura"> <div class="btn-container alura"> Alura </div> </a>
+                    <a href="../acompanhamento-feedback"> <div class="btn-container feedbacks"> Feedbacks </div> </a>
+                    <a href="../acompanhamento-avaliacao"> <div class="btn-container avaliacoes"> Avaliações </div> </a>
+                    <a href="../acompanhamento-ciclo"> <div class="btn-container conclusoes"> Conclusões </div> </a>
                 </div>
             </div>
         </section>
@@ -18,7 +18,6 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -27,44 +26,12 @@ export default {
   },
   data () {
     return {
-      participante: {},
-      id: {}
+      responseStatus: ''
     }
   },
-
   beforeMount () {
-    this.id = this.pegaDadosUrl().id
-    this.getParticipanteNome()
     Funcoes.verificaToken()
-  },
-
-  methods: {
-    getParticipanteNome () {
-      http
-        .get(`gerencial/${this.id}`)
-        .then((response) => {
-          this.participante = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    pegaDadosUrl () {
-      var query = location.search.slice(1)
-      var partes = query.split('&')
-      var data = {}
-
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=')
-        var chave = chaveValor[0]
-        var valor = chaveValor[1]
-        data[chave] = valor
-      })
-
-      return data
-    }
   }
-  
 }
 </script>
 

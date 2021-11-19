@@ -11,7 +11,7 @@
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
-                        <h4 class="fw-bold grey-font text-center">{{ participante.nome }}</h4>
+                        <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
                     </div>
                     <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
@@ -24,29 +24,29 @@
                         <fieldset class="mb-3">
                             <legend class="form-label fw-bold h5 titulo">Resultado (Reajuste salarial)</legend>
                             <div class="radio-item">
-                                <input type="radio"  name="reajuste" value="REAJUSTE_SALARIO" id="sim" class="me-2 " v-model="form.resultado">
-                                <label for="sim"  class="me-5">Sim</label>
+                                <input type="radio" name="reajuste" value="sim" id="sim" class="me-2 ">
+                                <label for="sim" class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio"  name="reajuste" value="NAO_REAJUSTE_SALARIO" id="nao" v-model="form.resultado" class="me-2">
+                                <input type="radio" name="reajuste" value="nao" id="nao" class="me-2" checked>
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
                         <div class="mb-3">
                             <label for="data-alteracao" class="form-label fw-bold h5 titulo">Data da alteração</label>
-                            <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao">
+                            <input type="date" class="form-control" id="data-alteracao">
                         </div>
                         <div class="mb-3">
                             <label for="cargo" class="form-label fw-bold h5 titulo">Cargo</label>
-                            <select class="form-select" id="filtro-programa" v-model="form.cargo">
-                                <!--<option value="0" id="cargo" selected disabled>Selecione o Cargo</option>-->
-                                <option :value="cargo.cargo" v-for="cargo in cargos" :key="cargo.id">{{ cargo.cargo }}</option>
-                            </select>
+                            <select class="form-select" id="filtro-programa">
+                            <option value="0" id="cargo" selected disabled>Selecione o Cargo</option>
+                            <option value="1" >Estagiário</option>
+                        </select>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
-                            <input id="file" @change="formatoUpload()" class="none" type="file" accept="application/pdf"/>
+                            <input id="file" class="none" type="file" accept="application/pdf"/>
                             <label for="file" class="btn-file d-flex justify-content-between">
                                 <div class="w-100">
                                     <img src="@/assets/imgs/upload.svg" class="upload-img"/>
@@ -58,7 +58,7 @@
                             </label>
 
                         </div>
-                        <button type="button" @click="postForm()"
+                        <button type="submit"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
                     </form>
                 </div>
@@ -73,17 +73,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(conclusao, index) in conclusoes" v-bind:key="conclusao">
-                                <th scope="row" class="titulo">{{++index}}</th>
-                                <td>{{formataDataParaMostrar(conclusao.dataRegistro)}}</td>
+                            <tr v-for="conclusao in conclusoes" v-bind:key="conclusao">
+                                <th scope="row" class="titulo">{{conclusao.id}}</th>
+                                <td>{{conclusao.dataAlteracao}}</td>
                                 <td>{{conclusao.status}}</td>
-                                <td @click="carregaModal(conclusao, index)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalCiclo">
+                                <td @click="carregaModal(conclusao)" class="eye" width="37px" data-bs-toggle="modal" data-bs-target="#modalCiclo">
                                     <img src="@/assets/imgs/visibility_white_24dp.svg" class="eye-img">
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <a :href="'../acompanhamento-ciclo-final?id=' + id" class="w-50">
+                    <a href="../acompanhamento-ciclo-final" class="w-50">
                     <button type="button" class="btn btn-warning sis-yellow-btn fw-bold fs-5 w-100">REGISTRAR ÚLTIMO
                         CICLO</button></a>
                 </div>
@@ -98,32 +98,32 @@
             <div class="modal-content p-5 grey-background">
                 <div class="row mb-5">
                     <div class="col">
-                        <h2 class="modal-title fw-bold titulo " id="exampleModalLabel">Conclusão de ciclo: {{ indiceModal }}</h2>
+                        <h2 class="modal-title fw-bold" id="exampleModalLabel">Conclusão de ciclo: 1</h2>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-7">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Reajuste salarial:</h4>
-                            <p class="grey-font h4">{{(conclusaoModal.resultado == 'REAJUSTE_SALARIO') ? 'Sim' : 'Não'}}</p>
+                            <p class="grey-font h4">{{conclusaoModal.reajuste}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/conclusão:</h4>
                             <p class="grey-font h4 text-decoration-underline">{{conclusaoModal.comprovante}}</p>
                         </div>
-                        <div class="mb-4" v-if="conclusaoModal.status == 'PROGRESSIVA'" >
-                            <h4 class="fw-bold titulo">Cargo:</h4>
-                            <p class="grey-font h4">{{conclusaoModal.cargoPrograma}}</p>
+                        <div class="mb-4">
+                            <h4 class="fw-bold titulo">Salário:</h4>
+                            <p class="grey-font h4">{{conclusaoModal.salario}}</p>
                         </div>
                     </div>
                     <div class="col-lg-5">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Status:</h4>
-                            <p class="grey-font h4">{{(conclusaoModal.status == 'PROGRESSIVA') ? 'Progressiva' : 'Final'}}</p>
+                            <p class="grey-font h4">{{conclusaoModal.status}}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data da alteração:</h4>
-                            <p class="grey-font h4">{{formataDataParaMostrar(conclusaoModal.dataRegistro)}}</p>
+                            <p class="grey-font h4">{{conclusaoModal.dataAlteracao}}</p>
                         </div>
                     </div>
                 </div>
@@ -135,7 +135,6 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -144,120 +143,50 @@ export default {
   },
   data () {
     return {
-      conclusoes: [],
-      cargos: [],
-      conclusaoModal: '',
-      id: {},
-      participante: {},
-
-      form: {
-        resultado: '',
-        dataAlteracao: '',
-        cargo: '',
-        comprovante: ''
-      },
-      indiceModal: {}
+      responseStatus: '',
+      conclusoes: [
+        {
+          id: 1,
+          status: 'Progressiva',
+          reajuste: 'Não',
+          salario: 1500.00,
+          comprovante: 'comprovante.pdf',
+          dataAlteracao: '20/09/2021'
+        },
+        {
+          id: 2,
+          status: 'Progressiva',
+          reajuste: 'Não',
+          salario: 1500.00,
+          comprovante: 'comprovante.pdf',
+          dataAlteracao: '20/10/2021'
+        },
+        {
+          id: 3,
+          status: 'Progressiva',
+          reajuste: 'Não',
+          salario: 1500.00,
+          comprovante: 'comprovante.pdf',
+          dataAlteracao: '18/11/2021'
+        },
+        {
+          id: 4,
+          status: 'Final',
+          reajuste: 'Sim',
+          salario: 2700.00,
+          comprovante: 'comprovante.pdf',
+          dataAlteracao: '30/12/2021'
+        }
+      ],
+      conclusaoModal: ''
     }
   },
-
   beforeMount () {
-    this.id = this.pegaDadosUrl().id
-    this.getParticipanteNome()
-    this.getCiclo()
-    this.getCargos()
     Funcoes.verificaToken()
   },
-
   methods: {
-    getParticipanteNome () {
-      http
-        .get(`gerencial/${this.id}`)
-        .then((response) => {
-          this.participante = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    getCargos () {
-      http 
-        .get('remuneracao/lista')
-        .then((response) => {
-          this.cargos = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    getCiclo () {
-      http
-        .get(`conclusao/${this.id}`)
-        .then((response) => {
-          this.conclusoes = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    postForm () {
-      let campos = document.querySelectorAll('input')
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0) {
-        http
-          .post(`conclusao/registrocicloprogressivo/${this.id}`, this.form)
-          .then((response) => { 
-            this.getCiclo()
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      } else {
-        alert('Por favor, preencha todos os campos!')
-      }    
-    },
-
-    carregaModal (conclusao, index) {
+    carregaModal (conclusao) {
       this.conclusaoModal = conclusao
-      this.indiceModal = index
-    },
-    
-    formataDataParaMostrar (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
-      return dataFormatada
-    },
-
-    pegaDadosUrl () {
-      var query = location.search.slice(1)
-      var partes = query.split('&')
-      var data = {}
-
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=')
-        var chave = chaveValor[0]
-        var valor = chaveValor[1]
-        data[chave] = valor
-      })
-
-      return data
-    },
-    formatoUpload () {
-      var texto = document.querySelector('#nome-arquivo')
-      let file = document.getElementById('file')
-      if (file.files.length == 0) {
-        texto.textContent = 'Faça upload do comprovante'
-      } else {
-        texto.textContent = file.files[0].name
-      }
     }
   }
 }

@@ -10,7 +10,7 @@
                     <div class="col-lg-7 d-flex justify-content-center align-items-center">
                         <div class="d-block justify-content-center">
                             <h3 class="fw-bold text-center titulo">Participante selecionado:</h3>
-                            <h4 class="fw-bold grey-font text-center nome-participante">{{participante.nome}}</h4>
+                            <h4 class="fw-bold grey-font text-center nome-participante">João da Silva Almeida</h4>
                         </div>
                         <img src="@/assets/imgs/perfil.svg" class="rounded-circle" width="70" height="70" alt="Perfil" />
                     </div>
@@ -21,25 +21,25 @@
                     <form>
                         <div class="mb-3">
                             <label for="qtdHoras" class="form-label fw-bold mb-0 titulo">Quantidade de Horas</label>
-                            <input name="qtdHoras" v-model="form.qtdHoras" type="number" required class="form-control campo">
+                            <input name="qtdHoras" type="number" required class="form-control campo" placeholder="60">
                         </div>
                         <div class="mb-3">
                             <label for="mAvaliado" class="form-label fw-bold mb-0 titulo">Mês avaliado</label>
-                            <input name="mAvaliado" v-model="form.mesAvaliado" type="number" required class="form-control campo">
+                            <input name="mAvaliado" type="number" required class="form-control campo" placeholder="1">
                         </div>
                         <div class="mb-3">
                             <label for="sAvaliada" class="form-label fw-bold mb-0 titulo">Semana avaliada</label>
-                            <input name="sAvaliada"  v-model="form.semanaAvaliada" type="number" required class="form-control campo">
+                            <input name="sAvaliada" type="number" required class="form-control campo" placeholder="1">
                         </div>
                         <div class="mb-3">
                             <label for="dtRegistro" class="form-label fw-bold mb-0 titulo">Data do Registro</label>
-                            <input name="dtRegistro"  v-model="form.dataRegistro" type="date" required class="form-control campo">
+                            <input name="dtRegistro" type="date" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="hMinima" class="form-label fw-bold mb-0 titulo">Horas mínimas semanais</label>
-                            <input name="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
+                            <input name="hMinima" type="number" required class="form-control campo" placeholder="30">
                         </div>
-                        <button type="button" @click="postForm()" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
+                        <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
                     </form>
                 </div>
                 <div  class="col-lg-7">
@@ -53,11 +53,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(registro, index ) in registros" :key="registro"  >
-                                    <th scope="row" class=" text-center titulo" id="info-id">{{++index}}</th>
-                                    <td class="text-center campo-tabela">{{registro.mesAvaliado}}/{{registro.semanaAvaliada}}</td>
-                                    <td class="text-center campo-tabela">{{this.formataDataParaMostrar(registro.dataRegistro)}}</td>
-                                    <td @click="carregaModal(registro, index)"
+                                <tr v-for="registro in registros" v-bind:key="registro">
+                                    <th scope="row" class=" text-center titulo" id="info-id">{{registro.id}}</th>
+                                    <td class="text-center campo-tabela">{{registro.mesSemana}}</td>
+                                    <td class="text-center campo-tabela">{{registro.dataReg}}</td>
+                                    <td @click="carregaModal(registro)"
                                         id="olho" class="td-button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"><img
@@ -76,7 +76,7 @@
             <div class="modal-content p-5 conteudoModal" >
                 <div class="row mb-5">
                     <div class="col">
-                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Registro do acompanhamento: {{indiceModal}}</h2>
+                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Registro do acompanhamento: {{registroModal.id}}</h2>
                     </div>
                 </div>
                 <div class="row mb-5">
@@ -91,17 +91,17 @@
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Horas Semanais:</h3>
-                            <p class="">{{registroModal.hrMinSemana}}</p>
+                            <p class="">{{registroModal.horasMinimas}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Data do registro:</h3>
-                            <p class="">{{this.formataDataParaMostrar(registroModal.dataRegistro)}}</p>
+                            <p class="">{{registroModal.dataReg}}</p>
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Quantidade de horas totais:</h3>
-                            <p class="">{{registroModal.qtdHoras}}</p>
+                            <p class="">{{registroModal.quantidadeDeHoras}}</p>
                         </div>
                     </div>
                 </div>
@@ -136,17 +136,17 @@
                         </div>
                         <div class="mb-4">
                             <h4 class=" titulo fw-bold">Horas Semanais:</h4>
-                            <p class="">{{registroModal.hrMinSemana}}</p>
+                            <p class="">{{registroModal.horasMinimas}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data do registro:</h4>
-                            <p class="">{{this.formataDataParaMostrar(registroModal.dataRegistro)}}</p>
+                            <p class="">{{registroModal.dataReg}}</p>
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Quantidade de horas totais:</h3>
-                            <p class="">{{registroModal.qtdHoras}}</p>
+                            <p class="">{{registroModal.quantidadeDeHoras}}</p>
                         </div>
                     </div>
                 </div>
@@ -170,7 +170,6 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -179,97 +178,54 @@ export default {
   },
   data () {
     return {
-      registros: [],
-      participante: {},
-      id: {},
-      registroModal: '',
-      form: {
-        qtdHoras: '',
-        mesAvaliado: '',
-        semanaAvaliada: '',
-        dataRegistro: '',
-        hrMinSemana: ''
-      },
-      indiceModal: {}
-    } 
+      responseStatus: '',
+      registros: [
+        {
+          id: 1,
+          mesSemana: '1/1',
+          dataReg: '29/04/2021',
+          mesAvaliado: '1',
+          semanaAvaliada: '1',
+          horasMinimas: '30 Horas',
+          quantidadeDeHoras: '60 horas'
+        },
+        {
+          id: 2,
+          mesSemana: '2/3',
+          dataReg: '23/02/2021',
+          mesAvaliado: '2',
+          semanaAvaliada: '3',
+          horasMinimas: '30 Horas',
+          quantidadeDeHoras: '60 horas'
+        },
+        {
+          id: 3,
+          mesSemana: '2/1',
+          dataReg: '19/01/2021',
+          mesAvaliado: '2',
+          semanaAvaliada: '1',
+          horasMinimas: '30 Horas',
+          quantidadeDeHoras: '60 horas'
+        },
+        {
+          id: 4,
+          mesSemana: '3/2',
+          dataReg: '24/05/2021',
+          mesAvaliado: '3',
+          semanaAvaliada: '2',
+          horasMinimas: '30 Horas',
+          quantidadeDeHoras: '60 horas'
+        }
+      ],
+      registroModal: ''
+    }
   },
-  
   beforeMount () {
-    this.id = this.pegaDadosUrl().id
-    this.getParticipanteNome()
-    this.getAlura()
     Funcoes.verificaToken()
   },
-
   methods: {
-    getParticipanteNome () {
-      http
-        .get(`gerencial/${this.id}`)
-        .then((response) => {
-          this.participante = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    
-    postForm () {
-      let campos = document.querySelectorAll('input')
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0) {
-        http
-          .post(`alura/novo/${this.id}`, this.form)
-          .then((response) => {
-            this.getAlura()
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      } else {
-        alert('Por favor, preencha todos os campos!')
-      }
-    },
-
-    getAlura () {
-      http
-        .get(`alura/${this.id}`)
-        .then((response) => {
-          this.registros = response.data
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-
-    formataDataParaMostrar (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
-      return dataFormatada
-    },
-
-    pegaDadosUrl () {
-      var query = location.search.slice(1)
-      var partes = query.split('&')
-      var data = {}
-
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=')
-        var chave = chaveValor[0]
-        var valor = chaveValor[1]
-        data[chave] = valor
-      })
-
-      return data
-    },
-    carregaModal (registro, index) {
+    carregaModal (registro) {
       this.registroModal = registro
-      this.indiceModal = index
     }
   }
 }
