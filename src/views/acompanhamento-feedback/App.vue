@@ -144,9 +144,9 @@ export default {
   },
   data () {
     return {
-      feedbacks: [],
-      feedbackModal: '',
-      participante: {},
+      feedbacks: [], // Array de feedback, que é populado com o getFeedback.
+      feedbackModal: '', // objeto que é usado para popular os campos do modal.
+      participante: {}, // objeto para salvar as informações do participante.
       form: {
         data: '',
         anotacoes: '',
@@ -175,7 +175,7 @@ export default {
           console.log(error)
         })
     },
-
+    // metodo para retornar os feedbacks.
     getFeedback () {
       http
         .get(`feedback/${this.id}`)
@@ -186,7 +186,7 @@ export default {
           console.log(error)
         })
     },
-
+    //  metodo para enviar o post com o form
     postForm () {
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
@@ -210,7 +210,6 @@ export default {
             }
           })
           .then((response) => {
-            this.form = {}
             this.getFeedback()
             document.querySelector('#aguarde').classList.add('none')
             document.querySelector('#enviado').classList.remove('none')
@@ -225,7 +224,7 @@ export default {
         document.querySelector('#preencha').classList.remove('none')
       }
     }, 
-
+    // método para deletar o o feedback.
     deleteById () {
       http  
         .delete(`/feedback/deletar/${this.feedbackModal.id}`)
@@ -236,7 +235,7 @@ export default {
           console.log(error)
         })
     },
-
+    // endereço da API para fazer donwload  do arquivo
     download () {
       location.href = `http://localhost:8081/api/feedback/download/${this.feedbackModal.id}`
     },
@@ -255,12 +254,12 @@ export default {
 
       return data
     },
-
+    // função para carregar o modal com as informações seleciondas
     carregaModal (feedback, index) {
       this.feedbackModal = feedback
       this.indiceModal = index
     },
-
+    // formata data para exibir corretamente no formato dd/MM/yyyy
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`

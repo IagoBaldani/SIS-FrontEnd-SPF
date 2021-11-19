@@ -181,30 +181,31 @@ export default {
   },
   data () {
     return {
-      registros: [],
-      participante: {},
-      id: {},
-      registroModal: '',
-      form: {
+      registros: [], // Lista de registro obtidos para popular a tabela.
+      participante: {}, // Informações do participante
+      id: {}, // cpf do participante
+      registroModal: '', // é usado para mostrar o registro especifico que foi escolhido da tabela no modal.
+      form: { // Objeto formulário para ser enviado ao Back-end.
         qtdHoras: '',
         mesAvaliado: '',
         semanaAvaliada: '',
         dataRegistro: '',
         hrMinSemana: ''
       },
-      indiceModal: {}
+      indiceModal: {} // função para gerar os indices no modal de acordo com a posição na tabela.
     } 
   },
   
-  beforeMount () {
+  beforeMount () { 
     this.id = this.pegaDadosUrl().id
     this.getParticipanteNome()
     this.getAlura()
     Funcoes.verificaToken()
   },
-
+  
   methods: {
-    getParticipanteNome () {
+    // faz o get no back-end e retorna as informações do participante 
+    getParticipanteNome () { 
       http
         .get(`gerencial/${this.id}`)
         .then((response) => {
@@ -214,7 +215,7 @@ export default {
           console.log(error)
         })
     },
-    
+    // requisição do tipo post para enviar as informações obtidas do formulário
     postForm () { 
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
@@ -229,7 +230,6 @@ export default {
         http
           .post(`alura/novo/${this.id}`, this.form)
           .then((response) => {
-            this.form = {}
             this.getAlura()
             document.querySelector('#aguarde').classList.add('none')
             document.querySelector('#enviado').classList.remove('none')
@@ -244,7 +244,7 @@ export default {
         document.querySelector('#preencha').classList.remove('none')
       }
     },
-
+    // Requisição para deletar um registro.
     deleteById () {
       http
         .delete(`alura/deletar/${this.registroModal.codigoAlura}`)
@@ -255,6 +255,7 @@ export default {
           console.log(error)
         })
     },
+    // requisição do tipo get para popular a tabela com os dados.
     getAlura () {
       http
         .get(`alura/${this.id}`)
@@ -272,7 +273,7 @@ export default {
 
       return dataFormatada
     },
-
+    // função para pegar os dados da URL
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -287,6 +288,7 @@ export default {
 
       return data
     },
+    // abre modal com as informações corretas e com o indice correspondente.
     carregaModal (registro, index) {
       this.registroModal = registro
       this.indiceModal = index

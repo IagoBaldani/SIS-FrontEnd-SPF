@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row justify-content-evenly mt-5 mb-3">
                 <div class="titulo col-lg-4">
-                    <h3 class="fw-bold" @click="teste()">Registrar ciclo final:</h3>
+                    <h3 class="fw-bold" @click="validaCampos()">Registrar ciclo final:</h3>
                 </div>
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
@@ -63,7 +63,7 @@
             <div class="row justify-content-evenly">
                 <div class="col-lg-4"></div>
                 <div class="col-lg-7 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-50" @click="teste()">REGISTRAR</button>
+                    <button type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-50" @click="validaCampos()">REGISTRAR</button>
                     <p id="abreModal" data-bs-toggle="modal" data-bs-target="#modalUltimoCiclo" class="none"></p>
                 </div>
             </div>
@@ -132,8 +132,8 @@ export default {
   },
   data () {
     return {
-      participante: {},
-
+      participante: {}, // objeto para receber as informações do participante.
+      
       form: {
         resultado: '',
         dataAlteracao: '',
@@ -163,7 +163,7 @@ export default {
           console.log(error)
         })
     },
-
+    // método para enviar o formdata com os campos do formulário e com o arquivo
     postForm () {
       var formData = new FormData()
       var comprovanteRematricula = document.getElementById('file').files[0] 
@@ -179,7 +179,6 @@ export default {
           }
         })
         .then((response) => {
-          this.form = {}
         })
         .catch((error) => {
           console.log(error)
@@ -197,7 +196,7 @@ export default {
 
       return dataFormatada
     },
-    
+    // é usada para capturar as informações na url para ser passada nas requisições
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -212,7 +211,7 @@ export default {
 
       return data
     },
-
+    // captura o arquivo no input
     formatoUpload () {
       var texto = document.querySelector('#nome-arquivo')
       let file = document.getElementById('file')
@@ -222,12 +221,12 @@ export default {
         texto.textContent = file.files[0].name
       }
     },
-
+    //  Endereço da API para fazer download do arquivo
     download () {
       location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
     },
-
-    teste () {
+    // funcão que valida os campos, caso estejam vazios uma notificação é exibida.
+    validaCampos () {
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
       campos.forEach(element => {

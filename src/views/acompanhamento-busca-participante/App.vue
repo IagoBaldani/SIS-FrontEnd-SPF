@@ -69,6 +69,7 @@ export default {
   },
 
   methods: {
+    // retorna os participantes ativos
     getParticipantes () {
       http
         .get('busca/participantes')
@@ -79,7 +80,7 @@ export default {
           console.log(error)
         })
     },
-
+    // é usada para retornar as formações ativas.
     getFormacoes () {
       http
         .get('busca/programa')
@@ -90,7 +91,7 @@ export default {
           console.log(error)
         })
     },
-
+    // é usada para pegar os dados da URl para serem usados nas requisições GET.
     pegaDados () {
       let linhas = document.querySelectorAll('#participante')
       let arrayDadosDasLinhas = []
@@ -125,6 +126,7 @@ export default {
       console.log(arrayBoolLinhas)
       return arrayBoolLinhas
     },
+    // Deixa invisível os participantes que não foram selecionados. 
     mudaVisibilidade (arrayBoolLinhas, linhas) {
       let i
       var contador = 0
@@ -146,6 +148,7 @@ export default {
         aviso.style.display = 'none'
       }
     },
+    // Filtra os participantes de acordo com a formação
     filtraDados () {
       const dadosLinhas = this.pegaDados()
 

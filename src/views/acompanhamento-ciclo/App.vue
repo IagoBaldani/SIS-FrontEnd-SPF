@@ -145,13 +145,13 @@ export default {
   },
   data () {
     return {
-      conclusoes: [],
-      cargos: [],
-      conclusaoModal: '',
-      id: {},
-      participante: {},
+      conclusoes: [], // Array de conclusão, usado para receber as informações do getConclusoes 
+      cargos: [], //  popula o comboBox para selecionar o cargo do participante
+      conclusaoModal: '', // objeto usado para popular o modal com as informações selecionadas
+      id: {}, 
+      participante: {}, // objeto para salvar as informações do participante.
 
-      form: {
+      form: { // objeto para usar no Body para enviar as requisições. 
         resultado: '',
         dataAlteracao: '',
         cargo: '',
@@ -170,6 +170,7 @@ export default {
   },
 
   methods: {
+    // faz o get no back-end para rertornar as informações do participante.
     getParticipanteNome () {
       http
         .get(`gerencial/${this.id}`)
@@ -180,7 +181,7 @@ export default {
           console.log(error)
         })
     },
-
+    // retorna os cargos adicionados no baanco de dados.
     getCargos () {
       http 
         .get('remuneracao/lista')
@@ -191,7 +192,7 @@ export default {
           console.log(error)
         })
     },
-
+    // retorna os ciclos anteriores do participante caso exista
     getCiclo () {
       http
         .get(`ciclo/${this.id}`)
@@ -202,7 +203,7 @@ export default {
           console.log(error)
         })
     },
-
+    // faz a requisição do tipo POST e envia o FormData no body.
     postForm () {
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
@@ -223,11 +224,10 @@ export default {
         http
           .post(`ciclo/registrocicloprogressivo/${this.id}`, formData, {
             headers: {
-              'Content-Type': 'multipart/form-data' 
+              'Content-Type': 'multipart/form-data' // cabeçalho especifico para formulário que contém arquivos no body.
             }
           })
           .then((response) => {
-            this.form = {}
             this.getCiclo()
             document.querySelector('#aguarde').classList.add('none')
             document.querySelector('#enviado').classList.remove('none')
@@ -242,19 +242,19 @@ export default {
         document.querySelector('#preencha').classList.remove('none')
       }    
     },
-
+    // carrega o modal com as informações dos ciclos, e cria a tabela com os indices corretos.
     carregaModal (conclusao, index) {
       this.conclusaoModal = conclusao
       this.indiceModal = index
     },
-    
+    // formata a data para exibir corretamente no formato dd/MM/yyyy
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
 
       return dataFormatada
     },
-
+    // é usada para capturar as informações na url para ser passada nas requisições
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -269,7 +269,7 @@ export default {
 
       return data
     },
-
+    // captura o arquivo no input 
     formatoUpload () {
       var texto = document.querySelector('#nome-arquivo')
       let file = document.getElementById('file')
@@ -279,7 +279,7 @@ export default {
         texto.textContent = file.files[0].name
       }
     },
-
+    // Endereço da API para fazer download do arquivo.
     download () {
       location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
     }

@@ -50,7 +50,7 @@
                         </div>
 
                         <button type="button" 
-                            class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100" @click="verificaForm()">REGISTRAR</button>
+                            class="btn btn-danger sis-red-btn mt-3 mb-1 fw-bold fs-5 w-100" @click="verificaForm()">REGISTRAR</button>
                         <p id="verificaCampos" class="none" @click="postForm()"></p>
                         <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
                         <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
@@ -353,12 +353,12 @@ export default {
   },
   data () {
     return {
-      avaliacoes: [],
-      avaliacaoModal: '',
-      participante: {},
+      avaliacoes: [], // Array de avaliações, que é populado com o getAvaliações.
+      avaliacaoModal: '', // objeto que é usado para popular os campos do modal.
+      participante: {}, // objeto para salvar as informações do participante.
       id: {},
-      media: {},
-      form: {
+      media: {}, // media das notas do modal, que origina a nota Comportamental.
+      form: { // objeto para usar no Body para enviar as requisições. 
         notaTecnica: '',
         notaPraticasAgeis: '',
         notaLideranca: '',
@@ -380,8 +380,8 @@ export default {
           sociabilidade: ''
         }
       },
-      indiceModal: {},
-      modalDesempenho: {}
+      indiceModal: {}, // função para gerar os indices no modal de acordo com a posição na tabela.
+      modalDesempenho: {} // // é usado para mostrar o registro especifico que foi escolhido da tabela no modal.
     }
   },
 
@@ -398,7 +398,7 @@ export default {
       this.indiceModal = index
       this.modalDesempenho = this.avaliacaoModal.notaComportamental
     },
-
+    // é usada para capturar as informações na url para ser passada nas requisições
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -413,7 +413,7 @@ export default {
 
       return data
     },
-
+    // faz o get no back-end para rertornar as informações do participante.
     getParticipanteNome () {
       http
         .get(`gerencial/${this.id}`)
@@ -425,7 +425,7 @@ export default {
           console.log(error)
         })
     },
-
+    // faz o get no back-end para exibir as notas anteriores do participante.
     getAvaliacao () {
       http
         .get(`avaliacao/${this.id}`)
@@ -437,12 +437,11 @@ export default {
           console.log(error)
         })
     },
-
+    // requisição do tipo post para enviar as informações obtidas do formulário
     postForm () {
       http
         .post(`avaliacao/novo/${this.id}`, this.form)
         .then((response) => {
-          this.form = {}
           this.getAvaliacao()
           document.querySelector('#aguarde').classList.add('none')
           document.querySelector('#enviado').classList.remove('none')
@@ -454,7 +453,7 @@ export default {
           console.log(error)
         })
     },
-
+    // Requisição para deletar um registro.
     deleteById () {
       http
         .delete(`avaliacao/deletar/${this.avaliacaoModal.id}`)
@@ -465,6 +464,7 @@ export default {
           console.log(error)
         })
     },
+    // função para gerar a média dos campos do modal, para exibir a nota comportamental no formulario
     getMedia () {
       this.media = (this.form.avaliacaoDesempenhoForm.qualidade + 
         this.form.avaliacaoDesempenhoForm.adaptacao +
@@ -480,7 +480,7 @@ export default {
         this.form.avaliacaoDesempenhoForm.sociabilidade) / 12
       return this.media
     },
-
+    // verifica os campos do formulário, caso tenha algum vazio um paragrafo aparece para notificar.  
     verificaFormModal () {
       let campos = document.querySelectorAll('#modalComportamental input , #modalComportamental select') 
       let campoVazio = 0
@@ -497,7 +497,7 @@ export default {
         document.querySelector('#preenchaModal').classList.remove('none')
       }  
     },
-
+    // função para ver se existe campo vazio no formulário
     verificaForm () {
       let campos = document.querySelectorAll('input') 
       let campoVazio = 0
@@ -509,6 +509,7 @@ export default {
       if (campoVazio == 0) {
         document.querySelector('#preencha').classList.add('none')
         document.getElementById('verificaCampos').click()
+        console.log(this.form.avaliacaoDesempenhoForm)
       } else {
         document.querySelector('#preencha').classList.remove('none')
       }  
