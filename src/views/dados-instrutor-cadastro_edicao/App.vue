@@ -14,19 +14,19 @@
                 <div class="col-xl-4">
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Nome</label>
-                            <input class="form-control" id="inputNome"  placeholder="Nome" v-model="instrutor.nome" type="text" />
+                            <input class="form-control" id="inputNome"  placeholder="Nome" v-model="instrutorForm.nome" type="text" />
                         </div>
                        <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Contato</label>
-                            <input class="form-control" id="inputTelefone" placeholder="(xx)xxxxx-xxxx" v-model="instrutor.telefone" type="tel" />
+                            <input class="form-control" id="inputTelefone" placeholder="(xx)xxxxx-xxxx" v-model="instrutorForm.telefone" type="tel" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
-                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" v-model="instrutor.cpf" type="text" />
+                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" v-model="instrutorForm.cpf" type="text" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
-                            <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutor.email" type="email" />
+                            <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutorForm.email" type="email" />
                         </div>
                 </div>
                 <div class="col-xl-4">
@@ -40,13 +40,11 @@
                    <div for="exampleModal" class="confirmar">
                      <div
                         type="button"
-                        @onclick="acao()"
-                        @click.prevent="enviarDados()"
                         class="bt"
                         data-bs-toggle="modal"
                         data-bs-target="#exampleModal"
                       >
-                    <button type="button" class="btn submit form-control" @click="enviarDados">
+                    <button type="button" class="btn submit form-control" >
                         CONFIRMAR
                     </button>
                      </div>
@@ -90,7 +88,7 @@
           </div>
           <div class="modal-footer border-0 justify-content-around">
             <div>
-              <button type="button" class="btn submit-modal" @click="processaRequisicoes">CONFIRMAR</button>
+              <button type="button" class="btn submit-modal" @click="postForm">CONFIRMAR</button>
             </div>
             <div>
               <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
@@ -139,13 +137,6 @@ export default {
       this.instrutorForm.cpf = document.querySelector('#inputCpf').value
       this.instrutorForm.telefone = document.querySelector('#inputTelefone').value
       this.instrutorForm.email = document.querySelector('#inputEmail').value
-      http.post('instrutor', this.instrutorForm)
-        .then(res => {
-          window.location.href = 'http://localhost:8080/dados-instrutor-busca'
-        })
-        .catch(erro => {
-          alert(`Erro: ${erro}`)
-        })
     },
     getInstrutor (cpf) {
       http.get(`instrutor/${cpf}`)
@@ -169,9 +160,8 @@ export default {
       })
 
       return data
-    }
-  },
-  processaRequisicoes () {
+    },
+    processaRequisicoes () {
     const dados = this.pegaDadosUrl()
     let cpf = dados.cpf
     let tipo = dados.tipo
@@ -195,8 +185,18 @@ export default {
           alert(error)
         })
     }
+  },
+  postForm () {
+    http.post('instrutor', this.instrutorForm)
+      .then(res => {
+        window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+      })
+      .catch(erro => {
+        alert(`Erro: ${erro}`)
+      })
+   }
   }
-}
+  
 </script>
 
 <style>
