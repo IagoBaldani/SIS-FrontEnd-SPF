@@ -206,7 +206,7 @@ export default {
   methods: {
     getParticipanteNome () {
       http
-        .get(`gerencial/${this.id}`)
+        .get(`participante/${this.id}`)
         .then((response) => {
           this.participante = response.data
         })
