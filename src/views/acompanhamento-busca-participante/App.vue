@@ -11,15 +11,17 @@
             </div>
             <!--ComboBox de Programa de formação-->
             <div class="row justify-content-evenly mb-5">
-                <div class="col-lg-4">
+                <form class="col-lg-4 d-flex flex-column justify-content-between">
                     <div class="comboBox w-100" id="programas">
-                        <select class="form-select" id="filtro-programa">
+                        <select class="form-select" id="filtro-programa" v-model="programaSelecionado">
                             <option value="0" class="programa-form" selected disabled>Programa de formação</option>
                             <option :value="''">Nenhum</option>
                             <option :value="programa.nome" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
                         </select>
                     </div>
-                </div>
+                    <button @click="filtraDados()" type="button" value="BUSCAR" class="btn w-100 fs-5 mt-3 btn-primary botao">BUSCAR</button>
+                </form>
+
                 <!--scroll(barra de rolagem) e a tabela de busca de participantes-->
                 <div class="col-lg-7" id="participantes">
                     <div class="aviso">
@@ -27,26 +29,18 @@
                         <button @click="recarregaLista()" class="mt-3 form-control recarregar">RECARREGAR LISTA</button>
                     </div>
                     <div class="scroll-tabela">
-                        <table class="table table-bordered tabela">
+                        <table class="table mb-0 table-bordered tabela">
                             <tbody>
-                                <tr id="participante" v-for="participante in participantes" v-bind:key="participante">
-                                    <th scope="row" class="titulo" id="info-id">{{participante.id}}</th>
+                                <tr id="participante" v-for="(participante, index) in participantes" v-bind:key="participante">
+                                    <th scope="row" class="titulo" id="info-id">{{++index}}</th>
                                     <td id="info-nome">{{participante.nome}}</td>
                                     <td id="info-programa">{{participante.programa}}</td>
-                                    <td id="logoBoneco"><a href="../acompanhamento-gerencial"><img src="@/assets/imgs/account_circle_white_24dp.svg"></a></td>
+                                    <td id="logoBoneco"><a :href="'../acompanhamento-gerencial?id=' + participante.cpf"><img src="@/assets/imgs/account_circle_white_24dp.svg"></a></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-
-            <!--Botão de Buscar-->
-            <div class="row justify-content-evenly">
-                <div class="col-lg-4">
-                    <button @click="filtraDados()" type="button" value="BUSCAR" class="btn w-100 fs-5 btn-primary botao">BUSCAR</button>
-                </div>
-                <div class="col-lg-7"></div>
             </div>
         </div>
     </main>
@@ -55,6 +49,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -63,65 +58,16 @@ export default {
   },
   data () {
     return {
-      responseStatus: '',
-      participantes: [
-        {
-          id: 1,
-          nome: 'Felipe',
-          programa: 'Java'
-        },
-
-        {
-          id: 2,
-          nome: 'Iago',
-          programa: 'Mainframe'
-        },
-
-        {
-          id: 3,
-          nome: 'Rubens',
-          programa: 'Java'
-        },
-
-        {
-          id: 4,
-          nome: 'Lucas',
-          programa: 'Java'
-        },
-
-        {
-          id: 5,
-          nome: 'Melo',
-          programa: 'Mainframe'
-        },
-
-        {
-          id: 6,
-          nome: 'Gabriel',
-          programa: 'Java'
-        }
-      ],
-      programas: [
-        {
-          id: 1,
-          nome: 'Java'
-        },
-
-        {
-          id: 2,
-          nome: 'Mainframe'
-        },
-
-        {
-          id: 3,
-          nome: '.Net'
-        }
-      ]
+      participantes: [],
+      programas: []
     }
   },
   beforeMount () {
+    this.getParticipantes()
+    this.getFormacoes()
     Funcoes.verificaToken()
   },
+
   methods: {
     // retorna os participantes ativos
     getParticipantes () {
@@ -154,13 +100,11 @@ export default {
         let dadosLinha = []
         let nome = linha.querySelector('#info-nome').textContent
 
-        let programa = this.trataPrograma(linha)
+        let programa = linha.querySelector('#info-programa').textContent
 
         dadosLinha.push(nome, programa)
         arrayDadosDasLinhas.push(dadosLinha)
       })
-
-      console.log(arrayDadosDasLinhas)
       return arrayDadosDasLinhas
     },
     verifica (dadosLinhas, programaProcurado) {

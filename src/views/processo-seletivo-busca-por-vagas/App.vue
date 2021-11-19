@@ -10,10 +10,10 @@
         <div class="col-lg-6"></div>
       </div>
       <div class="row justify-content-evenly">
-        <div class="col-lg-5">
+        <div class="col-lg-6">
           <!-- Input para filtragem na tabela -->
           <div class="search-input">
-            <div class="col-xl-9">
+            <div class="col-xl-8">
               <input
                 type="text"
                 class="form-control mb-3"
@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-7">
+        <div class="col-lg-6">
           <!-- Tabela dinâmica atualizada automaticamente usando o VueJS -->
           <div class="aviso mb-10 invisivel">
             <h4 class="titulo fw-bold">
@@ -41,7 +41,7 @@
             <!--  -->
             <table
               class="
-                table table-bordered 
+                table table-bordered
               "
             >
               <tbody class="processosSeletivos">
@@ -102,135 +102,143 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
+import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-export default {
-  name: "App",
-  components: {
-    Header,
-  },
+import Cookie from 'js-cookie'
 
-  data() {
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
+
+export default {
+  name: 'App',
+  components: {
+    Header
+  },
+  data () {
     return {
+      responseStatus: '',
       processosSeletivos: [
         {
           id: 1,
-          processo: "Processo Seletivo Java",
+          processo: 'Processo Seletivo Java',
           status: 'EM_ANDAMENTO'
         },
         {
           id: 2,
-          processo: "Processo Seletivo Python",
+          processo: 'Processo Seletivo Python',
           status: 'FINALIZADO'
         },
         {
           id: 3,
-          processo: "Processo Seletivo Spring",
+          processo: 'Processo Seletivo Spring',
           status: 'FINALIZADO'
         },
         {
           id: 4,
-          processo: "Processo Seletivo Mainframe",
+          processo: 'Processo Seletivo Mainframe',
           status: 'FINALIZADO'
         },
         {
           id: 5,
-          processo: "Processo Seletivo Mobile",
+          processo: 'Processo Seletivo Mobile',
           status: 'EM_ANDAMENTO'
         },
         {
           id: 6,
-          processo: "Processo Seletivo JavaScript",
+          processo: 'Processo Seletivo JavaScript',
           status: 'FINALIZADO'
         },
         {
           id: 7,
-          processo: "Processo Seletivo React Native",
+          processo: 'Processo Seletivo React Native',
           status: 'EM_ANDAMENTO'
         },
         {
           id: 8,
-          processo: "Processo Seletivo COBOL",
+          processo: 'Processo Seletivo COBOL',
           status: 'EM_ANDAMENTO'
         },
         {
           id: 9,
-          processo: "Processo Seletivo React Native",
+          processo: 'Processo Seletivo React Native',
           status: 'EM_ANDAMENTO'
         },
         {
           id: 10,
-          processo: "Processo Seletivo React Native",
+          processo: 'Processo Seletivo React Native',
           status: 'FINALIZADO'
         },
         {
           id: 11,
-          processo: "Processo Seletivo React Native",
+          processo: 'Processo Seletivo React Native',
           status: 'EM_ANDAMENTO'
         },
         {
           id: 12,
-          processo: "Processo Seletivo React Native",
+          processo: 'Processo Seletivo React Native',
           status: 'FINALIZADO'
         },
         {
           id: 13,
-          processo: "Processo Seletivo React Native",
+          processo: 'Processo Seletivo React Native',
           status: 'EM_ANDAMENTO'
         }
-      ],
-    };
+      ]
+    }
   },
   beforeMount () {
     Funcoes.verificaToken()
   },
   methods: {
-    filtraDados() {
-      var aviso = document.querySelector(".aviso");
-      aviso.classList.add("invisivel");
-      var campoFiltro = document.querySelector("#filtrar-tabela");
+    filtraDados () {
+      var aviso = document.querySelector('.aviso')
+      aviso.classList.add('invisivel')
+      var campoFiltro = document.querySelector('#filtrar-tabela')
 
-      var listaDeValores = [];
+      var listaDeValores = []
 
-      console.log(campoFiltro.value);
-      var processos = document.querySelectorAll(".processo");
+      console.log(campoFiltro.value)
+      var processos = document.querySelectorAll('.processo')
 
       if (campoFiltro.value.length >= 0) {
         for (var i = 0; i < processos.length; i++) {
-          var processo = processos[i];
-          var tdNome = processo.querySelector(".info-nome");
-          var nome = tdNome.textContent;
+          var processo = processos[i]
+          var tdNome = processo.querySelector('.info-nome')
+          var nome = tdNome.textContent
 
-          var expressao = new RegExp(campoFiltro.value, "i");
+          var expressao = new RegExp(campoFiltro.value, 'i')
 
           if (!expressao.test(nome)) {
-            processo.classList.add("invisivel");
-            aviso.classList.remove("invisivel");
+            processo.classList.add('invisivel')
+            aviso.classList.remove('invisivel')
           } else {
-            processo.classList.remove("invisivel");
-            aviso.classList.add("invisivel");
+            processo.classList.remove('invisivel')
+            aviso.classList.add('invisivel')
 
-            listaDeValores.push(i);
+            listaDeValores.push(i)
           }
 
-          console.log(listaDeValores);
+          console.log(listaDeValores)
 
           if (!listaDeValores.length == 0) {
-            aviso.classList.add("invisivel");
+            aviso.classList.add('invisivel')
           } else {
-            aviso.classList.remove("invisivel");
+            aviso.classList.remove('invisivel')
           }
         }
       } else {
         for (var j = 0; j < processos.length; j++) {
-          var processo2 = processos[j];
-          processo2.classList.remove("invisivel");
-          aviso.classList.remove("invisivel");
+          var processo2 = processos[j]
+          processo2.classList.remove('invisivel')
+          aviso.classList.remove('invisivel')
         }
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>
@@ -354,7 +362,6 @@ height: 59vh;
   color: var(--color-red-progress) !important;
 }
 
-
 /* Button do rodapé */
 
 .button-footer {
@@ -412,6 +419,5 @@ height: 59vh;
 .recarregar:hover {
   background-color: #141863 !important;
 }
-
 
 </style>

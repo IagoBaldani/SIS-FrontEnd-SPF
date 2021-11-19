@@ -1,48 +1,46 @@
 <template>
   <Header />
   <main>
-    <div id="relatorio">
-      <!-- divisão criada para titulo e cards -->
-      <div class="titulo">
-          <h2>Relatorio - Conclusões:</h2>
-          <!-- h2 é o titulo da tela -->
-          <h3>Programa de formação selecionado: <span class="programaSelecionado">{{relatorio.programadeformacao}}</span></h3>
-          <!-- h3 e h4 ficam juntos, sendo o programa selecionado-->
-          <h5>Turma:</h5>
-          <h6 class="turmaSelecionado">{{relatorio.turma}}</h6>
-          <!-- h5 e h6 devem ficar juntos, sendo a turma selecionada -->
-        </div>
+    <!-- divisão criada para titulo e cards -->
+    <div class="titulo">
+        <h2>Relatorio - Conclusões:</h2>
+        <!-- h2 é o titulo da tela -->
+        <h3>Programa de formação selecionado: <span class="programaSelecionado">Java</span></h3>
+        <!-- h3 e h4 ficam juntos, sendo o programa selecionado-->
+        <h5>Turma:</h5>
+        <h6 class="turmaSelecionado">Java 01</h6>
+        <!-- h5 e h6 devem ficar juntos, sendo a turma selecionada -->
+      </div>
 
-      <div class="container-fluid">
-        <!-- cards criados -->
-        <div class="cards partAtivos">
-          <div class="partAtiv">
-            <!-- card de participantes ativos -->
-            <h2 id="part-ativos">{{relatorio.participantesAtivos}}</h2>
-            <p class="descricao">
-              Participantes ativos em todos os programas de formação.
-            </p>
-          </div>
-          <div class="partEfetivados ">
-            <!-- card de participantes efetivados -->
-            <h2 id="part-efetivados">{{relatorio.participantesEfetivados}}</h2>
-            <p class="descricao">Participantes efetivados na empresa.</p>
-          </div>
-          <div class="dataConclusão ">
-            <!-- card da data de conclusão -->
-            <h2 id="data-conclusão">{{relatorio.dataConclusao}}</h2>
-            <p class="descricao">
-              Data do ultimo ciclo de conclusões (não efetivados).
-            </p>
-          </div>
+    <div class="container-fluid">
+      <!-- cards criados -->
+      <div class="cards partAtivos">
+        <div class="partAtiv">
+          <!-- card de participantes ativos -->
+          <h2 id="part-ativos">35</h2>
+          <p class="descricao">
+            Participantes ativos em todos os programas de formação.
+          </p>
         </div>
-        <!-- divisão de botões -->
-        <div class="buttons">
-          <input v-on:click="downloadRelatorioPDF()" type="button" value="GERAR PDF" class="gerar-pdf" />
-          <!-- botão para gerar pdf da pag -->
-          <input v-on:click="downloadRelatorioXLSX()" type="button" value="GERAR XLSX" class="gerar-xlsx" />
-          <!-- botão para gerar xlsx da pag -->
+        <div class="partEfetivados ">
+          <!-- card de participantes efetivados -->
+          <h2 id="part-efetivados">14</h2>
+          <p class="descricao">Participantes efetivados na empresa.</p>
         </div>
+        <div class="dataConclusão ">
+          <!-- card da data de conclusão -->
+          <h2 id="data-conclusão">20/12/2021</h2>
+          <p class="descricao">
+            Data do ultimo ciclo de conclusões (não efetivados).
+          </p>
+        </div>
+      </div>
+      <!-- divisão de botões -->
+      <div class="buttons">
+        <input type="button" value="GERAR PDF" class="gerar-pdf" />
+        <!-- botão para gerar pdf da pag -->
+        <input type="button" value="GERAR XLSX" class="gerar-xlsx" />
+        <!-- botão para gerar xlsx da pag -->
       </div>
     </div>
   </main>
@@ -50,58 +48,28 @@
 
 <script>
 import Header from '@/components/Header.vue'
+<<<<<<< HEAD
 import { http } from '../../services/Config'
 import  Funcoes from '../../services/Funcoes'
+=======
+import Funcoes from '../../services/Funcoes'
+import { http } from '../../services/Config'
+>>>>>>> parent of cf8eeac (Merge branch 'RelatoriosTelas' of https://github.com/IagoBaldani/SIS-FrontEnd-SPF into lucasMarra)
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Header,
+    Header
   },
-  data(){
-    return{
-      relatorio: {},
-      parametrosUrl: {}
+  data () {
+    return {
+      responseStatus: ''
     }
   },
-  beforeMount(){
-    Funcoes.verificaToken();
-  },
-
-  created(){
-    this.getParams();
-    this.getInfo();
-  },
-  methods: {
-
-   getParams() {
-      var query = location.search.slice(1);
-      var partes = query.split('&');
-      var data = {};
-
-       partes.forEach(function (parte) {
-        var chaveValor = parte.split('=');
-        var chave = chaveValor[0];
-        var valor = chaveValor[1];
-        data[chave] = valor;
-      });
-      this.parametrosUrl = data;
-    },
-
-    getInfo(){
-      http.get('conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/escopo=' + this.parametrosUrl.escopo)
-      .then(response => this.relatorio = response.data)
-    },
-
-    downloadRelatorioPDF(){
-      location.href = 'http://localhost:8081/api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
-    },
-
-    downloadRelatorioXLSX(){
-      location.href = 'http://localhost:8081/api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
-    }
+  beforeMount () {
+    Funcoes.verificaToken()
   }
-};
+}
 </script>
 
 <style>
@@ -184,10 +152,11 @@ body {
 .dataConclusão {
   width: 28%;
   padding: 0rem 1rem;
+  background-color: #FFF;
   border: 1px solid #CCC;
   border-radius: 5px;
   box-shadow: 4px 4px 4px #ccc;
-} 
+}
 
 /* alinhando conteudo de participantes ativos no programa */
 .partAtivos p {
@@ -293,11 +262,15 @@ body {
 
 /* Reponsividade da tela --------------------------------------*/
 
-@media (min-width: 1024px) {
+@media (max-width: 1024px) {
   .partAtiv,.partEfetivados,
   .dataConclusão {
-    max-width: 28%;
+    min-width: 28%;
   }
+
+  #data-conclusão {
+     font-size: 37px;
+   }
 }
 
 @media (max-width: 768px) {
@@ -308,11 +281,11 @@ body {
   }
 
   #part-ativos,#part-efetivados {
-    font-size: 50px;
+    font-size: 45px;
   }
 
    #data-conclusão {
-     font-size: 40px;
+     font-size: 35px;
    }
 
   .buttons {
@@ -325,9 +298,28 @@ body {
    .titulo h5, .titulo h6 {
     font-size: 20px;
   }
+
+  main .descricao {
+    font-size: 15px;
+  }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 600px) {
+  .partAtivos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .partAtiv,.partEfetivados,
+  .dataConclusão {
+    width: 80%;
+    margin-bottom: 1rem;
+  }
+
+}
+
+@media (max-width: 420px) {
   .partAtivos {
     display: flex;
     flex-direction: column;
@@ -335,8 +327,8 @@ body {
 
   .partAtiv,.partEfetivados,
   .dataConclusão {
-    width: 100%;
-    margin-bottom: 1rem; 
+    width: 80%;
+    margin-bottom: 1rem;
   }
 
   .buttons {
@@ -344,7 +336,6 @@ body {
     justify-content: space-evenly;
     margin-top: 4rem;
   }
-
 
   .gerar-pdf, .gerar-xlsx {
     min-width: 45%;

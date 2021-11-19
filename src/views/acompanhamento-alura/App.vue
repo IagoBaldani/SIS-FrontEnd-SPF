@@ -10,7 +10,7 @@
                     <div class="col-lg-7 d-flex justify-content-center align-items-center">
                         <div class="d-block justify-content-center">
                             <h3 class="fw-bold text-center titulo">Participante selecionado:</h3>
-                            <h4 class="fw-bold grey-font text-center nome-participante">João da Silva Almeida</h4>
+                            <h4 class="fw-bold grey-font text-center nome-participante">{{participante.nome}}</h4>
                         </div>
                     </div>
                 </div>
@@ -20,23 +20,23 @@
                     <form>
                         <div class="mb-3">
                             <label for="qtdHoras" class="form-label fw-bold mb-0 titulo">Quantidade de Horas</label>
-                            <input name="qtdHoras" type="number" required class="form-control campo" placeholder="60">
+                            <input name="qtdHoras" v-model="form.qtdHoras" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="mAvaliado" class="form-label fw-bold mb-0 titulo">Mês avaliado</label>
-                            <input name="mAvaliado" type="number" required class="form-control campo" placeholder="1">
+                            <input name="mAvaliado" v-model="form.mesAvaliado" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="sAvaliada" class="form-label fw-bold mb-0 titulo">Semana avaliada</label>
-                            <input name="sAvaliada" type="number" required class="form-control campo" placeholder="1">
+                            <input name="sAvaliada"  v-model="form.semanaAvaliada" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="dtRegistro" class="form-label fw-bold mb-0 titulo">Data do Registro</label>
-                            <input name="dtRegistro" type="date" required class="form-control campo">
+                            <input name="dtRegistro"  v-model="form.dataRegistro" type="date" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="hMinima" class="form-label fw-bold mb-0 titulo">Horas mínimas semanais</label>
-                            <input name="hMinima" type="number" required class="form-control campo" placeholder="30">
+                            <input name="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
                         </div>
                         <button type="button" @click="postForm()" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
                         <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
@@ -55,11 +55,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="registro in registros" v-bind:key="registro">
-                                    <th scope="row" class=" text-center titulo" id="info-id">{{registro.id}}</th>
-                                    <td class="text-center campo-tabela">{{registro.mesSemana}}</td>
-                                    <td class="text-center campo-tabela">{{registro.dataReg}}</td>
-                                    <td @click="carregaModal(registro)"
+                                <tr v-for="(registro, index ) in registros" :key="registro"  >
+                                    <th scope="row" class=" text-center titulo" id="info-id">{{++index}}</th>
+                                    <td class="text-center campo-tabela">{{registro.mesAvaliado}}/{{registro.semanaAvaliada}}</td>
+                                    <td class="text-center campo-tabela">{{this.formataDataParaMostrar(registro.dataRegistro)}}</td>
+                                    <td @click="carregaModal(registro, index)"
                                         id="olho" class="td-button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"><img
@@ -78,7 +78,7 @@
             <div class="modal-content p-5 conteudoModal" >
                 <div class="row mb-5">
                     <div class="col">
-                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Registro do acompanhamento: {{registroModal.id}}</h2>
+                        <h2 class="modal-title fw-bold titulo" id="exampleModalLabel">Registro do acompanhamento: {{indiceModal}}</h2>
                     </div>
                 </div>
                 <div class="row mb-5">
@@ -93,17 +93,17 @@
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Horas Semanais:</h3>
-                            <p class="">{{registroModal.horasMinimas}}</p>
+                            <p class="">{{registroModal.hrMinSemana}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Data do registro:</h3>
-                            <p class="">{{registroModal.dataReg}}</p>
+                            <p class="">{{this.formataDataParaMostrar(registroModal.dataRegistro)}}</p>
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Quantidade de horas totais:</h3>
-                            <p class="">{{registroModal.quantidadeDeHoras}}</p>
+                            <p class="">{{registroModal.qtdHoras}}</p>
                         </div>
                     </div>
                 </div>
@@ -138,17 +138,17 @@
                         </div>
                         <div class="mb-4">
                             <h4 class=" titulo fw-bold">Horas Semanais:</h4>
-                            <p class="">{{registroModal.horasMinimas}}</p>
+                            <p class="">{{registroModal.hrMinSemana}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data do registro:</h4>
-                            <p class="">{{registroModal.dataReg}}</p>
+                            <p class="">{{this.formataDataParaMostrar(registroModal.dataRegistro)}}</p>
                         </div>
                         <div class="mb-4">
                             <h3 class="fw-bold titulo">Quantidade de horas totais:</h3>
-                            <p class="">{{registroModal.quantidadeDeHoras}}</p>
+                            <p class="">{{registroModal.qtdHoras}}</p>
                         </div>
                     </div>
                 </div>
@@ -172,6 +172,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -290,6 +291,7 @@ export default {
     // abre modal com as informações corretas e com o indice correspondente.
     carregaModal (registro, index) {
       this.registroModal = registro
+      this.indiceModal = index
     }
   }
 }

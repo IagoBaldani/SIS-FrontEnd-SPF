@@ -3,12 +3,12 @@
 
   <main>
 
-    <div class="container" id="relatorio">
+    <div class="container" id="relatorioInvestimento">
       <!-- Informações do programa de formação turma e programa selecionados -->
       <div class="relatorio-programa-selecionado">
         <h2 class="txtRelatorio">Relatório Investimento</h2>
-        <h2 class="txtFormacao">Programa de formação selecionado:<span class="buscaFormacao">{{relatorio.formacao}}</span></h2>
-        <h2 class="txtTurma">Turma: <span class="buscaTurma">{{relatorio.turma}}</span></h2>
+        <h2 class="txtFormacao">Programa de formação selecionado:<span class="buscaFormacao">Java</span></h2>
+        <h2 class="txtTurma">Turma: <span class="buscaTurma">Java</span></h2>
       </div>
 
       <!-- Cards Superiores da pagina ou antes do filtro -->
@@ -16,7 +16,7 @@
         <div class="card-left-superior" >
           <div class="card" style="height: auto; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-left" class="card-title" >R$ {{relatorio.investParticipantes}}</h3>
+              <h3 id="txt-saida-card-left" class="card-title" >{{relatorioParticipante}}</h3>
               <h6>Investimento em total com participantes</h6>
             </div>
           </div>
@@ -25,7 +25,7 @@
         <div class="card-central-superior" >
           <div class="card" style="height: auto; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-central" class="card-title">R$ {{relatorio.investInstrutores}}</h3>
+              <h3 id="txt-saida-card-central" class="card-title">{{relatorioInstrutores}}</h3>
               <h6>Investimento total com instrutores</h6>
             </div>
           </div>
@@ -34,7 +34,7 @@
         <div class="card-right-superior" >
           <div class="card" style="height: auto; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-right" class="card-title">R$ {{relatorio.investTotal}}</h3>
+              <h3 id="txt-saida-card-right" class="card-title"></h3>
               <h6 id="txt-cards-valor-total">Investimento total com o programa</h6>
             </div>
           </div>
@@ -45,46 +45,44 @@
         <form action="" >
           <div class="filtro">
             <label class="selecioneData">Selecione dia, mês e ano</label>
-            <input type="date" id="dataInicial" name="dataInicial" ref="dataInicial"/>
+            <input type="date" id="dataInicial" name="dataInicial" />
             <label class="labelData">até</label>
-            <input type="date" id="dataFinal" name="dataFinal" ref="dataFinal"/>
+            <input type="date" id="dataFinal" name="dataFinal" />
 
             <!-- Botão consultar data -->
-            <input id="bottonConsultaData" class="btn btn-primary btn-lg"  v-on:click="selecionarData()" value="CONSULTAR">
+            <input type="submit" id="bottonConsultaData" class="btn btn-primary btn-lg"  v-on:click="selecionarData('dataInicial','dataFinal')" value="CONSULTAR">
           </div>
        </form>
 
       <!-- Cards inferiores -->
-      <div id="relatorioPeriodo">
-        <section>
-          <div class="card-left-inferior" id="dataSelecionada">
-            <div class="card" style="height: 100%; width: 100%">
-              <div class="card-body">
-                <h3 id="txt-saida-card-left" class="card-title">R$ {{relatorioPeriodo.investParticipantesPeriodoSelecionado}}</h3>
-                <h6>Investimento total em participantes no periodo</h6>
-              </div>
+      <section>
+        <div class="card-left-inferior" id="dataSelecionada">
+          <div class="card" style="height: 100%; width: 100%">
+            <div class="card-body">
+              <h3 id="txt-saida-card-left" class="card-title">R$ 5000</h3>
+              <h6>Investimento total em participantes no periodo</h6>
             </div>
           </div>
+        </div>
 
-          <div class="card-central-inferior" id="dataSelecionada">
-            <div class="card">
-              <div class="card-body" style="height: 100%; width: 100%">
-                <h3 id="txt-saida-card-central" class="card-title">R$ {{relatorioPeriodo.investInstrutoresPeriodoSelecionado}}</h3>
-                <h6>Investimento total em instrutores no periodo</h6>
-              </div>
+        <div class="card-central-inferior" id="dataSelecionada">
+          <div class="card" style="height: 100%; width: 100%">
+            <div class="card-body">
+              <h3 id="txt-saida-card-central" class="card-title">R$ 5000</h3>
+              <h6>Investimento total em instrutores no periodo</h6>
             </div>
           </div>
+        </div>
 
-          <div class="card-right-inferior" id="dataSelecionada">
-            <div class="card" style="height: auto; width: 100%">
-              <div class="card-body">
-                <h3 id="txt-saida-card-right" class="card-title">R$ {{relatorioPeriodo.investTotalPeriodoSelecionado}}</h3>
-                <h6 id="txt-cards-valor-total">Investimento total do periodo</h6>
-              </div>
+        <div class="card-right-inferior" id="dataSelecionada">
+          <div class="card" style="height: 100%; width: 100%">
+            <div class="card-body">
+              <h3 style="color: #090b2e" class="card-title">R$ 5000</h3>
+              <h6>Investimento total em instrutores no periodo</h6>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
       <!-- Botões gerar relatorio PDF e XLSX -->
       <div class="botao">
@@ -93,7 +91,7 @@
             id="botao_pdf"
             type="button"
             class="btn btn-primary btn-lg"
-            v-on:click="downloadRelatorioPDF()">GERAR PDF
+            onclick="location.href = 'http://localhost:8080/api/relatorio-avaliacao/pdf';">GERAR PDF
           </button>
         </div>
 
@@ -102,7 +100,7 @@
             id="botao_xlsx"
             type="button"
             class="btn btn-primary btn-lg"
-            v-on:click="downloadRelatorioXLSX()">GERAR XLSX
+            onclick="location.href = 'http://localhost:8080/api/relatorio-avaliacao/xlsx';">GERAR XLSX
           </button>
         </div>
       </div>
@@ -112,71 +110,59 @@
 
 <script>
 import Header from '@/components/Header.vue'
+<<<<<<< HEAD
 import { http } from '../../services/Config'
+=======
+>>>>>>> parent of cf8eeac (Merge branch 'RelatoriosTelas' of https://github.com/IagoBaldani/SIS-FrontEnd-SPF into lucasMarra)
 import Funcoes from '../../services/Funcoes'
+import { http } from '../../services/Config'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Header,
+    Header
   },
-  data(){
-      return{
-          relatorio: {},
-          parametrosUrl:{},
-          relatorioPeriodo:{},
-          dataInicial:'',
-          dataFinal:''
-      };
-  },
-  beforeMount(){
-    Funcoes.verificaToken();
-  },
-  created(){
-    this.getParams();
-    this.getInvestimentos();
-  },
-  methods:{
-    getParams() {
-      var query = location.search.slice(1);
-      var partes = query.split('&');
-      var data = {};
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=');
-        var chave = chaveValor[0];
-        var valor = chaveValor[1];
-        data[chave] = valor;
-      });
+  data () {
+    return {
+      responseStatus: '',
+      relatorioParticipante: '',
+      relatorioInstrutores: '',
+      dataSelecionada: ''
 
-    // console.log(data);
-    this.parametrosUrl = data;
-    console.log(this.parametrosUrl);
-    },
-    
-    getInvestimentos (){
-      http
-        .get('investimentos/investimentosPrograma/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma)
-        .then(response => this.relatorio = response.data)
-    },
-
-    selecionarData (){
-      this.dataInicial = this.$refs.dataInicial.value
-      this.dataFinal = this.$refs.dataFinal.value
-
-      http
-        .get('investimentos/investimentoPeriodoSelecionado/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal)
-        .then(response => this.relatorioPeriodo = response.data)
-    },
-
-    downloadRelatorioPDF () {
-      location.href = 'http://localhost:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
-    },
-
-    downloadRelatorioXLSX () {
-      location.href = 'http://localhost:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/xlsx'
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
   }
+  // created () {
+  //   this.investimentosParticipantes()
+  //   this.investimentosInstrutores()
+  //   this.selecionarData()
+  // }
+  // methods: {
+  //
+  //   investimentosParticipantes: function () {
+  //     axios
+  //       .get('http://localhost:8080/investimentos/investimentosParticipantes')
+  //       .then(response => { this.relatorioParticipante = response.data })
+  //   },
+  //
+  //   investimentosInstrutores: function () {
+  //     axios
+  //       .get('http://localhost:8080/investimentos/investimentosInstrutores')
+  //       .then(response => { this.relatorioInstrutores = response.data })
+  //   },
+  //
+  //   selecionarData: function (dataInicial, dataFinal) {
+  //     axios
+  //       .post('http://localhost:8080/investimentos/')
+  //       .then(response => (this.dataSelecionada = response.data))
+  //
+  //     console.log('Funfo')
+  //   }
+  // }
 }
+
 </script>
 
 <style>
@@ -197,7 +183,7 @@ html {
 
 body {
   background-color: #ebebeb !important;
-  
+
 }
 
 /* Relatório - Investimento */
@@ -231,7 +217,6 @@ body {
 .card-left-inferior,
 .card-central-inferior,
 .card-right-inferior {
-  border: 1px solid #bcb3b3;
   min-height: 275px !important;
   box-shadow: 4px 4px 4px #ccc;
   border-radius: 5px;
@@ -253,10 +238,6 @@ h3 {
 
 #txt-saida-card-central {
   color: #ffb600;
-}
-
-#txt-saida-card-right {
-  color: #090b2e;
 }
 
 h6 {
@@ -286,7 +267,7 @@ h6 {
 #bottonConsultaData {
   background-color: #ffffff;
   margin-left: 5%;
-  width: 465;
+  width: 45%;
   color: #090b2e;
   height: 4rem;
   border-radius: 7px;
@@ -312,7 +293,7 @@ h6 {
 
 #botao_pdf {
   background: #ab0045;
- 
+
 }
 
 #botao_xlsx {
@@ -439,7 +420,7 @@ h6 {
   }
 
   #bottonConsultaData {
-    margin-left: 29%;
+    margin-left: 28%;
   }
 
   /*Botões de relatorio*/
@@ -519,7 +500,7 @@ h6 {
       margin-left: 92px;
   }
   #bottonConsultaData {
-    margin-left: 30%;
+    width: 45%;
   }
 
   #botao_pdf,
@@ -562,9 +543,9 @@ h6 {
     margin-left: 30%;
   }
 
-  #bottonConsultaData {
+  /* #bottonConsultaData {
     margin-left: 190px;
-  }
+  } */
 }
 
 @media (min-width: 768px) {
@@ -616,7 +597,9 @@ h6 {
   }
 
   #bottonConsultaData {
-    margin-left: 271px;
+    /* margin-left: 271px; */
+    width: 30%;
+    text-align: center;
   }
 
   #botao_pdf,
@@ -641,6 +624,7 @@ h6 {
   #bottonConsultaData {
     margin-left: 390px;
   }
+
 }
 
 @media (min-width: 1024px) {
@@ -709,7 +693,7 @@ h6 {
 
   h6{
       font-size: 1.6rem !important;
-    
+
   }
 
   .card-left-superior,
@@ -722,10 +706,6 @@ h6 {
     display: inline-block;
     width: 30.5%;
     margin-left: 2%;
-  }
-
-  .card-left-superior {
-    height: 100%;
   }
 
   .selecioneData {

@@ -171,47 +171,55 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
+import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
+
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Header,
+    Header
   },
-  methods: {
-    modal() {
-      let btn = document.querySelector("#disabled");
-      let modal = document.querySelector(".modal");
-      let cancelar = document.querySelector("#cancelar");
-
-      btn.addEventListener("click", () => {
-        modal.style.display = "flex";
-      });
-
-      cancelar.addEventListener("click", () => {
-        modal.removeAttribute("style");
-      });
-    },
-  },
-
-  data() {
+  data () {
     return {
+      responseStatus: '',
       candidato: {
         id: 1,
-        formacao: "Formação Java",
-        dataInicio: "dd/MM/yyyy",
-        dataTermino: "dd/MM/yyyy",
+        formacao: 'Formação Java',
+        dataInicio: 'dd/MM/yyyy',
+        dataTermino: 'dd/MM/yyyy',
         qtdEstagiarios: 20,
         qtdTrainees: 30,
         qtdAprendizes: 5,
-        participantesTotais: 55,
-      },
-    };
+        participantesTotais: 55
+      }
+    }
   },
   beforeMount () {
     Funcoes.verificaToken()
   },
-};
+  methods: {
+    modal () {
+      let btn = document.querySelector('#disabled')
+      let modal = document.querySelector('.modal')
+      let cancelar = document.querySelector('#cancelar')
+
+      btn.addEventListener('click', () => {
+        modal.style.display = 'flex'
+      })
+
+      cancelar.addEventListener('click', () => {
+        modal.removeAttribute('style')
+      })
+    }
+  }
+}
 </script>
 
 <style>

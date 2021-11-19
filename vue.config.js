@@ -60,6 +60,12 @@ module.exports = {
       title: 'Participante - Seleção para cadastro',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-selecao-cadastro']
     },
+    'dados-participante-arquivos': {
+      entry: './src/views/dados-participante-arquivos/main.js',
+      template: 'public/index.html',
+      title: 'Participante - Envio de arquivos',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-arquivos']
+    },
     'dados-instrutor-visualizacao': {
       entry: './src/views/dados-instrutor-visualizacao/main.js',
       template: 'public/index.html',
@@ -209,24 +215,6 @@ module.exports = {
       template: 'public/index.html',
       title: 'Relatórios | Investimentos',
       chunks: ['chunk-vendors', 'chunk-common', 'relatorios-investimentos']
-    },
-    'cargo-cadastro-edicao': {
-      entry: './src/views/cargo-cadastro-edicao/main.js',
-      template: 'public/index.html',
-      title: 'Cadastro & Edição - Cargo',
-      chunks: ['chunk-vendors', 'chunk-common', 'cargo-cadastro-edicao']
-    },
-    'cargo-visualizar': {
-      entry: './src/views/cargo-visualizar/main.js',
-      template: 'public/index.html',
-      title: 'Visualizar - Cargo',
-      chunks: ['chunk-vendors', 'chunk-common', 'cargo-visualizar']
-    },
-    'cargo-listar': {
-      entry: './src/views/cargo-listar/main.js',
-      template: 'public/index.html',
-      title: 'Lista - Cargos',
-      chunks: ['chunk-vendors', 'chunk-common', 'cargo-listar']
     }
   }
 }

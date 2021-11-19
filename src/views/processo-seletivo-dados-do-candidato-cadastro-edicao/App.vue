@@ -1,7 +1,7 @@
 <template>
   <Header />
-  <main>
-    <div class="container-fluid">
+  <main id="candidato">
+    <div class="container container-fluid">
       <div class="row justify-content-evenly">
         <div class="col-xl-4">
           <h1 class="dadosCandidato mt-4 mb-4">Dados do Candidato:</h1>
@@ -11,96 +11,113 @@
       <div class="row justify-content-evenly">
         <div class="col-md-4">
           <div class="mb-3">
-            <label class="label-form">Nome</label>
+            <label class="label-form" for="Nome">Nomes</label>
             <input
               type="text"
               class="form-control"
-              id="inputNome"
-              placeholder="Nome"
-              v-model="candidato.nome"
+              v-model="modelNome"
+              :placeholder="candidato.nome"
             />
           </div>
 
           <div class="mb-3">
-            <label class="label-form">Contato</label>
+            <label class="label-form" for="tel">Contato</label>
             <input
               type="tel"
               class="form-control"
-              id="inputContato"
-              placeholder="(xx) xxxxx-xxxx"
-              v-model="candidato.telefone"
+              id="tel"
+              v-model="modelContato"
+              :placeholder="candidato.contato"
             />
           </div>
 
           <div class="mb-3">
-            <label class="label-form" >Fonte de recrutamento</label>
+            <label class="label-form" for="fonte">Fonte de recrutamento</label>
             <input
               type="text"
               class="form-control"
-              id="inputFonteDeRecrutamento"
-              placeholder="Fonte de recrutamento"
-              v-model="candidato.fonteRecrutamento"
+              id="fonte"
+              v-model="modelFonteRecrutamento"
+              :placeholder="candidato.fonteRecrutamento"
             />
           </div>
 
           <div class="mb-3">
-            <label class="label-form">Data agendamento</label>
-            <input
-              type="date"
-              class="form-control"
-              id="inputDataAgendamento"
-              placeholder="2021/02/15"
-              v-model="candidato.dataAgendamento"
-            />
-          </div>
-
-          <div class="mb-3">
-            <label class="label-form">Curso</label>
+            <label class="label-form" for="data">Data agendamento</label>
             <input
               type="text"
               class="form-control"
-              id="inputCurso"
-              placeholder="Curso"
-              v-model="candidato.curso"
+              id="data"
+              v-model="modelDataAgendamento"
+              :placeholder="candidato.dataAgendamento"
             />
           </div>
-          <div class="mt-0">
-            <label class="label-form titulo mb-0">Resultado 1ª fase</label>
-            <select class="form-select" v-model="candidato.status" id="status">
-              <option value="SEM_STATUS" selected>Sem status</option>
-              <option value="APROVADO_1_FASE" class="aprovado">Aprovado 1ª fase</option>
-              <option value="REPROVADO_1_FASE" class="reprovado">Reprovado 1ª fase</option>
-              <option value="APROVADO_2_FASE" class="aprovado">Aprovado 2ª fase</option>
-              <option value="REPROVADO_2_FASE" class="reprovado">Reprovado 2ª fase</option>
-              <option value="STANDBY" class="standby">Stand By</option>
-            </select>
+
+          <div class="mb-3">
+            <label class="label-form" for="curso">Curso</label>
+            <input
+              type="text"
+              class="form-control"
+              id="curso"
+              v-model="modelCurso"
+              :placeholder="candidato.curso"
+            />
           </div>
         </div>
         <div class="col-md-4">
           <div class="mb-3">
-            <label class="label-form">Prova prática</label>
-            <input type="text" class="form-control" id="inputProvaPratica" placeholder="Prova prática" v-model="candidato.testeLogico"/>
+            <label class="label-form" for="prova">Prova prática</label>
+            <input
+              type="text"
+              class="form-control"
+              disabled="disabled"
+              id="prova"
+              v-model="modelProvaPratica"
+              :placeholder="candidato.provaPratica"
+            />
           </div>
 
           <div class="mb-3">
-            <label class="label-form">DISC</label>
-            <input type="text" class="form-control" id="inputDisc" placeholder="DISC" v-model="candidato.notaDisc"/>
+            <label class="label-form" for="disc">DISC</label>
+            <input
+              type="text"
+              class="form-control"
+              id="disc"
+              disabled="disabled"
+              v-model="modelDISC"
+              :placeholder="candidato.disc"
+            />
           </div>
 
           <div class="mb-3">
-            <label class="label-form mb-0 titulo">Currículo candidato</label><br>
-              <input type="file" class="form-control">
+            <label class="label-form" for="curriculo"
+              >Currículo candidato</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="curriculo"
+              v-model="modelCurriculo"
+              :placeholder="candidato.curriculo"
+            />
           </div>
 
           <div class="mb-3">
-            <label class="label-form">Observações Entrevista</label>
-            <textarea rows="5" class="form-control" id="inputObservacao" v-model="candidato.observacao"></textarea>
+            <label class="label-form" for="observacao">Observação</label>
+            <textarea
+              name="observacoes"
+              class="form-control"
+              id="observacao"
+              v-model="modelObservacao"
+              :placeholder="candidato.observacao"
+              rows="5"
+            ></textarea>
           </div>
         </div>
       </div>
       <div class="row justify-content-evenly mt-4">
         <div class="col-md-4">
-          <div class="mb-2">
+          <div class="mb-3">
             <div for="exampleModal" class="confirmar">
               <div
                 type="button"
@@ -118,6 +135,13 @@
           </div>
         </div>
         <div class="col-md-4">
+          <div class="mb-3">
+            <div class="botaoStatus">
+              <button type="button" class="bt btn-status largura">
+                STATUS
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -135,23 +159,23 @@
         <div class="modal-content">
           <div class="modal-body d-flex justify-content-between">
             <div>
-              <h1 class="modal-title form-label fw-bold mb-0 titulo" v-if="candidatoForm.id == ''">
-                Deseja confirmar o cadastro?
-              </h1>
-              <h1 class="modal-title form-label fw-bold mb-0 titulo" v-else>
-                Deseja confirmar a edição do participante?
+              <h1 class="modal-title form-label fw-bold mb-0 titulo">
+                Deseja confirmar a desativação?
               </h1>
             </div>
             <div class="conteudomodal">
               <div class="col-xl-5 mb-3">
-                <h2 class="nome">Nome: {{ candidatoForm.nome }}</h2>
-                <h2 class="nome">Contato: {{ candidatoForm.telefone }}</h2>
-                <h2 class="nome">Candidato: {{ candidatoForm.fonteRecrutamento }}</h2>
-                <h2 class="nome">Data Agendamento: {{ candidatoForm.dataAgendamento }}</h2>
-                <h2 class="nome">Curso: {{ candidatoForm.curso }}</h2>
-                <h2 class="nome">Currículo:</h2>
-                <h2 class="nome">Observação: {{ candidatoForm.observacao }}</h2>
-                <h2 class="nome">Status: {{ candidatoForm.status }}</h2>
+                <h2 class="nome">Nome: {{ candidato.nome }}</h2>
+                <h2 class="nome">Contato: {{ candidato.contato }}</h2>
+                <h2 class="nome">
+                  Candidato: {{ candidato.fonteRecrutamento }}
+                </h2>
+                <h2 class="nome">
+                  Data Agendamento: {{ candidato.dataAgendamento }}
+                </h2>
+                <h2 class="nome">Curso: {{ candidato.curso }}</h2>
+                <h2 class="nome">Currículo: {{ candidato.curriculo }}</h2>
+                <h2 class="nome">Observação: {{ candidato.observacao }}</h2>
               </div>
               <div class="col-xl-2"></div>
               <div class="col-xl-5 mt-5"></div>
@@ -159,7 +183,12 @@
           </div>
           <div class="modal-footer border-0 justify-content-around">
             <div>
-              <button type="button" class="btn submit" @click="processaRequisicoes">CONFIRMAR</button>
+              <button type="button" class="btn submit">CONFIRMAR</button>
+            </div>
+            <div>
+              <button type="button" class="btn cancel" data-bs-dismiss="modal">
+                CANCELAR
+              </button>
             </div>
           </div>
         </div>
@@ -170,42 +199,44 @@
 
 <script>
 import Header from '@/components/Header.vue'
+<<<<<<< HEAD
 import Funcoes from '@/services/Funcoes'
 import { http } from '@/services/Config'
+=======
+import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
+>>>>>>> parent of cf8eeac (Merge branch 'RelatoriosTelas' of https://github.com/IagoBaldani/SIS-FrontEnd-SPF into lucasMarra)
 
 export default {
   name: 'App',
   components: {
     Header
   },
-
   data () {
     return {
-      candidato: {},
-      candidatoForm: {
-        id: '',
-        nome: '',
-        telefone: '',
-        fonteRecrutamento: '',
-        dataAgendamento: '',
-        curso: '',
-        testeLogico: '',
-        notaDisc: '',
-        observacao: '',
-        status: ''
+      responseStatus: '',
+      candidato: {
+        id: 1,
+        nome: 'Diego',
+        contato: '(xx)xxxx-xxxx',
+        fonteRecrutamento: 'Palestra via Faculdade',
+        dataAgendamento: 'dd/MM/yyyy',
+        curso: 'Análise e Desenvolvimento de Sistemas',
+        provaPratica: '10/10',
+        disc: 'disc.xlsx',
+        curriculo: 'curriculo.pdf',
+        observacao: 'Mensagem...'
       }
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-
-    const dadosUrl = this.pegaDadosUrl()
-    let id = dadosUrl.id
-    let tipo = dadosUrl.tipo
-
-    if (tipo == 'edicao') {
-      this.getCandidato(id)
-    }
   },
   methods: {
     acao () {
@@ -219,72 +250,17 @@ export default {
       })
     },
     enviarDados () {
-      this.candidatoForm.id = this.candidato.id
-      this.candidatoForm.nome = document.querySelector('#inputNome').value
-      this.candidatoForm.telefone = document.querySelector('#inputContato').value
-      this.candidatoForm.fonteRecrutamento = document.querySelector('#inputFonteDeRecrutamento').value
-      this.candidatoForm.dataAgendamento = document.querySelector('#inputDataAgendamento').value
-      this.candidatoForm.curso = document.querySelector('#inputCurso').value
-      this.candidatoForm.testeLogico = document.querySelector('#inputProvaPratica').value
-      this.candidatoForm.notaDisc = document.querySelector('#inputDisc').value
-      this.candidatoForm.observacao = document.querySelector('#inputObservacao').value
-      this.candidatoForm.status = document.querySelector('#status').value
-    },
-    pegaDadosUrl () {
-      var query = location.search.slice(1)
-      var partes = query.split('&')
-      var data = {}
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=')
-        var chave = chaveValor[0]
-        var valor = chaveValor[1]
-        data[chave] = valor
-      })
-      return data
-    },
-    getCandidato (id) {
-      http
-        .get(`candidato/${id}`)
-        .then(response => {
-          this.candidato = response.data
-        })
-        .catch(error => {
-          alert(error)
-        })
-    },
-    processaRequisicoes () {
-      const dados = this.pegaDadosUrl()
-      let id = dados.id
-      let tipo = dados.tipo
-
-      if (tipo == 'edicao') {
-        http
-          .put(`candidato/${id}`, this.candidatoForm)
-          .then(response => {
-            alert('Candidato atualizado com sucesso')
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
-          })
-          .catch(error => {
-            alert(error)
-          })
-      } else if (tipo == 'cadastro') {
-        http
-          .post('candidato', this.candidatoForm)
-          .then(response => {
-            alert('Candidato criado com sucesso')
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
-          })
-          .catch(error => {
-            alert(error)
-          })
-      }
+      this.candidato.nome = this.modelNome
+      this.candidato.contato = this.modelContato
+      this.candidato.fonteRecrutamento = this.modelFonteRecrutamento
+      this.candidato.dataAgendamento = this.modelDataAgendamento
+      this.candidato.curso = this.modelCurso
+      this.candidato.provaPratica = this.modelProvaPratica
+      this.candidato.disc = this.modelDisc
+      this.candidato.curriculo = this.modelCurriculo
+      this.candidato.observacao = this.modelObservacao
     }
   }
-}
-function formataDataParaExibicao (data) {
-  const dataPreForm = new Date(data)
-  const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-  return dataFormatada
 }
 </script>
 
@@ -330,9 +306,37 @@ body {
 
 /* Tudo relacionado ao header */
 
+.header {
+  background-color: var(--color-blue-principal);
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-header {
+  height: 75px;
+  width: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.disabled {
+  display: none;
+}
+
 .btn-header img,
 .logo img {
   height: 50px;
+}
+
+.home.btn-header {
+  background-color: var(--color-yellow-principal);
+}
+
+.rollback.btn-header {
+  background-color: var(--color-magenta-principal);
 }
 
 /* Final do Header */
@@ -453,22 +457,5 @@ button .largura {
 .nome {
   color: var(--color-gray-font);
   font-size: 24px;
-}
-.download{
-    transform: rotate(180deg) !important;
-}
-textarea {
-  resize: none;
-}
-.aprovado{
-  color: #19B200 !important;
-}
-
-.reprovado{
-  color: red !important;
-}
-
-.standby{
-  color: blue !important;
 }
 </style>

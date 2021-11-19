@@ -10,12 +10,9 @@
         <div class="col-xl-2 d-flex justify-content-center">
           <h2 class="titulo secundario">
             Status:
-            <span
-              v-bind:class="
-                programa.status == 'Em andamento' ? 'ativo' : 'inativo'
-              "
-              >{{ programa.status }}</span
-            >
+            <span v-bind:class="programa.status == 'EM_ANDAMENTO' ? 'ativo' : 'inativo'">
+              {{ programa.status == 'EM_ANDAMENTO' ? 'Em andamento' : 'Inativo' }}
+            </span>
           </h2>
         </div>
       </div>
@@ -23,66 +20,55 @@
         <div class="col-xl-4">
           <fieldset disabled>
             <div class="mb-3">
-              <label for="nome" class="form-label fw-bold mb-0 titulo"
-                >Nome</label
-              >
+              <label for="nome" class="form-label fw-bold mb-0 titulo">Nome</label>
               <input
                 name="nome"
                 type="text"
-                class="form-control"
-                id="disabledTextInput"
+                class="form-control disabledTextInput"
                 v-bind:value="programa.nome"
               />
             </div>
             <div class="mb-3">
-              <label
-                for="inicio-do-programa"
-                class="form-label fw-bold mb-0 titulo"
-                >Início do Programa</label
-              >
+              <label for="inicio-do-programa" class="form-label fw-bold mb-0 titulo">
+                Início do Programa
+              </label>
               <input
                 name="inicio-do-programa"
                 type="text"
-                class="form-control"
-                id="disabledTextInput"
-                v-bind:value="programa.inicio"
+                class="form-control disabledTextInput"
+                v-bind:value="this.formataDataParaExibicao(programa.inicio)"
               />
             </div>
             <div class="mb-3">
-              <label
-                for="termino-do-programa"
-                class="form-label fw-bold mb-0 titulo"
-                >Término do Programa</label
-              >
+              <label for="termino-do-programa" class="form-label fw-bold mb-0 titulo">
+                Término do Programa
+              </label>
               <input
                 name="termino-do-programa"
                 type="text"
-                class="form-control"
-                id="disabledTextInput"
-                v-bind:value="programa.fim"
+                class="form-control disabledTextInput"
+                v-bind:value="this.formataDataParaExibicao(programa.termino)"
               />
             </div>
             <div class="mb-3">
-              <label for="coordenador" class="form-label fw-bold mb-0 titulo"
-                >Coordenador</label
-              >
+              <label for="coordenador" class="form-label fw-bold mb-0 titulo">
+                Coordenador
+              </label>
               <input
                 name="coordenador"
                 type="text"
-                class="form-control"
-                id="disabledTextInput"
-                v-bind:value="programa.coordenador"
+                class="form-control disabledTextInput"
+                v-bind:value="programa.nomeCoordenador"
               />
             </div>
             <div class="mb-3">
-              <label for="turma" class="form-label fw-bold mb-0 titulo"
-                >Turma</label
-              >
+              <label for="turma" class="form-label fw-bold mb-0 titulo">
+                Turma
+              </label>
               <input
                 name="turma"
                 type="text"
-                class="form-control"
-                id="disabledTextInput"
+                class="form-control disabledTextInput"
                 v-bind:value="programa.turma"
               />
             </div>
@@ -96,7 +82,7 @@
           <input
             type="button"
             name="botao-ok"
-            value="ENCERRAR FORMAÇÃO"
+            :value="(programa.status == 'EM_ANDAMENTO')?'ENCERRAR FORMAÇÃO':'ATIVAR FORMAÇÃO'"
             class="mt-5 form-control submit"
             data-bs-toggle="modal"
             data-bs-target="#exampleModal"
@@ -128,7 +114,7 @@
         <div class="modal-body d-flex justify-content-between">
           <div>
             <h1 class="modal-title form-label fw-bold mb-0 titulo">
-              Deseja encerrar a seguinte formação?
+              {{ (programa.status == 'EM_ANDAMENTO')?'Deseja encerrar a seguinte formação ?':'Deseja ativar a seguinte formação ?' }}
             </h1>
           </div>
           <div class="conteudomodal">
@@ -139,14 +125,10 @@
         </div>
         <div class="modal-footer border-0 justify-content-around">
           <div>
-            <button type="button" class="btn submit-modal">CONFIRMAR</button>
+            <button type="button" class="btn submit-modal" @click="alteraStatus">CONFIRMAR</button>
           </div>
           <div>
-            <button
-              type="button"
-              class="btn cancel-modal"
-              data-bs-dismiss="modal"
-            >
+            <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">
               CANCELAR
             </button>
           </div>
@@ -159,13 +141,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -175,21 +151,24 @@ export default {
   data () {
     return {
       responseStatus: '',
-      programa: {
-        nome: 'Java',
-        inicio: '20/07/2021',
-        fim: '12/12/2021',
-        coordenador: 'Kaiqui Lopes',
-        turma: 'Turma I 2021',
-        status: 'Em andamento'
-      }
+      programa: {},
+      id: this.pegaDadosUrl().id
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-    console.log(this.pegaDadosUrl())
+    this.getPrograma()
   },
   methods: {
+    getPrograma () {
+      http.get(`programa/${this.id}`)
+        .then(response => {
+          this.programa = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -203,6 +182,22 @@ export default {
       })
 
       return data
+    },
+    formataDataParaExibicao (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+
+      return dataFormatada
+    },
+    alteraStatus () {
+      http.put(`programa/altera-status/${this.id}`, null)
+        .then(response => {
+          if (response.status == '200') {
+            window.location.href = '/dados-programa-busca'
+          } else {
+            alert('Erro na tentativa de atualização')
+          }
+        })
     }
   }
 }
@@ -242,9 +237,9 @@ body {
   color: #737373;
 }
 
-#disabledTextInput {
-  background-color: #d3caca;
-  border: 1px solid #bcb3b3;
+.disabledTextInput {
+  background-color: #d3caca !important;
+  border: 1px solid #bcb3b3 !important;
 }
 
 #formulario-principal {

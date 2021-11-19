@@ -9,7 +9,7 @@
                 <div class="col-lg-7 d-flex justify-content-center align-items-center">
                     <div class="d-block justify-content-center">
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
-                        <h4 class="fw-bold grey-font text-center">João da Silva Almeida</h4>
+                        <h4 class="fw-bold grey-font text-center">{{participante.nome}}</h4>
                     </div>
                 </div>
             </div>
@@ -19,17 +19,17 @@
                         <fieldset class="mb-3">
                             <legend class="form-label fw-bold h5 titulo">Resultado (Efetivado)</legend>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="sim" id="sim" class="me-2 ">
+                                <input type="radio" name="reajuste" value="EFETIVADO" id="sim" class="me-2" v-model="form.resultado">
                                 <label for="sim" class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="nao" id="nao" class="me-2" checked>
+                                <input type="radio" name="reajuste" value="NAO_EFETIVADO" id="nao" class="me-2" v-model="form.resultado">
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
                         <div class="mb-3">
                             <label for="data-alteracao" class="form-label fw-bold h5 titulo">Data</label>
-                            <input type="date" class="form-control" id="data-alteracao">
+                            <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao">
                         </div>
                         <div class="mb-3">
                             <label id="menes" for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
@@ -41,7 +41,7 @@
                     <form>
                         <div class="mb-3">
                             <label for="file" class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
-                            <input id="file" type="file" accept="application/pdf" class="none" />
+                            <input id="file" @change="formatoUpload()" type="file" accept="application/pdf" class="none" />
                             <label for="file" class="btn-file d-flex justify-content-between">
                                 <div class="w-100">
                                     <img src="@/assets/imgs/upload.svg"
@@ -88,16 +88,11 @@
                     <div class="col-lg-7">
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Reajuste salarial</h4>
-                            <p class="grey-font h4">Sim</p>
+                            <p class="grey-font h4">{{ form.resultado }}</p>
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Data da alteração</h4>
-                            <p class="grey-font h4">20/09/2021</p>
-                        </div>
-
-                        <div class="mb-4">
-                            <h4 class="fw-bold titulo">Salário</h4>
-                            <p class="grey-font h4">2700,00</p>
+                            <p class="grey-font h4">{{formataDataParaMostrar(form.dataAlteracao)}}</p>
                         </div>
                     </div>
                     <div class="col-lg-5">
@@ -128,6 +123,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -148,9 +144,13 @@ export default {
       id: {}
     }
   },
+
   beforeMount () {
+    this.id = this.pegaDadosUrl().id
+    this.getParticipanteNome()
     Funcoes.verificaToken()
   },
+
   methods: {
     getParticipanteNome () {
       http

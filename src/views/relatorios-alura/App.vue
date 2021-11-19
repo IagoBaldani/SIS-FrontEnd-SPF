@@ -69,6 +69,7 @@
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6" id="coluna">
                   <div id="funcionario-maior-hora">
                     <div class="card mb-4" id="card-grande" v-show="mostrarFuncionarioMaiorQntHoras">
+                      <img class="card-image" src="@/assets/imgs/foto_funcionario.jpg" alt="Imagem do funcionário com maior quantidade de horas">
                       <div class="card-body">
                       <h6 class="card-title" id="nome-funcionario">{{relatorio.nomeFuncionarioComMaiorQuantidadeHoras}}</h6>
                       <p class="card-text" id="cargo">{{relatorio.cargoFuncionarioComMaiorQuantidadeHoras}}</p>
@@ -79,7 +80,7 @@
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6" id="coluna">
                   <div id="funcionario-menor-hora">
                     <div class="card mb-4" id="card-grande" v-show="mostrarFuncionarioMenorQntHoras">
-                      
+                      <img class="card-image" src="@/assets/imgs/foto_funcionario2.jpg" alt="Imagem do funcionário com menor quantidade de horas">
                       <div class="card-body">
                       <h6 class="card-title" id="nome-funcionario">{{relatorio.nomeFuncionarioComMenorQuantidadeHoras}}</h6>
                       <p class="card-text" id="cargo">{{relatorio.cargoFuncionarioComMenorQuantidadeHoras}}</p>
@@ -92,8 +93,8 @@
             <!-- Botões para gerar o relatório em pdf ou excel -->
             <section class="buttons">
               <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-danger" v-on:click="downloadRelatorioPDF()" id="btn-pdf">GERAR PDF</button>
-                <button type="button" class="btn btn-warning" v-on:click="downloadRelatorioXLSX()" id="btn-xlsx">GERAR XLSX</button>
+                <button type="button" class="btn btn-danger" onclick="location.href = 'http://localhost:8080/api/relatorio-alura/pdf';" id="btn-pdf">GERAR PDF</button>
+                <button type="button" class="btn btn-warning" onclick="location.href = 'http://localhost:8080/api/relatorio-alura/xlsx'" id="btn-xlsx">GERAR XLSX</button>
               </div>
             </section>
           </div>
@@ -102,61 +103,43 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import Header from "@/components/Header.vue"
 import { http } from '../../services/Config'
 import  Funcoes from '../../services/Funcoes'
+=======
+import Header from '@/components/Header.vue'
+import Funcoes from '../../services/Funcoes'
+import { http } from '../../services/Config'
+>>>>>>> parent of cf8eeac (Merge branch 'RelatoriosTelas' of https://github.com/IagoBaldani/SIS-FrontEnd-SPF into lucasMarra)
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Header,
+    Header
   },
-  data(){
+  data () {
     return {
+      responseStatus: '',
       relatorio: {},
       mostrarFuncionarioMaiorQntHoras: false,
-			mostrarFuncionarioMenorQntHoras: false,
-      parametrosUrl:{}
-    };
-  },
-
-  beforeMount(){
-    Funcoes.verificaToken();
-  },
-
-  created(){
-    this.getParams();
-    this.getRelatorio();
-  },
-  methods: {
-    getParams() {
-      var query = location.search.slice(1);
-      var partes = query.split('&');
-      var data = {};
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=');
-        var chave = chaveValor[0];
-        var valor = chaveValor[1];
-        data[chave] = valor;
-      });
-    this.parametrosUrl = data;
-    console.log(this.parametrosUrl);
-    },
-
-    getRelatorio() {
-      http.get('relatorio-alura/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/escopo=' + this.parametrosUrl.escopo)
-      .then(res => this.relatorio = res.data);
-    },
-
-    downloadRelatorioPDF(){
-      location.href = 'http://localhost:8081/api/relatorio-alura/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
-    },
-
-    downloadRelatorioXLSX(){
-      location.href = 'http://localhost:8081/api/relatorio-alura/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
+      mostrarFuncionarioMenorQntHoras: false
     }
+  // },
+  // created () {
+  //   this.getRelatorio()
+  // },
+  // methods: {
+  //   // getRelatorio () {
+  //   //   axios.get('http://localhost:8080/api/relatorio-alura')
+  //   //     // eslint-disable-next-line no-return-assign
+  //   //     .then(res => this.relatorio = res.data)
+  //   // }
   },
-};
+  beforeMount () {
+    Funcoes.verificaToken()
+  }
+}
 </script>
 
 <style>
@@ -191,11 +174,15 @@ export default {
 }
 
 .disabled{
-    display: none !important; 
+    display: none !important;
 }
 
 .btn-header img, .logo img{
     height: 50px;
+}
+
+.btn-danger {
+  background-color: #AB0045;
 }
 
 .home.btn-header{
@@ -208,7 +195,6 @@ export default {
 
 .container{
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     padding: 1.5em;
@@ -287,11 +273,7 @@ export default {
 #nome-funcionario{
     padding-top: 15px;
     font-weight: bold;
-    font-size: 26px;
-}
-
-#cargo {
-    font-size: 22px;
+    font-size: 18px;
 }
 
 .card-text{
@@ -370,12 +352,8 @@ export default {
     }
 
     #nome-funcionario{
-        font-size: 23px;
+        font-size: 14px;
         padding-bottom: 5px;
-    }
-
-    #cargo {
-      font-size: 19px;
     }
 
     #ultimo-registro{
@@ -453,6 +431,11 @@ export default {
     }
 
     /* Botões gerar pdf e xlsx */
+    .btn-danger {
+      background-color: #AB0045;
+      border-color: none;
+    }
+
     #btn-pdf{
         position: absolute;
         margin-right: 15px;

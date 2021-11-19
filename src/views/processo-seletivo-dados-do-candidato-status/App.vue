@@ -8,12 +8,26 @@
           <div class="mt-3"><h3 class="titulo">Status: Fase 1</h3></div>
           <div class="mt-5"><span class="subtitulo">Testes</span></div>
           <div class="mt-4">
-            <label for="testeLogico" class="form-label titulo mb-0">Teste lógico</label>
-            <input name="testeLogico" class="form-control" type="text" placeholder="10/10" v-model="modelTesteLogico"/>
+            <label for="testeLogico" class="form-label titulo mb-0"
+              >Teste lógico</label
+            >
+            <input
+              name="testeLogico"
+              class="form-control"
+              type="text"
+              placeholder="10/10"
+              v-model="modelTesteLogico"
+            />
           </div>
           <div class="mt-1">
             <label for="disc" class="form-label titulo mt-4 mb-0">DISC</label>
-            <input type="text" name="disc" class="form-control" placeholder="D:10 I:9 S:9 C:7" v-model="modelDisc"/>
+            <input
+              type="text"
+              name="disc"
+              class="form-control"
+              placeholder="D:10 I:9 S:9 C:7"
+              v-model="modelDisc"
+            />
           </div>
           <div class="mt-4">
             <label class="form-label titulo mb-0">Resultado 1ª fase</label>
@@ -114,6 +128,14 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
+import Cookie from 'js-cookie'
+
+let config = {
+  headers: {
+    Authorization: `Bearer ${Cookie.get('login_token')}`
+  }
+}
+
 export default {
   name: 'App',
   components: {
@@ -121,6 +143,7 @@ export default {
   },
   data () {
     return {
+      responseStatus: '',
       candidato: {
         id: '1',
         nome: 'Gustavo de Oliveira Juliano'
@@ -150,9 +173,6 @@ export default {
 </script>
 
 <style>
-body{
-  background-color: #ebebeb;
-}
 .titulo{
     color: #090B2E;
     font-weight: bold;
@@ -177,9 +197,6 @@ body{
 
 textarea{
     resize: none !important;
-}
-input{
-  background: white;
 }
 
 .download{
