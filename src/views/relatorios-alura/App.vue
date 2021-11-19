@@ -103,15 +103,9 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-import Header from "@/components/Header.vue"
-import { http } from '../../services/Config'
-import  Funcoes from '../../services/Funcoes'
-=======
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
->>>>>>> parent of cf8eeac (Merge branch 'RelatoriosTelas' of https://github.com/IagoBaldani/SIS-FrontEnd-SPF into lucasMarra)
 
 export default {
   name: 'App',
