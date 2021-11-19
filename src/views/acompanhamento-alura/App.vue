@@ -207,7 +207,7 @@ export default {
     // faz o get no back-end e retorna as informações do participante 
     getParticipanteNome () { 
       http
-        .get(`gerencial/${this.id}`)
+        .get(`participante/${this.id}`)
         .then((response) => {
           this.participante = response.data
         })

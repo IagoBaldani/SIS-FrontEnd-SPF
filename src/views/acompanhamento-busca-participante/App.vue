@@ -72,7 +72,7 @@ export default {
     // retorna os participantes ativos
     getParticipantes () {
       http
-        .get('busca/participantes')
+        .get('participante/ativos')
         .then((response) => {
           this.participantes = response.data
         })
@@ -83,7 +83,7 @@ export default {
     // é usada para retornar as formações ativas.
     getFormacoes () {
       http
-        .get('busca/programa')
+        .get('programa/ativos')
         .then((response) => {
           this.programas = response.data
         })
