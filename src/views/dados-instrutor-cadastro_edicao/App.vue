@@ -14,19 +14,19 @@
                 <div class="col-xl-4">
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Nome</label>
-                            <input class="form-control" id="inputNome"  placeholder="Nome" v-model="instrutorForm.nome" type="text" />
+                            <input class="form-control" id="inputNome"  placeholder="Nome" v-model="instrutor.nome" type="text" />
                         </div>
                        <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Contato</label>
-                            <input class="form-control" id="inputTelefone" placeholder="(xx)xxxxx-xxxx" v-model="instrutorForm.telefone" type="tel" />
+                            <input class="form-control" id="inputTelefone" placeholder="(xx)xxxxx-xxxx" v-model="instrutor.telefone" type="tel" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
-                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" v-model="instrutorForm.cpf" type="text" />
+                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" v-model="instrutor.cpf" type="text" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
-                            <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutorForm.email" type="email" />
+                            <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutor.email" type="email" />
                         </div>
                 </div>
                 <div class="col-xl-4">
@@ -41,6 +41,7 @@
                      <div
                         type="button"
                         class="bt"
+                        @click.prevent="enviarDados()"
                         data-bs-toggle="modal"
                         data-bs-target="#exampleModal"
                       >
@@ -88,7 +89,7 @@
           </div>
           <div class="modal-footer border-0 justify-content-around">
             <div>
-              <button type="button" class="btn submit-modal" @click="postForm">CONFIRMAR</button>
+              <button type="button" class="btn submit-modal" @click="processaRequisicoes()">CONFIRMAR</button>
             </div>
             <div>
               <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
@@ -124,9 +125,12 @@ export default {
   },
   beforeMount () {
     Funcoes.verificaToken()
-    const dadosUrl = this.pegaDadosUrl()
 
-    if (dadosUrl.tipo == 'edicao') {
+    const dadosUrl = this.pegaDadosUrl()
+    let id = dadosUrl.id
+    let tipo = dadosUrl.tipo
+
+    if (tipo == 'edicao') {
       this.getInstrutor(dadosUrl.id)
     }
   },
@@ -175,7 +179,7 @@ export default {
           .catch(error => {
             alert(error)
           })
-      } else if (tipo == 'cadastro') {
+      } else {
         http
           .post('instrutor', this.instrutorForm)
           .then(response => {
@@ -185,15 +189,6 @@ export default {
             alert(error)
           })
       }
-    },
-    postForm () {
-      http.post('instrutor', this.instrutorForm)
-        .then(res => {
-          window.location.href = 'http://localhost:8080/dados-instrutor-busca'
-        })
-        .catch(erro => {
-          alert(`Erro: ${erro}`)
-        })
     }
   }
 }
