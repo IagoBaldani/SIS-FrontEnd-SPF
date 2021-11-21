@@ -20,7 +20,7 @@
               Programa de formação
             </option>
             <option ref="nomePrograma" class="relatorio_opcao"
-               v-for="(formacao, id) in todasFormacoes" :key="id">{{formacao.nomePrograma}}</option>
+               v-for="(formacao, id) in todasFormacoes" :key="id">{{formacao.nome}}</option>
           </select>
 
           <!-- Select Turma -->
@@ -393,7 +393,7 @@
               <table class="modal_table-1 table table-bordered" id="formacoes">
                 <tbody>
                   <tr v-for="(formacoes, id) in formacoesComFiltro" v-bind:key="id">
-                    <td>{{ formacoes.nomePrograma }}</td>
+                    <td>{{ formacoes.nome }}</td>
                     <td class="modal_table-imagem-forAndamento rounded">
                       <a href="#"
                         ><img src="@/assets/imgs/usuario.svg" alt="Imagem"
@@ -458,7 +458,7 @@ export default {
       this.numeroTotalDeCadaLista = response.data;
     });
     http.get("relatorios/formacoes").then(response => {
-      this.todasFormacoes = response.data;
+      console.log(this.todasFormacoes = response.data);
     })
   },
   computed: {
@@ -535,7 +535,7 @@ export default {
       http
         .get('relatorios/formacoesEmAndamento')
         .then(response => {
-          this.formacoesTotal = response.data
+          console.log(this.formacoesTotal = response.data)
         })
     }
   }
