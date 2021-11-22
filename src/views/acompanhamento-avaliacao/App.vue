@@ -419,7 +419,6 @@ export default {
         .get(`participante/${this.id}`)
         .then((response) => {
           this.participante = response.data
-          console.log(response.data)
         })
         .catch((error) => {
           console.log(error)
@@ -431,7 +430,6 @@ export default {
         .get(`avaliacao/${this.id}`)
         .then((response) => {
           this.avaliacoes = response.data
-          console.log(response.data)
         })
         .catch((error) => {
           console.log(error)
