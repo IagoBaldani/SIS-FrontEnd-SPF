@@ -509,7 +509,6 @@ export default {
       if (campoVazio == 0) {
         document.querySelector('#preencha').classList.add('none')
         document.getElementById('verificaCampos').click()
-        console.log(this.form.avaliacaoDesempenhoForm)
       } else {
         document.querySelector('#preencha').classList.remove('none')
       }  

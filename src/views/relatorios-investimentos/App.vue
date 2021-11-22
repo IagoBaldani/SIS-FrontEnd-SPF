@@ -148,9 +148,7 @@ export default {
         data[chave] = valor;
       });
 
-    // console.log(data);
     this.parametrosUrl = data;
-    console.log(this.parametrosUrl);
     },
     
     getInvestimentos (){

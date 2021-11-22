@@ -137,11 +137,8 @@ export default {
         data[chave] = valor;
       });
     this.parametrosUrl = data;
-    console.log(this.parametrosUrl.formacao);
     },
     getRelatorio() {
-      // console.log(this.parametrosUrl.formacao)
-      // console.log(this.parametrosUrl.turma)
       http.get('relatorio-alura/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/escopo=' + this.parametrosUrl.escopo)
       .then(res => this.relatorio = res.data);
     },

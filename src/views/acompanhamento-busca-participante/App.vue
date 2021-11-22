@@ -123,7 +123,6 @@ export default {
         arrayBoolLinhas.push(boolLinha)
       })
 
-      console.log(arrayBoolLinhas)
       return arrayBoolLinhas
     },
     // Deixa invisível os participantes que não foram selecionados. 

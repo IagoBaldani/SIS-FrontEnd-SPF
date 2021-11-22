@@ -120,7 +120,7 @@ export default {
     this.getRelatorio();
   },
   methods: {
-      getParams() {
+    getParams() {
       var query = location.search.slice(1);
       var partes = query.split('&');
       var data = {};
@@ -131,9 +131,7 @@ export default {
         data[chave] = valor;
       });
 
-    // console.log(data);
-    this.parametrosUrl = data;
-    console.log(this.parametrosUrl);
+      this.parametrosUrl = data;
     },
 
     getRelatorio() {

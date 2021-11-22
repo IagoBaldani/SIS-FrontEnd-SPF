@@ -458,7 +458,7 @@ export default {
       this.numeroTotalDeCadaLista = response.data;
     });
     http.get("relatorios/formacoes").then(response => {
-      console.log(this.todasFormacoes = response.data);
+      this.todasFormacoes = response.data;
     })
   },
   computed: {
@@ -525,9 +525,8 @@ export default {
     },
     buscarTurmasDeUmaFormacao: function() {
       this.nomePrograma = document.querySelector("#select1").value
-      console.log(this.nomePrograma)
       http.get(`relatorios/turmas/${this.nomePrograma}`).then(response => {
-        console.log(this.turmasPrograma = response.data);
+       this.turmasPrograma = response.data;
       })
     },
 
