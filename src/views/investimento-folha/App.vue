@@ -1,7 +1,7 @@
 <template>
   <Header />
   <div class="container">
-    <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+    <div class="row g-2 g-lg-3">
       <div class="col-xl-4">
         <div>
           <a class="btn mt-4" id="botaoFolha" role="button">FOLHA</a>
@@ -14,125 +14,106 @@
           >
         </div>
       </div>
-      <div class="col-xl-2">
-        <div>
-          <div class="form-group mt-4">
-            <select class="form-control" id="filtro-programa">
-              <option disabled selected value="0">Formação</option>
-              <option
-                id="programa"
-                v-bind:value="programa.id"
-                v-for="programa in programas"
-                v-bind:key="programa"
-              >
-                {{ programa.nome }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-2">
-        <div>
-          <div class="form-group mt-4">
-            <select class="form-control" id="filtro-turma">
-              <option disabled selected value="0">Turmas</option>
-              <option
-                id="turma"
-                v-bind:value="turma.id"
-                v-for="turma in turmas"
-                v-bind:key="turma"
-              >
-                {{ turma.nome }}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-4">
-        <div class="d-flex mt-4">
-          <input
-            name="nome"
-            id="filtro-nome"
-            class="form-control me-2"
-            type="text"
-            placeholder="Nome"
-          />
-          <button
-            class="btn btn-outline-success botaoselecionar"
-            id="close-image"
-            @click="filtraDados()"
-          >
-            <img src="../../assets/imgs/lupa.svg" />
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="col-xl-12 mt-4" id="participantes">
-      <div class="aviso">
-        <h4 class="titulo fw-bold">
-          Não foi encontrado nenhum resultado com os parâmetros informados
-        </h4>
-        <button
-          class="recarregar mt-3 form-control"
-          onclick="window.location.reload()"
-        >
-          RECARREGAR LISTA
-        </button>
-      </div>
-      <div class="table-wrapper-scroll-y my-custom-scrollbar tabela">
-        <table class="table table-stripped tabela">
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Formação</th>
-              <th>Turma</th>
-              <th>MM/YY</th>
-              <th>MM/YY</th>
-              <th>MM/YY</th>
-            </tr>
-          </thead>
-          <tbody align="center">
-            <tr
-              id="participante"
-              v-for="participante in participantes"
-              v-bind:key="participante"
+      <div class="col-xl-8">
+        <form class="formulario row g-3">
+          <div class="formacoes col-xl-3">
+            <select
+              class="filtro-programa form-select mt-4"
+              id="validationDefault04"
+              required
             >
-              <td id="info-nome">{{ participante.nome }}</td>
-              <td id="info-programa">{{ participante.programa }}</td>
-              <td id="info-turma">{{ participante.turma }}</td>
-              <td id="info-salario">{{ participante.salario }}</td>
-              <td id="info-salario">{{ participante.salario }}</td>
-              <td id="info-salario">{{ participante.salario }}</td>
-            </tr>
-            <tr>
-              <th class="ultima">TOTAL</th>
-              <td class="ultima"></td>
-              <td class="ultima"></td>
-              <td class="ultima"></td>
-              <td class="ultima"></td>
-              <td class="ultima"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="container overflow-hidden botoes">
-      <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-        <div class="botõesfinais col-xl-5">
-          <div>
-            <button id="botaoSalarioPadrao" type="button" class="btn-lg">
-              ADICIONAR SALÁRIO PADRÃO
+              <option selected disabled value="">Formação</option>
+              <option>Java</option>
+              <option>Cobol</option>
+              <option>.Net</option>
+              <option>Mobile</option>
+              <option>Mainframe</option>
+              <option>Infraestrutura</option>
+            </select>
+          </div>
+          <div class="col-xl-3">
+            <select
+              class="filtro-turma turmas form-select mt-4"
+              id="validationDefault04"
+              required
+            >
+              <option selected disabled value="">Turmas</option>
+              <option>Turma I</option>
+              <option>Turma II</option>
+              <option>Turma III</option>
+            </select>
+          </div>
+          <div class="col-xl-2">
+            <button
+              class="botaoConfirmar btn btn-primary mt-4"
+              type="button"
+              v-on:click="filtrarDados(), mudaVisibilidade()"
+            >
+              Pesquisar
             </button>
           </div>
-        </div>
-        <div class="col-xl-2"></div>
-        <div class="botõesfinais col-xl-5">
-          <div
-            onclick="acao()"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
+        </form>
+      </div>
+    </div>
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+      <table class="table table-stripped mt-4">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Formação</th>
+            <th>Turma</th>
+            <th>Salario investido</th>
+            <th>Data início programa</th>
+            <th>Data fim programa</th>
+          </tr>
+        </thead>
+        <tbody align="center">
+          <tr
+            id="participante"
+            v-for="participante in participantes"
+            v-bind:key="participante"
+            class="participantes"
           >
-            <button id="botaoAdicionarManualmente" type="button" class="btn-lg">
+            <td>{{ participante.nomeParticipante }}</td>
+            <td>{{ participante.nomeFormacao }}</td>
+            <td>{{ participante.nomeTurma }}</td>
+            <td>R$
+              {{
+                participante.bolsaAux +
+                  participante.beneficios +
+                  participante.convenio +
+                  participante.horaExtra +
+                  participante.beneficioLegislacao +
+                  participante.remuneracaoEsporadica +
+                  participante.remuneracaoExtra +
+                  participante.alura
+              }}
+            </td>
+            <td>{{ participante.dataInicio }}</td>
+            <td>{{ participante.dataFim }}</td>
+          </tr>
+        </tbody>
+        <tfoot class="extremo">
+          <tr>
+            <th scope="row">TOTAL</th>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="mensagem col-xl-12">
+        Por favor, filtre os campos Formação e Turma para continuar
+      </div>
+    </div>
+    <div class="container overflow-hidden">
+      <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+        <div class="botõesfinais col-xl-5">
+          <div data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button
+              id="botaoAdicionarManualmente"
+              type="button"
+              class="btn-lg"
+              v-on:click="mostrarParticipantes()"
+            >
               ADICIONAR MANUALMENTE
             </button>
           </div>
@@ -161,108 +142,124 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="container-fluid ms-2">
-          <div class="modalBody" id="fontModal">
-            <label id="modalconteudo">Nome</label>
-            <div class="input-group input-group-lg">
-              <input
-                type="text"
-                class="form-control"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-lg"
-              />
-            </div>
-            <label id="modalconteudo">Mês e ano</label>
-            <div class="input-group input-group-lg">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="MM/YY"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-lg"
-              />
-            </div>
-            <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-              <div class="modalitens col-xl-6">
-                <label id="modalconteudo">Remuneração</label>
-                <div class="input-group input-group-lg">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="R$"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
-                  />
-                </div>
-              </div>
-              <div class="modalitens col-xl-6">
-                <label id="modalconteudo">Encargos</label>
-                <div class="input-group input-group-lg">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="R$"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-              <div class="modalitens col-xl-6">
-                <label id="modalconteudo">Benefícios</label>
-                <div class="input-group input-group-lg">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="R$"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
-                  />
-                </div>
-              </div>
-              <div class="modalitens col-xl-6">
-                <label id="modalconteudo">Total</label>
-                <div class="input-group input-group-lg">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="R$"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
-                  />
-                </div>
-              </div>
-              <div class="conteudodescrição col-xl-12">
-                <label class="" id="modalconteudo"
-                  >Descrição do investimento</label
+        <form>
+          <div class="container-fluid ms-2">
+            <div class="modalBody" id="fontModal">
+              <label class="modalconteudo">Nome</label>
+              <div class="input-group input-group-lg">
+                <select
+                  class="form-select nomeModal"
+                  aria-label="Default select example"
+                  id="nomeModal"
                 >
-                <div class="input-group input-group-lg">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Salário Padrão"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
-                  />
+                  <option
+                    :value="cpfParticipante.cpfParticipante"
+                    v-for="cpfParticipante in cpfParticipantes"
+                    :key="cpfParticipante.cpfParticipante"
+                    >{{ cpfParticipante.nomeCandidato }}</option
+                  >
+                </select>
+              </div>
+              <label class="modalconteudo">Mês e ano</label>
+              <div class="input-group input-group-lg">
+                <input
+                  id="mesAnoModal"
+                  type="date"
+                  class="form-control"
+                  placeholder="MM/YY"
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-lg"
+                />
+              </div>
+              <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+                <div class="modalitens col-xl-6">
+                  <label class="modalconteudo">Remuneração</label>
+                  <div class="input-group input-group-lg">
+                    <input
+                      @input="escutaQuantidades"
+                      id="remuneracaoModal"
+                      type="number"
+                      class="form-control"
+                      placeholder="R$"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg"
+                    />
+                  </div>
+                </div>
+                <div class="modalitens col-xl-6">
+                  <label class="modalconteudo">Encargos</label>
+                  <div class="input-group input-group-lg">
+                    <input
+                      @input="escutaQuantidades"
+                      id="encargosModal"
+                      type="number"
+                      class="form-control"
+                      placeholder="R$"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+                <div class="modalitens col-xl-6">
+                  <label class="modalconteudo">Benefícios</label>
+                  <div class="input-group input-group-lg">
+                    <input
+                      id="beneficiosModal"
+                      @input="escutaQuantidades"
+                      type="number"
+                      class="form-control"
+                      placeholder="R$"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg"
+                    />
+                  </div>
+                </div>
+                <div class="modalitens col-xl-6">
+                  <label class="modalconteudo">Total</label>
+                  <div class="input-group input-group-lg">
+                    <input
+                      id="inputQtdTotal"
+                      disabled
+                      type="number"
+                      class="form-control"
+                      placeholder="R$"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg"
+                    />
+                  </div>
+                </div>
+                <div class="modalitens col-xl-12">
+                  <label class="modalconteudo">Descrição do Investimento</label>
+                  <div class="input-group input-group-lg">
+                    <input
+                      id="descricaoModal"
+                      type="text"
+                      class="form-control"
+                      aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 modal-footer">
-            <div class="row-xl-5">
-              <button
-                id="confirmar"
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                CONFIRMAR
-              </button>
+            <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 modal-footer">
+              <div class="row-xl-5">
+                <button
+                  id="confirmar"
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                  v-on:click="inserirInvestimento()"
+                >
+                  CONFIRMAR
+                </button>
+              </div>
+              <div class="col-xl-5"></div>
             </div>
-            <div class="col-xl-5"></div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -280,213 +277,95 @@ export default {
   },
   data () {
     return {
-      responseStatus: '',
-      participantes: [
-        {
-          nome: 'Marco Aguiar',
-          programa: 'Java',
-          turma: '01',
-          salario: 'R$ 1500.00'
-        },
-        {
-          nome: 'Matheus Andrade',
-          programa: 'Java',
-          turma: '02',
-          salario: 'R$ 1500.00'
-        },
-        {
-          nome: 'Lucas Machado',
-          programa: 'Mobile',
-          turma: '02',
-          salario: 'R$ 1500.00'
-        },
-        {
-          nome: 'Miguel Vasconcelos',
-          programa: '.net',
-          turma: '03',
-          salario: 'R$ 1500.00'
-        },
-        {
-          nome: 'Patricia Moraes',
-          programa: 'Java',
-          turma: '01',
-          salario: 'R$ 1500.00'
-        },
-        {
-          nome: 'Ricardo Benevides',
-          programa: 'Mainframe',
-          turma: '02',
-          salario: 'R$ 1500.00'
-        },
-        {
-          nome: 'Nicollas Andrade',
-          programa: 'Java',
-          turma: '01',
-          salario: 'R$ 1500.00'
-        }
-      ],
-      programas: [
-        {
-          id: 1,
-          nome: 'Infraestrutura'
-        },
-        {
-          id: 2,
-          nome: 'Java'
-        },
-        {
-          id: 3,
-          nome: 'Mainframe'
-        },
-        {
-          id: 4,
-          nome: 'Mobile'
-        },
-        {
-          id: 5,
-          nome: '.Net'
-        }
-      ],
-      turmas: [
-        {
-          id: 1,
-          nome: '01'
-        },
-        {
-          id: 2,
-          nome: '02'
-        },
-        {
-          id: 3,
-          nome: '03'
-        }
-      ],
-      salarios: [
-        {
-          id: 1,
-          nome: 'R$ 1500.00'
-        }
-      ]
+      participantes: [],
+      cpfParticipantes: [],
+      programaProcurado: '',
+      turmaProcurada: '',
+      form: {
+        cpf: '',
+        mesAno: '',
+        remuneracao: '',
+        encargos: '',
+        beneficios: '',
+        descricao: ''
+      },
+      qtdTotal: {
+        qtdTotal: ''
+      },
+      qtdSalario: {
+        qtdSalario: ''
+      }
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
   },
   methods: {
-    filtraDados () {
-      const dadosLinhas = this.pegaDados()
-      let nomeProcurado = document.querySelector('#filtro-nome').value
-      let programaProcurado = document.querySelector('#filtro-programa').value
-      let turmaProcurada = document.querySelector('#filtro-turma').value
-      let linhasNl = document.querySelectorAll('#participante')
-      var linhasArray = Array.prototype.slice.call(linhasNl)
-      let arrayBoolLinhas = this.verifica(
-        dadosLinhas,
-        nomeProcurado,
-        programaProcurado,
-        turmaProcurada
-      )
-      this.mudaVisibilidade(arrayBoolLinhas, linhasArray)
+    filtrarDados () {
+      this.programaProcurado = document.querySelector('.filtro-programa').value
+      this.turmaProcurada = document.querySelector('.filtro-turma').value
+      http
+        .get(
+          'investimento-folha/' +
+            this.programaProcurado +
+            '/' +
+            this.turmaProcurada
+        )
+        .then(response => (this.participantes = response.data))
     },
-    pegaDados () {
-      let linhas = document.querySelectorAll('#participante')
-      let programas = document.querySelectorAll('#programa')
-      let arrayProgramas = []
-      let arrayDadosDasLinhas = []
-      programas.forEach((programa) => {
-        arrayProgramas.push(programa.textContent)
+
+    mostrarParticipantes () {
+      http
+        .get(
+          `investimento-folha/participantes/${this.programaProcurado}/${this.turmaProcurada}`
+        )
+        .then(response => (this.cpfParticipantes = response.data))
+    },
+
+    inserirInvestimento () {
+      this.form.cpf = document.getElementById('nomeModal').value
+      this.form.mesAno = document.querySelector('#mesAnoModal').value
+      this.form.remuneracao = document.querySelector('#remuneracaoModal').value
+      this.form.encargos = document.querySelector('#encargosModal').value
+      this.form.beneficios = document.querySelector('#beneficiosModal').value
+      this.form.descricao = document.querySelector('#descricaoModal').value
+      http.post('/investimento-folha', this.form).then(response => {
       })
-      console.log(arrayProgramas)
-      linhas.forEach((linha) => {
-        let dadosLinha = []
-        let nome = linha.querySelector('#info-nome').textContent
-        let programa = this.trataPrograma(linha, arrayProgramas)
-        let turma = this.trataTurma(linha)
-        dadosLinha.push(nome, programa, turma)
-        arrayDadosDasLinhas.push(dadosLinha)
-      })
-      console.log(arrayDadosDasLinhas)
-      return arrayDadosDasLinhas
     },
-    trataTurma (linha) {
-      let turmaTxt = linha.querySelector('#info-turma').textContent
-      let turma = 0
-      if (turmaTxt == '01') {
-        turma = 1
-        return turma
-      } else if (turmaTxt == '02') {
-        turma = 2
-        return turma
-      } else if (turmaTxt == '03') {
-        turma = 3
-        return turma
-      }
-      return turma
+
+    escutaQuantidades () {
+      let remuneracao = document.querySelector('#remuneracaoModal').value
+      let encargos = document.querySelector('#encargosModal').value
+      let beneficios = document.querySelector('#beneficiosModal').value
+      this.carregaQuantidade(remuneracao, encargos, beneficios)
     },
-    trataPrograma (linha, arrayProgramas) {
-      var programaTxt = linha.querySelector('#info-programa').textContent
-      let programaNum = 0
-      let i = 0
-      for (let i = 0; i < arrayProgramas.length; i++) {
-        if (programaTxt == arrayProgramas[i]) {
-          programaNum = i + 1
-          return programaNum
-        }
+
+    carregaQuantidade (remun, encarg, benef) {
+      remun = parseInt(remun)
+      encarg = parseInt(encarg)
+      benef = parseInt(benef)
+
+      if (isNaN(remun)) {
+        remun = 0
       }
-      return programaNum
+      if (isNaN(encarg)) {
+        encarg = 0
+      }
+      if (isNaN(benef)) {
+        benef = 0
+      }
+      let qtdTotal = 0
+      qtdTotal += remun + encarg + benef
+      let elQtdTotal = document.querySelector('#inputQtdTotal')
+      elQtdTotal.value = qtdTotal
     },
-    verifica (dadosLinhas, nomeProcurado, programaProcurado, turmaProcurada) {
-      let arrayBoolLinhas = []
-      let expressao = new RegExp(nomeProcurado, 'i')
-      dadosLinhas.forEach((dadosLinha) => {
-        let boolLinha = []
-        // Verificando se o nome procurado consta na tabela
-        if (expressao.test(dadosLinha[0]) || nomeProcurado == '') {
-          boolLinha.push(true)
-        } else {
-          boolLinha.push(false)
-        }
-        // Verificando se o programa procurado consta na tabela
-        if (programaProcurado == dadosLinha[1] || programaProcurado == 0) {
-          boolLinha.push(true)
-        } else {
-          boolLinha.push(false)
-        }
-        // Verificando se a turma procurada consta na tabela
-        if (turmaProcurada == dadosLinha[2] || turmaProcurada == 0) {
-          boolLinha.push(true)
-        } else {
-          boolLinha.push(false)
-        }
-        arrayBoolLinhas.push(boolLinha)
-      })
-      return arrayBoolLinhas
-    },
-    mudaVisibilidade (arrayBoolLinhas, linhas) {
-      let i
-      var contador = 0
-      let aviso = document.querySelector('.aviso')
-      let tabela = document.querySelector('.tabela')
-      var qtdLinhas = linhas.length
-      for (i = 0; i < linhas.length; i++) {
-        if (
-          arrayBoolLinhas[i][0] &&
-          arrayBoolLinhas[i][1] &&
-          arrayBoolLinhas[i][2]
-        ) {
-          linhas[i].style.display = ''
-        } else {
-          linhas[i].style.display = 'none'
-          contador++
-        }
-      }
-      if (qtdLinhas == contador) {
-        aviso.style.display = 'flex'
-        tabela.style.display = 'none'
-      } else {
-        aviso.style.display = 'none'
-        tabela.style.display = 'flex'
-      }
+
+    mudaVisibilidade () {
+      let mensagem = document.querySelector('.mensagem')
+      let extremo = document.querySelector('.extremo')
+
+      mensagem.style.display = 'none'
+      extremo.style.display = 'flex'
     }
   }
 }
@@ -495,10 +374,6 @@ export default {
 <style>
 body {
   background: #ebebeb;
-}
-
-.tela {
-  background-color: #ebebeb;
 }
 
 #botaoFolha {
@@ -512,7 +387,7 @@ body {
   background: #ffb600;
   font-weight: bold;
   width: 180px;
-  margin-left: 10px;
+  margin-left: 30px;
   color: #ffffff;
 }
 
@@ -524,25 +399,40 @@ body {
   border: none;
 }
 
-.botaoselecionar {
-  display: inline-block;
-  padding: 0px !important;
-  height: 38px;
-  margin: 0px !important;
-  border: none !important;
-}
-
-#close-image img {
-  display: inline-block;
-  height: 38px;
-}
-
 #botaoAdicionarManualmente {
   background: #ffb700;
   font-weight: bold;
   color: #ffffff;
-  margin-left: 120px;
   border: none;
+}
+
+.formacao,
+.turma {
+  margin-top: 22px;
+}
+
+.extremo {
+  display: none;
+}
+
+.mensagem {
+  margin-top: 120px;
+  color: #090b2e;
+  font-size: x-large;
+  font-weight: bold;
+  text-align: center;
+}
+
+.botaoConfirmar {
+  margin-left: 40px;
+  background: #090b2e;
+  color: white;
+  width: 160px;
+}
+
+.botaoOrdenar {
+  background: #090b2e;
+  color: white;
 }
 
 #filtro-nome {
@@ -551,27 +441,33 @@ body {
 
 #botaoSelecionar {
   height: 38px;
+  width: 60px;
+  border: none;
 }
 
-.ultima {
-  background: #63657a !important;
-  color: #ffffff;
+#lupa {
+  width: 100%;
+}
+
+#tabela {
+  margin-top: 30px;
+}
+
+.table {
+  width: 95%;
+}
+
+.participantes {
   text-align: left;
-}
-
-#info-nome,
-#info-turma,
-#info-programa,
-#info-salario {
-  text-align: left;
-}
-
-.forte {
-  font-weight: bold;
+  font-weight: 500;
 }
 
 #modalinteiro {
   background-color: #ebebeb;
+}
+
+.nomeModal {
+  height: 55px;
 }
 
 .my-custom-scrollbar {
@@ -585,16 +481,8 @@ body {
   height: 59vh;
 }
 
-#info-nome {
-  font-weight: bold;
-}
-
 .botao {
   padding-bottom: 2%;
-}
-
-.botoes {
-  margin-top: 100px;
 }
 
 #formação {
@@ -608,12 +496,8 @@ body {
   display: none;
 }
 
-#botaoSelecionar {
-  width: 40px;
-}
-
-#close-image:hover {
-  background-color: #00b5;
+#botaoSelecionar:hover {
+  background-color: steelblue;
 }
 
 .aviso {
@@ -623,9 +507,7 @@ body {
   justify-content: center;
   text-align: center;
   position: relative;
-  margin-top: 220px;
-  margin-bottom: 200px;
-
+  margin-bottom: 400px;
 }
 
 .recarregar {
@@ -645,7 +527,7 @@ body {
   width: 100%;
 }
 
-#modalconteudo {
+.modalconteudo {
   font-family: Montserrat;
   font-size: 20px;
   font-style: normal;
@@ -688,11 +570,6 @@ body {
     width: 100%;
     margin-left: 0px;
     margin-top: 10px;
-  }
-
-  #formação,
-  #turmas {
-    width: auto;
   }
 
   #botaoSalarioPadrao {
