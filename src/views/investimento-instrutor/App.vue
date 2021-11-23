@@ -245,17 +245,17 @@ export default {
     return {
       instrutores: [],
       cpfInstrutores: [],
-      programaProcurado: "",
-      turmaProcurada: "",
+      programaProcurado: '',
+      turmaProcurada: '',
       salarios: [],
       form: {
-        cpf: "",
-        mesAno: "",
-        valorHora: "",
-        horasTrabalhadas: ""
+        cpf: '',
+        mesAno: '',
+        valorHora: '',
+        horasTrabalhadas: ''
       },
       qtdTotal: {
-        qtdTotal: ""
+        qtdTotal: ''
       }
     }
   },
@@ -263,69 +263,69 @@ export default {
     Funcoes.verificaToken()
   },
   methods: {
-    filtrarDados() {
-      this.programaProcurado = document.querySelector(".filtro-programa").value;
-      this.turmaProcurada = document.querySelector(".filtro-turma").value;
+    filtrarDados () {
+      this.programaProcurado = document.querySelector('.filtro-programa').value
+      this.turmaProcurada = document.querySelector('.filtro-turma').value
       http
         .get(
-          "instrutor/buscar-instrutor/" +
+          'instrutor/buscar-instrutor/' +
             this.programaProcurado +
-            "/" +
+            '/' +
             this.turmaProcurada
         )
-        .then(response => (this.instrutores = response.data)); //Apenas o nome, formação e turma
+        .then(response => (this.instrutores = response.data))
     },
 
-    inserirInvestimento() {
-      this.form.cpf = document.querySelector("#nomeModal").value;
-      this.form.mesAno = document.querySelector("#mesAnoModal").value;
-      this.form.valorHora = document.querySelector("#valorHoraModal").value;
+    inserirInvestimento () {
+      this.form.cpf = document.querySelector('#nomeModal').value
+      this.form.mesAno = document.querySelector('#mesAnoModal').value
+      this.form.valorHora = document.querySelector('#valorHoraModal').value
       this.form.horasTrabalhadas = document.querySelector(
-        "#horasTrabalhadasModal"
-      ).value;
+        '#horasTrabalhadasModal'
+      ).value
       http
-        .post("/instrutor/salvar-invest", this.form) //mudar a url, por causa da junção com juliano
-        .then(response => console.log(response.data));
+        .post('/instrutor/salvar-invest', this.form)
+        .then(response => console.log(response.data))
     },
 
-    escutaQuantidades() {
-      let valorHora = document.querySelector("#valorHoraModal").value;
-      let quantidadeHora = document.querySelector("#horasTrabalhadasModal")
-        .value;
-      this.carregaQuantidade(valorHora, quantidadeHora);
+    escutaQuantidades () {
+      let valorHora = document.querySelector('#valorHoraModal').value
+      let quantidadeHora = document.querySelector('#horasTrabalhadasModal')
+        .value
+      this.carregaQuantidade(valorHora, quantidadeHora)
     },
 
-    carregaQuantidade(valor, quantidade) {
-      valor = parseInt(valor);
-      quantidade = parseInt(quantidade);
+    carregaQuantidade (valor, quantidade) {
+      valor = parseInt(valor)
+      quantidade = parseInt(quantidade)
 
       if (isNaN(valor)) {
-        valor = 0;
+        valor = 0
       }
       if (isNaN(quantidade)) {
-        quantidade = 0;
+        quantidade = 0
       }
 
-      let qtdTotal = 0;
-      qtdTotal = valor * quantidade;
-      let elQtdTotal = document.querySelector("#inputQtdTotal");
-      elQtdTotal.value = qtdTotal;
+      let qtdTotal = 0
+      qtdTotal = valor * quantidade
+      let elQtdTotal = document.querySelector('#inputQtdTotal')
+      elQtdTotal.value = qtdTotal
     },
 
-    mostrarInstrutor() {
+    mostrarInstrutor () {
       http
         .get(
           `instrutor/instrutores/${this.programaProcurado}/${this.turmaProcurada}`
         )
-        .then(response => console.log((this.cpfInstrutores = response.data)));
+        .then(response => console.log((this.cpfInstrutores = response.data)))
     },
 
-    mudaVisibilidade() {
-      let mensagem = document.querySelector(".mensagem");
-      let extremo = document.querySelector(".extremo");
+    mudaVisibilidade () {
+      let mensagem = document.querySelector('.mensagem')
+      let extremo = document.querySelector('.extremo')
 
-      mensagem.style.display = "none";
-      extremo.style.display = "flex";
+      mensagem.style.display = 'none'
+      extremo.style.display = 'flex'
     }
   }
 }

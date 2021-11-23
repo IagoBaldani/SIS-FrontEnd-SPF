@@ -279,21 +279,21 @@ export default {
     return {
       participantes: [],
       cpfParticipantes: [],
-      programaProcurado: "",
-      turmaProcurada: "",
+      programaProcurado: '',
+      turmaProcurada: '',
       form: {
-        cpf: "",
-        mesAno: "",
-        remuneracao: "",
-        encargos: "",
-        beneficios: "",
-        descricao: ""
+        cpf: '',
+        mesAno: '',
+        remuneracao: '',
+        encargos: '',
+        beneficios: '',
+        descricao: ''
       },
       qtdTotal: {
-        qtdTotal: ""
+        qtdTotal: ''
       },
       qtdSalario: {
-        qtdSalario: ""
+        qtdSalario: ''
       }
     }
   },
@@ -301,72 +301,71 @@ export default {
     Funcoes.verificaToken()
   },
   methods: {
-    filtrarDados() {
-      this.programaProcurado = document.querySelector(".filtro-programa").value;
-      this.turmaProcurada = document.querySelector(".filtro-turma").value;
+    filtrarDados () {
+      this.programaProcurado = document.querySelector('.filtro-programa').value
+      this.turmaProcurada = document.querySelector('.filtro-turma').value
       http
         .get(
-          "investimento-folha/" +
+          'investimento-folha/' +
             this.programaProcurado +
-            "/" +
+            '/' +
             this.turmaProcurada
         )
-        .then(response => (this.participantes = response.data)); //Apenas o conteúdo
+        .then(response => (this.participantes = response.data))
     },
 
-    mostrarParticipantes() {
+    mostrarParticipantes () {
       http
         .get(
           `investimento-folha/participantes/${this.programaProcurado}/${this.turmaProcurada}`
         )
-        .then(response => (this.cpfParticipantes = response.data));
+        .then(response => (this.cpfParticipantes = response.data))
     },
 
-    inserirInvestimento() {
-      this.form.cpf = document.getElementById("nomeModal").value;
-      this.form.mesAno = document.querySelector("#mesAnoModal").value;
-      this.form.remuneracao = document.querySelector("#remuneracaoModal").value;
-      this.form.encargos = document.querySelector("#encargosModal").value;
-      this.form.beneficios = document.querySelector("#beneficiosModal").value;
-      this.form.descricao = document.querySelector("#descricaoModal").value;
-      http.post("/investimento-folha", this.form).then(response => {
-        this.form;
-      });
+    inserirInvestimento () {
+      this.form.cpf = document.getElementById('nomeModal').value
+      this.form.mesAno = document.querySelector('#mesAnoModal').value
+      this.form.remuneracao = document.querySelector('#remuneracaoModal').value
+      this.form.encargos = document.querySelector('#encargosModal').value
+      this.form.beneficios = document.querySelector('#beneficiosModal').value
+      this.form.descricao = document.querySelector('#descricaoModal').value
+      http.post('/investimento-folha', this.form).then(response => {
+      })
     },
 
-    escutaQuantidades() {
-      let remuneracao = document.querySelector("#remuneracaoModal").value;
-      let encargos = document.querySelector("#encargosModal").value;
-      let beneficios = document.querySelector("#beneficiosModal").value;
-      this.carregaQuantidade(remuneracao, encargos, beneficios);
+    escutaQuantidades () {
+      let remuneracao = document.querySelector('#remuneracaoModal').value
+      let encargos = document.querySelector('#encargosModal').value
+      let beneficios = document.querySelector('#beneficiosModal').value
+      this.carregaQuantidade(remuneracao, encargos, beneficios)
     },
 
-    carregaQuantidade(remun, encarg, benef) {
-      remun = parseInt(remun);
-      encarg = parseInt(encarg);
-      benef = parseInt(benef);
+    carregaQuantidade (remun, encarg, benef) {
+      remun = parseInt(remun)
+      encarg = parseInt(encarg)
+      benef = parseInt(benef)
 
       if (isNaN(remun)) {
-        remun = 0;
+        remun = 0
       }
       if (isNaN(encarg)) {
-        encarg = 0;
+        encarg = 0
       }
       if (isNaN(benef)) {
-        benef = 0;
+        benef = 0
       }
-      let qtdTotal = 0;
-      qtdTotal += remun + encarg + benef;
-      let elQtdTotal = document.querySelector("#inputQtdTotal");
-      elQtdTotal.value = qtdTotal;
+      let qtdTotal = 0
+      qtdTotal += remun + encarg + benef
+      let elQtdTotal = document.querySelector('#inputQtdTotal')
+      elQtdTotal.value = qtdTotal
     },
 
-    mudaVisibilidade() {
-      let mensagem = document.querySelector(".mensagem");
-      let extremo = document.querySelector(".extremo");
+    mudaVisibilidade () {
+      let mensagem = document.querySelector('.mensagem')
+      let extremo = document.querySelector('.extremo')
 
-      mensagem.style.display = "none";
-      extremo.style.display = "flex";
+      mensagem.style.display = 'none'
+      extremo.style.display = 'flex'
     }
   }
 }
