@@ -95,7 +95,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import { http } from '@/services/Config'
+import { http } from '@/services/config'
 
 export default {
   name: 'App',

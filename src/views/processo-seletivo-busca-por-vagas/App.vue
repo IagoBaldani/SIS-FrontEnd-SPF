@@ -10,10 +10,10 @@
         <div class="col-lg-6"></div>
       </div>
       <div class="row justify-content-evenly">
-        <div class="col-lg-6">
+        <div class="col-lg-5">
           <!-- Input para filtragem na tabela -->
           <div class="search-input">
-            <div class="col-xl-8">
+            <div class="col-xl-9">
               <input
                 type="text"
                 class="form-control mb-3"
@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-7">
           <!-- Tabela dinâmica atualizada automaticamente usando o VueJS -->
           <div class="aviso mb-10 invisivel">
             <h4 class="titulo fw-bold">
@@ -47,34 +47,27 @@
               <tbody class="processosSeletivos">
                 <tr
                   class="processo"
-                  v-for="processo in processosSeletivos"
+                  v-for="(processo, index) in processosSeletivos"
                   :key="processo"
                 >
                   <th class="font-weight-normal" scope="row">
-                    {{ processo.id }}
+                    {{ ++index }}
                   </th>
-                  <td class="info-nome">{{ processo.processo }}</td>
-                  <td class="em-andamento" v-if="processo.status == 'EM_ANDAMENTO'">Em andamento</td>
-                  <td class="finalizado" v-if="processo.status == 'FINALIZADO'">
-                    Finalizado
-                  </td>
+                  <td class="info-nome">{{ processo.nome }}</td>
+                  <td class="em-andamento">Em andamento</td>
                   <td>
-                    <a
-                      href="http://localhost:8080/processo-seletivo-dados-da-vaga-visualizacao"
-                    >
-                      <img
-                        src="../../assets/imgs/visibility_white_24dp.svg"
-                        alt=""
-                      />
+                    <a :href="'processo-seletivo-dados-da-vaga-visualizacao?id=' + processo.id">
+                      <img src="../../assets/imgs/visibility_white_24dp.svg" alt=""/>
                     </a>
                   </td>
                   <td>
-                    <img
-                      src="../../assets/imgs/settings_white_24dp.svg"
-                      alt=""
-                    />
+                    <a :href="'/processo-seletivo-dados-da-vaga-cadastro-edicao?id=' + processo.id + '&tipo=edicao'">
+                    <img src="../../assets/imgs/settings_white_24dp.svg" alt=""/>
+                    </a>
                   </td>
-                  <td><img src="../../assets/imgs/Pattern.svg" alt="" /></td>
+                  <td>
+                    <a :href="'/processo-seletivo-busca-por-candidato?id=' + processo.id"><img src="../../assets/imgs/Pattern.svg" alt="" /></a>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -88,12 +81,8 @@
         <div class="col-xl-4"></div>
         <!-- Botão de cadastro de nova vaga -->
         <div class="col-xl-4">
-          <button
-            class="button-footer mb-3 mt-5  submit"
-            id="cadastrar"
-            type="submit"
-          >
-            Cadastrar Nova Vaga
+          <button class="button-footer mb-3 mt-5  submit" id="cadastrar" type="submit">
+            <a :href="'processo-seletivo-dados-da-vaga-cadastro-edicao?tipo=cadastro'">Cadastrar Nova Vaga</a>
           </button>
         </div>
       </div>
@@ -104,93 +93,23 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '@/services/Config'
 
 export default {
   name: 'App',
   components: {
     Header
   },
+
   data () {
     return {
-      responseStatus: '',
-      processosSeletivos: [
-        {
-          id: 1,
-          processo: 'Processo Seletivo Java',
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 2,
-          processo: 'Processo Seletivo Python',
-          status: 'FINALIZADO'
-        },
-        {
-          id: 3,
-          processo: 'Processo Seletivo Spring',
-          status: 'FINALIZADO'
-        },
-        {
-          id: 4,
-          processo: 'Processo Seletivo Mainframe',
-          status: 'FINALIZADO'
-        },
-        {
-          id: 5,
-          processo: 'Processo Seletivo Mobile',
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 6,
-          processo: 'Processo Seletivo JavaScript',
-          status: 'FINALIZADO'
-        },
-        {
-          id: 7,
-          processo: 'Processo Seletivo React Native',
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 8,
-          processo: 'Processo Seletivo COBOL',
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 9,
-          processo: 'Processo Seletivo React Native',
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 10,
-          processo: 'Processo Seletivo React Native',
-          status: 'FINALIZADO'
-        },
-        {
-          id: 11,
-          processo: 'Processo Seletivo React Native',
-          status: 'EM_ANDAMENTO'
-        },
-        {
-          id: 12,
-          processo: 'Processo Seletivo React Native',
-          status: 'FINALIZADO'
-        },
-        {
-          id: 13,
-          processo: 'Processo Seletivo React Native',
-          status: 'EM_ANDAMENTO'
-        }
-      ]
+      processosSeletivos: []
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
+
+    this.getListaDeProcessos()
   },
   methods: {
     filtraDados () {
@@ -236,6 +155,16 @@ export default {
           aviso.classList.remove('invisivel')
         }
       }
+    },
+    getListaDeProcessos () {
+      http
+        .get('processo-seletivo')
+        .then(response => {
+          this.processosSeletivos = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
     }
   }
 }
@@ -286,13 +215,13 @@ body {
 /* Scroll */
 .my-custom-scrollbar {
 position: relative;
-height: 59vh;
+height: 52vh;
 overflow: auto;
 }
 
 .table-wrapper-scroll-y {
 display: block;
-height: 59vh;
+height: 52vh;
 }
 
 /* Input de busca */
@@ -362,6 +291,10 @@ height: 59vh;
   color: var(--color-red-progress) !important;
 }
 
+.formacao-em-andamento{
+  color: yellow !important;
+}
+
 /* Button do rodapé */
 
 .button-footer {
@@ -419,5 +352,12 @@ height: 59vh;
 .recarregar:hover {
   background-color: #141863 !important;
 }
-
+a {
+  color: white;
+  text-decoration: none;
+}
+a:hover {
+  color: white !important;
+  text-decoration: none !important;
+}
 </style>

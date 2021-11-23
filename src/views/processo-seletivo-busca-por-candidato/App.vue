@@ -5,26 +5,26 @@
       <!-- Título da Página -->
       <div class="row justify-content-evenly">
         <div class="col-lg-b6 mb-2 mt-2">
-          <h1 class="mt-3 mb-3">Busca por processos seletivos:</h1>
+          <h1 class="mt-3 mb-3">Busca por candidato:</h1>
         </div>
         <div class="col-lg-6"></div>
       </div>
       <div class="row justify-content-evenly">
-        <div class="col-lg-6">
+        <div class="col-lg-5">
           <!-- Input para filtragem na tabela -->
           <div class="search-input">
-            <div class="col-xl-8">
+            <div class="col-xl-9">
               <input
                 type="text"
                 class="form-control mb-3"
                 id="filtrar-tabela"
-                placeholder="Processo seletivo Java"
+                placeholder="Candidato"
                 @input="filtraDados"
               />
             </div>
           </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-7">
           <!-- Tabela dinâmica atualizada automaticamente usando o VueJS -->
           <div class="aviso mb-10 invisivel">
             <h4 class="titulo fw-bold">
@@ -48,30 +48,34 @@
               <tbody class="processosSeletivos">
                 <tr
                   class="processo"
-                  v-for="processo in processo"
-                  :key="processo"
+                  v-for="(candidato, index) in candidatos"
+                  :key="candidato"
                 >
                   <th class="font-weight-normal" scope="row">
-                    {{ processo.id }}
+                    {{ ++index }}
                   </th>
-                  <td class="info-nome">{{ processo.nome }}</td>
-                  <td class="aprovado" v-if="processo.status == 'APROVADO_2_FASE'">APROVADO</td>
-                  <td class="reprovado" v-if="processo.status == 'REPROVADO_2_FASE'">
-                    REPROVADO
-                  </td>
-                  <td class="sem-status" v-if="processo.status == 'SEM_STATUS'">SEM STATUS</td>
-                  <td class="stand" v-if="processo.status == 'STANDBY'">STANDBY</td>
+                  <td class="info-nome">{{ candidato.nome }}</td>
+                  <td class="aprovado" v-if="candidato.status == 'APROVADO_2_FASE'">Aprovado</td>
+                  <td class="aprovado" v-if="candidato.status == 'APROVADO_1_FASE'">Aprovado 1ª fase</td>
+                  <td class="reprovado" v-if="candidato.status == 'REPROVADO_1_FASE'">Reprovado 1ª fase</td>
+                  <td class="reprovado" v-if="candidato.status == 'REPROVADO_2_FASE'">Reprovado</td>
+                  <td class="sem-status" v-if="candidato.status == 'SEM_STATUS'">Sem Status</td>
+                  <td class="stand" v-if="candidato.status == 'STANDBY'">Standby</td>
                   <td>
-                    <img
-                      src="../../assets/imgs/manage_accounts_white_24dp.svg"
-                      alt=""
-                    />
+                    <a :href="'/processo-seletivo-dados-do-candidato-visualizacao?id=' + candidato.id">
+                      <img
+                        src="../../assets/imgs/account_circle_white_24dp.svg"
+                        alt=""
+                      />
+                    </a>
                   </td>
                   <td>
-                    <img
-                      src="../../assets/imgs/account_circle_white_24dp.svg"
-                      alt=""
-                    />
+                    <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id + '&tipo=edicao'">
+                      <img
+                        src="../../assets/imgs/manage_accounts_white_24dp.svg"
+                        alt=""
+                      />
+                    </a>
                   </td>
                 </tr>
               </tbody>
@@ -79,19 +83,19 @@
           </div>
         </div>
       </div>
-      <div class="row empty"></div>
       <div class="mt-10"></div>
       <div class="row justify-content-between">
-        <!-- Botão de busca -->
         <div class="col-xl-4"></div>
         <!-- Botão de cadastro de nova vaga -->
         <div class="col-xl-4">
           <button
-            class="button-footer mb-3 mt-3 submit"
+            class="button-footer mt-5 submit"
             id="cadastrar"
-            type="submit"
+            type="button"
           >
-            Cadastrar Nova Vaga
+            <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?tipo=cadastro'">
+              Cadastrar novo candidato
+            </a>
           </button>
         </div>
       </div>
@@ -111,63 +115,19 @@ export default {
   },
   data () {
     return {
-      responseStatus: '',
-      processo: [
-        {
-          id: 1,
-          nome: 'Priscila Estuani',
-          status: 'APROVADO_2_FASE'
-        },
-        {
-          id: 2,
-          nome: 'Calopsita',
-          status: 'REPROVADO_2_FASE'
-        },
-        {
-          id: 3,
-          nome: 'Nico Stepatt',
-          status: 'SEM_STATUS'
-        },
-        {
-          id: 4,
-          nome: 'Gabriel Paulista',
-          status: 'STANDBY'
-        },
-        {
-          id: 1,
-          nome: 'Priscila Estuani',
-          status: 'APROVADO_2_FASE'
-        },
-        {
-          id: 1,
-          nome: 'Priscila Estuani',
-          status: 'APROVADO_2_FASE'
-        },
-        {
-          id: 1,
-          nome: 'Priscila Estuani',
-          status: 'APROVADO_2_FASE'
-        },
-        {
-          id: 1,
-          nome: 'Priscila Estuani',
-          status: 'APROVADO_2_FASE'
-        },
-        {
-          id: 1,
-          nome: 'Priscila Estuani',
-          status: 'APROVADO_2_FASE'
-        },
-        {
-          id: 1,
-          nome: 'Priscila Estuani',
-          status: 'APROVADO_2_FASE'
-        }
-      ]
+      candidatos: []
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
+    const dadosUrl = this.pegaDadosUrl()
+    let idProcesso = dadosUrl.id
+
+    if (idProcesso != null && idProcesso != '') {
+      this.getListaDaFormacao(idProcesso)
+    } else {
+      this.getLista()
+    }
   },
   methods: {
     filtraDados () {
@@ -206,6 +166,38 @@ export default {
           aviso.classList.remove('invisivel')
         }
       }
+    },
+    getLista () {
+      http
+        .get('candidato/lista')
+        .then(response => {
+          this.candidatos = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
+    pegaDadosUrl () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+      return data
+    },
+    getListaDaFormacao (idProcesso) {
+      http
+        .get(`candidato/lista-do-processo/${idProcesso}`)
+        .then(response => {
+          this.candidatos = response.data
+        })
+        .catch(error => {
+          alert(error)
+        })
     }
   }
 }
@@ -328,13 +320,13 @@ body {
 
 .my-custom-scrollbar {
   position: relative;
-  height: 59vh;
+  height: 55vh;
   overflow: auto;
 }
 
 .table-wrapper-scroll-y {
   display: block;
-  height: 59vh;
+  height: 55vh;
 }
 
 /* Início das Cores de Status do Participante */
@@ -345,9 +337,7 @@ body {
 .reprovado,
 .stand,
 .sem-status {
-  font-weight: bold;
-
-  font-size: 20px;
+  font-weight: 700;
 }
 
 /* Aprovado - Verde */
@@ -396,6 +386,7 @@ body {
 }
 #cadastrar {
   background-color: var(--color-yellow-principal);
+  color: white !important;
 }
 .btn {
   margin-top: 150px;
@@ -407,6 +398,7 @@ body {
 .invisivel {
   display: none;
 }
+
 .aviso {
   align-items: center;
   flex-direction: column;
@@ -428,5 +420,13 @@ body {
   .empty {
     height: 120px;
   }
+}
+
+a {
+  text-decoration: none !important;
+  color: var(--color-white-default) !important;
+}
+a:hover {
+  color: var(--color-white-default) !important;
 }
 </style>
