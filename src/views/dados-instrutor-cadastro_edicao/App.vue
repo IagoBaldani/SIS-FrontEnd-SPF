@@ -167,12 +167,13 @@ export default {
     },
     processaRequisicoes () {
       const dados = this.pegaDadosUrl()
-      let cpf = dados.cpf
+      let cpf = dados.id
       let tipo = dados.tipo
 
       if (tipo == 'edicao') {
+        console.log(cpf)
         http
-          .put(`instrutor/${cpf}`, this.instrutorForm)
+          .put(`instrutor/altera/${cpf}`, this.instrutorForm)
           .then(response => {
             window.location.href = 'http://localhost:8080/dados-instrutor-busca'
           })
