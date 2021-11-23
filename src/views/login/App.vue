@@ -35,10 +35,12 @@ export default {
       axios.post('http://localhost:8081/auth', {
         usuario: this.usuario,
         senha: this.senha
+       
       })
         .then(response => {
           Cookie.set('login_token', response.data.token)
           window.location.href = 'http://localhost:8080/home'
+          console.log(this.usuario, this.senha)
         })
         .catch(erro => {
           alert('Dados incorretos. Por favor, tente novamente.')
