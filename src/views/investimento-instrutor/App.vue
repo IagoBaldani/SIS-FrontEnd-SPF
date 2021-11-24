@@ -47,7 +47,7 @@
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="filtrarDados(), mudaVisibilidade()"
+              v-on:click="filtrarDados()"
             >
               Pesquisar
             </button>
@@ -77,15 +77,15 @@
             <td>{{ instrutor.nomeInstrutor }}</td>
             <td>{{ instrutor.nomePrograma }}</td>
             <td>{{ instrutor.nomeTurma }}</td>
-            <td>{{ instrutor.qtdHora * instrutor.vlrHora }}</td>
-            <td>{{ instrutor.dataLancamento }}</td>
-            <td>{{ instrutor.dataFim }}</td>
+            <td>R$ {{ instrutor.qtdHora * instrutor.vlrHora }},00</td>
+            <td>{{ formataDataParaMostrar(instrutor.dataLancamento) }}</td>
+            <td>{{ formataDataParaMostrar(instrutor.dataFim) }}</td>
           </tr>
         </tbody>
         <tfoot class="extremo">
           <tr>
             <th scope="row">TOTAL</th>
-            <td></td>
+            <td id="salarioTotal"></td>
           </tr>
         </tfoot>
       </table>
@@ -266,6 +266,7 @@ export default {
     filtrarDados () {
       this.programaProcurado = document.querySelector('.filtro-programa').value
       this.turmaProcurada = document.querySelector('.filtro-turma').value
+      this.mudaVisibilidade()
       http
         .get(
           'instrutor/buscar-instrutor/' +
@@ -273,7 +274,10 @@ export default {
             '/' +
             this.turmaProcurada
         )
-        .then(response => (this.instrutores = response.data))
+        .then(response => {
+          (this.instrutores = response.data)
+          this.pegarSalario()
+        }) 
     },
 
     inserirInvestimento () {
@@ -286,6 +290,14 @@ export default {
       http
         .post('/instrutor/salvar-invest', this.form)
         .then(response => console.log(response.data))
+    },
+
+    pegarSalario () {
+      let salario = 0
+      this.instrutores.forEach(instrutor => {
+        salario = salario + (instrutor.qtdHora * instrutor.vlrHora)
+      })
+      document.querySelector('#salarioTotal').textContent = 'R$ ' + salario + ',00'
     },
 
     escutaQuantidades () {
@@ -326,6 +338,12 @@ export default {
 
       mensagem.style.display = 'none'
       extremo.style.display = 'flex'
+    },
+
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
     }
   }
 }
@@ -394,6 +412,10 @@ body {
 
 .extremo {
   display: none;
+}
+
+#salarioTotal {
+  font-weight: 500;
 }
 
 .botaoConfirmar {
