@@ -1,11 +1,11 @@
 import Cookie from 'js-cookie'
-import axios from 'axios'
+import { http } from '../services/Config'
 
 export default {
   async verificaToken () {
     const token = Cookie.get('login_token')
 
-    await axios.get(`http://localhost:8081/auth/${token}`)
+    await http.get(`auth/${token}`)
       .then(response => {
         this.responseStatus = response.data
         console.log('AUTENTICADO')

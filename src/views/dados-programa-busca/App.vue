@@ -64,7 +64,7 @@
                     <input value="BUSCAR" type="button" class="mt-5 form-control submit" @click="filtraDados"/>
                 </div>
                 <div class="col-xl-7 justify-content-end d-flex">
-                    <a href="/dados-programa-processo-seletivo"
+                    <a href="/dados-programa-cadastro_edicao?tipo=cadastro"
                        class="mt-5 form-control cadastro d-flex justify-content-center"> NOVO CADASTRO
                     </a>
                 </div>
@@ -78,7 +78,6 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
-
 export default {
   name: 'App',
   components: {
@@ -106,29 +105,23 @@ export default {
     },
     filtraDados () {
       let dadosLinhas = this.pegaDados()
-
       let nomeProcurado = document.querySelector('#filtro-nome').value
       let statusProcurado = document.querySelector('#filtro-status').value
-
       let linhasNl = document.querySelectorAll('.programa')
       var linhas = Array.prototype.slice.call(linhasNl)
-
       const arrayBoolLinhas = this.verifica(dadosLinhas, nomeProcurado, statusProcurado)
       this.mudaVisibilidade(arrayBoolLinhas, linhas)
     },
     pegaDados () {
       let linhas = document.querySelectorAll('.programa')
       let arrayDadosDasLinhas = []
-
       linhas.forEach(linha => {
         let dadosLinha = []
         let nome = linha.querySelector('#info-nome').textContent
         let status = this.trataStatus(linha)
-
         dadosLinha.push(nome, status)
         arrayDadosDasLinhas.push(dadosLinha)
       })
-
       return arrayDadosDasLinhas
     },
     trataStatus (item) {
@@ -141,13 +134,11 @@ export default {
         status = 2
         return status
       }
-
       return status
     },
     verifica (dadosLinhas, nomeProcurado, statusProcurado) {
       let arrayBoolLinhas = []
       let expressao = new RegExp(nomeProcurado, 'i')
-
       dadosLinhas.forEach(dadosLinha => {
         const boolLinha = []
         console.log(dadosLinha)
@@ -156,16 +147,13 @@ export default {
         } else {
           boolLinha.push(false)
         }
-
         if (statusProcurado == dadosLinha[1] || statusProcurado == 0) {
           boolLinha.push(true)
         } else {
           boolLinha.push(false)
         }
-
         arrayBoolLinhas.push(boolLinha)
       })
-
       return arrayBoolLinhas
     },
     mudaVisibilidade (arrayBoolLinhas, linhas) {
@@ -173,7 +161,6 @@ export default {
       var contador = 0
       let aviso = document.querySelector('.aviso')
       var qtdLinhas = linhas.length
-
       for (i = 0; i < linhas.length; i++) {
         if (arrayBoolLinhas[i][0] && arrayBoolLinhas[i][1]) {
           linhas[i].style.display = ''
@@ -182,7 +169,6 @@ export default {
           contador++
         }
       }
-
       if (qtdLinhas === contador) {
         aviso.style.display = 'flex'
       } else {
@@ -192,11 +178,9 @@ export default {
     recarregaLista () {
       let linhas = document.querySelectorAll('.programa')
       let aviso = document.querySelector('.aviso')
-
       linhas.forEach(linha => {
         linha.style.display = ''
       })
-
       aviso.style.display = 'none'
     }
   }
@@ -210,97 +194,78 @@ body {
 a{
     text-decoration: none !important;
 }
-
 .tabela{
     border: 1px solid #BCB3B3 !important;
     background-color: white;
 }
-
 .titulo{
     color: #090B2E;
 }
-
 .botao{
     background-color: #AB0045 !important;
     border-style: none !important;
     width: 26.9em !important;
     border-radius: 2px !important;
 }
-
 .campo{
     border-radius: 2px !important;
     background-color: white !important;
     color: #737373 !important;
 }
-
 .th-id{
     width: 2em !important;
 }
-
 .th-ms{
     width: 15em !important;
 }
-
 .td-button{
     width: 1.5em !important;
     background-color: #FFB700 !important;
 }
-
 .nome-participante{
     color: #737373;
 }
 .campo-tabela{
     color: #737373 !important;
 }
-
 .submit, .cadastro, .recarregar{
     color: white !important;
     font-weight: bold !important;
     border-radius: 5px !important;
 }
-
 .submit{
     background-color: #AB0045 !important;
 }
-
 .cadastro{
     background-color: #FFB700 !important;
     max-width: 575px !important;
 }
-
 .em-andamento{
     color: green;
     font-weight: bold;
 }
-
 .encerrado{
     color: darkred;
     font-weight: bold;
 }
-
 .imagem{
     background-color:  #AB0045 !important;
 }
-
 .imagem-coluna{
     background-color: #FFB700 !important;
 }
-
 .my-custom-scrollbar {
     position: relative;
     height: 59vh;
     overflow: auto;
 }
-
 .table-wrapper-scroll-y {
     display: block;
     height: 59vh;
 }
-
 .invisivel{
     display: none;
 }
-
 .aviso{
     display: none;
     align-items: center;
@@ -311,16 +276,13 @@ a{
     position: absolute;
     z-index: 100;
 }
-
 .recarregar{
     background-color: #090B2E !important;
     max-width: 50%;
     cursor: pointer !important;
     transition: all linear 0.3s !important;
 }
-
 .recarregar:hover{
     background-color: #141863 !important;
 }
-
 </style>

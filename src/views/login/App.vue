@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Cookie from 'js-cookie'
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     submit () {
-      axios.post('http://localhost:8081/auth', {
+      http.post('auth', {
         usuario: this.usuario,
         senha: this.senha
        
@@ -40,7 +40,6 @@ export default {
         .then(response => {
           Cookie.set('login_token', response.data.token)
           window.location.href = 'http://localhost:8080/home'
-          console.log(this.usuario, this.senha)
         })
         .catch(erro => {
           alert('Dados incorretos. Por favor, tente novamente.')

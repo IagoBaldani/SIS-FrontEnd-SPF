@@ -36,7 +36,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="hMinima" class="form-label fw-bold mb-0 titulo">Horas mínimas semanais</label>
-                            <input name="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
+                            <input name="hMinima" id="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
                         </div>
                         <button type="button" @click="postForm()" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
                         <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
@@ -193,19 +193,19 @@ export default {
         hrMinSemana: ''
       },
       indiceModal: {} // função para gerar os indices no modal de acordo com a posição na tabela.
-    } 
+    }
   },
-  
-  beforeMount () { 
+
+  beforeMount () {
     this.id = this.pegaDadosUrl().id
     this.getParticipanteNome()
     this.getAlura()
     Funcoes.verificaToken()
   },
-  
+
   methods: {
-    // faz o get no back-end e retorna as informações do participante 
-    getParticipanteNome () { 
+    // faz o get no back-end e retorna as informações do participante
+    getParticipanteNome () {
       http
         .get(`participante/${this.id}`)
         .then((response) => {
@@ -216,7 +216,7 @@ export default {
         })
     },
     // requisição do tipo post para enviar as informações obtidas do formulário
-    postForm () { 
+    postForm () {
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
       campos.forEach(element => {

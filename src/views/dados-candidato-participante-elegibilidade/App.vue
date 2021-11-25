@@ -5,7 +5,7 @@
       <!-- Título da Página -->
       <div class="row justify-content-evenly">
         <div class="col-lg-b6 mb-2 mt-2">
-          <h1 class="mt-3 mb-3">Busca por cargos:</h1>
+          <h1 class="mt-3 mb-3">Busca por candidato:</h1>
         </div>
         <div class="col-lg-6"></div>
       </div>
@@ -18,7 +18,7 @@
                 type="text"
                 class="form-control mb-3"
                 id="filtrar-tabela"
-                placeholder="Estágiario 1"
+                placeholder="Candidato"
                 @input="filtraDados"
               />
             </div>
@@ -37,56 +37,28 @@
               RECARREGAR LISTA
             </button>
           </div>
-          <div class="search-table table-wrapper-scroll-y my-custom-scrollbar">
-            <!--  -->
-            <table
-              class="
-                table table-bordered
-              "
-            >
-              <tbody class="processosSeletivos">
-                <tr
-                  class="processo"
-                  v-for="(cargo, index) in cargos"
-                  :key="cargo"
-                >
-                  <th class="font-weight-normal" scope="row">
-                    {{++index}}
-                  </th>
-                  <td class="info-nome">{{cargo.cargo}}</td>
-                  <td>
-                    <a :href="'/cargo-visualizar?id=' + cargo.id">
-                      <img src="../../assets/imgs/visibility_white_24dp.svg" alt=""/>
-                    </a>
-                  </td>
-                  <td>
-                    <a :href="'/cargo-cadastro-edicao?id=' + cargo.id + '&tipo=edicao'">
-                    <img src="../../assets/imgs/settings_white_24dp.svg" alt=""/>
-                    </a>
-                  </td>
-                </tr>
+         <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <table class="table table-bordered tabela mt-4 ">
+              <tbody align="center">
+              <tr id="candidato" v-for="candidato in candidatos" class="candidatoAprovado" v-bind:key="candidato">
+                <th class="info-nome" scope="row" width="200">{{candidato.nome}}</th>
+                <td id="info-processo">{{candidato.processoSeletivo}}</td>
+                <td id="info-status">{{candidato.status}}</td>
+                <td class="imagem rounded" width="30">
+                  <a :href="'/dados-participante-cadastro_participante?id=' + candidato.id">
+                    <img src="@/assets/imgs/usuario.svg" alt="Imagem" />
+                  </a>
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      <div class="row empty"></div>
-      <div class="mt-8"></div>
+      <div class="mt-10"></div>
       <div class="row justify-content-between">
         <!-- Botão de busca -->
         <div class="col-xl-4"></div>
-        <!-- Botão de cadastro de nova vaga -->
-        <div class="col-xl-4">
-          <button
-            class="button-footer mb-3 mt-4 submit"
-            id="cadastrar"
-            type="button"
-          >
-          <a class="button-footer submit" :href="'/cargo-cadastro-edicao?tipo=cadastro'">
-            CADASTRAR NOVO CARGO
-          </a>
-          </button>
-        </div>
       </div>
     </div>
   </main>
@@ -96,21 +68,21 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
-
 export default {
   name: 'App',
   components: {
     Header
   },
-
   data () {
     return {
-      cargos: []
+      candidatos: []
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-    this.getLista()
+  },
+  mounted () {
+    http.get('/participante/status').then(response => (this.candidatos = response.data))
   },
   methods: {
     filtraDados () {
@@ -121,7 +93,7 @@ export default {
       var listaDeValores = []
 
       console.log(campoFiltro.value)
-      var processos = document.querySelectorAll('.processo')
+      var processos = document.querySelectorAll('.candidatoAprovado')
 
       if (campoFiltro.value.length >= 0) {
         for (var i = 0; i < processos.length; i++) {
@@ -156,16 +128,6 @@ export default {
           aviso.classList.remove('invisivel')
         }
       }
-    },
-    getLista () {
-      http
-        .get('remuneracao/lista')
-        .then(response => {
-          this.cargos = response.data
-        })
-        .catch(error => {
-          alert(error)
-        })
     }
   }
 }
@@ -186,51 +148,69 @@ export default {
   --color-blue-principal: #090b2e;
   --color-magenta-principal: #ab0045;
   --color-background-form-input: #d3caca;
-
   /* Cores da barra de progresso da busca de vagas */
   --color-green-progress: #19b200;
   --color-yellow-progress: yellow;
   --color-red-progress: red;
-
   /* Cores de fonte */
   --color-gray-font: #737373;
-
   /* Cores default */
   --color-white-default: #ffffff;
   --color-black-default: #000000;
 }
-
 /* Restart da página, removendo as bordas default do navegador */
-
 body {
   background-color: var(--color-background-screen) !important;
 }
-
+.title h1 {
+  font-weight: 700;
+}
+.header {
+  background-color: var(--color-blue-principal);
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.btn-header {
+  height: 75px;
+  width: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.disabled {
+  display: none;
+}
+.imagem{
+  background: #FFB600 !important;
+}
+.btn-header img,
+.logo img {
+  height: 50px;
+}
+.home.btn-header {
+  background-color: var(--color-yellow-principal);
+}
+.rollback.btn-header {
+  background-color: var(--color-magenta-principal);
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.5em;
+}
 /* Title */
-
 .container-fluid h1 {
   font-weight: 700;
   font-size: 30px;
 }
-
-/* Scroll */
-.my-custom-scrollbar {
-position: relative;
-height: 59vh;
-overflow: auto;
-}
-
-.table-wrapper-scroll-y {
-display: block;
-height: 59vh;
-}
-
 /* Input de busca */
-
 .search-input input {
   border-radius: 3px;
 }
-
 /* Table - Coluna Índice */
 .search-table tbody > tr > th {
   font-weight: 500;
@@ -238,49 +218,71 @@ height: 59vh;
   font-size: 20px;
   text-align: center;
 }
-
 /* Table - Coluna Processo Seletivo Java */
 .search-table tbody > tr > td:nth-child(2) {
   font-weight: 500;
   font-size: 20px;
 }
-
-/* Table - Coluna1  */
+/* Table - Coluna em Andamento */
 .search-table tbody > tr > td:nth-child(3) {
-  background-color: var(--color-blue-principal);
-  font-weight: 700;
+  color: var(--color-green-progress);
   text-align: center;
+  font-weight: 700;
 }
-
 /* Table - Coluna2  */
 .search-table tbody > tr > td:nth-child(4) {
   background-color: var(--color-magenta-principal);
   font-weight: 700;
   text-align: center;
 }
-
+/* Table - Coluna3  */
+.search-table tbody > tr > td:nth-child(5) {
+  background-color: var(--color-yellow-principal);
+  font-weight: 700;
+  text-align: center;
+}
 .search-table tbody > tr > td {
   color: var(--color-gray-font);
 }
-
 /* Table */
-
 .table {
   background-color: var(--color-white-default);
 }
-
-/* Status do Programa */
-
-.em-andamento {
+.my-custom-scrollbar {
+  position: relative;
+  height: 55vh;
+  overflow: auto;
+}
+.table-wrapper-scroll-y {
+  display: block;
+  height: 55vh;
+}
+/* Início das Cores de Status do Participante */
+/* Estilo de fonte */
+.aprovado,
+.reprovado,
+.stand,
+.sem-status {
+  font-weight: 700;
+}
+/* Aprovado - Verde */
+.aprovado {
   color: var(--color-green-progress) !important;
 }
-
-.finalizado {
+/* Reprovado - Vermelho */
+.reprovado {
   color: var(--color-red-progress) !important;
 }
-
+/* Em standby - Azul */
+.stand {
+  color: blue !important;
+}
+/* Sem status - Cinza */
+.sem-status {
+  color: var(--color-without-status-progress) !important;
+}
+/* Final das Cores de Status do Participante */
 /* Button do rodapé */
-
 .button-footer {
   width: 100%;
   height: 50px;
@@ -291,36 +293,33 @@ height: 59vh;
   border-radius: 3px;
   font-weight: 700;
 }
-
 .button-footer:hover {
   background-color: var(--color-yellow-principal);
   transition: 0.5s, 0.5s;
 }
-
+a{
+  color: white;
+  text-decoration: none;
+}
 a:hover{
   color: white;
 }
-
 #buscar {
   background-color: var(--color-magenta-principal);
 }
-
 #cadastrar {
   background-color: var(--color-yellow-principal);
 }
-
 .btn {
   margin-top: 150px;
   display: grid;
   grid-template-columns: repeat(autofit, minmax(150px, 1fr));
   gap: 1000px !important;
 }
-
 /* Parte de deixar o menu invisivel */
 .invisivel {
   display: none;
 }
-
 .aviso {
   align-items: center;
   flex-direction: column;
@@ -329,16 +328,18 @@ a:hover{
   margin-top: 50px;
   text-align: center;
 }
-
 .recarregar {
-  background-color: #090b2e;
+  background-color: #090b2e !important;
   cursor: pointer !important;
   color: var(--color-white-default) !important;
   transition: all linear 0.3s !important;
 }
-
 .recarregar:hover {
   background-color: #141863 !important;
 }
-
+@media screen and (min-width: 974px) {
+  .empty {
+    height: 120px;
+  }
+}
 </style>

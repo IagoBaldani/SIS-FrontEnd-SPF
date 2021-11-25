@@ -144,6 +144,36 @@ module.exports = {
       title: 'Investimento Instrutor',
       chunks: ['chunk-vendors', 'chunk-common', 'investimento-instrutor']
     },
+    'cargo-cadastro-edicao': {
+      entry: './src/views/cargo-cadastro-edicao/main.js',
+      template: 'public/index.html',
+      title: 'Cadastro Edição',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-cadastro-edicao']
+    },
+    'cargo-listar': {
+      entry: './src/views/cargo-listar/main.js',
+      template: 'public/index.html',
+      title: 'Listar cargos',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-listar']
+    },
+    'cargo-visualizar': {
+      entry: './src/views/cargo-visualizar/main.js',
+      template: 'public/index.html',
+      title: 'Visualizar cargos',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-visualizar']
+    },
+    'dados-candidato-participante-elegibilidade': {
+      entry: './src/views/dados-candidato-participante-elegibilidade/main.js',
+      template: 'public/index.html',
+      title: 'Participante Elegibilidade',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-candidato-participante-elegibilidade']
+    },
+    'dados-participante-cadastro_participante': {
+      entry: './src/views/dados-participante-cadastro_participante/main.js',
+      template: 'public/index.html',
+      title: 'Cadastro Participante',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-cadastro_participante']
+    },
     'processo-seletivo-busca-por-candidato': {
       entry: './src/views/processo-seletivo-busca-por-candidato/main.js',
       template: 'public/index.html',

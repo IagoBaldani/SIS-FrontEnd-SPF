@@ -85,6 +85,7 @@
       </div>
       <div class="mt-10"></div>
       <div class="row justify-content-between">
+        <!-- Botão de busca -->
         <div class="col-xl-4"></div>
         <!-- Botão de cadastro de nova vaga -->
         <div class="col-xl-4">
@@ -107,7 +108,6 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
-
 export default {
   name: 'App',
   components: {
@@ -122,7 +122,6 @@ export default {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
     let idProcesso = dadosUrl.id
-
     if (idProcesso != null && idProcesso != '') {
       this.getListaDaFormacao(idProcesso)
     } else {
@@ -134,7 +133,6 @@ export default {
       var aviso = document.querySelector('.aviso')
       aviso.classList.add('invisivel')
       var campoFiltro = document.querySelector('#filtrar-tabela')
-
       var listaDeValores = []
       console.log(campoFiltro.value)
       var processos = document.querySelectorAll('.processo')
@@ -242,7 +240,6 @@ body {
   align-items: center;
   justify-content: space-between;
 }
-
 .btn-header {
   height: 75px;
   width: 75px;
@@ -297,7 +294,6 @@ body {
   text-align: center;
   font-weight: 700;
 }
-
 /* Table - Coluna2  */
 .search-table tbody > tr > td:nth-child(4) {
   background-color: var(--color-magenta-principal);
@@ -317,55 +313,40 @@ body {
 .table {
   background-color: var(--color-white-default);
 }
-
 .my-custom-scrollbar {
   position: relative;
   height: 55vh;
   overflow: auto;
 }
-
 .table-wrapper-scroll-y {
   display: block;
   height: 55vh;
 }
-
 /* Início das Cores de Status do Participante */
-
 /* Estilo de fonte */
-
 .aprovado,
 .reprovado,
 .stand,
 .sem-status {
   font-weight: 700;
 }
-
 /* Aprovado - Verde */
-
 .aprovado {
   color: var(--color-green-progress) !important;
 }
-
 /* Reprovado - Vermelho */
-
 .reprovado {
   color: var(--color-red-progress) !important;
 }
-
 /* Em standby - Azul */
-
 .stand {
   color: blue !important;
 }
-
 /* Sem status - Cinza */
-
 .sem-status {
   color: var(--color-without-status-progress) !important;
 }
-
 /* Final das Cores de Status do Participante */
-
 /* Button do rodapé */
 .button-footer {
   width: 100%;
@@ -381,12 +362,18 @@ body {
   background-color: var(--color-yellow-principal);
   transition: 0.5s, 0.5s;
 }
+a{
+  color: white;
+  text-decoration: none;
+}
+a:hover{
+  color: white;
+}
 #buscar {
   background-color: var(--color-magenta-principal);
 }
 #cadastrar {
   background-color: var(--color-yellow-principal);
-  color: white !important;
 }
 .btn {
   margin-top: 150px;
@@ -398,7 +385,6 @@ body {
 .invisivel {
   display: none;
 }
-
 .aviso {
   align-items: center;
   flex-direction: column;
@@ -420,13 +406,5 @@ body {
   .empty {
     height: 120px;
   }
-}
-
-a {
-  text-decoration: none !important;
-  color: var(--color-white-default) !important;
-}
-a:hover {
-  color: var(--color-white-default) !important;
 }
 </style>
