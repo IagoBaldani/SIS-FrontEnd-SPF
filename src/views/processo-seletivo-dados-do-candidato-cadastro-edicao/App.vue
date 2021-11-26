@@ -271,7 +271,7 @@ export default {
           this.candidato = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     processaRequisicoes () {
@@ -303,11 +303,10 @@ export default {
             }
           })
           .then(response => {
-            alert('Candidato atualizado com sucesso')
             window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
           })
           .catch(error => {
-            alert(error)
+            console.log(error)
           })
       } else if (tipo == 'cadastro') {
         var formData = new FormData()
@@ -333,11 +332,10 @@ export default {
             }
           })
           .then(response => {
-            alert('Candidato criado com sucesso')
             window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
           })
           .catch(error => {
-            alert(error)
+            console.log(error)
           })
       }
     },
@@ -348,7 +346,7 @@ export default {
           this.processosSeletivos = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     }
   }

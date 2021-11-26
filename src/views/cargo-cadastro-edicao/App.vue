@@ -203,7 +203,7 @@ export default {
           this.cargos = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     processarDados () {
@@ -212,21 +212,19 @@ export default {
         http
           .post('remuneracao', this.cargoForm)
           .then(response => {
-            alert('Cargo cadastrado com sucesso!')
             window.location.href = 'http://localhost:8080/cargo-listar'
           })
           .catch(error => {
-            alert(error)
+            console.log(error)
           })
       } else if (dados.tipo == 'edicao') {
         http
           .put(`remuneracao/${dados.id}`, this.cargoForm)
           .then(response => {
-            alert('Cargo atualizado com sucesso!')
             window.location.href = 'http://localhost:8080/cargo-listar'
           })
           .catch(error => {
-            alert(error)
+            console.log(error)
           })
       }
     }

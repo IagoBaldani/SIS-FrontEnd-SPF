@@ -108,7 +108,7 @@ export default {
           this.instrutores = res.data
         })
         .catch(erro => {
-          alert(`Erro na requisição (${erro})`)
+          console.log(`Erro na requisição (${erro})`)
         })
     },
     filtraDados () {

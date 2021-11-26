@@ -95,7 +95,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import { http } from '@/services/config'
+import { http } from '@/services/Config'
 
 export default {
   name: 'App',
@@ -164,7 +164,7 @@ export default {
           this.cargos = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     }
   }

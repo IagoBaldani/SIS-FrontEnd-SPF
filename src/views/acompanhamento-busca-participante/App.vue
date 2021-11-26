@@ -83,7 +83,7 @@ export default {
     // é usada para retornar as formações ativas.
     getFormacoes () {
       http
-        .get('programa/ativos')
+        .get('programa/ativos') 
         .then((response) => {
           this.programas = response.data
         })

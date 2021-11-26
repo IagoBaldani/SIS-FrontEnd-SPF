@@ -110,7 +110,7 @@ export default {
           this.candidato = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     pegaDadosUrl () {

@@ -178,7 +178,7 @@ export default {
           }
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     getInstrutor () {
@@ -188,7 +188,7 @@ export default {
           console.log(this.instrutores[0].nome)
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
 
@@ -198,7 +198,7 @@ export default {
           this.programa = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     enviarDados () {

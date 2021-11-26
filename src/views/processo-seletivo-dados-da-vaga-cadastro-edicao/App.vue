@@ -245,11 +245,10 @@ export default {
       http
         .put(`processo-seletivo/${id}`, this.formacoesForm)
         .then(response => {
-          alert('Programa finalizado com sucesso!')
           window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     pegaDadosUrl () {
@@ -271,7 +270,7 @@ export default {
           this.formacoes = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     getInstrutores () {
@@ -281,7 +280,7 @@ export default {
           this.instrutores = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     enviaDados () {
@@ -294,22 +293,20 @@ export default {
         http
           .put(`processo-seletivo/${id}`, this.formacoesForm)
           .then(response => {
-            alert('Processo seletivo atualizado com sucesso')
             window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
           })
           .catch(error => {
-            alert(error)
+            console.log(error)
           })
       } else if (tipo == 'cadastro') {
         this.formacoesForm.status = 'EM_ANDAMENTO'
         http
           .post('processo-seletivo', this.formacoesForm)
           .then(response => {
-            alert('Processo seletivo criado com sucesso')
             window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
           })
           .catch(error => {
-            alert(error)
+            console.log(error)
           })
       }
     }

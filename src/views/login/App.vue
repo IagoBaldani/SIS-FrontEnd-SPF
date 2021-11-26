@@ -17,7 +17,7 @@
 
 <script>
 import Cookie from 'js-cookie'
-import { http } from '../../services/Config' 
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -32,17 +32,17 @@ export default {
   },
   methods: {
     submit () {
-      http.post('/auth', {
+      http.post('auth', {
         usuario: this.usuario,
         senha: this.senha
+       
       })
         .then(response => {
           Cookie.set('login_token', response.data.token)
           window.location.href = 'http://localhost:8080/home'
-          console.log(this.usuario, this.senha)
         })
         .catch(erro => {
-          alert('Dados incorretos. Por favor, tente novamente.')
+          console.log('Dados incorretos. Por favor, tente novamente.')
         })
     }
   }

@@ -91,7 +91,7 @@ export default {
           this.processoSeletivo = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     pegaDadosUrl () {

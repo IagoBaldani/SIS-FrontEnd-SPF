@@ -148,7 +148,7 @@ export default {
           this.instrutor = res.data
         })
         .catch(erro => {
-          alert(`Erro: ${erro}`)
+          console.log(`Erro: ${erro}`)
         })
     },
     pegaDadosUrl () {
@@ -178,7 +178,7 @@ export default {
             window.location.href = 'http://localhost:8080/dados-instrutor-busca'
           })
           .catch(error => {
-            alert(error)
+            console.log(error)
           })
       } else {
         http
@@ -187,7 +187,7 @@ export default {
             window.location.href = 'http://localhost:8080/dados-instrutor-busca'
           })
           .catch(error => {
-            alert(error)
+            console.log(error)
           })
       }
     }

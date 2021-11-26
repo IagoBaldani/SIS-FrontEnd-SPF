@@ -48,6 +48,12 @@ module.exports = {
       title: 'Participante - Visualização',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-visualizacao']
     },
+    'dados-participante-cadastro_participante': {
+      entry: './src/views/dados-participante-cadastro_participante/main.js',
+      template: 'public/index.html',
+      title: 'Cadastro Participante',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-cadastro_participante']
+    },
     'dados-participante-busca': {
       entry: './src/views/dados-participante-busca/main.js',
       template: 'public/index.html',
@@ -71,6 +77,12 @@ module.exports = {
       template: 'public/index.html',
       title: 'Participante - Envio de arquivos',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-arquivos']
+    },
+    'dados-candidato-participante-elegibilidade': {
+      entry: './src/views/dados-candidato-participante-elegibilidade/main.js',
+      template: 'public/index.html',
+      title: 'Participante Elegibilidade',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-candidato-participante-elegibilidade']
     },
     'dados-instrutor-visualizacao': {
       entry: './src/views/dados-instrutor-visualizacao/main.js',
@@ -215,6 +227,7 @@ module.exports = {
       template: 'public/index.html',
       title: 'Relatórios | Investimentos',
       chunks: ['chunk-vendors', 'chunk-common', 'relatorios-investimentos']
-    }
+    },
+   
   }
 }

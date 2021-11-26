@@ -50,7 +50,7 @@
                   </a>
                 </td>
                 <td class="imagem-coluna rounded" width="50">
-                  <a :href="'/dados-participante-visualizacao?id=' + participante.id">
+                  <a :href="'/dados-participante-visualizacao?id=' + participante.cpf">
                     <img src="@/assets/imgs/account_circle_white_24dp.svg">
                   </a>
                 </td>
@@ -65,7 +65,7 @@
           <button class="mt-5 form-control submit" @click="filtraDados()">BUSCAR</button>
         </div>
         <div class="col-xl-7 justify-content-end d-flex">
-          <a href="/dados-participante-selecao-cadastro"
+          <a href="/dados-candidato-participante-elegibilidade"
              class="mt-5 form-control cadastro d-flex justify-content-center">SELEÇÃO PARA NOVO CADASTRO </a>
         </div>
       </div>
@@ -77,7 +77,6 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
-
 export default {
   name: 'App',
   components: {
@@ -92,7 +91,6 @@ export default {
   },
   beforeMount () {
     Funcoes.verificaToken()
-
     this.getParticipantes()
     this.getProgramas()
   },
@@ -103,64 +101,49 @@ export default {
           this.participantes = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
-
     getProgramas () {
       http.get('programa')
         .then(response => {
           this.programas = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
-
     filtraDados () {
       const dadosLinhas = this.pegaDados()
-
       let nomeProcurado = document.querySelector('#filtro-nome').value
       let programaProcurado = document.querySelector('#filtro-programa').value
       let statusProcurado = document.querySelector('#filtro-status').value
       let linhasNl = document.querySelectorAll('#participante')
-
       var linhasArray = Array.prototype.slice.call(linhasNl)
-
       let arrayBoolLinhas = this.verifica(dadosLinhas, nomeProcurado, programaProcurado, statusProcurado)
-
       this.mudaVisibilidade(arrayBoolLinhas, linhasArray)
     },
-
     pegaDados () {
       let linhas = document.querySelectorAll('#participante')
       let programas = document.querySelectorAll('#programa')
-
       let arrayProgramas = []
       let arrayDadosDasLinhas = []
-
       programas.forEach(programa => {
         arrayProgramas.push(programa.textContent)
       })
-
       linhas.forEach(linha => {
         let dadosLinha = []
         let nome = linha.querySelector('#info-nome').textContent
-
         let programa = this.trataPrograma(linha, arrayProgramas)
         let status = this.trataStatus(linha)
-
         dadosLinha.push(nome, programa, status)
         arrayDadosDasLinhas.push(dadosLinha)
       })
-
       return arrayDadosDasLinhas
     },
-
     trataStatus (linha) {
       let statusTxt = linha.querySelector('#info-status').textContent
       let status = 0
-
       if (statusTxt == 'Ativo') {
         status = 1
         return status
@@ -168,64 +151,51 @@ export default {
         status = 2
         return status
       }
-
       return status
     },
-
     trataPrograma (linha, arrayProgramas) {
       var programaTxt = linha.querySelector('#info-programa').textContent
       let programaNum = 0; let i = 0
-
       for (let i = 0; i < arrayProgramas.length; i++) {
         if (programaTxt == arrayProgramas[i]) {
           programaNum = i + 1
           return programaNum
         }
       }
-
       return programaNum
     },
-
     verifica (dadosLinhas, nomeProcurado, programaProcurado, statusProcurado) {
       let arrayBoolLinhas = []
       let expressao = new RegExp(nomeProcurado, 'i')
-
       dadosLinhas.forEach(dadosLinha => {
         let boolLinha = []
-
         // Verificando se o nome procurado consta na tabela
         if (expressao.test(dadosLinha[0]) || nomeProcurado == '') {
           boolLinha.push(true)
         } else {
           boolLinha.push(false)
         }
-
         // Verificando se o programa procurado consta na tabela
         if (programaProcurado == dadosLinha[1] || programaProcurado == 0) {
           boolLinha.push(true)
         } else {
           boolLinha.push(false)
         }
-
         // Verificando se o status procurado consta na tabela
         if (statusProcurado == dadosLinha[2] || statusProcurado == 0) {
           boolLinha.push(true)
         } else {
           boolLinha.push(false)
         }
-
         arrayBoolLinhas.push(boolLinha)
       })
-
       return arrayBoolLinhas
     },
-
     mudaVisibilidade (arrayBoolLinhas, linhas) {
       let i
       var contador = 0
       let aviso = document.querySelector('.aviso')
       var qtdLinhas = linhas.length
-
       for (i = 0; i < linhas.length; i++) {
         if (arrayBoolLinhas[i][0] && arrayBoolLinhas[i][1] && arrayBoolLinhas[i][2]) {
           linhas[i].style.display = ''
@@ -234,22 +204,18 @@ export default {
           contador++
         }
       }
-
       if (qtdLinhas == contador) {
         aviso.style.display = 'flex'
       } else {
         aviso.style.display = 'none'
       }
     },
-
     recarregaLista () {
       let linhas = document.querySelectorAll('#participante')
       let aviso = document.querySelector('.aviso')
-
       linhas.forEach(linha => {
         linha.style.display = ''
       })
-
       aviso.style.display = 'none'
     }
   }
@@ -257,111 +223,90 @@ export default {
 </script>
 
 <style>
-
 body{
     background-color: #EBEBEB !important;
 }
 a{
   text-decoration: none !important;
 }
-
 .tabela{
   border: 1px solid #BCB3B3 !important;
   background-color: white;
 }
-
 .titulo{
   color: #090B2E;
 }
-
 .botao{
   background-color: #AB0045 !important;
   border-style: none !important;
   width: 26.9em !important;
   border-radius: 2px !important;
 }
-
 .campo{
   border-radius: 2px !important;
   background-color: white !important;
   color: #737373 !important;
 }
-
 .th-id{
   width: 2em !important;
 }
-
 .th-ms{
   width: 15em !important;
 }
-
 .td-button{
   width: 1.5em !important;
   background-color: #FFB700 !important;
 }
-
 .nome-participante{
   color: #737373;
 }
 .campo-tabela{
   color: #737373 !important;
 }
-
 .submit, .cadastro, .recarregar{
   color: white !important;
   font-weight: bold !important;
   border-radius: 5px !important;
 }
-
 .submit{
   background-color: #AB0045 !important;
 }
-
 .cadastro{
   background-color: #FFB700 !important;
   max-width: 575px !important;
 }
-
 .recarregar{
   background-color: #090B2E !important;
   max-width: 50%;
   cursor: pointer !important;
   transition: all linear 0.3s !important;
 }
-
 .recarregar:hover{
   background-color: #141863 !important;
 }
-
 .ativo{
   color: green;
   font-weight: bold;
 }
-
 .inativo{
   color: darkred;
   font-weight: bold;
 }
-
 .imagem{
   background-color:  #AB0045 !important;
 }
-
 .imagem-coluna{
   background-color: #FFB700 !important;
 }
-
 .my-custom-scrollbar {
   position: relative;
   height: 59vh;
   overflow: auto;
 }
-
 .table-wrapper-scroll-y {
   display: block;
   height: 59vh;
 }
-
 .aviso{
   display: none;
   align-items: center;
@@ -372,5 +317,4 @@ a{
   position: absolute;
   z-index: 100;
 }
-
 </style>
