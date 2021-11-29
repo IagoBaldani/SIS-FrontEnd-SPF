@@ -52,8 +52,8 @@
             </div>
             <div class="mb-3">
                 <label for="cargo" class="form-label fw-bold h5 titulo">Cargo</label>
-                <select class="form-select" id="filtro-programa" v-model="cadastroParticipanteForm.idRemuneracao">
-                    <option :value="cargo.id" v-for="cargo in cargos" :key="cargo.id" >{{ cargo.nome }}</option>
+                <select class="form-select" id="filtro-programa" v-model="remuneracao">
+                    <option v-for="cargo in cargos" :value="cargo" :key="cargo.id" >{{ cargo.nome }}</option>
                 </select>
             </div>
             <!-- <div class="mb-3">
@@ -62,21 +62,21 @@
             </div> -->
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Nome do Programa</label>
-              <input class="form-control" disabled id="nomeProgramaCandidato" :placeholder="cadastroParticipanteForm.nomePrograma" type="text" v-model="cadastroParticipanteForm.idProcessoSeletivo">
+              <input class="form-control" disabled id="nomeProgramaCandidato" :placeholder="nomeProgramaCandidato.nome" type="text" v-model="cadastroParticipanteForm.idProcessoSeletivo">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Turma</label>
                 <select required class="form-select" v-on:click="buscarTurmasDeUmaFormacao()" v-model="cadastroParticipanteForm.idPrograma">
                     <option class="relatorio_opcao" disabled selected>Turma</option>
                     <option class="relatorio_opcao" v-for="(turmasProgramaCandidato, id) in turmasProgramaCandidatos"
-                    :key="id" :value="turmasProgramaCandidato.id">{{turmasProgramaCandidato.nome}}
+                    :key="id" :value="turmasProgramaCandidato.id">{{turmasProgramaCandidato.turmas}}
                     </option>
                 </select>
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Coordenador Técnico</label>
               <input id="coordenador" class="form-control" type="text" >
-            </div>
+            </div> -->
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Observação</label>
               <textarea  disabled class="form-control" placeholder="Mensagem..." cols="20" rows="6" style="resize:none;" :value="candidato.observacao"></textarea>
@@ -90,17 +90,17 @@
       </div>
       <div class="row justify-content-evenly">
         <div class="col-xl-4 ">
-          <button @click="enviarDados" type="button" class="btn submit form-control" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <button v-on:click="popularCargoTurma()" type="button" class="btn submit form-control" data-bs-toggle="modal" data-bs-target="#exampleModal">
             CONFIRMAR
           </button>
         </div>
-        <div class="col-xl-4">
+        <!-- <div class="col-xl-4">
           <a v-on:click="enviarDados()">
             <div class="btn cancel form-control mb-5">
               ENVIAR ARQUIVOS
             </div>
           </a>
-        </div>
+        </div> -->
         <div class="col-xl-2"></div>
       </div>
     </div>
@@ -129,16 +129,16 @@
                 <li>Instituição de Ensino: <span class="titulo"> {{cadastroParticipanteForm.instituicaoEnsino}} </span></li>
                 <li>Curso: <span class="titulo"> {{cadastroParticipanteForm.curso}} </span></li>
                 <li>Término da Graduação: <span class="titulo"> {{cadastroParticipanteForm.terminoGraduacao}} </span></li>
-                <li>Cargo: <span class="titulo"> {{cadastroParticipanteForm.cargo}} </span></li>
+                <li>Cargo: <span class="titulo" id="cargoModal">{{ remuneracao.nome }}</span></li>
                 <!-- <li>Salário: <span class="titulo"> {{participante.salario}}</span></li> -->
-                <li>Programa de Formação - Turma: <span class="titulo"> {{cadastroParticipanteForm.nomeTurma}}</span></li>
+                <li>Programa de Formação - Turma: <span class="titulo"> {{cadastroParticipanteForm.idPrograma}}</span></li>
                 <li>Observação: <span class="titulo"> {{candidato.observacao}}</span></li>
               </ul>
             </div>
           </div>
           <div class="modal-footer border-0 justify-content-around">
             <div>
-              <button type="button" class="btn submit-modal">CONFIRMAR</button>
+              <button v-on:click="enviarDados()" type="button" class="btn submit-modal">CONFIRMAR</button>
             </div>
             <div>
               <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
@@ -163,6 +163,8 @@ export default {
     return {
       candidato: {},
       id: '',
+      instrutores: [],
+      remuneracao: {},
       cargos: [],
       turmasPrograma: [],
       nomePrograma: '',
@@ -171,12 +173,9 @@ export default {
         instituicaoEnsino: '',
         curso: '',
         terminoGraduacao: '',
-        remuneracao: '',
-        nomeTurma: '',
-        candidato: '',
         idRemuneracao: '',
         idProcessoSeletivo: '',
-        idCandidato: '',
+        idCandidato: this.id,
         idPrograma: ''
       },
       nomeProgramaCandidato: {
@@ -188,10 +187,8 @@ export default {
   },
   methods: {
     buscarTurmasDeUmaFormacao () {
-      this.nomePrograma = document.querySelector('#nomePrograma').textContent
-      http.get(`relatorios/turmas/${this.nomePrograma}`).then(response => {
-        this.turmasPrograma = response.data
-      })
+      http.get(`candidato/programa-candidato-turmas/${this.nomeProgramaCandidato.nome}`)
+        .then(response => (this.turmasProgramaCandidatos = response.data)) 
     },
     validaCampos () {
       let campos = document.querySelectorAll('input')
@@ -238,6 +235,9 @@ export default {
         data[chave] = valor
       })
       return data
+    },
+    popularCargoTurma () {
+      this.cadastroParticipanteForm.idRemuneracao = this.remuneracao.id
     }
   },
   beforeMount () {
@@ -255,14 +255,11 @@ export default {
     http.get('remuneracao/cargos')
       .then(response => (this.cargos = response.data))
 
-    http.get(`participante/nomePrograma/${this.id}`)
-      .then(response => (this.nomePrograma = response.data))
+    http.get('candidato/buscar-instrutor')
+      .then(response => (this.instrutores = response.data))
     
     http.get(`candidato/programa-candidato-nome/${this.id}`)
       .then(response => (this.nomeProgramaCandidato = response.data))  
-
-    http.get(`candidato/programa-candidato-turmas/${this.nomeProgramaCandidato.nome}`)
-      .then(response => (this.turmasProgramaCandidatos = response.data)) 
   }
 }
 </script>
