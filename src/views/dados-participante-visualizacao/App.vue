@@ -9,7 +9,7 @@
         </div>
         <div class="col-xl-4"></div>
         <div class="col-xl-2 d-flex justify-content-center">
-          <h2 class="titulo secundario"> Status: <span v-bind:class="(participante.status == 'Ativo')?'ativo':'inativo'"> {{participante.status}} </span></h2>
+          <!-- <h2 class="titulo secundario"> Status: <span v-bind:class="(participante.status == 'Ativo')?'ativo':'inativo'"> {{participante.status}} </span></h2> -->
         </div>
       </div>
       <div class="row justify-content-evenly">
@@ -90,11 +90,6 @@
           </fieldset>
         </div>
         <div class="col-xl-2">
-          <fieldset disabled>
-            <div class=" text-center text-md-left">
-              <img src="@/assets/imgs/perfil.svg" class="rounded-circle" alt="">
-            </div>
-          </fieldset>
         </div>
       </div>
       <div class="row justify-content-evenly">

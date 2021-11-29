@@ -22,7 +22,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputCpf">CPF</label>
-              <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" type="text" v-model="cadastroParticipanteForm.cpf" >
+              <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" type="text" maxlength="12" v-model="cadastroParticipanteForm.cpf" >
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputContato">Contato</label>
@@ -56,20 +56,24 @@
                     <option v-for="cargo in cargos" :value="cargo" :key="cargo.id" >{{ cargo.nome }}</option>
                 </select>
             </div>
-            <!-- <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Salário</label>
-              <input  class="form-control" type="number">
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
+              <input  class="form-control" type="email" v-model="cadastroParticipanteForm.email">
+            </div>
+            <!-- <div>
+              <label for="file" class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
+              <input id="file" @change="formatoUpload()" type="file" accept="application/pdf" class="none mb-4" />
             </div> -->
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Nome do Programa</label>
-              <input class="form-control" disabled id="nomeProgramaCandidato" :placeholder="nomeProgramaCandidato.nome" type="text" v-model="cadastroParticipanteForm.idProcessoSeletivo">
+              <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.nome" type="text">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Turma</label>
-                <select required class="form-select" v-on:click="buscarTurmasDeUmaFormacao()" v-model="cadastroParticipanteForm.idPrograma">
+                <select required class="form-select" v-on:click="buscarTurmasDeUmaFormacao()" v-model="turmaSelecionada">
                     <option class="relatorio_opcao" disabled selected>Turma</option>
                     <option class="relatorio_opcao" v-for="(turmasProgramaCandidato, id) in turmasProgramaCandidatos"
-                    :key="id" :value="turmasProgramaCandidato.id">{{turmasProgramaCandidato.turmas}}
+                    :key="id" :value="turmasProgramaCandidato">{{turmasProgramaCandidato.turmas}}
                     </option>
                 </select>
             </div>
@@ -94,13 +98,7 @@
             CONFIRMAR
           </button>
         </div>
-        <!-- <div class="col-xl-4">
-          <a v-on:click="enviarDados()">
-            <div class="btn cancel form-control mb-5">
-              ENVIAR ARQUIVOS
-            </div>
-          </a>
-        </div> -->
+        <div class="col-xl-4"></div>
         <div class="col-xl-2"></div>
       </div>
     </div>
@@ -128,10 +126,11 @@
                 <li>Nota na prova lógica: <span class="titulo"> {{candidato.testeLogico}}</span> </li>
                 <li>Instituição de Ensino: <span class="titulo"> {{cadastroParticipanteForm.instituicaoEnsino}} </span></li>
                 <li>Curso: <span class="titulo"> {{cadastroParticipanteForm.curso}} </span></li>
-                <li>Término da Graduação: <span class="titulo"> {{cadastroParticipanteForm.terminoGraduacao}} </span></li>
-                <li>Cargo: <span class="titulo" id="cargoModal">{{ remuneracao.nome }}</span></li>
+                <li>Término da Graduação: <span class="titulo"> {{formataDataParaMostrar(cadastroParticipanteForm.terminoGraduacao)}} </span></li>
+                <li>Cargo: <span class="titulo">{{ remuneracao.nome }}</span></li>
+                <li>Email: <span class="titulo">{{ cadastroParticipanteForm.email }}</span></li>
                 <!-- <li>Salário: <span class="titulo"> {{participante.salario}}</span></li> -->
-                <li>Programa de Formação - Turma: <span class="titulo"> {{cadastroParticipanteForm.idPrograma}}</span></li>
+                <li>Programa de Formação - Turma: <span class="titulo"> {{turmaSelecionada.turmas}}</span></li>
                 <li>Observação: <span class="titulo"> {{candidato.observacao}}</span></li>
               </ul>
             </div>
@@ -165,6 +164,7 @@ export default {
       id: '',
       instrutores: [],
       remuneracao: {},
+      turmaSelecionada: {},
       cargos: [],
       turmasPrograma: [],
       nomePrograma: '',
@@ -174,9 +174,9 @@ export default {
         curso: '',
         terminoGraduacao: '',
         idRemuneracao: '',
-        idProcessoSeletivo: '',
-        idCandidato: this.id,
-        idPrograma: ''
+        idCandidato: '',
+        idPrograma: '',
+        email: ''
       },
       nomeProgramaCandidato: {
         id: '',
@@ -206,6 +206,8 @@ export default {
       }     
     },
     enviarDados () {
+      // var formData = new FormData()
+      // var comprovanteRematricula = document.getElementById('file').files[0] 
       http
         .post('participante/salvarParticipante', this.cadastroParticipanteForm)
         .then(response => {
@@ -217,7 +219,7 @@ export default {
       this.redirecionar()
     },
     redirecionar () {
-      location.href = `/dados-participante-arquivos?id=${this.participante.cpf}`
+      location.href = '/dados-participante-busca'
     },
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)
@@ -238,6 +240,12 @@ export default {
     },
     popularCargoTurma () {
       this.cadastroParticipanteForm.idRemuneracao = this.remuneracao.id
+      this.cadastroParticipanteForm.idPrograma = this.turmaSelecionada.id
+    },
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
     }
   },
   beforeMount () {
@@ -247,6 +255,7 @@ export default {
     if (dadosUrl.tipo == 'edicao') {
       this.tipo = dadosUrl.tipo
     }
+    this.cadastroParticipanteForm.idCandidato = this.id
   },
   mounted () {
     http.get(`participante/candidato/${this.id}`)
