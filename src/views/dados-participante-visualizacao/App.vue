@@ -66,15 +66,6 @@
                 readonly
               />
             </div>
-            <!-- <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">DISC</label><br />
-              <a v-on:click="download()" href="#"
-                ><img
-                  src="@/assets/imgs/file_download_black_24dp.svg"
-                  alt=""
-                />disc.xls</a
-              >
-            </div> -->
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo"
                 >Instituição de Ensino</label

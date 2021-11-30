@@ -11,19 +11,18 @@
       <div class="row justify-content-evenly">
         <div class="col-xl-4">
           <div class="mb-3">
-            <input name="nome" type="text" class="form-control mt-4" placeholder="Nome" id="filtro-nome">
+            <input name="nome" type="text" class="form-control mt-4" placeholder="Nome do participante" id="filtro-nome">
           </div>
           <div class="mb-3">
             <select class="form-select mt-4" id="filtro-programa">
               <option disabled selected value="0">Programa de Formação</option>
-              <option id="programa" v-bind:value="programa.id" v-for="programa in programas" v-bind:key="programa">{{programa.nome + " - " + programa.turma}}</option>
+              <option id="programa" v-bind:value="programa.nomePrograma" v-for="programa in programas" v-bind:key="programa">{{programa.nomePrograma}}</option>
             </select>
           </div>
           <div class="mb-3">
-            <select class="form-select mt-4" id="filtro-status">
-              <option disabled selected value="0">Status</option>
-              <option value="1">Ativo</option>
-              <option value="2">Inativo</option>
+            <select class="form-select mt-4" id="filtro-turmas" v-on:click="getTurmas()">
+              <option disabled selected value="0">Turmas</option>
+              <option id="turma" v-bind:value="turma.id" v-for="turma in turmas" v-bind:key="turma">{{turma.nomeTurma}}</option>
             </select>
           </div>
         </div>
@@ -37,10 +36,10 @@
           <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table class="table table-bordered tabela mt-4 ">
               <tbody align="center">
-              <tr id="participante" v-for="participante in participantes" v-bind:key="participante">
+              <tr class="nome" id="participante" v-for="participante in participantes" v-bind:key="participante">
                 <th scope="row" width="50">{{participante.cpf}}</th>
                 <td id="info-nome">{{participante.nome}}</td>
-                <td id="info-programa">{{participante.programa + " - " + participante.turmaPrograma}}</td>
+                <td id="info-programa">{{participante.programa}}</td>
                 <td id="info-status"
                     v-bind:class="(participante.statusAtivo == 'ATIVO')?'ativo':'inativo'">
                   {{(participante.statusAtivo == 'ATIVO')?'Ativo':'Inativo'}}</td>
@@ -86,7 +85,8 @@ export default {
     return {
       responseStatus: '',
       participantes: [],
-      programas: []
+      programas: [],
+      turmas: []
     }
   },
   beforeMount () {
@@ -98,117 +98,45 @@ export default {
     getParticipantes () {
       http.get('participante')
         .then(response => {
-          console.log(this.participantes = response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-    getProgramas () {
-      http.get('programa')
-        .then(response => {
-          this.programas = response.data
+          (this.participantes = response.data)
         })
         .catch(error => {
           console.log(error)
         })
     },
     filtraDados () {
-      const dadosLinhas = this.pegaDados()
-      let nomeProcurado = document.querySelector('#filtro-nome').value
       let programaProcurado = document.querySelector('#filtro-programa').value
-      let statusProcurado = document.querySelector('#filtro-status').value
-      let linhasNl = document.querySelectorAll('#participante')
-      var linhasArray = Array.prototype.slice.call(linhasNl)
-      let arrayBoolLinhas = this.verifica(dadosLinhas, nomeProcurado, programaProcurado, statusProcurado)
-      this.mudaVisibilidade(arrayBoolLinhas, linhasArray)
-    },
-    pegaDados () {
-      let linhas = document.querySelectorAll('#participante')
-      let programas = document.querySelectorAll('#programa')
-      let arrayProgramas = []
-      let arrayDadosDasLinhas = []
-      programas.forEach(programa => {
-        arrayProgramas.push(programa.textContent)
-      })
-      linhas.forEach(linha => {
-        let dadosLinha = []
-        let nome = linha.querySelector('#info-nome').textContent
-        let programa = this.trataPrograma(linha, arrayProgramas)
-        let status = this.trataStatus(linha)
-        dadosLinha.push(nome, programa, status)
-        arrayDadosDasLinhas.push(dadosLinha)
-      })
-      return arrayDadosDasLinhas
-    },
-    trataStatus (linha) {
-      let statusTxt = linha.querySelector('#info-status').textContent
-      let status = 0
-      if (statusTxt == 'Ativo') {
-        status = 1
-        return status
-      } else if (statusTxt == 'Inativo') {
-        status = 2
-        return status
-      }
-      return status
-    },
-    trataPrograma (linha, arrayProgramas) {
-      var programaTxt = linha.querySelector('#info-programa').textContent
-      let programaNum = 0; let i = 0
-      for (let i = 0; i < arrayProgramas.length; i++) {
-        if (programaTxt == arrayProgramas[i]) {
-          programaNum = i + 1
-          return programaNum
-        }
-      }
-      return programaNum
-    },
-    verifica (dadosLinhas, nomeProcurado, programaProcurado, statusProcurado) {
-      let arrayBoolLinhas = []
-      let expressao = new RegExp(nomeProcurado, 'i')
-      dadosLinhas.forEach(dadosLinha => {
-        let boolLinha = []
-        // Verificando se o nome procurado consta na tabela
-        if (expressao.test(dadosLinha[0]) || nomeProcurado == '') {
-          boolLinha.push(true)
-        } else {
-          boolLinha.push(false)
-        }
-        // Verificando se o programa procurado consta na tabela
-        if (programaProcurado == dadosLinha[1] || programaProcurado == 0) {
-          boolLinha.push(true)
-        } else {
-          boolLinha.push(false)
-        }
-        // Verificando se o status procurado consta na tabela
-        if (statusProcurado == dadosLinha[2] || statusProcurado == 0) {
-          boolLinha.push(true)
-        } else {
-          boolLinha.push(false)
-        }
-        arrayBoolLinhas.push(boolLinha)
-      })
-      return arrayBoolLinhas
-    },
-    mudaVisibilidade (arrayBoolLinhas, linhas) {
-      let i
-      var contador = 0
-      let aviso = document.querySelector('.aviso')
-      var qtdLinhas = linhas.length
-      for (i = 0; i < linhas.length; i++) {
-        if (arrayBoolLinhas[i][0] && arrayBoolLinhas[i][1] && arrayBoolLinhas[i][2]) {
-          linhas[i].style.display = ''
-        } else {
-          linhas[i].style.display = 'none'
-          contador++
-        }
-      }
-      if (qtdLinhas == contador) {
-        aviso.style.display = 'flex'
+      let nomeProcurado = document.querySelector('#filtro-nome').value
+      let turmaProcurada = document.querySelector('#filtro-turmas').value
+      console.log(nomeProcurado)
+      if (nomeProcurado == '') {
+        http.get(`participante/0/${programaProcurado}/${turmaProcurada}`)
+          .then(response => {
+            this.participantes = response.data
+          })
       } else {
-        aviso.style.display = 'none'
+        http.get(`participante/${nomeProcurado}/${programaProcurado}/${turmaProcurada}`)
+          .then(response => {
+            this.participantes = response.data
+          })
       }
+    },
+    getTurmas () {
+      let turmas = document.querySelector('#filtro-programa').value
+      console.log(turmas)
+      http.get(`relatorios/turmas/${turmas}`)
+        .then(response => {
+          this.turmas = response.data
+        })
+    },
+    getProgramas () {
+      http.get('relatorios/formacoes')
+        .then(response => {
+          this.programas = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     recarregaLista () {
       let linhas = document.querySelectorAll('#participante')
