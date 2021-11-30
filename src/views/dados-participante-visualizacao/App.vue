@@ -1,5 +1,5 @@
 <template>
-  <Header/>
+  <Header />
   <main>
     <!-- ínicio do formulário -->
     <div class="container-fluid" id="participante">
@@ -9,7 +9,6 @@
         </div>
         <div class="col-xl-4"></div>
         <div class="col-xl-2 d-flex justify-content-center">
-          <!-- <h2 class="titulo secundario"> Status: <span v-bind:class="(participante.status == 'Ativo')?'ativo':'inativo'"> {{participante.status}} </span></h2> -->
         </div>
       </div>
       <div class="row justify-content-evenly">
@@ -17,85 +16,214 @@
           <fieldset disabled>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Nome</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.nome" type="text">
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.nome"
+                type="text"
+              />
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">CPF</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.cpf" type="text">
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.cpf"
+                type="text"
+              />
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Contato</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.contato" type="tel" disabled readonly>
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.telefone"
+                type="tel"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Fonte recrutamento</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.fonteRecrutamento" type="text" disabled readonly>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Fonte recrutamento</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.fonteRecrutamento"
+                type="text"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Nota na prova de lógica</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.notaProvaLogica" type="number" min="0" max="10" disabled readonly>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Nota na prova de lógica</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.testeLogico"
+                type="number"
+                min="0"
+                max="10"
+                disabled
+                readonly
+              />
             </div>
+            <!-- <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo">DISC</label><br />
+              <a v-on:click="download()" href="#"
+                ><img
+                  src="@/assets/imgs/file_download_black_24dp.svg"
+                  alt=""
+                />disc.xls</a
+              >
+            </div> -->
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">DISC</label><br>
-              <a v-bind:href="participante.urlDisc"><img src="@/assets/imgs/file_download_black_24dp.svg" alt="">disc.xls</a>
-            </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Instituição de Ensino</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.instituicaoEnsino" type="text" disabled readonly>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Instituição de Ensino</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.nmFaculdade"
+                type="text"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Curso</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.curso" type="text" disabled readonly>
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.curso"
+                type="text"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">TCE</label><br>
-              <a v-bind:href="participante.urlTce"><img src="@/assets/imgs/file_download_black_24dp.svg" alt="">tce.xls</a>
+              <label class="form-label fw-bold mb-0 titulo">TCE</label><br />
+              <a href="#"
+                ><img
+                  src="@/assets/imgs/file_download_black_24dp.svg"
+                  alt=""
+                />tce.xls</a
+              >
             </div>
           </fieldset>
         </div>
         <div class="col-xl-4">
           <fieldset disabled>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Término da graduação</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.terminoGraduacao" type="text" disabled readonly>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Término da graduação</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="formataDataParaMostrar(participante.dataFimGraduacao)"
+                type="text"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Cargo</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.cargo" type="text" disabled readonly>
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.cargo"
+                type="text"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Salário</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.salario" type="number">
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.bolsa"
+                type="number"
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Programa de Formação - Turma</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.programaDeFormacao.nome + ' - ' +  participante.programaDeFormacao.turma" type="text" disabled readonly>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Programa de Formação - Turma</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="
+                  participante.turma
+                "
+                type="text"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Coordenador Técnico</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.programaDeFormacao.coordenador" type="text" disabled readonly>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Coordenador Técnico</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.nomeInstrutor"
+                type="text"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Início do programa</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.programaDeFormacao.inicio" type="text" disabled readonly>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Início do programa</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="formataDataParaMostrar(participante.iniPrograma)"
+                type="text"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Término do programa</label>
-              <input class="form-control disabledTextInput" v-bind:value="participante.programaDeFormacao.fim" type="text" disabled readonly>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Término do programa</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="formataDataParaMostrar(participante.fimPrograma)"
+                type="text"
+                disabled
+                readonly
+              />
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Observação</label>
-              <textarea class="form-control disabledTextInput" cols="20" rows="10" v-bind:value="participante.observacao" ></textarea>
+              <textarea
+                class="form-control disabledTextInput"
+                cols="20"
+                rows="10"
+                v-bind:value="participante.observacao"
+              ></textarea>
             </div>
           </fieldset>
         </div>
         <div class="col-xl-2">
+          <fieldset disabled>
+            <div class="text-center text-md-left">
+            </div>
+          </fieldset>
         </div>
       </div>
       <div class="row justify-content-evenly">
-        <div class="col-xl-4 ">
-          <button type="button" class="btn submit form-control" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            DESATIVAR PARTICIPANTE
+        <div class="col-xl-4">
+            <button v-if="participante.statusAtivo == 'ATIVO'"
+              type="button"
+              class="btn submit form-control"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal">
+              DESATIVAR PARTICIPANTE
+            </button>
+          <button v-else
+            type="button"
+            class="btn submit form-control"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModalAtivar"
+            id="ativarParticipante">
+            ATIVAR PARTICIPANTE
           </button>
         </div>
         <div class="col-xl-4"></div>
@@ -104,26 +232,91 @@
     </div>
     <!-- fim do formulário -->
   </main>
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- MODAL PARA DESATIVAR -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-xl modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header border-0">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="modal-body d-flex justify-content-between">
           <div>
-            <h1 class="modal-title form-label fw-bold mb-0 titulo"> Deseja confirmar a desativação do seguinte participante? </h1>
+            <h1 class="modal-title form-label fw-bold mb-0 titulo">
+              Deseja confirmar a desativação do seguinte participante?
+            </h1>
           </div>
           <div class="conteudomodal" id="participante-modal">
-            <h2 class="fw-bold subtitulo"> {{participante.nome}}</h2>
+            <h2 class="fw-bold subtitulo">{{ participante.nome }}</h2>
           </div>
         </div>
         <div class="modal-footer border-0 justify-content-around">
           <div>
-            <button type="button" class="btn submit-modal" >CONFIRMAR</button>
+            <button type="button" class="btn submit-modal" v-on:click="processaRequisicoes(this.participante.statusAtivo)">CONFIRMAR</button>
           </div>
           <div>
-            <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
+            <button
+              type="button"
+              class="btn cancel-modal"
+              data-bs-dismiss="modal"
+            >
+              CANCELAR
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- MODAL PARA ATIVAR PARTICIPANTE -->
+   <div
+    class="modal fade"
+    id="exampleModalAtivar"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-xl modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body d-flex justify-content-between">
+          <div>
+            <h1 class="modal-title form-label fw-bold mb-0 titulo">
+              Deseja confirmar a ativação do seguinte participante?
+            </h1>
+          </div>
+          <div class="conteudomodal" id="participante-modal">
+            <h2 class="fw-bold subtitulo">{{ participante.nome }}</h2>
+          </div>
+        </div>
+        <div class="modal-footer border-0 justify-content-around">
+          <div>
+            <button type="button" class="btn submit-modal" v-on:click="processaRequisicoes(this.participante.statusAtivo)">CONFIRMAR</button>
+          </div>
+          <div>
+            <button
+              type="button"
+              class="btn cancel-modal"
+              data-bs-dismiss="modal"
+            >
+              CANCELAR
+            </button>
           </div>
         </div>
       </div>
@@ -143,117 +336,138 @@ export default {
   },
   data () {
     return {
-      responseStatus: '',
-      participante: {
-        // Esses dados serão obtidos pela nossa API
-        id: 1,
-        nome: 'Miguel Felisberto',
-        cpf: '112.123.849-90',
-        contato: '(14)99999-9999',
-        fonteRecrutamento: 'Palestra via faculdade',
-        notaProvaLogica: '10',
-        urlDisc: 'google.com.br',
-        instituicaoEnsino: 'Fatec Ourinhos',
-        curso: 'Análise e Desenvolvimento de Sistemas',
-        urlTce: 'google.com.br',
-        terminoGraduacao: '20/12/2021',
-        cargo: 'Estagiário',
-        salario: 1500,
-        status: 'Ativo',
-        programaDeFormacao: {
-          nome: 'Java',
-          turma: 'Turma I 2021',
-          coordenador: 'Kaiqui Lopes',
-          inicio: '20/07/2021',
-          fim: '12/12/2021'
-        },
-        observacao: ''
+      participante: {},
+      id: '',
+      atualizaStatusForm: {
+        statusAtivo: '',
+        cpf: ''
       }
     }
+  },
+  beforeMount () {
+    Funcoes.verificaToken()
+    const dadosUrl = this.pegaDadosUrl()
+    this.id = dadosUrl.id
+    var cpf = dadosUrl.id
+    this.getCargo(cpf)
   },
   methods: {
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
       var data = {}
-
       partes.forEach(function (parte) {
         var chaveValor = parte.split('=')
         var chave = chaveValor[0]
         var valor = chaveValor[1]
         data[chave] = valor
       })
-
       return data
+    },
+    getCargo (cpf) {
+      http.get(`participante/completo/${cpf}`)
+        .then(response => {
+          console.log(this.participante = response.data)
+        })
+        .catch(error => {
+          alert(error)
+        })
+    },
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
+    },
+    download () {
+      location.href = `http://localhost:8081/api/feedback/download/${this.id}`
+    },
+
+    processaRequisicoes (statusAtivo) {
+      this.atualizaStatusForm.cpf = this.participante.cpf
+      this.atualizaStatusForm.statusAtivo = this.participante.statusAtivo
+      if (statusAtivo == 'ATIVO') {
+        this.atualizaStatusForm.statusAtivo = 'INATIVO'
+      } else if (statusAtivo == 'INATIVO') {
+        this.atualizaStatusForm.statusAtivo = 'ATIVO'
+      }
+      http
+        .put('participante/atualizaStatus', this.atualizaStatusForm)
+        .then(response => {
+          window.location.href = 'http://localhost:8080/dados-participante-busca'
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
-  },
-  beforeMount () {
-    Funcoes.verificaToken()
-    console.log(this.pegaDadosUrl())
-    // Aqui você faz a requisição para API e pega os dados para exibição
   }
 }
+ 
 </script>
 
 <style>
-
-body{
-    background-color: #EBEBEB !important;
+body {
+  background-color: #ebebeb !important;
 }
 
-.titulo{
-  color: #090B2E;
+.titulo {
+  color: #090b2e;
   font-weight: bold;
 }
 
-.secundario{
+.secundario {
   font-size: 20px;
 }
 
-.ativo, .inativo{
+.ativo,
+.inativo {
   margin-left: 1em;
 }
 
-.ativo{
-  color: green;
+#ativarParticipante {
+  background-color: #ffb700 !important;
+  
 }
-.inativo{
+
+.inativo {
   color: darkred;
 }
 
-.subtitulo{
+.subtitulo {
   color: #737373;
 }
 
-.disabledTextInput{
-  background-color: #D3CACA !important;
-  border: 1px solid #BCB3B3 !important;
+.disabledTextInput {
+  background-color: #d3caca !important;
+  border: 1px solid #bcb3b3 !important;
 }
 
-.form-control{
+.form-control {
   color: #737373 !important;
 }
 
-textarea{
+textarea {
   resize: none !important;
-  height:200px !important;
+  height: 200px !important;
 }
 
-.download{
+.download {
   transform: rotate(180deg) !important;
 }
 
-.modal-body, .modal-header, .modal-footer {
+.modal-body,
+.modal-header,
+.modal-footer {
   text-align: center;
-  background-color: #EBEBEB
+  background-color: #ebebeb;
 }
 
-.modal-body{
+.modal-body {
   min-height: 55vh;
   flex-direction: column;
 }
 
-.submit-modal, .cancel-modal{
+.submit-modal,
+.cancel-modal {
   color: white !important;
   font-weight: bold !important;
   border-radius: 5px !important;
@@ -261,16 +475,18 @@ textarea{
   font-size: 25px !important;
 }
 
-.submit, .submit-modal{
+.submit,
+.submit-modal {
   color: white !important;
   font-weight: bold !important;
-  background-color: #AB0045 !important;
+  background-color: #ab0045 !important;
 }
 
-.cancel, .cancel-modal{
+.cancel,
+.cancel-modal {
   color: white !important;
   font-weight: bold !important;
-  background-color: #FFB700 !important;
+  background-color: #ffb700 !important;
 }
 
 .conteudomodal {
@@ -280,12 +496,12 @@ textarea{
   min-height: 40vh;
 }
 
-.rounded-circle{
+.rounded-circle {
   width: 150px;
 }
 
 @media (max-width: 1200px) {
-  .rounded-circle{
+  .rounded-circle {
     margin-bottom: 3em;
   }
 }

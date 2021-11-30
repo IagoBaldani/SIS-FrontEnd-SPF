@@ -42,8 +42,8 @@
                 <td id="info-nome">{{participante.nome}}</td>
                 <td id="info-programa">{{participante.programa + " - " + participante.turmaPrograma}}</td>
                 <td id="info-status"
-                    v-bind:class="(participante.status == 'ATIVO')?'ativo':'inativo'">
-                  {{(participante.status == 'ATIVO')?'Ativo':'Inativo'}}</td>
+                    v-bind:class="(participante.statusAtivo == 'ATIVO')?'ativo':'inativo'">
+                  {{(participante.statusAtivo == 'ATIVO')?'Ativo':'Inativo'}}</td>
                 <td class="imagem rounded" width="50">
                   <a :href="'/dados-participante-cadastro_edicao?id=' + participante.id + '&tipo=edicao'">
                     <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem" />
@@ -98,7 +98,7 @@ export default {
     getParticipantes () {
       http.get('participante')
         .then(response => {
-          this.participantes = response.data
+          console.log(this.participantes = response.data)
         })
         .catch(error => {
           console.log(error)

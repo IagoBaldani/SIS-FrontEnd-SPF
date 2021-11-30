@@ -16,11 +16,17 @@
             aria-label="Default select example"
             v-on:click="totalFormacoes()"
           >
-            <option  name="formacao" class="relatorio_opcao" disabled selected>
+            <option name="formacao" class="relatorio_opcao" disabled selected>
               Programa de formação
             </option>
-            <option ref="nomePrograma" class="relatorio_opcao"
-               v-for="(formacao, id) in todasFormacoes" :key="id">{{formacao.nomePrograma}}</option>
+            <option
+              ref="nomePrograma"
+              class="relatorio_opcao"
+              v-for="(formacao, id) in todasFormacoes"
+              :key="id"
+            >
+              {{ formacao.nomePrograma }}
+            </option>
           </select>
 
           <!-- Select Turma -->
@@ -33,8 +39,13 @@
             v-on:click="buscarTurmasDeUmaFormacao()"
           >
             <option class="relatorio_opcao" disabled selected>Turma</option>
-            <option class="relatorio_opcao" v-for="(turma, id) in turmasPrograma"
-                    :key="id">{{turma.nomeTurma}}</option>
+            <option
+              class="relatorio_opcao"
+              v-for="(turma, id) in turmasPrograma"
+              :key="id"
+            >
+              {{ turma.nomeTurma }}
+            </option>
           </select>
 
           <!-- Select Escopo do relatório -->
@@ -212,9 +223,7 @@
                       {{ ativos.nomePrograma }}
                     </td>
                     <td class="modal_table-imagem rounded">
-                      <a href="#"
-                        ><img src="@/assets/imgs/usuario.svg" alt="Imagem"
-                      /></a>
+                      <img src="@/assets/imgs/usuario.svg" alt="Imagem" />
                     </td>
                   </tr>
                 </tbody>
@@ -309,9 +318,7 @@
                       {{ efetivados.nomePrograma }}
                     </td>
                     <td class="modal_table-imagem rounded">
-                      <a href="#"
-                        ><img src="@/assets/imgs/usuario.svg" alt="Imagem"
-                      /></a>
+                      <img src="@/assets/imgs/usuario.svg" alt="Imagem" />
                     </td>
                   </tr>
                 </tbody>
@@ -392,12 +399,13 @@
             <div class="modal_table-scroll">
               <table class="modal_table-1 table table-bordered" id="formacoes">
                 <tbody>
-                  <tr v-for="(formacoes, id) in formacoesComFiltro" v-bind:key="id">
+                  <tr
+                    v-for="(formacoes, id) in formacoesComFiltro"
+                    v-bind:key="id"
+                  >
                     <td>{{ formacoes.nomePrograma }}</td>
                     <td class="modal_table-imagem-forAndamento rounded">
-                      <a href="#"
-                        ><img src="@/assets/imgs/usuario.svg" alt="Imagem"
-                      /></a>
+                      <img src="@/assets/imgs/usuario.svg" alt="Imagem" />
                     </td>
                   </tr>
                 </tbody>
@@ -432,7 +440,7 @@ import Funcoes from "../../services/Funcoes";
 export default {
   name: "App",
   components: {
-    Header
+    Header,
   },
   data() {
     return {
@@ -446,7 +454,7 @@ export default {
       filtroAtivos: "",
       filtroEfetivados: "",
       filtroFormacoes: "",
-      nomePrograma: ""
+      nomePrograma: "",
     };
   },
   beforeMount() {
@@ -454,18 +462,18 @@ export default {
   },
 
   mounted() {
-    http.get("relatorios").then(response => {
+    http.get("relatorios").then((response) => {
       this.numeroTotalDeCadaLista = response.data;
     });
-    http.get("relatorios/formacoes").then(response => {
+    http.get("relatorios/formacoes").then((response) => {
       this.todasFormacoes = response.data;
-    })
+    });
   },
   computed: {
     participantesAtivosComFiltro() {
       if (this.filtroAtivos) {
         let exp = new RegExp(this.filtroAtivos.trim(), "i");
-        return this.ativosParticipantes.filter(ativos =>
+        return this.ativosParticipantes.filter((ativos) =>
           exp.test(ativos.nomeParticipante)
         );
       } else {
@@ -475,7 +483,7 @@ export default {
     participantesEfetivadosComFiltro() {
       if (this.filtroEfetivados) {
         let exp = new RegExp(this.filtroEfetivados.trim(), "i");
-        return this.efetivadosParticipantes.filter(efetivados =>
+        return this.efetivadosParticipantes.filter((efetivados) =>
           exp.test(efetivados.nomeParticipante)
         );
       } else {
@@ -485,16 +493,16 @@ export default {
     formacoesComFiltro() {
       if (this.filtroFormacoes) {
         let exp = new RegExp(this.filtroFormacoes.trim(), "i");
-        return this.formacoesTotal.filter(formacoes =>
+        return this.formacoesTotal.filter((formacoes) =>
           exp.test(formacoes.nomePrograma)
         );
       } else {
         return this.formacoesTotal;
       }
-    }
+    },
   },
   methods: {
-    redirecionamento: function() {
+    redirecionamento: function () {
       var formacao = document.getElementById("select1").value;
       var turma = document.getElementById("select2").value;
       var escopo = document.getElementById("select3").value;
@@ -503,41 +511,45 @@ export default {
         formulario.action = encodeURI("http://localhost:8080/relatorios-alura");
         formulario.submit();
       } else if (escopo == "Avaliações") {
-        formulario.action = encodeURI("http://localhost:8080/relatorios-avaliacoes");
+        formulario.action = encodeURI(
+          "http://localhost:8080/relatorios-avaliacoes"
+        );
         formulario.submit();
       } else if (escopo == "Conclusões") {
-        formulario.action = encodeURI("http://localhost:8080/relatorios-conclusoes");
+        formulario.action = encodeURI(
+          "http://localhost:8080/relatorios-conclusoes"
+        );
         formulario.submit();
       } else if (escopo == "Investimentos") {
-        formulario.action = encodeURI("http://localhost:8080/relatorios-investimentos");
+        formulario.action = encodeURI(
+          "http://localhost:8080/relatorios-investimentos"
+        );
         formulario.submit();
       }
     },
-    participantesAtivos: function() {
-      http.get("relatorios/participantesAtivos").then(response => {
+    participantesAtivos: function () {
+      http.get("relatorios/participantesAtivos").then((response) => {
         this.ativosParticipantes = response.data;
       });
     },
-    participantesEfetivados: function() {
-      http.get("relatorios/participantesEfetivados").then(response => {
+    participantesEfetivados: function () {
+      http.get("relatorios/participantesEfetivados").then((response) => {
         this.efetivadosParticipantes = response.data;
       });
     },
-    buscarTurmasDeUmaFormacao: function() {
-      this.nomePrograma = document.querySelector("#select1").value
-      http.get(`relatorios/turmas/${this.nomePrograma}`).then(response => {
-       this.turmasPrograma = response.data;
-      })
+    buscarTurmasDeUmaFormacao: function () {
+      this.nomePrograma = document.querySelector("#select1").value;
+      http.get(`relatorios/turmas/${this.nomePrograma}`).then((response) => {
+        this.turmasPrograma = response.data;
+      });
     },
 
     totalFormacoes: function () {
-      http
-        .get('relatorios/formacoesEmAndamento')
-        .then(response => {
-          console.log(this.formacoesTotal = response.data)
-        })
-    }
-  }
+      http.get("relatorios/formacoesEmAndamento").then((response) => {
+        console.log((this.formacoesTotal = response.data));
+      });
+    },
+  },
 };
 </script>
 
