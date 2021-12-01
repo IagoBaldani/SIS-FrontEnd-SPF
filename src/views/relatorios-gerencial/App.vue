@@ -508,21 +508,21 @@ export default {
       var escopo = document.getElementById("select3").value;
       var formulario = document.getElementById("formSelect");
       if (escopo == "Alura") {
-        formulario.action = encodeURI("http://localhost:8080/relatorios-alura");
+        formulario.action = encodeURI("http://192.168.30.162:8080/relatorios-alura");
         formulario.submit();
       } else if (escopo == "Avaliações") {
         formulario.action = encodeURI(
-          "http://localhost:8080/relatorios-avaliacoes"
+          "http://192.168.30.162:8080/relatorios-avaliacoes"
         );
         formulario.submit();
       } else if (escopo == "Conclusões") {
         formulario.action = encodeURI(
-          "http://localhost:8080/relatorios-conclusoes"
+          "http://192.168.30.162:8080/relatorios-conclusoes"
         );
         formulario.submit();
       } else if (escopo == "Investimentos") {
         formulario.action = encodeURI(
-          "http://localhost:8080/relatorios-investimentos"
+          "http://192.168.30.162:8080/relatorios-investimentos"
         );
         formulario.submit();
       }

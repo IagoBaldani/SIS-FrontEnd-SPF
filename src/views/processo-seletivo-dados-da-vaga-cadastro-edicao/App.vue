@@ -245,7 +245,7 @@ export default {
       http
         .put(`processo-seletivo/${id}`, this.formacoesForm)
         .then(response => {
-          window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+          window.location.href = 'http://192.168.30.162:8080/processo-seletivo-busca-por-vagas'
         })
         .catch(error => {
           console.log(error)
@@ -293,7 +293,7 @@ export default {
         http
           .put(`processo-seletivo/${id}`, this.formacoesForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+            window.location.href = 'http://192.168.30.162:8080/processo-seletivo-busca-por-vagas'
           })
           .catch(error => {
             console.log(error)
@@ -303,7 +303,7 @@ export default {
         http
           .post('processo-seletivo', this.formacoesForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+            window.location.href = 'http://192.168.30.162:8080/processo-seletivo-busca-por-vagas'
           })
           .catch(error => {
             console.log(error)

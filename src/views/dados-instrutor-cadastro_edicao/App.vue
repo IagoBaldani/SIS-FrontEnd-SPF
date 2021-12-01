@@ -175,7 +175,7 @@ export default {
         http
           .put(`instrutor/altera/${cpf}`, this.instrutorForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+            window.location.href = 'http://192.168.30.162:8080/dados-instrutor-busca'
           })
           .catch(error => {
             console.log(error)
@@ -184,7 +184,7 @@ export default {
         http
           .post('instrutor', this.instrutorForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+            window.location.href = 'http://192.168.30.162:8080/dados-instrutor-busca'
           })
           .catch(error => {
             console.log(error)

@@ -212,7 +212,7 @@ export default {
         http
           .post('remuneracao', this.cargoForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/cargo-listar'
+            window.location.href = 'http://192.168.30.162:8080/cargo-listar'
           })
           .catch(error => {
             console.log(error)
@@ -221,7 +221,7 @@ export default {
         http
           .put(`remuneracao/${dados.id}`, this.cargoForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/cargo-listar'
+            window.location.href = 'http://192.168.30.162:8080/cargo-listar'
           })
           .catch(error => {
             console.log(error)

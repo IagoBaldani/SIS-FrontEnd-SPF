@@ -303,7 +303,7 @@ export default {
             }
           })
           .then(response => {
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
+            window.location.href = 'http://192.168.30.162:8080/processo-seletivo-busca-por-candidato'
           })
           .catch(error => {
             console.log(error)
@@ -332,7 +332,7 @@ export default {
             }
           })
           .then(response => {
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
+            window.location.href = 'http://192.168.30.162:8080/processo-seletivo-busca-por-candidato'
           })
           .catch(error => {
             console.log(error)

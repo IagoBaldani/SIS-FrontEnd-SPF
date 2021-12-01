@@ -126,10 +126,10 @@ export default {
       return data
     },
     downloadDisc () {
-      location.href = `http://localhost:8081/api/candidato/download-disc/${this.id}`
+      location.href = `http://192.168.30.162:8081/api/candidato/download-disc/${this.id}`
     },
     downloadCurriculo () {
-      location.href = `http://localhost:8081/api/candidato/download-curriculo/${this.id}`
+      location.href = `http://192.168.30.162:8081/api/candidato/download-curriculo/${this.id}`
     }
   }
 }

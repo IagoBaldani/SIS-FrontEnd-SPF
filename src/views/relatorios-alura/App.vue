@@ -143,10 +143,10 @@ export default {
       .then(res => this.relatorio = res.data);
     },
     downloadRelatorioPDF(){
-      location.href = 'http://localhost:8081/api/relatorio-alura/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
+      location.href = 'http://192.168.30.162:8081/api/relatorio-alura/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
     },
     downloadRelatorioXLSX(){
-      location.href = 'http://localhost:8081/api/relatorio-alura/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
+      location.href = 'http://192.168.30.162:8081/api/relatorio-alura/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
     }
   },
 };

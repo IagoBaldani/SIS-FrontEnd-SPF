@@ -167,11 +167,11 @@ export default {
     },
 
     downloadRelatorioPDF () {
-      location.href = 'http://localhost:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
+      location.href = 'http://192.168.30.162:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
     },
 
     downloadRelatorioXLSX () {
-      location.href = 'http://localhost:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/xlsx'
+      location.href = 'http://192.168.30.162:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/xlsx'
     }
   }
 }
@@ -723,7 +723,7 @@ h6 {
   }
 
   .card-left-superior {
-    height: 100%;
+    height: auto;
   }
 
   .selecioneData {

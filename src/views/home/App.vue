@@ -50,7 +50,7 @@
               </div>
             </div>
           </a>
-          <a href="/cargo-listar">
+           <a href="/cargo-listar">
             <div class="btn-container">
               <div class="icon-btn-container cargo">
                 <img src="@/assets/imgs/group_add_white_24dp.svg" />
@@ -59,7 +59,7 @@
                 Cargos
               </div>
             </div>
-          </a>
+          </a> 
         </div>
       </div>
     </section>

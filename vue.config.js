@@ -3,7 +3,7 @@ module.exports = {
     login: {
       entry: './src/views/login/main.js',
       template: 'public/index.html',
-      title: 'SPF - Login',
+      title: 'SIS Programa de Formação - Login',
       chunks: ['chunk-vendors', 'chunk-common', 'login']
     },
     home: {
@@ -227,6 +227,24 @@ module.exports = {
       template: 'public/index.html',
       title: 'Relatórios | Investimentos',
       chunks: ['chunk-vendors', 'chunk-common', 'relatorios-investimentos']
+    },
+    'cargo-listar': {
+      entry: './src/views/cargo-listar/main.js',
+      template: 'public/index.html',
+      title: 'Cargos | Listar',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-listar']
+    },
+    'cargo-visualizar': {
+      entry: './src/views/cargo-visualizar/main.js',
+      template: 'public/index.html',
+      title: 'Cargos | Visualizar',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-visualizar']
+    },
+    'cargo-cadastro-edicao': {
+      entry: './src/views/cargo-cadastro-edicao/main.js',
+      template: 'public/index.html',
+      title: 'Cargos | Edição',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-cadastro-edicao']
     },
    
   }

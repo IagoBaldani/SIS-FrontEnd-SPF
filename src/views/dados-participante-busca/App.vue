@@ -44,7 +44,7 @@
                     v-bind:class="(participante.statusAtivo == 'ATIVO')?'ativo':'inativo'">
                   {{(participante.statusAtivo == 'ATIVO')?'Ativo':'Inativo'}}</td>
                 <td class="imagem rounded" width="50">
-                  <a :href="'/dados-participante-cadastro_edicao?id=' + participante.id + '&tipo=edicao'">
+                  <a :href="'/dados-participante-cadastro_edicao?id=' + participante.cpf ">
                     <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem" />
                   </a>
                 </td>

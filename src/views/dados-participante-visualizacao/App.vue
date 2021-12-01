@@ -370,7 +370,7 @@ export default {
       return dataFormatada
     },
     download () {
-      location.href = `http://localhost:8081/api/feedback/download/${this.id}`
+      location.href = `http://192.168.30.162:8081/api/feedback/download/${this.id}`
     },
 
     processaRequisicoes (statusAtivo) {
@@ -384,7 +384,7 @@ export default {
       http
         .put('participante/atualizaStatus', this.atualizaStatusForm)
         .then(response => {
-          window.location.href = 'http://localhost:8080/dados-participante-busca'
+          window.location.href = 'http://192.168.30.162:8080/dados-participante-busca'
         })
         .catch(error => {
           console.log(error)
