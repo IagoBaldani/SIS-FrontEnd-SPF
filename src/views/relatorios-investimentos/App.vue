@@ -116,54 +116,54 @@ import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Header,
+    Header
   },
-  data(){
-      return{
-          relatorio: {},
-          parametrosUrl:{},
-          relatorioPeriodo:{},
-          dataInicial:'',
-          dataFinal:''
-      };
+  data () {
+    return {
+      relatorio: {},
+      parametrosUrl: {},
+      relatorioPeriodo: {},
+      dataInicial: '',
+      dataFinal: ''
+    }
   },
-  beforeMount(){
-    Funcoes.verificaToken();
+  beforeMount () {
+    Funcoes.verificaToken()
   },
-  created(){
-    this.getParams();
-    this.getInvestimentos();
+  created () {
+    this.getParams()
+    this.getInvestimentos()
   },
-  methods:{
-    getParams() {
-      var query = location.search.slice(1);
-      var partes = query.split('&');
-      var data = {};
+  methods: {
+    getParams () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
       partes.forEach(function (parte) {
-        var chaveValor = parte.split('=');
-        var chave = chaveValor[0];
-        var valor = chaveValor[1];
-        data[chave] = valor;
-      });
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
 
-    this.parametrosUrl = data;
+      this.parametrosUrl = data
     },
     
-    getInvestimentos (){
+    getInvestimentos () {
       http
         .get('investimentos/investimentosPrograma/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma)
-        .then(response => this.relatorio = response.data)
+        .then(response => (this.relatorio = response.data))
     },
 
-    selecionarData (){
+    selecionarData () {
       this.dataInicial = this.$refs.dataInicial.value
       this.dataFinal = this.$refs.dataFinal.value
 
       http
         .get('investimentos/investimentoPeriodoSelecionado/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal)
-        .then(response => this.relatorioPeriodo = response.data)
+        .then(response => (this.relatorioPeriodo = response.data))
     },
 
     downloadRelatorioPDF () {
