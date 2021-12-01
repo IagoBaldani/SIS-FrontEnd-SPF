@@ -127,7 +127,7 @@ export default {
         .catch(erro => {
           console.log(`Erro: ${erro}`) 
         })
-      window.location.href = 'http://192.168.30.162:8080/dados-instrutor-busca'
+      window.location.href = 'http://localhost:8080/dados-instrutor-busca'
     },
     
     pegaDadosUrl () {

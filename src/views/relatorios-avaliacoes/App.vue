@@ -140,11 +140,11 @@ export default {
     },
 
     downloadRelatorioPDF(){
-      location.href = 'http://192.168.30.162:8081/api/relatorio-avaliacao/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
+      location.href = 'http://localhost:8081/api/relatorio-avaliacao/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
     },
 
     downloadRelatorioXLSX(){
-      location.href = 'http://192.168.30.162:8081/api/relatorio-avaliacao/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
+      location.href = 'http://localhost:8081/api/relatorio-avaliacao/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
     }
   },
 };

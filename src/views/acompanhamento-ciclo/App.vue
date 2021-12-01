@@ -281,7 +281,7 @@ export default {
     },
     // Endereço da API para fazer download do arquivo.
     download () {
-      location.href = `http://192.168.30.162:8081/api/ciclo/download/${this.conclusaoModal.id}`
+      location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
     }
   }
 }

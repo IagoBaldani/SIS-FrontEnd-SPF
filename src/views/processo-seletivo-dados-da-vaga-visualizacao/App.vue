@@ -19,12 +19,13 @@
 
             <div class="form-group mb-3">
               <label>Data de início</label>
-              <input type="text" class="form-control" v-model="processoSeletivo.dataInicio" disabled/>
+              <input type="text" class="form-control"  
+              :value="formataDataParaMostrar(processoSeletivo.dataInicio)" disabled/>
             </div>
 
             <div class="form-group mb-3">
               <label>Data de término</label>
-              <input type="text" class="form-control" v-model="processoSeletivo.dataFim" disabled/>
+              <input type="text" class="form-control" :value="formataDataParaMostrar(processoSeletivo.dataFim)"/>
             </div>
 
             <div class="form-group mb-3">
@@ -105,6 +106,11 @@ export default {
         data[chave] = valor
       })
       return data
+    },
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
     }
   }
 }

@@ -26,7 +26,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Data Agendamento</label>
-                                <input name="dataAgendamento" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.dataAgendamento">
+                                <input name="dataAgendamento" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="formataDataParaMostrar(candidato.dataAgendamento)">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Curso</label>
@@ -126,10 +126,15 @@ export default {
       return data
     },
     downloadDisc () {
-      location.href = `http://192.168.30.162:8081/api/candidato/download-disc/${this.id}`
+      location.href = `http://localhost:8081/api/candidato/download-disc/${this.id}`
     },
     downloadCurriculo () {
-      location.href = `http://192.168.30.162:8081/api/candidato/download-curriculo/${this.id}`
+      location.href = `http://localhost:8081/api/candidato/download-curriculo/${this.id}`
+    },
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
     }
   }
 }

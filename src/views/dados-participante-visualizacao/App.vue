@@ -26,7 +26,7 @@
               <label class="form-label fw-bold mb-0 titulo">CPF</label>
               <input
                 class="form-control disabledTextInput"
-                v-bind:value="participante.cpf"
+                v-bind:value="formataCpfparaMostrar(participante.cpf)"
                 type="text"
               />
             </div>
@@ -361,7 +361,7 @@ export default {
           console.log(this.participante = response.data)
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     formataDataParaMostrar (data) {
@@ -370,9 +370,11 @@ export default {
       return dataFormatada
     },
     download () {
-      location.href = `http://192.168.30.162:8081/api/feedback/download/${this.id}`
+      location.href = `http://localhost:8081/api/feedback/download/${this.id}`
     },
-
+    formataCpfparaMostrar (cpf) {
+      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+    },
     processaRequisicoes (statusAtivo) {
       this.atualizaStatusForm.cpf = this.participante.cpf
       this.atualizaStatusForm.statusAtivo = this.participante.statusAtivo
@@ -384,7 +386,7 @@ export default {
       http
         .put('participante/atualizaStatus', this.atualizaStatusForm)
         .then(response => {
-          window.location.href = 'http://192.168.30.162:8080/dados-participante-busca'
+          window.location.href = 'http://localhost:8080/dados-participante-busca'
         })
         .catch(error => {
           console.log(error)

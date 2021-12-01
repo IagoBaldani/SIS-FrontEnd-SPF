@@ -5,9 +5,9 @@
           <h2>Faça seu login</h2>
           <h3>(Credenciais SIS)</h3>
 
-          <input v-model="usuario" class="input" type="text" placeholder="Usuário" />
-          <input v-model="senha" class="input" type="password" placeholder="Senha"/>
-          <a href="">Esqueceu sua senha?</a>
+          <input v-model="usuario" class="input" type="text" placeholder="Usuário" required />
+          <input v-model="senha" class="input" type="password" placeholder="Senha" required/>
+          <!-- <a href="">Esqueceu sua senha?</a> -->
 
           <input class="submit" type="submit" value="CONFIRMAR"/>
         </form>
@@ -39,7 +39,7 @@ export default {
       })
         .then(response => {
           Cookie.set('login_token', response.data.token)
-          window.location.href = 'http://192.168.30.162:8080/home'
+          window.location.href = 'http://localhost:8080/home'
         })
         .catch(erro => {
           console.log('Dados incorretos. Por favor, tente novamente.')

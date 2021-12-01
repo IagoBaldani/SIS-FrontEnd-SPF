@@ -10,7 +10,7 @@
                 <div class="col-xl-4"></div>
                 <div class="col-xl-2"></div>
             </div>
-            <form method="POST" :action="`http://192.168.30.162:8081/api/arquivos/id`">
+            <form method="POST" :action="`http://localhost:8081/api/arquivos/id`">
               <div class="row justify-content-evenly">
                   <div class="col-xl-4">
                     <div class="mb-3">

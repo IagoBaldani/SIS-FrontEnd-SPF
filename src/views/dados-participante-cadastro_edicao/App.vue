@@ -2,6 +2,7 @@
   <Header />
   <main>
     <!-- ínicio do formulário -->
+  <form>
     <div class="container-fluid" id="participante">
       <div class="row mt-4 justify-content-evenly">
         <div class="div-titulo col-xl-4">
@@ -24,9 +25,9 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">CPF</label>
-              <input id="participanteCpf"
+              <input id="participanteCpf" disabled
                 class="form-control disabledTextInput"
-                v-bind:value="participante.cpf"
+                v-bind:value="formataCpfparaMostrar(participante.cpf)"
                 type="text"
               />
             </div>
@@ -40,7 +41,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
-              <input v-bind:value="participante.email" class="form-control" type="email" id="participanteEmail">
+              <input required  v-bind:value="participante.email" class="form-control" type="email" id="participanteEmail">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo"
@@ -83,7 +84,7 @@
             </div>
         <div class="col-xl-4">
          <button 
-            type="button"
+            type="submit"
             class="btn submit form-control"
             v-on:click="processaRequisicoes()"
             id="ativarParticipante">
@@ -154,6 +155,7 @@
         </div>
       </div>
     </div>  
+  </form>  
     <!-- fim do formulário -->
   </main>
  
@@ -173,6 +175,7 @@ export default {
     return {
       participante: {},
       id: '',
+      cpfFormatado: '',
       atualizaStatusForm: {
         nome: '',
         cpf: '',
@@ -215,7 +218,7 @@ export default {
           console.log(this.participante = response.data)
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     formataDataParaMostrar (data) {
@@ -231,7 +234,7 @@ export default {
     
     processaRequisicoes () {
       this.atualizaStatusForm.nome = document.getElementById('participanteNome').value
-      this.atualizaStatusForm.cpf = document.getElementById('participanteCpf').value
+      this.atualizaStatusForm.cpf = this.participante.cpf
       this.atualizaStatusForm.telefone = document.getElementById('participanteTelefone').value
       this.atualizaStatusForm.fonteRecrutamento = document.getElementById('participanteFonteRecrutamento').value
       this.atualizaStatusForm.nmFaculdade = document.getElementById('participanteNomeFaculdade').value
@@ -244,14 +247,21 @@ export default {
       http
         .put('participante/atualizaParticipante', this.atualizaStatusForm)
         .then(response => {
-          window.location.href = 'http://192.168.30.162:8080/dados-participante-busca'
+          window.location.href = 'http://localhost:8080/dados-participante-busca'
         })
         .catch(error => {
           console.log(error)
         })
+    },
+    formataCpfparaMostrar (cpf) {
+      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
     }
-  } 
-}
+    // validaEmail (email) {
+    //   var regex = (/^([a-zA-Z0-9_.+-])+\'@'(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/)
+    //   return regex.test(email)
+    // }
+  }
+} 
  
 </script>
 
