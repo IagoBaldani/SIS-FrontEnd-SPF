@@ -195,6 +195,7 @@ export default {
           campoVazio = 1
         }
       })
+      if (this.form.anotacoes == '') campoVazio = 1
       if (campoVazio == 0) {
         document.querySelector('#preencha').classList.add('none')
         document.querySelector('#aguarde').classList.remove('none')

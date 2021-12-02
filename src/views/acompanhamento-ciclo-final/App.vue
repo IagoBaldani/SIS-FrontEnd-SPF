@@ -23,7 +23,7 @@
                                 <label for="sim" class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="NAO_EFETIVADO" id="nao" class="me-2" v-model="form.resultado">
+                                <input type="radio"  checked name="reajuste" value="NAO_EFETIVADO" id="nao" class="me-2" v-model="form.resultado">
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
@@ -61,16 +61,18 @@
                 </div>
             </div>
             <div class="row justify-content-evenly">
-                <div class="col-lg-4"></div>
-                <div class="col-lg-7 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-50" @click="validaCampos()">REGISTRAR</button>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100" @click="validaCampos()">REGISTRAR</button>
                     <p id="abreModal" data-bs-toggle="modal" data-bs-target="#modalUltimoCiclo" class="none"></p>
+                </div>
+                <div class="col-lg-7 d-flex justify-content-end">
                 </div>
             </div>
             <div class="row justify-content-evenly">
-                <div class="col-lg-4"></div>
-                <div class="col-lg-7 d-flex justify-content-end">
+                <div class="col-lg-4">
                     <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
+                </div>
+                <div class="col-lg-7 d-flex justify-content-end">
                 </div>
             </div>
         </div>
@@ -87,7 +89,7 @@
                 <div class="row mb-5">
                     <div class="col-lg-7">
                         <div class="mb-4">
-                            <h4 class="fw-bold titulo">Reajuste salarial</h4>
+                            <h4 class="fw-bold titulo">Resultado</h4>
                             <p class="grey-font h4">{{ form.resultado }}</p>
                         </div>
                         <div class="mb-4">
@@ -135,7 +137,7 @@ export default {
       participante: {}, // objeto para receber as informações do participante.
       
       form: {
-        resultado: '',
+        resultado: 'NAO_EFETIVADO',
         dataAlteracao: '',
         cargoEfetivado: '',
         comprovante: '',

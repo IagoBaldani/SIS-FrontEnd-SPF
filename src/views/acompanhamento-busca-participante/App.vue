@@ -12,13 +12,11 @@
             <!--ComboBox de Programa de formação-->
             <div class="row justify-content-evenly mb-5">
                 <form class="col-lg-4 d-flex flex-column justify-content-between">
-                    <div class="comboBox w-100" id="programas">
-                        <select class="form-select" id="filtro-programa" v-model="programaSelecionado">
-                            <option value="0" class="programa-form" selected disabled>Programa de formação</option>
+                        <select class="form-select" id="filtro-programa" required>
+                            <option value="0" disabled hidden selected >Programa de formação</option>
                             <option :value="''">Nenhum</option>
                             <option :value="programa.nome" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
                         </select>
-                    </div>
                     <button @click="filtraDados()" type="button" value="BUSCAR" class="btn w-100 fs-5 mt-3 btn-primary botao">BUSCAR</button>
                 </form>
 

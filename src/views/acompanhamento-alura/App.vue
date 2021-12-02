@@ -20,14 +20,17 @@
                     <form>
                         <div class="mb-3">
                             <label for="qtdHoras" class="form-label fw-bold mb-0 titulo">Quantidade de Horas</label>
+                            <p id="qtdHoras" class="erro none">Valores válidos: 0 - 40</p>
                             <input name="qtdHoras" v-model="form.qtdHoras" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="mAvaliado" class="form-label fw-bold mb-0 titulo">Mês avaliado</label>
+                            <p id="mesAval" class="erro none">Valores válidos: 0 - 18</p>
                             <input name="mAvaliado" v-model="form.mesAvaliado" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="sAvaliada" class="form-label fw-bold mb-0 titulo">Semana avaliada</label>
+                            <p id="semAval" class="erro none">Valores válidos: 0 - 5</p>
                             <input name="sAvaliada"  v-model="form.semanaAvaliada" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
@@ -36,12 +39,13 @@
                         </div>
                         <div class="mb-3">
                             <label for="hMinima" class="form-label fw-bold mb-0 titulo">Horas mínimas semanais</label>
+                            <p id="hrMin" class="erro none">Valores válidos: 0 - 40</p>
                             <input name="hMinima" id="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
                         </div>
                         <button type="button" @click="postForm()" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
                         <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
                         <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
-                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
+                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos (corretamente)!</p>
                     </form>
                 </div>
                 <div  class="col-lg-7">
@@ -224,7 +228,7 @@ export default {
           campoVazio = 1
         }
       })
-      if (campoVazio == 0) {
+      if (campoVazio == 0 && this.validaCampos()) {
         document.querySelector('#preencha').classList.add('none')
         document.querySelector('#aguarde').classList.remove('none')
         http
@@ -265,6 +269,38 @@ export default {
         .catch((error) => {
           console.log(error)
         })
+    },
+
+    validaCampos () {
+      let erro = 0
+      if (this.form.qtdHoras > 40 || this.form.qtdHoras < 0) {
+        document.querySelector('#qtdHoras').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#qtdHoras').classList.add('none')
+      }
+      if (this.form.mesAvaliado > 18 || this.form.mesAvaliado < 0) {
+        document.querySelector('#mesAval').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#mesAval').classList.add('none')
+      }
+      if (this.form.semanaAvaliada > 5 || this.form.semanaAvaliada < 0) {
+        document.querySelector('#semAval').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#semAval').classList.add('none')
+      }
+      if (this.form.hrMinSemana > 40 || this.form.hrMinSemana < 0) {
+        document.querySelector('#hrMin').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#hrMin').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } 
+      return true
     },
 
     formataDataParaMostrar (data) {

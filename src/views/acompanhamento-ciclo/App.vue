@@ -26,7 +26,7 @@
                                 <label for="sim"  class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio"  name="reajuste" value="NAO_REAJUSTE_SALARIO" id="nao" v-model="form.resultado" class="me-2">
+                                <input type="radio" checked name="reajuste" value="NAO_REAJUSTE_SALARIO" id="nao" v-model="form.resultado" class="me-2">
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
@@ -152,7 +152,7 @@ export default {
       participante: {}, // objeto para salvar as informações do participante.
 
       form: { // objeto para usar no Body para enviar as requisições. 
-        resultado: '',
+        resultado: 'NAO_REAJUSTE_SALARIO',
         dataAlteracao: '',
         cargo: '',
         comprovante: ''
