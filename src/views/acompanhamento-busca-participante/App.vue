@@ -15,6 +15,7 @@
                     <div class="comboBox w-100" id="programas">
                         <select class="form-select" id="filtro-programa" v-model="programaSelecionado">
                             <option value="0" class="programa-form" selected disabled>Programa de formação</option>
+                            <option :value="''">Nenhum</option>
                             <option :value="programa.nome" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
                         </select>
                     </div>
@@ -68,9 +69,10 @@ export default {
   },
 
   methods: {
+    // retorna os participantes ativos
     getParticipantes () {
       http
-        .get('busca/participantes/ativo')
+        .get('participante/ativos')
         .then((response) => {
           this.participantes = response.data
         })
@@ -78,10 +80,10 @@ export default {
           console.log(error)
         })
     },
-
+    // é usada para retornar as formações ativas.
     getFormacoes () {
       http
-        .get('busca/participantes/programa/em_andamento')
+        .get('programa/buscar-processo') 
         .then((response) => {
           this.programas = response.data
         })
@@ -89,7 +91,7 @@ export default {
           console.log(error)
         })
     },
-
+    // é usada para pegar os dados da URl para serem usados nas requisições GET.
     pegaDados () {
       let linhas = document.querySelectorAll('#participante')
       let arrayDadosDasLinhas = []
@@ -121,9 +123,9 @@ export default {
         arrayBoolLinhas.push(boolLinha)
       })
 
-      console.log(arrayBoolLinhas)
       return arrayBoolLinhas
     },
+    // Deixa invisível os participantes que não foram selecionados. 
     mudaVisibilidade (arrayBoolLinhas, linhas) {
       let i
       var contador = 0
@@ -145,6 +147,7 @@ export default {
         aviso.style.display = 'none'
       }
     },
+    // Filtra os participantes de acordo com a formação
     filtraDados () {
       const dadosLinhas = this.pegaDados()
 

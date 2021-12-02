@@ -32,16 +32,11 @@
                             <input class="form-control disabledTextInput" v-bind:value="instrutor.email" type="email" disabled>
                         </div>
                     </div>
-                    <div class="col-xl-4">
+                    <!-- <div class="col-xl-4">
 
                     </div>
-                    <div class="col-xl-2">
-                        <form>
-                            <div class=" text-center text-md-left">
-                               <img src="@/assets/imgs/perfil.svg" class="rounded-circle" alt="">
-                            </div>
-                        </form>
-                    </div>
+                      <div class="col-xl-2">
+                    </div> -->
                 </div>
             </fieldset>
             <div class="mt-5 row justify-content-evenly">
@@ -118,7 +113,7 @@ export default {
           this.instrutor = res.data
         })
         .catch(erro => {
-          alert(`Erro: ${erro}`)
+          console.log(`Erro: ${erro}`)
         })
     },
 
@@ -130,7 +125,7 @@ export default {
           this.instrutor = res.data
         })
         .catch(erro => {
-          alert(`Erro: ${erro}`) 
+          console.log(`Erro: ${erro}`) 
         })
       window.location.href = 'http://localhost:8080/dados-instrutor-busca'
     },

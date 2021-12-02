@@ -166,7 +166,7 @@ export default {
           this.programa = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     pegaDadosUrl () {
@@ -194,9 +194,7 @@ export default {
         .then(response => {
           if (response.status == '200') {
             window.location.href = '/dados-programa-busca'
-          } else {
-            alert('Erro na tentativa de atualização')
-          }
+          } 
         })
     }
   }

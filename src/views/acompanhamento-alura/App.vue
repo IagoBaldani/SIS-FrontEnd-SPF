@@ -12,7 +12,6 @@
                             <h3 class="fw-bold text-center titulo">Participante selecionado:</h3>
                             <h4 class="fw-bold grey-font text-center nome-participante">{{participante.nome}}</h4>
                         </div>
-                        <img src="@/assets/imgs/perfil.svg" class="rounded-circle" width="70" height="70" alt="Perfil" />
                     </div>
                 </div>
             </div>
@@ -37,9 +36,12 @@
                         </div>
                         <div class="mb-3">
                             <label for="hMinima" class="form-label fw-bold mb-0 titulo">Horas mínimas semanais</label>
-                            <input name="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
+                            <input name="hMinima" id="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
                         </div>
                         <button type="button" @click="postForm()" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
+                        <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
+                        <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
+                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
                     </form>
                 </div>
                 <div  class="col-lg-7">
@@ -153,12 +155,12 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div>
-                            <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botao">CONFIRMAR</button>
+                            <button type="submit"  @click="deleteById()" class="btn btn-primary mt-2 fw-bold w-100 botao" data-bs-dismiss="modal" >CONFIRMAR</button>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div>
-                            <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botaocanc">CANCELAR</button>
+                            <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botaocanc" data-bs-dismiss="modal" >CANCELAR</button>
                         </div>
                     </div>
                 </div>
@@ -179,21 +181,21 @@ export default {
   },
   data () {
     return {
-      registros: [],
-      participante: {},
-      id: {},
-      registroModal: '',
-      form: {
+      registros: [], // Lista de registro obtidos para popular a tabela.
+      participante: {}, // Informações do participante
+      id: {}, // cpf do participante
+      registroModal: '', // é usado para mostrar o registro especifico que foi escolhido da tabela no modal.
+      form: { // Objeto formulário para ser enviado ao Back-end.
         qtdHoras: '',
         mesAvaliado: '',
         semanaAvaliada: '',
         dataRegistro: '',
         hrMinSemana: ''
       },
-      indiceModal: {}
-    } 
+      indiceModal: {} // função para gerar os indices no modal de acordo com a posição na tabela.
+    }
   },
-  
+
   beforeMount () {
     this.id = this.pegaDadosUrl().id
     this.getParticipanteNome()
@@ -202,9 +204,10 @@ export default {
   },
 
   methods: {
+    // faz o get no back-end e retorna as informações do participante
     getParticipanteNome () {
       http
-        .get(`gerencial/${this.id}`)
+        .get(`participante/${this.id}`)
         .then((response) => {
           this.participante = response.data
         })
@@ -212,7 +215,7 @@ export default {
           console.log(error)
         })
     },
-    
+    // requisição do tipo post para enviar as informações obtidas do formulário
     postForm () {
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
@@ -222,19 +225,37 @@ export default {
         }
       })
       if (campoVazio == 0) {
+        document.querySelector('#preencha').classList.add('none')
+        document.querySelector('#aguarde').classList.remove('none')
         http
           .post(`alura/novo/${this.id}`, this.form)
           .then((response) => {
             this.getAlura()
+            document.querySelector('#aguarde').classList.add('none')
+            document.querySelector('#enviado').classList.remove('none')
+            setTimeout(function () {
+              document.querySelector('#enviado').classList.add('none')
+            }, 2000)
           })
           .catch((error) => {
             console.log(error)
           })
       } else {
-        alert('Por favor, preencha todos os campos!')
+        document.querySelector('#preencha').classList.remove('none')
       }
     },
-
+    // Requisição para deletar um registro.
+    deleteById () {
+      http
+        .delete(`alura/deletar/${this.registroModal.codigoAlura}`)
+        .then((response) => {
+          this.getAlura()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    // requisição do tipo get para popular a tabela com os dados.
     getAlura () {
       http
         .get(`alura/${this.id}`)
@@ -252,7 +273,7 @@ export default {
 
       return dataFormatada
     },
-
+    // função para pegar os dados da URL
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -267,6 +288,7 @@ export default {
 
       return data
     },
+    // abre modal com as informações corretas e com o indice correspondente.
     carregaModal (registro, index) {
       this.registroModal = registro
       this.indiceModal = index
@@ -357,5 +379,17 @@ body {
 .botaocanc:hover{
     transition: 0.3s ease-in-out !important;
     background-color: #dd9700 !important;
+}
+
+.none {
+    display: none;
+}
+
+.erro {
+  color: red;
+}
+
+.enviado {
+  color: green
 }
 </style>

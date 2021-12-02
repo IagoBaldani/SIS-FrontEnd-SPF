@@ -11,7 +11,6 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold text-center nomeCol">{{participante.nome}}</h4>
                     </div>
-                    <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
 
             </div>
@@ -30,9 +29,13 @@
                         </div>
                         <div class="input-group">
                             <!--<input class="input-file" type="file">-->
-                            <input type="file" class="form-control" id="inputGroupFile02">
+                             <input type="file" class="form-control" id="disc" 
+                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                         </div>
                         <button class="btn-registrar mt-4 " type="button" @click="postForm()" >REGISTRAR</button>
+                        <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
+                        <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
+                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
                     </form>
                 </div>
                 <div class="col-lg-7">
@@ -71,7 +74,11 @@
                             <h4 class="fw-bold titulo">Data do Feedback:</h4>
                             <p class="nomeCol">{{formataDataParaMostrar(feedbackModal.data)}}</p>
                             <h4 class="fw-bold titulo">Anotações do feedback</h4>
-                            <textarea v-model="feedbackModal.anotacao" class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
+                            <textarea v-model="feedbackModal.anotacao" disabled class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
+                        </div>
+                        <div class="col-lg-6" >
+                            <h4 class="fw-bold titulo mb-3" >Download DISC:</h4>
+                            <a @click="download()" id="oioi" class="btn-registrar pointer" > DOWNLOAD</a>
                         </div>
                     </div>
                     <div class="row">
@@ -109,7 +116,7 @@
                         <div class="col-lg-6">
                             <div>
                                  <button type="submit" class="btn btn-primary mt-2 fw-bold botao" data-bs-toggle="modal"
-                                data-bs-target="#exmodal">CONFIRMAR</button>
+                                data-bs-target="#exmodal" @click="deleteById()" >CONFIRMAR</button>
                              </div>
                         </div>
                         <div class="col-lg-6">
@@ -137,12 +144,13 @@ export default {
   },
   data () {
     return {
-      feedbacks: [],
-      feedbackModal: '',
-      participante: {},
+      feedbacks: [], // Array de feedback, que é populado com o getFeedback.
+      feedbackModal: '', // objeto que é usado para popular os campos do modal.
+      participante: {}, // objeto para salvar as informações do participante.
       form: {
         data: '',
-        anotacoes: ''
+        anotacoes: '',
+        disc: {}
       },
       id: {},     
       indiceModal: {}
@@ -159,7 +167,7 @@ export default {
   methods: {
     getParticipanteNome () {
       http
-        .get(`gerencial/${this.id}`)
+        .get(`participante/${this.id}`)
         .then((response) => {
           this.participante = response.data
         })
@@ -167,7 +175,7 @@ export default {
           console.log(error)
         })
     },
-
+    // metodo para retornar os feedbacks.
     getFeedback () {
       http
         .get(`feedback/${this.id}`)
@@ -178,7 +186,7 @@ export default {
           console.log(error)
         })
     },
-
+    //  metodo para enviar o post com o form
     postForm () {
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
@@ -188,19 +196,49 @@ export default {
         }
       })
       if (campoVazio == 0) {
+        document.querySelector('#preencha').classList.add('none')
+        document.querySelector('#aguarde').classList.remove('none')
+        var formData = new FormData()
+        var disc = document.getElementById('disc').files[0]
+        formData.append('data', this.form.data)
+        formData.append('anotacoes', this.form.anotacoes)
+        formData.append('disc', disc)
         http
-          .post(`feedback/novo/${this.id}`, this.form)
+          .post(`feedback/novo/${this.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data' 
+            }
+          })
           .then((response) => {
-            alert('Feedback incluido com sucesso')
             this.getFeedback()
+            document.querySelector('#aguarde').classList.add('none')
+            document.querySelector('#enviado').classList.remove('none')
+            setTimeout(function () {
+              document.querySelector('#enviado').classList.add('none')
+            }, 2000)
           })
           .catch((error) => {
             console.log(error)
           })
       } else {
-        alert('Por favor, preencha todos os campos!')
+        document.querySelector('#preencha').classList.remove('none')
       }
     }, 
+    // método para deletar o o feedback.
+    deleteById () {
+      http  
+        .delete(`/feedback/deletar/${this.feedbackModal.id}`)
+        .then((response) => {
+          this.getFeedback()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    // endereço da API para fazer donwload  do arquivo
+    download () {
+      location.href = `http://localhost:8081/api/feedback/download/${this.feedbackModal.id}`
+    },
 
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -216,20 +254,20 @@ export default {
 
       return data
     },
-
+    // função para carregar o modal com as informações seleciondas
     carregaModal (feedback, index) {
       this.feedbackModal = feedback
       this.indiceModal = index
     },
-
+    // formata data para exibir corretamente no formato dd/MM/yyyy
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
       return dataFormatada
     }
   }
 }
+
 </script>
 
 <style scoped>
@@ -378,6 +416,18 @@ textarea  {
     color: #090B2E;
 }
 
+.none {
+    display: none;
+}
+
+.erro {
+  color: red;
+}
+
+.enviado {
+  color: green
+}
+
 .nomeCol{
     color: #737373;
 }
@@ -401,5 +451,10 @@ textarea  {
     border-style: none !important;
     width: 25.9em !important;
     border-radius: 2px !important;
+}
+
+.pointer {
+  cursor: pointer;
+  background-color: #FFB700 !important
 }
 </style>

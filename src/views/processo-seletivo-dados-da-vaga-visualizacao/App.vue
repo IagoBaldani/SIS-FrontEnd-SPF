@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row justify-content-evenly">
         <div class="col-md-4">
-          <h1 class="mt-3 f">Dados da Vaga</h1>
+          <h1 class="mt-3 f">Dados do Processo Seletivo</h1>
         </div>
         <div class="col-md-4"></div>
         <div class="col-md-2"></div>
@@ -13,173 +13,58 @@
         <div class="col-md-4">
           <fieldset disabled>
             <div class="form-group mb-3">
-              <label for="course">Formação</label>
-              <input
-                type="text"
-                class="form-control"
-                v-bind:placeholder="candidato.formacao"
-                disabled
-              />
+              <label>Processo Seletivo</label>
+              <input type="text" class="form-control" v-model="processoSeletivo.nome" disabled/>
             </div>
 
             <div class="form-group mb-3">
-              <label for="start-date">Data de início</label>
-              <input
-                type="text"
-                class="form-control"
-                v-bind:placeholder="candidato.dataInicio"
-                disabled
-              />
+              <label>Data de início</label>
+              <input type="text" class="form-control"  
+              :value="formataDataParaMostrar(processoSeletivo.dataInicio)" disabled/>
             </div>
 
             <div class="form-group mb-3">
-              <label for="final-date">Data de término</label>
-              <input
-                type="text"
-                class="form-control"
-                v-bind:placeholder="candidato.dataTermino"
-                disabled
-              />
+              <label>Data de término</label>
+              <input type="text" class="form-control" :value="formataDataParaMostrar(processoSeletivo.dataFim)"/>
             </div>
 
             <div class="form-group mb-3">
-              <label for="qtd-estagiarios">Quantidade de Estagiários</label>
-              <input
-                type="text"
-                class="form-control"
-                v-bind:placeholder="candidato.qtdEstagiarios"
-                disabled
-              />
+              <label>Nome do Instrutor Responsável</label>
+              <input type="text" class="form-control" v-model="processoSeletivo.nomeInstrutor" disabled/>
             </div>
 
             <div class="form-group mb-3">
-              <label for="qtd-trainees">Quantidade de Trainees</label>
-              <input
-                type="text"
-                class="form-control"
-                id="disabledTextInput"
-                v-bind:placeholder="candidato.qtdTrainees"
-                disabled
-              />
+              <label>Status do processo</label>
+              <input type="text" class="form-control" v-bind:value="'Em andamento'" v-if="processoSeletivo.status == 'EM_ANDAMENTO'" disabled/>
+              <input type="text" class="form-control" v-bind:value="'Finalizada'" v-else-if="processoSeletivo.status == 'FINALIZADA'" disabled/>
             </div>
           </fieldset>
         </div>
         <div class="col-md-4">
           <fieldset disabled>
             <div class="form-group mb-3">
-              <label for="qtd-trainees">Quantidade de Aprendizes</label>
-              <input
-                type="text"
-                class="form-control"
-                v-bind:placeholder="candidato.qtdAprendizes"
-                disabled
-              />
+              <label>Quantidade de Estagiários</label>
+              <input type="text" class="form-control" v-model="processoSeletivo.qtdEstagiario" disabled/>
             </div>
-
             <div class="form-group mb-3">
-              <label for="all-participators">Participantes Totais</label>
-              <input
-                type="text"
-                class="form-control"
-                v-bind:placeholder="candidato.participantesTotais"
-                disabled
-              />
+              <label>Quantidade de Trainees</label>
+              <input type="text" class="form-control" v-model="processoSeletivo.qtdTrainee" disabled/>
+            </div>
+            <div class="form-group mb-3">
+              <label>Quantidade de Aprendizes</label>
+              <input type="text" class="form-control" v-model="processoSeletivo.qtdAprendiz" disabled/>
             </div>
           </fieldset>
-        </div>
-        <div class="col-md-2"></div>
-        <footer>
-          <div class="row justify-content-evenly">
-            <div class="content-center col-md-4">
-              <button
-                class="bt-disabled mt-5 mb-2"
-                v-on:click="modal()"
-                id="disabled"
-                type="submit"
-              >
-                Desativar Processo
-              </button>
-            </div>
-            <div class="col-md-4"></div>
-            <div class="col-md-2"></div>
-          </div>
-        </footer>
       </div>
-    </div>
-    <div
-      class="modal"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-xl modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <button
-              type="button"
-              id="cancelar"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body d-flex justify-content-between">
-            <div>
-              <h1 class="modal-title form-label fw-bold mb-0 titulo">
-                Deseja confirmar a desativação?
-              </h1>
-            </div>
-            <div class="conteudomodal">
-              <div class="col-xl-5">
-                <div class="modal-body-group">
-                  <h2>Formação</h2>
-                  <p>{{ candidato.formacao }}</p>
-                </div>
-                <div class="modal-body-group">
-                  <h2>Data de início</h2>
-                  <p>{{ candidato.dataInicio }}</p>
-                </div>
-              </div>
-              <div class="col-xl-2"></div>
-              <div class="col-xl-5 mt-5">
-                <div class="modal-body-group">
-                  <h2>Data do Término</h2>
-                  <p>{{ candidato.dataTermino }}</p>
-                </div>
-                <div class="modal-body-group">
-                  <h2>Quantidade de participantes</h2>
-                  <p>{{ candidato.participantesTotais }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer border-0 justify-content-around">
-            <div>
-              <button type="button" class="btn submit">CONFIRMAR</button>
-            </div>
-            <div>
-              <button type="button" class="btn cancel" data-bs-dismiss="modal">
-                CANCELAR
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
+</div>
   </main>
 </template>
 
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
-import Cookie from 'js-cookie'
-
-let config = {
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-}
+import { http } from '@/services/Config'
 
 export default {
   name: 'App',
@@ -188,35 +73,44 @@ export default {
   },
   data () {
     return {
-      responseStatus: '',
-      candidato: {
-        id: 1,
-        formacao: 'Formação Java',
-        dataInicio: 'dd/MM/yyyy',
-        dataTermino: 'dd/MM/yyyy',
-        qtdEstagiarios: 20,
-        qtdTrainees: 30,
-        qtdAprendizes: 5,
-        participantesTotais: 55
-      }
+      processoSeletivo: {}
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
+
+    const dadosUrl = this.pegaDadosUrl()
+    let id = dadosUrl.id
+
+    this.getProcessoSeletivo(id)
   },
   methods: {
-    modal () {
-      let btn = document.querySelector('#disabled')
-      let modal = document.querySelector('.modal')
-      let cancelar = document.querySelector('#cancelar')
-
-      btn.addEventListener('click', () => {
-        modal.style.display = 'flex'
+    getProcessoSeletivo (id) {
+      http
+        .get(`processo-seletivo/${id}`)
+        .then(response => {
+          this.processoSeletivo = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    pegaDadosUrl () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
       })
-
-      cancelar.addEventListener('click', () => {
-        modal.removeAttribute('style')
-      })
+      return data
+    },
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
     }
   }
 }
@@ -266,6 +160,10 @@ body {
 h1 {
   font-weight: 700;
   font-size: 1.7rem !important;
+}
+
+input {
+  color: #737373 !important;
 }
 
 .header {

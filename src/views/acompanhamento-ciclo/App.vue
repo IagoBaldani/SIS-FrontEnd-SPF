@@ -13,10 +13,8 @@
                         <h4 class="fw-bold text-center titulo">Participante selecionado:</h4>
                         <h4 class="fw-bold grey-font text-center">{{ participante.nome }}</h4>
                     </div>
-                    <img src="@/assets/imgs/perfil.svg" class="perfil-img" />
                 </div>
             </div>
-
             <!-- LINHA DE BAIXO (FORMULÁRIO, TABELA E BOTÕES) -->
             <div class="row justify-content-evenly">
                 <div class="col-lg-4">
@@ -46,7 +44,7 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
-                            <input id="file" @change="formatoUpload()" class="none" type="file" accept="application/pdf"/>
+                            <input id="file" @change="formatoUpload()" class="none"  type="file" accept="application/pdf"/>
                             <label for="file" class="btn-file d-flex justify-content-between">
                                 <div class="w-100">
                                     <img src="@/assets/imgs/upload.svg" class="upload-img"/>
@@ -60,6 +58,9 @@
                         </div>
                         <button type="button" @click="postForm()"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
+                        <p class="none h4" id="aguarde">Enviando formulário, aguarde...</p>
+                        <p class="none h4 enviado" id="enviado">Formulário enviado</p>
+                        <p class="erro h4 none" id="preencha">Preencha todos os campos!</p>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
@@ -109,7 +110,7 @@
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/conclusão:</h4>
-                            <p class="grey-font h4 text-decoration-underline">{{conclusaoModal.comprovante}}</p>
+                            <p  class="grey-font h4 text-decoration-underline pointer" @click="download()">comprovante.pdf</p>
                         </div>
                         <div class="mb-4" v-if="conclusaoModal.status == 'PROGRESSIVA'" >
                             <h4 class="fw-bold titulo">Cargo:</h4>
@@ -144,13 +145,13 @@ export default {
   },
   data () {
     return {
-      conclusoes: [],
-      cargos: [],
-      conclusaoModal: '',
-      id: {},
-      participante: {},
+      conclusoes: [], // Array de conclusão, usado para receber as informações do getConclusoes 
+      cargos: [], //  popula o comboBox para selecionar o cargo do participante
+      conclusaoModal: '', // objeto usado para popular o modal com as informações selecionadas
+      id: {}, 
+      participante: {}, // objeto para salvar as informações do participante.
 
-      form: {
+      form: { // objeto para usar no Body para enviar as requisições. 
         resultado: '',
         dataAlteracao: '',
         cargo: '',
@@ -169,9 +170,10 @@ export default {
   },
 
   methods: {
+    // faz o get no back-end para rertornar as informações do participante.
     getParticipanteNome () {
       http
-        .get(`gerencial/${this.id}`)
+        .get(`participante/${this.id}`)
         .then((response) => {
           this.participante = response.data
         })
@@ -179,7 +181,7 @@ export default {
           console.log(error)
         })
     },
-
+    // retorna os cargos adicionados no baanco de dados.
     getCargos () {
       http 
         .get('remuneracao/lista')
@@ -190,10 +192,10 @@ export default {
           console.log(error)
         })
     },
-
+    // retorna os ciclos anteriores do participante caso exista
     getCiclo () {
       http
-        .get(`conclusao/${this.id}`)
+        .get(`ciclo/${this.id}`)
         .then((response) => {
           this.conclusoes = response.data
         })
@@ -201,7 +203,7 @@ export default {
           console.log(error)
         })
     },
-
+    // faz a requisição do tipo POST e envia o FormData no body.
     postForm () {
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
@@ -211,31 +213,48 @@ export default {
         }
       })
       if (campoVazio == 0) {
+        document.querySelector('#preencha').classList.add('none')
+        document.querySelector('#aguarde').classList.remove('none')
+        var formData = new FormData()
+        var comprovanteRematricula = document.getElementById('file').files[0] 
+        formData.append('resultado', this.form.resultado)
+        formData.append('dataAlteracao', this.form.dataAlteracao)
+        formData.append('cargo', this.form.cargo)
+        formData.append('comprovante', comprovanteRematricula)
         http
-          .post(`conclusao/registrocicloprogressivo/${this.id}`, this.form)
-          .then((response) => { 
+          .post(`ciclo/registrocicloprogressivo/${this.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data' // cabeçalho especifico para formulário que contém arquivos no body.
+            }
+          })
+          .then((response) => {
             this.getCiclo()
+            document.querySelector('#aguarde').classList.add('none')
+            document.querySelector('#enviado').classList.remove('none')
+            setTimeout(function () {
+              document.querySelector('#enviado').classList.add('none')
+            }, 2000)
           })
           .catch((error) => {
             console.log(error)
           })
       } else {
-        alert('Por favor, preencha todos os campos!')
+        document.querySelector('#preencha').classList.remove('none')
       }    
     },
-
+    // carrega o modal com as informações dos ciclos, e cria a tabela com os indices corretos.
     carregaModal (conclusao, index) {
       this.conclusaoModal = conclusao
       this.indiceModal = index
     },
-    
+    // formata a data para exibir corretamente no formato dd/MM/yyyy
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
 
       return dataFormatada
     },
-
+    // é usada para capturar as informações na url para ser passada nas requisições
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -250,6 +269,7 @@ export default {
 
       return data
     },
+    // captura o arquivo no input 
     formatoUpload () {
       var texto = document.querySelector('#nome-arquivo')
       let file = document.getElementById('file')
@@ -258,6 +278,10 @@ export default {
       } else {
         texto.textContent = file.files[0].name
       }
+    },
+    // Endereço da API para fazer download do arquivo.
+    download () {
+      location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
     }
   }
 }
@@ -399,6 +423,14 @@ export default {
     display: none;
 }
 
+.erro {
+  color: red;
+}
+
+.enviado {
+  color: green
+}
+
 .h-198px {
     height: 198px;
 }
@@ -455,5 +487,9 @@ export default {
 
 .conteudoModal{
     background-color: #EBEBEB !important;
+}
+
+.pointer {
+  cursor: pointer;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <Header/>
+    <Header />
     <main>
       <div class="container" id="relatorio">
         <!-- Informações do programa e turma selecionados -->
@@ -11,11 +11,16 @@
             </div>
             <!--Trocar o java pelo programa selecionado!-->
             <div class="tipo-relatorio">
-              <p>Programa de Formação selecionado: <span id="programa">{{ relatorio.programaDeFormacao }}</span></p>
+              <p>
+                Programa de Formação selecionado:
+                <span id="programa">{{ relatorio.programaDeFormacao }}</span>
+              </p>
             </div>
             <!--Trocar o Java 01 pela turma selecionada!-->
             <div class="tipo-relatorio">
-              <p>Turma: <span id="turma">{{ relatorio.turma }}</span></p>
+              <p>
+                Turma: <span id="turma">{{ relatorio.turma }}</span>
+              </p>
             </div>
           </div>
         </section>
@@ -25,8 +30,12 @@
             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-5" id="coluna">
               <div class="card mb-4" id="card-grande">
                 <div class="card-body">
-                  <h1 class="card-title" id="titulo-nota-tecnica">{{ relatorio.notaMediaAvaliacaoTecnica }}</h1>
-                  <p class="card-text" id="texto-nota-tecnica">Nota máedia da avaliação técnica.</p>
+                  <h1 class="card-title" id="titulo-nota-tecnica">
+                    {{ relatorio.notaMediaAvaliacaoTecnica }}
+                  </h1>
+                  <p class="card-text" id="texto-nota-tecnica">
+                    Nota máedia da avaliação técnica.
+                  </p>
                 </div>
               </div>
             </div>
@@ -35,8 +44,11 @@
                 <div class="card mb-4" id="card-grande">
                   <div class="card-body">
                     <h1 class="card-title" id="titulo-nota-comportamental">
-                      {{ relatorio.notaMediaAvaliacaoComportamental }}</h1>
-                    <p class="card-text" id="texto-nota-comportamental">Nota média da avaliação comportamental.</p>
+                      {{ relatorio.notaMediaAvaliacaoComportamental }}
+                    </h1>
+                    <p class="card-text" id="texto-nota-comportamental">
+                      Nota média da avaliação comportamental.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -46,8 +58,11 @@
                 <div class="card mb-4" id="card-pequeno">
                   <div class="card-body">
                     <h1 class="card-title" id="titulo-nota-praticas-ageis">
-                      {{ relatorio.notaMediaAvaliacaoPraticasAgeis }}</h1>
-                    <p class="card-text" id="texto-praticas-ageis">Nota média da avaliação do Módulo Práticas Ágeis.</p>
+                      {{ relatorio.notaMediaAvaliacaoPraticasAgeis }}
+                    </h1>
+                    <p class="card-text" id="texto-praticas-ageis">
+                      Nota média da avaliação do Módulo Práticas Ágeis.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -56,8 +71,12 @@
               <div class="nota-media-lideranca">
                 <div class="card mb-4" id="card-pequeno">
                   <div class="card-body">
-                    <h1 class="card-title" id="titulo-nota-lideranca">{{ relatorio.notaMediaAvaliacaoLideranca }}</h1>
-                    <p class="card-text" id="texto-lideranca">Nota média da avaliação do Módulo Liderança.</p>
+                    <h1 class="card-title" id="titulo-nota-lideranca">
+                      {{ relatorio.notaMediaAvaliacaoLideranca }}
+                    </h1>
+                    <p class="card-text" id="texto-lideranca">
+                      Nota média da avaliação do Módulo Liderança.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -66,8 +85,12 @@
               <div class="nota-media-negocio">
                 <div class="card mb-3" id="card-pequeno">
                   <div class="card-body">
-                    <h1 class="card-title" id="titulo-nota-negocio">{{ relatorio.notaMediaAvaliacaoNegocio }}</h1>
-                    <p class="card-text" id="texto-negocio">Nota média da avaliação do Módulo Negócio.</p>
+                    <h1 class="card-title" id="titulo-nota-negocio">
+                      {{ relatorio.notaMediaAvaliacaoNegocio }}
+                    </h1>
+                    <p class="card-text" id="texto-negocio">
+                      Nota média da avaliação do Módulo Negócio.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -78,8 +101,12 @@
               <div class="ultimo-ciclo">
                 <div class="card mb-4" id="card-grande">
                   <div class="card-body">
-                    <h1 class="card-title" id="titulo-ultimo-ciclo">{{ relatorio.ultimoCicloRegistrado }}</h1>
-                    <p class="card-text" id="texto-ultimo-cliclo">Último ciclo de avaliações registrado.</p>
+                    <h1 class="card-title" id="titulo-ultimo-ciclo">
+                      {{ relatorio.ultimoCicloRegistrado }}
+                    </h1>
+                    <p class="card-text" id="texto-ultimo-cliclo">
+                      Último ciclo de avaliações registrado.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -89,11 +116,21 @@
         <!-- Botões para gerar o relatório em pdf ou excel -->
         <section class="buttons">
           <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-danger"
-                    onclick="location.href = 'http://localhost:8080/api/relatorio-alura/pdf'" id="btn-pdf">GERAR PDF
+            <button
+              type="button"
+              class="btn btn-danger"
+              v-on:click="downloadRelatorioPDF()"
+              id="btn-pdf"
+            >
+              GERAR PDF
             </button>
-            <button type="button" class="btn btn-warning"
-                    onclick="location.href = 'http://localhost:8080/api/relatorio-alura/xlsx'" id="btn-xlsx">GERAR XLSX
+            <button
+              type="button"
+              class="btn btn-warning"
+              v-on:click="downloadRelatorioXLSX()"
+              id="btn-xlsx"
+            >
+              GERAR XLSX
             </button>
           </div>
         </section>
@@ -104,8 +141,8 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import Funcoes from '../../services/Funcoes'
 
 export default {
   name: 'App',
@@ -114,22 +151,62 @@ export default {
   },
   data () {
     return {
-      responseStatus: '',
-      relatorio: {}
+      relatorio: {},
+      parametrosUrl: {}
     }
-  // },
-  // created () {
-  //   this.getRelatorio()
-  // },
-  // methods: {
-    // getRelatorio () {
-    //   axios.get('http://localhost:8080/api/relatorio-avaliacao')
-    //     // eslint-disable-next-line no-return-assign
-    //     .then(response => this.relatorio = response.data)
-    // }
   },
   beforeMount () {
     Funcoes.verificaToken()
+  },
+  created () {
+    this.getParams()
+    this.getRelatorio()
+  },
+  methods: {
+    getParams () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+
+      this.parametrosUrl = data
+    },
+
+    getRelatorio () {
+      http
+        .get(
+          'relatorio-avaliacao/formacao=' +
+            this.parametrosUrl.formacao +
+            '/turma=' +
+            this.parametrosUrl.turma +
+            '/escopo=' +
+            this.parametrosUrl.escopo
+        )
+        .then(response => (this.relatorio = response.data))
+    },
+
+    downloadRelatorioPDF () {
+      location.href =
+        'http://localhost:8081/api/relatorio-avaliacao/formacao=' +
+        this.parametrosUrl.formacao +
+        '/turma=' +
+        this.parametrosUrl.turma +
+        '/pdf'
+    },
+
+    downloadRelatorioXLSX () {
+      location.href =
+        'http://localhost:8081/api/relatorio-avaliacao/formacao=' +
+        this.parametrosUrl.formacao +
+        '/turma=' +
+        this.parametrosUrl.turma +
+        '/xlsx'
+    }
   }
 }
 </script>
@@ -137,19 +214,19 @@ export default {
 <style>
 * {
   box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   margin: 0;
   padding: 0;
   text-decoration: none;
 }
 
 .background {
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
 }
 
 /* Header */
 .header {
-  background-color: #090B2E;
+  background-color: #090b2e;
   height: 75px;
   width: 100%;
   display: flex;
@@ -169,16 +246,17 @@ export default {
   display: none !important;
 }
 
-.btn-header img, .logo img {
+.btn-header img,
+.logo img {
   height: 50px;
 }
 
 .home.btn-header {
-  background-color: #FFB700;
+  background-color: #ffb700;
 }
 
 .rollback.btn-header {
-  background-color: #AB0045;
+  background-color: #ab0045;
 }
 
 .container {
@@ -193,11 +271,12 @@ export default {
   display: inline-block;
   font-weight: bold;
   font-size: 20px;
-  color: #090B2E;
+  color: #090b2e;
   padding-left: 50px;
 }
 
-#programa, #turma {
+#programa,
+#turma {
   color: #9e9d9d;
 }
 
@@ -220,46 +299,48 @@ export default {
 #titulo-nota-tecnica {
   font-weight: 700;
   font-size: 70px;
-  color: #AB0045;
+  color: #ab0045;
 }
 
 /* Titulo dos cards */
 #titulo-nota-comportamental {
   font-weight: 700;
   font-size: 70px;
-  color: #FFB700;
+  color: #ffb700;
 }
 
 #titulo-nota-lideranca {
   font-weight: 700;
   font-size: 40px;
-  color: #AB0045;
+  color: #ab0045;
   padding-bottom: 10px;
 }
 
 #titulo-nota-praticas-ageis {
   font-weight: 700;
   font-size: 40px;
-  color: #090B2E;
+  color: #090b2e;
   padding-bottom: 5px;
 }
 
 #titulo-nota-negocio {
   font-weight: 700;
   font-size: 40px;
-  color: #FFB700;
+  color: #ffb700;
   padding-bottom: 5px;
 }
 
 #titulo-ultimo-ciclo {
   font-weight: 700;
   font-size: 70px;
-  color: #090B2E;
+  color: #090b2e;
   padding-bottom: 5px;
 }
 
 /* Texto dos cards */
-#texto-praticas-ageis, #texto-lideranca, #texto-negocio {
+#texto-praticas-ageis,
+#texto-lideranca,
+#texto-negocio {
   font-size: 15px;
 }
 
@@ -295,7 +376,6 @@ export default {
     padding: 5px;
   }
 }
-
 @media (max-width: 1199px) {
   /* Informações do tipo de relatório */
   .tipo-relatorio {
@@ -321,20 +401,27 @@ export default {
   }
 
   /* Titulo dos cards */
-  #titulo-nota-tecnica, #titulo-nota-comportamental, #titulo-ultimo-ciclo {
+  #titulo-nota-tecnica,
+  #titulo-nota-comportamental,
+  #titulo-ultimo-ciclo {
     font-size: 60px;
   }
 
-  #titulo-nota-lideranca, #titulo-nota-praticas-ageis, #titulo-nota-negocio {
+  #titulo-nota-lideranca,
+  #titulo-nota-praticas-ageis,
+  #titulo-nota-negocio {
     font-size: 25px;
   }
 
   /* Texto dos cards */
-  #texto-praticas-ageis, #texto-lideranca, #texto-negocio {
+  #texto-praticas-ageis,
+  #texto-lideranca,
+  #texto-negocio {
     font-size: 15px;
   }
 
-  #texto-nota-tecnica, #texto-nota-comportamental {
+  #texto-nota-tecnica,
+  #texto-nota-comportamental {
     font-size: 15px;
   }
 }
@@ -344,7 +431,6 @@ export default {
   .tipo-relatorio {
     font-size: 13px;
   }
-
   /* Cards */
   /* Tamanho / Posição */
   #card-grande {
@@ -360,19 +446,24 @@ export default {
   }
 
   /* Titulo dos cards */
-  #titulo-nota-tecnica, #titulo-nota-comportamental, #titulo-ultimo-ciclo {
+  #titulo-nota-tecnica,
+  #titulo-nota-comportamental,
+  #titulo-ultimo-ciclo {
     font-size: 50px;
   }
 
-  #titulo-nota-lideranca, #titulo-nota-praticas-ageis, #titulo-nota-negocio {
+  #titulo-nota-lideranca,
+  #titulo-nota-praticas-ageis,
+  #titulo-nota-negocio {
     font-size: 24px;
   }
 
   /* Texto dos cards */
-  #texto-praticas-ageis, #texto-lideranca, #texto-negocio {
+  #texto-praticas-ageis,
+  #texto-lideranca,
+  #texto-negocio {
     font-size: 12px;
   }
-
 }
 
 @media (max-width: 767px) {
@@ -380,7 +471,6 @@ export default {
   .tipo-relatorio {
     font-size: 15px;
   }
-
   /* Cards */
   /* Tamanho / Posição */
   #card-grande {
@@ -396,16 +486,22 @@ export default {
   }
 
   /* Titulo dos cards */
-  #titulo-nota-tecnica, #titulo-nota-comportamental, #titulo-ultimo-ciclo {
+  #titulo-nota-tecnica,
+  #titulo-nota-comportamental,
+  #titulo-ultimo-ciclo {
     font-size: 60px;
   }
 
-  #titulo-nota-lideranca, #titulo-nota-praticas-ageis, #titulo-nota-negocio {
+  #titulo-nota-lideranca,
+  #titulo-nota-praticas-ageis,
+  #titulo-nota-negocio {
     font-size: 30px;
   }
 
   /* Texto dos cards */
-  #texto-praticas-ageis, #texto-lideranca, #texto-negocio {
+  #texto-praticas-ageis,
+  #texto-lideranca,
+  #texto-negocio {
     font-size: 14px;
   }
 
@@ -428,7 +524,6 @@ export default {
   .tipo-relatorio {
     font-size: 16px;
   }
-
   /* Cards */
   /* Tamanho / Posição */
   #card-grande {
@@ -472,7 +567,9 @@ export default {
   }
 
   /* Texto dos cards */
-  #texto-praticas-ageis, #texto-lideranca, #texto-negocio {
+  #texto-praticas-ageis,
+  #texto-lideranca,
+  #texto-negocio {
     font-size: 13px;
   }
 

@@ -47,7 +47,7 @@
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="filtrarDados(), mudaVisibilidade()"
+              v-on:click="filtrarDados()"
             >
               Pesquisar
             </button>
@@ -87,16 +87,16 @@
                   participante.remuneracaoEsporadica +
                   participante.remuneracaoExtra +
                   participante.alura
-              }}
+              }},00
             </td>
-            <td>{{ participante.dataInicio }}</td>
-            <td>{{ participante.dataFim }}</td>
+            <td>{{ formataDataParaMostrar(participante.dataInicio) }}</td>
+            <td>{{ formataDataParaMostrar(participante.dataFim) }}</td>
           </tr>
         </tbody>
         <tfoot class="extremo">
           <tr>
             <th scope="row">TOTAL</th>
-            <td></td>
+            <td id="salarioTotal"></td>
           </tr>
         </tfoot>
       </table>
@@ -304,6 +304,7 @@ export default {
     filtrarDados () {
       this.programaProcurado = document.querySelector('.filtro-programa').value
       this.turmaProcurada = document.querySelector('.filtro-turma').value
+      
       http
         .get(
           'investimento-folha/' +
@@ -311,7 +312,11 @@ export default {
             '/' +
             this.turmaProcurada
         )
-        .then(response => (this.participantes = response.data))
+        .then(response => {
+          (this.participantes = response.data)
+          this.pegarSalario()
+        })
+      this.mudaVisibilidade()
     },
 
     mostrarParticipantes () {
@@ -331,6 +336,19 @@ export default {
       this.form.descricao = document.querySelector('#descricaoModal').value
       http.post('/investimento-folha', this.form).then(response => {
       })
+    },
+
+    pegarSalario () {
+      let salario = 0
+      this.participantes.forEach(participante => {
+        salario = salario + participante.bolsaAux + participante.beneficios + participante.convenio +
+        participante.horaExtra +
+        participante.beneficioLegislacao +
+        participante.remuneracaoEsporadica +
+        participante.remuneracaoExtra +
+        participante.alura
+      })
+      document.querySelector('#salarioTotal').textContent = 'R$ ' + salario + ',00'
     },
 
     escutaQuantidades () {
@@ -366,6 +384,12 @@ export default {
 
       mensagem.style.display = 'none'
       extremo.style.display = 'flex'
+    },
+
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
     }
   }
 }
@@ -404,6 +428,10 @@ body {
   font-weight: bold;
   color: #ffffff;
   border: none;
+}
+
+#salarioTotal {
+  font-weight: 500;
 }
 
 .formacao,

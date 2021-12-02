@@ -101,7 +101,7 @@ export default {
           this.participantes = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
 

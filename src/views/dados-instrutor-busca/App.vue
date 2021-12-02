@@ -49,6 +49,11 @@
                     <td id="info-status" v-bind:class="instrutor.status == 'ATIVO' ? 'ativo' : 'inativo'">
                       {{ (instrutor.status == 'ATIVO'?'Ativo':'Inativo')}}
                     </td>
+                    <td class="imagem rounded" width="50">
+                      <a :href="'/dados-instrutor-cadastro_edicao?id=' + instrutor.cpf + '&tipo=edicao'">
+                       <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem" />
+                      </a>
+                    </td>
                     <td class="imagem-coluna rounded" width="50">
                       <a :href="'/dados-instrutor-visualizacao?id=' + instrutor.cpf">
                         <img src="@/assets/imgs/account_circle_white_24dp.svg" />
@@ -68,10 +73,10 @@
           </div>
           <div class="col-xl-7 justify-content-end d-flex">
             <a
-              href="/dados-instrutor-selecao-cadastro"
+              href="/dados-instrutor-cadastro_edicao"
               class="mt-5 form-control cadastro d-flex justify-content-center"
             >
-              SELEÇÃO PARA NOVO CADASTRO
+              NOVO CADASTRO
             </a>
           </div>
         </div>
@@ -103,7 +108,7 @@ export default {
           this.instrutores = res.data
         })
         .catch(erro => {
-          alert(`Erro na requisição (${erro})`)
+          console.log(`Erro na requisição (${erro})`)
         })
     },
     filtraDados () {

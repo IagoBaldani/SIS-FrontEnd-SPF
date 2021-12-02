@@ -46,12 +46,12 @@
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label fw-bold mb-0 titulo">Instrutor</label>
-                        <select class="form-select" id="instrutores" v-model="modelInstrutor">
+                        <select class="form-select" id="instrutores" v-model="programaForm.instrutor.nome">
                             <option
                                 id="coordenador"
                                 v-for="instrutor in instrutores"
-                                v-bind:value="instrutor.cpf"
-                                v-bind:key="instrutor"
+                                v-bind:value="instrutor.nome"
+                                v-bind:key="instrutor.cpf"
                             >
                                 {{ instrutor.nome }}
                             </option>
@@ -109,13 +109,13 @@
                                 <li>Nome: <span class="titulo"> {{ programaForm.nome }} </span></li>
                                 <li>Início do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.inicio)}}</span></li>
                                 <li>Término do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.termino)}}</span></li>
-                                <li>Instrutor: <span class="titulo">{{ programaForm.instrutorCpf }}</span></li>
+                                <li>Instrutor: <span class="titulo">{{ programaForm.instrutor.nome }}</span></li>
                                 <li>Turma: <span class="titulo">{{ programaForm.turma }}</span></li>
                             </ul>
                         </div>
                         <div class="mt-3 modal-footer border-0 justify-content-around">
                             <div>
-                                <button type="button" class="btn submit-modal" @click="postPrograma">
+                                <button type="button" class="btn submit-modal" v-on:click="postPrograma">
                                     CONFIRMAR
                                 </button>
                             </div>
@@ -151,7 +151,7 @@ export default {
         nome: '',
         inicio: '',
         termino: '',
-        instrutorCpf: '',
+        instrutor: {},
         turma: ''
       }
     }
@@ -178,16 +178,17 @@ export default {
           }
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     getInstrutor () {
       http.get('instrutor/status/ATIVO')
         .then(response => {
           this.instrutores = response.data
+          console.log(this.instrutores[0].nome)
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
 
@@ -197,7 +198,7 @@ export default {
           this.programa = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
     enviarDados () {

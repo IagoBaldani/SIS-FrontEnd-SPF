@@ -5,9 +5,9 @@
           <h2>Faça seu login</h2>
           <h3>(Credenciais SIS)</h3>
 
-          <input v-model="usuario" class="input" type="text" placeholder="Usuário" />
-          <input v-model="senha" class="input" type="password" placeholder="Senha"/>
-          <a href="">Esqueceu sua senha?</a>
+          <input v-model="usuario" class="input" type="text" placeholder="Usuário" required />
+          <input v-model="senha" class="input" type="password" placeholder="Senha" required/>
+          <!-- <a href="">Esqueceu sua senha?</a> -->
 
           <input class="submit" type="submit" value="CONFIRMAR"/>
         </form>
@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Cookie from 'js-cookie'
+import { http } from '../../services/Config'
 
 export default {
   name: 'App',
@@ -32,16 +32,17 @@ export default {
   },
   methods: {
     submit () {
-      axios.post('http://localhost:8081/auth', {
+      http.post('auth', {
         usuario: this.usuario,
         senha: this.senha
+       
       })
         .then(response => {
           Cookie.set('login_token', response.data.token)
           window.location.href = 'http://localhost:8080/home'
         })
         .catch(erro => {
-          alert('Dados incorretos. Por favor, tente novamente.')
+          console.log('Dados incorretos. Por favor, tente novamente.')
         })
     }
   }

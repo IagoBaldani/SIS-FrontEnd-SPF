@@ -1,156 +1,164 @@
 <template>
-  <Header/>
+  <Header />
   <main>
     <!-- ínicio do formulário -->
+  <form>
     <div class="container-fluid" id="participante">
       <div class="row mt-4 justify-content-evenly">
         <div class="div-titulo col-xl-4">
           <h3 class="fw-bold titulo">Dados do participante:</h3>
         </div>
         <div class="col-xl-4"></div>
-        <div class="col-xl-2" >
-          <h2 class="titulo secundario" v-if="tipo =='edicao'">
-            Status: <span v-bind:class="(participante.status === 'Ativo')?'ativo':'inativo'"> {{participante.status}} </span>
-          </h2>
+        <div class="col-xl-2 d-flex justify-content-center">
         </div>
       </div>
       <div class="row justify-content-evenly">
         <div class="col-xl-4">
+          <fieldset>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputName">Nome</label>
-              <input class="form-control disabledTextInput" id="inputName" :placeholder="participante.nome" type="text" disabled>
+              <label class="form-label fw-bold mb-0 titulo">Nome</label>
+              <input id="participanteNome"
+                class="form-control disabledTextInput"
+                v-bind:value="participante.nome"
+                type="text" 
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputCpf">CPF</label>
-              <input class="form-control disabledTextInput" id="inputCpf" :placeholder="participante.cpf" type="text" disabled>
+              <label class="form-label fw-bold mb-0 titulo">CPF</label>
+              <input id="participanteCpf" disabled
+                class="form-control disabledTextInput"
+                v-bind:value="formataCpfparaMostrar(participante.cpf)"
+                type="text"
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputContato">Contato</label>
-              <input class="form-control disabledTextInput" id="inputContato" :placeholder="participante.contato" type="tel" disabled>
+              <label class="form-label fw-bold mb-0 titulo">Contato</label>
+              <input id="participanteTelefone"
+                class="form-control disabledTextInput"
+                v-bind:value="participante.telefone"
+                type="tel"
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Fonte recrutamento</label>
-              <input v-model="modelFonteRecrutamento" class="form-control" id="inputFonteRecrutamento" placeholder="Palestra via faculdade" type="text">
+              <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
+              <input required  v-bind:value="participante.email" class="form-control" type="email" id="participanteEmail">
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputNotaLogica">Nota na prova de lógica</label>
-              <input v-model="modelNotaLogica" class="form-control" id="inputNotaLogica" placeholder="10/10" type="number" min="0" max="10">
+              <label class="form-label fw-bold mb-0 titulo"
+                >Fonte recrutamento</label
+              >
+              <input id="participanteFonteRecrutamento"
+                class="form-control disabledTextInput"
+                v-bind:value="participante.fonteRecrutamento"
+                type="text"
+              />
+            </div>
+            <!-- <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo"
+                >Nota na prova de lógica</label
+              >
+              <input disabled
+                class="form-control disabledTextInput"
+                v-bind:value="participante.testeLogico"
+                type="number"
+                min="0"
+                max="10"
+            </div> --> 
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo"
+                >Instituição de Ensino</label
+              >
+              <input id="participanteNomeFaculdade"
+                class="form-control disabledTextInput"
+                v-bind:value="participante.nmFaculdade"
+                type="text"
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputInstEnsino">Instituição de Ensino</label>
-              <input v-model="modelInstituicaoEnsino" class="form-control" id="inputInstEnsino" placeholder="Fatec Ourinhos" type="text">
+              <label class="form-label fw-bold mb-0 titulo">Curso</label>
+              <input id="participanteCurso"
+                class="form-control disabledTextInput"
+                v-bind:value="participante.curso"
+                type="text"
+              />
             </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputCurso">Curso</label>
-              <input v-model="modelCurso" class="form-control" id="inputCurso" placeholder="Análise e Desenvolvimento de Sistemas" type="text">
-            </div>
+        <div class="col-xl-4">
+         <button 
+            type="submit"
+            class="btn submit form-control"
+            v-on:click="processaRequisicoes()"
+            id="ativarParticipante">
+              SALVAR
+          </button>
+        </div>
+        <div class="col-xl-2"></div>
+      
+            <!-- <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo">TCE</label><br />
+              <a href="#"
+                ><img
+                  src="@/assets/imgs/file_download_black_24dp.svg"
+                  alt=""
+                />tce.xls</a
+              >
+            </div> -->
+          </fieldset>
         </div>
         <div class="col-xl-4">
+          <fieldset >
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputTerminoGraduacao">Término da graduação</label>
-              <input v-model="modelTerminoGraduacao" class="form-control" id="inputTerminoGraduacao" placeholder="20/12/2021" type="date">
+              <label class="form-label fw-bold mb-0 titulo"
+                >Término da graduação</label
+              >
+              <input id="participanteDataFimGraduacao"
+                class="form-control disabledTextInput"
+                v-bind:value="participante.dataFimGraduacao"
+                type="date"
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputCargo">Cargo</label>
-              <select class="form-select" id="inputCargo" placeholder="Estagiário" v-model="modelCargo">
-                <option value="ESTAGIARIO">Estagiário</option>
-                <option value="JOVEM_APRENDIZ">Jovem Aprendiz</option>
-                <option value="TRAINEE">Trainee</option>
-              </select>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Início do programa</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="formataDataParaMostrar(participante.iniPrograma)"
+                type="text"
+              />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Salário</label>
-              <input v-model="modelSalario" class="form-control disabledTextInput" type="number" disabled>
-            </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Programa de Formação - Turma</label>
-              <select class="form-select" v-model="modelPrograma" @input="exibeDadosPrograma(programas)">
-                <option id="programa" v-bind:value="programa.nome + ' - ' + programa.turma" v-for="programa in programas" v-bind:key="programa"> {{programa.nome}} - {{programa.turma}}</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Coordenador Técnico</label>
-              <input id="coordenador" class="form-control disabledTextInput" type="text" disabled>
-            </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Início do programa</label>
-              <input id="inicioPrograma" class="form-control disabledTextInput" type="text" disabled>
-            </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Término do programa</label>
-              <input id="terminoPrograma" class="form-control disabledTextInput" type="text" disabled>
+              <label class="form-label fw-bold mb-0 titulo"
+                >Término do programa</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="formataDataParaMostrar(participante.fimPrograma)"
+                type="text"
+              />
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Observação</label>
-              <textarea v-model="modelObservacao" class="form-control" placeholder="Mensagem..." cols="20" rows="6" style="resize:none;"></textarea>
+              <textarea id="participanteObservacao"
+                class="form-control disabledTextInput"
+                cols="20"
+                rows="10"
+                v-bind:value="participante.observacao"
+              ></textarea>
             </div>
+          </fieldset>
         </div>
         <div class="col-xl-2">
+          <fieldset >
             <div class="text-center text-md-left">
-              <img src="@/assets/imgs/perfil.svg" class="rounded-circle" alt="">
             </div>
+          </fieldset>
         </div>
       </div>
-      <div class="row justify-content-evenly">
-        <div class="col-xl-4 ">
-          <button @click="enviarDados" type="button" class="btn submit form-control" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            CONFIRMAR
-          </button>
-        </div>
-        <div class="col-xl-4">
-          <a :href="'/dados-participante-arquivos?id=' + participante.cpf " >
-            <div class="btn cancel form-control mb-5">
-              ENVIAR ARQUIVOS
-            </div>
-          </a>
-        </div>
-        <div class="col-xl-2"></div>
-      </div>
-    </div>
+    </div>  
+  </form>  
     <!-- fim do formulário -->
   </main>
-
-  <!-- modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-xl modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header border-0">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body d-flex justify-content-between">
-          <div>
-            <h1 class="modal-title form-label fw-bold mb-0 titulo"> Deseja confirmar os seguintes dados? </h1>
-          </div>
-          <div class="conteudomodal d-flex flex-column justify-content-center mb-5">
-            <div class="">
-              <ul class="fw-bold subtitulo text-start">Informações gerais:
-                <li>Nome: <span class="titulo"> {{participante.nome}} </span></li>
-                <li>CPF: <span class="titulo"> {{participante.cpf}} </span></li>
-                <li>Contato: <span class="titulo"> {{participante.contato}} </span></li>
-                <li>Fonte de recrutamento: <span class="titulo"> {{participante.fonteRecrutamento}} </span></li>
-                <li>Nota na prova lógica: <span class="titulo"> {{participante.notaProvaLogica}}</span> </li>
-                <li>Instituição de Ensino: <span class="titulo"> {{participante.instituicaoEnsino}} </span></li>
-                <li>Curso: <span class="titulo"> {{participante.curso}} </span></li>
-                <li>Término da Graduação: <span class="titulo"> {{participante.terminoGraduacao}} </span></li>
-                <li>Cargo: <span class="titulo"> {{participante.cargo}} </span></li>
-                <li>Salário: <span class="titulo"> {{participante.salario}}</span></li>
-                <li>Programa de Formação - Turma: <span class="titulo"> {{participante.programaSelecionado.nomeETurma}}</span></li>
-                <li>Observação: <span class="titulo"> {{participante.observacao}}</span></li>
-              </ul>
-            </div>
-          </div>
-          <div class="modal-footer border-0 justify-content-around">
-            <div>
-              <button type="button" class="btn submit-modal">CONFIRMAR</button>
-            </div>
-            <div>
-              <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+ 
 </template>
 
 <script>
@@ -165,182 +173,163 @@ export default {
   },
   data () {
     return {
-      responseStatus: '',
-      tipo: '',
-      programas: [
-        {
-          id: 1,
-          nome: 'Java',
-          turma: 'Turma I 2021',
-          coordenador: 'Kaiqui Lopes',
-          inicio: '20/07/2021',
-          termino: '12/12/2021'
-        },
-        {
-          id: 2,
-          nome: 'Java',
-          turma: 'Turma II 2021',
-          coordenador: 'Nico Steppat',
-          inicio: '12/07/2021',
-          termino: '12/12/2022'
-        },
-        {
-          id: 3,
-          nome: 'Mainframe',
-          turma: 'Turma I 2021',
-          coordenador: 'João Maurício',
-          inicio: '10/12/2021',
-          termino: '10/12/2022'
-        }
-      ],
-      participante: {
+      participante: {},
+      id: '',
+      cpfFormatado: '',
+      atualizaStatusForm: {
         nome: '',
         cpf: '',
-        contato: '',
+        telefone: '',
         fonteRecrutamento: '',
-        notaProvaLogica: '',
-        instituicaoEnsino: '',
+        nmFaculdade: '',
         curso: '',
-        terminoGraduacao: '',
-        cargo: '',
-        salario: '',
-        programaSelecionado: {
-          nomeETurma: ''
-        },
+        dataFimGraduacao: '',
         observacao: '',
-        status: 'Ativo'
-      }
+        email: ''
+      },
+      todasFormacoes: [],
+      turmasProgramaCandidato: []
     }
   },
+
+  beforeMount () {
+    Funcoes.verificaToken()
+    const dadosUrl = this.pegaDadosUrl()
+    this.id = dadosUrl.id
+    var cpf = dadosUrl.id
+    this.getCargo(cpf)
+  },
   methods: {
-    enviarDados () {
-      this.participante.fonteRecrutamento = this.modelFonteRecrutamento
-      this.participante.notaProvaLogica = this.modelNotaLogica
-      this.participante.instituicaoEnsino = this.modelInstituicaoEnsino
-      this.participante.curso = this.modelCurso
-      this.participante.terminoGraduacao = this.formataDataParaExibicao(this.modelTerminoGraduacao)
-      this.participante.programaSelecionado.nomeETurma = this.modelPrograma
-      this.participante.observacao = this.modelObservacao
-    },
-
-    formataDataParaExibicao (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
-      return dataFormatada
-    },
-
-    exibeDadosPrograma (programas) {
-      let elProgramas = document.querySelectorAll('#programa')
-      let arrayOptions = []
-
-      elProgramas.forEach(elPrograma => {
-        arrayOptions.push([elPrograma.value, elPrograma.selected])
-      })
-
-      arrayOptions.forEach(option => {
-        if (option[1]) {
-          for (let i = 0; i < programas.length; i++) {
-            let nomeETurma = `${programas[i].nome} - ${programas[i].turma}`
-
-            if (nomeETurma === option[0]) {
-              document.querySelector('#coordenador').placeholder = programas[i].coordenador
-              document.querySelector('#inicioPrograma').placeholder = programas[i].inicio
-              document.querySelector('#terminoPrograma').placeholder = programas[i].termino
-            }
-          }
-        }
-      })
-    },
-
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
       var data = {}
-
       partes.forEach(function (parte) {
         var chaveValor = parte.split('=')
         var chave = chaveValor[0]
         var valor = chaveValor[1]
         data[chave] = valor
       })
-
       return data
-    }
-  },
-  beforeMount () {
-    Funcoes.verificaToken()
-    const dadosUrl = this.pegaDadosUrl()
+    },
+    getCargo (cpf) {
+      http.get(`participante/completo/${cpf}`)
+        .then(response => {
+          console.log(this.participante = response.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
+    },
+    formataDataParaEnviar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCFullYear()}-${dataPreForm.getUTCMonth() + 1}-${dataPreForm.getUTCDate()}`
+      return dataFormatada
+    },
+    
+    processaRequisicoes () {
+      this.atualizaStatusForm.nome = document.getElementById('participanteNome').value
+      this.atualizaStatusForm.cpf = this.participante.cpf
+      this.atualizaStatusForm.telefone = document.getElementById('participanteTelefone').value
+      this.atualizaStatusForm.fonteRecrutamento = document.getElementById('participanteFonteRecrutamento').value
+      this.atualizaStatusForm.nmFaculdade = document.getElementById('participanteNomeFaculdade').value
+      this.atualizaStatusForm.curso = document.getElementById('participanteCurso').value
+      this.atualizaStatusForm.dataFimGraduacao = document.getElementById('participanteDataFimGraduacao').value
+      this.atualizaStatusForm.observacao = document.getElementById('participanteObservacao').value
+      this.atualizaStatusForm.email = document.getElementById('participanteEmail').value
 
-    if (dadosUrl.tipo == 'edicao') {
-      this.tipo = dadosUrl.tipo
+      console.log(this.atualizaStatusForm.email)
+      http
+        .put('participante/atualizaParticipante', this.atualizaStatusForm)
+        .then(response => {
+          window.location.href = 'http://localhost:8080/dados-participante-busca'
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    formataCpfparaMostrar (cpf) {
+      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
     }
-
-    // Chamada da API MOCK
-    http.get(`mock/participante/${dadosUrl.id}`)
-      .then(response => {
-        this.participante.nome = response.data.nome
-        this.participante.cpf = response.data.cpf
-        this.participante.contato = response.data.telefone
-      })
-      .catch(error => {
-        alert('Erro na chamada da API MOCK - ' + error)
-      })
+    // validaEmail (email) {
+    //   var regex = (/^([a-zA-Z0-9_.+-])+\'@'(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/)
+    //   return regex.test(email)
+    // }
   }
-}
-
+} 
+ 
 </script>
 
 <style>
-
-body{
-    background-color: #EBEBEB !important;
+body {
+  background-color: #ebebeb !important;
 }
 
-.titulo{
-  color: #090B2E;
+.titulo {
+  color: #090b2e;
   font-weight: bold;
 }
 
-.secundario{
+.secundario {
   font-size: 20px;
 }
 
-.ativo, .inativo{
+.ativo,
+.inativo {
   margin-left: 1em;
 }
 
-.ativo{
-  color: green;
+#ativarParticipante {
+  background-color: #ffb700 !important;
+  width: 100% !important;
+  height: 50px !important;
 }
-.inativo{
+
+.inativo {
   color: darkred;
 }
 
-.subtitulo{
+.subtitulo {
   color: #737373;
 }
 
-.disabledTextInput{
-  background-color: #D3CACA;
-  border: 1px solid #BCB3B3;
+/* .disabledTextInput {
+  background-color: #d3caca !important;
+  border: 1px solid #bcb3b3 !important;
+} */
+
+.form-control {
+  color: #737373 !important;
 }
 
-.download{
+textarea {
+  resize: none !important;
+  height: 200px !important;
+}
+
+.download {
   transform: rotate(180deg) !important;
 }
 
-.modal-body, .modal-header, .modal-footer {
+.modal-body,
+.modal-header,
+.modal-footer {
   text-align: center;
-  background-color: #EBEBEB
+  background-color: #ebebeb;
 }
 
-.modal-body{
+.modal-body {
   min-height: 55vh;
   flex-direction: column;
 }
 
-.submit-modal, .cancel-modal{
+.submit-modal,
+.cancel-modal {
   color: white !important;
   font-weight: bold !important;
   border-radius: 5px !important;
@@ -348,41 +337,37 @@ body{
   font-size: 25px !important;
 }
 
-.submit, .submit-modal{
+.submit,
+.submit-modal {
   color: white !important;
   font-weight: bold !important;
-  background-color: #AB0045 !important;
+  background-color: #ab0045 !important;
 }
-
-.cancel, .cancel-modal{
+.btnSalvar{
+  height: 49px;
+  width: 100% !important;
+}
+.cancel,
+.cancel-modal {
   color: white !important;
   font-weight: bold !important;
-  background-color: #FFB700 !important;
-}
-
-.input-arquivo{
-  display: none;
-}
-
-.rounded-circle{
-  width: 150px;
+  background-color: #ffb700 !important;
 }
 
 .conteudomodal {
   display: flex;
   justify-content: center;
+  align-items: center;
   min-height: 40vh;
-  font-size: 21px;
 }
 
-.envio-arquivo{
-  cursor: pointer;
+.rounded-circle {
+  width: 150px;
 }
 
 @media (max-width: 1200px) {
-  .editar{
+  .rounded-circle {
     margin-bottom: 3em;
   }
 }
-
 </style>

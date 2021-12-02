@@ -3,7 +3,7 @@ module.exports = {
     login: {
       entry: './src/views/login/main.js',
       template: 'public/index.html',
-      title: 'SPF - Login',
+      title: 'SIS Programa de Formação - Login',
       chunks: ['chunk-vendors', 'chunk-common', 'login']
     },
     home: {
@@ -36,11 +36,23 @@ module.exports = {
       title: 'Programa de Formação - Cadastro e Edição',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-programa-cadastro_edicao']
     },
+    'dados-programa-processo-seletivo': {
+      entry: './src/views/dados-programa-processo-seletivo/main.js',
+      template: 'public/index.html',
+      title: 'Programa de Formação - Processo Seletivo',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-programa-processo-seletivo']
+    },
     'dados-participante-visualizacao': {
       entry: './src/views/dados-participante-visualizacao/main.js',
       template: 'public/index.html',
       title: 'Participante - Visualização',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-visualizacao']
+    },
+    'dados-participante-cadastro_participante': {
+      entry: './src/views/dados-participante-cadastro_participante/main.js',
+      template: 'public/index.html',
+      title: 'Cadastro Participante',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-cadastro_participante']
     },
     'dados-participante-busca': {
       entry: './src/views/dados-participante-busca/main.js',
@@ -66,6 +78,12 @@ module.exports = {
       title: 'Participante - Envio de arquivos',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-participante-arquivos']
     },
+    'dados-candidato-participante-elegibilidade': {
+      entry: './src/views/dados-candidato-participante-elegibilidade/main.js',
+      template: 'public/index.html',
+      title: 'Participante Elegibilidade',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-candidato-participante-elegibilidade']
+    },
     'dados-instrutor-visualizacao': {
       entry: './src/views/dados-instrutor-visualizacao/main.js',
       template: 'public/index.html',
@@ -78,17 +96,11 @@ module.exports = {
       title: 'Instrutor - Busca',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-busca']
     },
-    'dados-instrutor-cadastro': {
-      entry: './src/views/dados-instrutor-cadastro/main.js',
+    'dados-instrutor-cadastro_edicao': {
+      entry: './src/views/dados-instrutor-cadastro_edicao/main.js',
       template: 'public/index.html',
-      title: 'Instrutor - Cadastro',
-      chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-cadastro']
-    },
-    'dados-instrutor-selecao-cadastro': {
-      entry: './src/views/dados-instrutor-selecao-cadastro/main.js',
-      template: 'public/index.html',
-      title: 'Instrutor - Seleção para cadastro',
-      chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-selecao-cadastro']
+      title: 'Instrutor - Cadastro - Edição',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-cadastro_edicao']
     },
     'acompanhamento-feedback': {
       entry: './src/views/acompanhamento-feedback/main.js',
@@ -215,6 +227,25 @@ module.exports = {
       template: 'public/index.html',
       title: 'Relatórios | Investimentos',
       chunks: ['chunk-vendors', 'chunk-common', 'relatorios-investimentos']
-    }
+    },
+    'cargo-listar': {
+      entry: './src/views/cargo-listar/main.js',
+      template: 'public/index.html',
+      title: 'Cargos | Listar',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-listar']
+    },
+    'cargo-visualizar': {
+      entry: './src/views/cargo-visualizar/main.js',
+      template: 'public/index.html',
+      title: 'Cargos | Visualizar',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-visualizar']
+    },
+    'cargo-cadastro-edicao': {
+      entry: './src/views/cargo-cadastro-edicao/main.js',
+      template: 'public/index.html',
+      title: 'Cargos | Edição',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-cadastro-edicao']
+    },
+   
   }
 }

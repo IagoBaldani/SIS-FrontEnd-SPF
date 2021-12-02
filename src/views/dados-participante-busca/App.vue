@@ -11,19 +11,18 @@
       <div class="row justify-content-evenly">
         <div class="col-xl-4">
           <div class="mb-3">
-            <input name="nome" type="text" class="form-control mt-4" placeholder="Nome" id="filtro-nome">
+            <input name="nome" type="text" class="form-control mt-4" placeholder="Nome do participante" id="filtro-nome">
           </div>
           <div class="mb-3">
             <select class="form-select mt-4" id="filtro-programa">
               <option disabled selected value="0">Programa de Formação</option>
-              <option id="programa" v-bind:value="programa.id" v-for="programa in programas" v-bind:key="programa">{{programa.nome + " - " + programa.turma}}</option>
+              <option id="programa" v-bind:value="programa.nomePrograma" v-for="programa in programas" v-bind:key="programa">{{programa.nomePrograma}}</option>
             </select>
           </div>
           <div class="mb-3">
-            <select class="form-select mt-4" id="filtro-status">
-              <option disabled selected value="0">Status</option>
-              <option value="1">Ativo</option>
-              <option value="2">Inativo</option>
+            <select class="form-select mt-4" id="filtro-turmas" v-on:click="getTurmas()">
+              <option disabled selected value="0">Turmas</option>
+              <option id="turma" v-bind:value="turma.id" v-for="turma in turmas" v-bind:key="turma">{{turma.nomeTurma}}</option>
             </select>
           </div>
         </div>
@@ -37,20 +36,20 @@
           <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table class="table table-bordered tabela mt-4 ">
               <tbody align="center">
-              <tr id="participante" v-for="participante in participantes" v-bind:key="participante">
+              <tr class="nome" id="participante" v-for="participante in participantes" v-bind:key="participante">
                 <th scope="row" width="50">{{participante.cpf}}</th>
                 <td id="info-nome">{{participante.nome}}</td>
-                <td id="info-programa">{{participante.programa + " - " + participante.turmaPrograma}}</td>
+                <td id="info-programa">{{participante.programa}}</td>
                 <td id="info-status"
-                    v-bind:class="(participante.status == 'ATIVO')?'ativo':'inativo'">
-                  {{(participante.status == 'ATIVO')?'Ativo':'Inativo'}}</td>
+                    v-bind:class="(participante.statusAtivo == 'ATIVO')?'ativo':'inativo'">
+                  {{(participante.statusAtivo == 'ATIVO')?'Ativo':'Inativo'}}</td>
                 <td class="imagem rounded" width="50">
-                  <a :href="'/dados-participante-cadastro_edicao?id=' + participante.id + '&tipo=edicao'">
+                  <a :href="'/dados-participante-cadastro_edicao?id=' + participante.cpf ">
                     <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem" />
                   </a>
                 </td>
                 <td class="imagem-coluna rounded" width="50">
-                  <a :href="'/dados-participante-visualizacao?id=' + participante.id">
+                  <a :href="'/dados-participante-visualizacao?id=' + participante.cpf">
                     <img src="@/assets/imgs/account_circle_white_24dp.svg">
                   </a>
                 </td>
@@ -65,7 +64,7 @@
           <button class="mt-5 form-control submit" @click="filtraDados()">BUSCAR</button>
         </div>
         <div class="col-xl-7 justify-content-end d-flex">
-          <a href="/dados-participante-selecao-cadastro"
+          <a href="/dados-candidato-participante-elegibilidade"
              class="mt-5 form-control cadastro d-flex justify-content-center">SELEÇÃO PARA NOVO CADASTRO </a>
         </div>
       </div>
@@ -77,7 +76,6 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
-
 export default {
   name: 'App',
   components: {
@@ -87,12 +85,12 @@ export default {
     return {
       responseStatus: '',
       participantes: [],
-      programas: []
+      programas: [],
+      turmas: []
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-
     this.getParticipantes()
     this.getProgramas()
   },
@@ -100,156 +98,52 @@ export default {
     getParticipantes () {
       http.get('participante')
         .then(response => {
-          this.participantes = response.data
+          (this.participantes = response.data)
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
-
+    filtraDados () {
+      let programaProcurado = document.querySelector('#filtro-programa').value
+      let nomeProcurado = document.querySelector('#filtro-nome').value
+      let turmaProcurada = document.querySelector('#filtro-turmas').value
+      console.log(nomeProcurado)
+      if (nomeProcurado == '') {
+        http.get(`participante/0/${programaProcurado}/${turmaProcurada}`)
+          .then(response => {
+            this.participantes = response.data
+          })
+      } else {
+        http.get(`participante/${nomeProcurado}/${programaProcurado}/${turmaProcurada}`)
+          .then(response => {
+            this.participantes = response.data
+          })
+      }
+    },
+    getTurmas () {
+      let turmas = document.querySelector('#filtro-programa').value
+      console.log(turmas)
+      http.get(`relatorios/turmas/${turmas}`)
+        .then(response => {
+          this.turmas = response.data
+        })
+    },
     getProgramas () {
-      http.get('programa')
+      http.get('relatorios/formacoes')
         .then(response => {
           this.programas = response.data
         })
         .catch(error => {
-          alert(error)
+          console.log(error)
         })
     },
-
-    filtraDados () {
-      const dadosLinhas = this.pegaDados()
-
-      let nomeProcurado = document.querySelector('#filtro-nome').value
-      let programaProcurado = document.querySelector('#filtro-programa').value
-      let statusProcurado = document.querySelector('#filtro-status').value
-      let linhasNl = document.querySelectorAll('#participante')
-
-      var linhasArray = Array.prototype.slice.call(linhasNl)
-
-      let arrayBoolLinhas = this.verifica(dadosLinhas, nomeProcurado, programaProcurado, statusProcurado)
-
-      this.mudaVisibilidade(arrayBoolLinhas, linhasArray)
-    },
-
-    pegaDados () {
-      let linhas = document.querySelectorAll('#participante')
-      let programas = document.querySelectorAll('#programa')
-
-      let arrayProgramas = []
-      let arrayDadosDasLinhas = []
-
-      programas.forEach(programa => {
-        arrayProgramas.push(programa.textContent)
-      })
-
-      linhas.forEach(linha => {
-        let dadosLinha = []
-        let nome = linha.querySelector('#info-nome').textContent
-
-        let programa = this.trataPrograma(linha, arrayProgramas)
-        let status = this.trataStatus(linha)
-
-        dadosLinha.push(nome, programa, status)
-        arrayDadosDasLinhas.push(dadosLinha)
-      })
-
-      return arrayDadosDasLinhas
-    },
-
-    trataStatus (linha) {
-      let statusTxt = linha.querySelector('#info-status').textContent
-      let status = 0
-
-      if (statusTxt == 'Ativo') {
-        status = 1
-        return status
-      } else if (statusTxt == 'Inativo') {
-        status = 2
-        return status
-      }
-
-      return status
-    },
-
-    trataPrograma (linha, arrayProgramas) {
-      var programaTxt = linha.querySelector('#info-programa').textContent
-      let programaNum = 0; let i = 0
-
-      for (let i = 0; i < arrayProgramas.length; i++) {
-        if (programaTxt == arrayProgramas[i]) {
-          programaNum = i + 1
-          return programaNum
-        }
-      }
-
-      return programaNum
-    },
-
-    verifica (dadosLinhas, nomeProcurado, programaProcurado, statusProcurado) {
-      let arrayBoolLinhas = []
-      let expressao = new RegExp(nomeProcurado, 'i')
-
-      dadosLinhas.forEach(dadosLinha => {
-        let boolLinha = []
-
-        // Verificando se o nome procurado consta na tabela
-        if (expressao.test(dadosLinha[0]) || nomeProcurado == '') {
-          boolLinha.push(true)
-        } else {
-          boolLinha.push(false)
-        }
-
-        // Verificando se o programa procurado consta na tabela
-        if (programaProcurado == dadosLinha[1] || programaProcurado == 0) {
-          boolLinha.push(true)
-        } else {
-          boolLinha.push(false)
-        }
-
-        // Verificando se o status procurado consta na tabela
-        if (statusProcurado == dadosLinha[2] || statusProcurado == 0) {
-          boolLinha.push(true)
-        } else {
-          boolLinha.push(false)
-        }
-
-        arrayBoolLinhas.push(boolLinha)
-      })
-
-      return arrayBoolLinhas
-    },
-
-    mudaVisibilidade (arrayBoolLinhas, linhas) {
-      let i
-      var contador = 0
-      let aviso = document.querySelector('.aviso')
-      var qtdLinhas = linhas.length
-
-      for (i = 0; i < linhas.length; i++) {
-        if (arrayBoolLinhas[i][0] && arrayBoolLinhas[i][1] && arrayBoolLinhas[i][2]) {
-          linhas[i].style.display = ''
-        } else {
-          linhas[i].style.display = 'none'
-          contador++
-        }
-      }
-
-      if (qtdLinhas == contador) {
-        aviso.style.display = 'flex'
-      } else {
-        aviso.style.display = 'none'
-      }
-    },
-
     recarregaLista () {
       let linhas = document.querySelectorAll('#participante')
       let aviso = document.querySelector('.aviso')
-
       linhas.forEach(linha => {
         linha.style.display = ''
       })
-
       aviso.style.display = 'none'
     }
   }
@@ -257,111 +151,90 @@ export default {
 </script>
 
 <style>
-
 body{
     background-color: #EBEBEB !important;
 }
 a{
   text-decoration: none !important;
 }
-
 .tabela{
   border: 1px solid #BCB3B3 !important;
   background-color: white;
 }
-
 .titulo{
   color: #090B2E;
 }
-
 .botao{
   background-color: #AB0045 !important;
   border-style: none !important;
   width: 26.9em !important;
   border-radius: 2px !important;
 }
-
 .campo{
   border-radius: 2px !important;
   background-color: white !important;
   color: #737373 !important;
 }
-
 .th-id{
   width: 2em !important;
 }
-
 .th-ms{
   width: 15em !important;
 }
-
 .td-button{
   width: 1.5em !important;
   background-color: #FFB700 !important;
 }
-
 .nome-participante{
   color: #737373;
 }
 .campo-tabela{
   color: #737373 !important;
 }
-
 .submit, .cadastro, .recarregar{
   color: white !important;
   font-weight: bold !important;
   border-radius: 5px !important;
 }
-
 .submit{
   background-color: #AB0045 !important;
 }
-
 .cadastro{
   background-color: #FFB700 !important;
   max-width: 575px !important;
 }
-
 .recarregar{
   background-color: #090B2E !important;
   max-width: 50%;
   cursor: pointer !important;
   transition: all linear 0.3s !important;
 }
-
 .recarregar:hover{
   background-color: #141863 !important;
 }
-
 .ativo{
   color: green;
   font-weight: bold;
 }
-
 .inativo{
   color: darkred;
   font-weight: bold;
 }
-
 .imagem{
   background-color:  #AB0045 !important;
 }
-
 .imagem-coluna{
   background-color: #FFB700 !important;
 }
-
 .my-custom-scrollbar {
   position: relative;
   height: 59vh;
   overflow: auto;
 }
-
 .table-wrapper-scroll-y {
   display: block;
   height: 59vh;
 }
-
 .aviso{
   display: none;
   align-items: center;
@@ -372,5 +245,4 @@ a{
   position: absolute;
   z-index: 100;
 }
-
 </style>

@@ -5,7 +5,7 @@
       <!-- Título da Página -->
       <div class="row justify-content-evenly">
         <div class="col-lg-b6 mb-2 mt-2">
-          <h1 class="mt-3 mb-3">Busca por processos seletivos:</h1>
+          <h1 class="mt-3 mb-3">Busca por cargos:</h1>
         </div>
         <div class="col-lg-6"></div>
       </div>
@@ -18,7 +18,7 @@
                 type="text"
                 class="form-control mb-3"
                 id="filtrar-tabela"
-                placeholder="Processo seletivo Java"
+                placeholder="Estágiario 1"
                 @input="filtraDados"
               />
             </div>
@@ -47,26 +47,22 @@
               <tbody class="processosSeletivos">
                 <tr
                   class="processo"
-                  v-for="(processo, index) in processosSeletivos"
-                  :key="processo"
+                  v-for="(cargo, index) in cargos"
+                  :key="cargo"
                 >
                   <th class="font-weight-normal" scope="row">
-                    {{ ++index }}
+                    {{++index}}
                   </th>
-                  <td class="info-nome">{{ processo.nome }}</td>
-                  <td class="em-andamento">Em andamento</td>
+                  <td class="info-nome">{{cargo.cargo}}</td>
                   <td>
-                    <a :href="'processo-seletivo-dados-da-vaga-visualizacao?id=' + processo.id">
+                    <a :href="'/cargo-visualizar?id=' + cargo.id">
                       <img src="../../assets/imgs/visibility_white_24dp.svg" alt=""/>
                     </a>
                   </td>
                   <td>
-                    <a :href="'/processo-seletivo-dados-da-vaga-cadastro-edicao?id=' + processo.id + '&tipo=edicao'">
+                    <a :href="'/cargo-cadastro-edicao?id=' + cargo.id + '&tipo=edicao'">
                     <img src="../../assets/imgs/settings_white_24dp.svg" alt=""/>
                     </a>
-                  </td>
-                  <td>
-                    <a :href="'/processo-seletivo-busca-por-candidato?id=' + processo.id"><img src="../../assets/imgs/Pattern.svg" alt="" /></a>
                   </td>
                 </tr>
               </tbody>
@@ -75,14 +71,20 @@
         </div>
       </div>
       <div class="row empty"></div>
-      <div class="mt-10"></div>
+      <div class="mt-8"></div>
       <div class="row justify-content-between">
         <!-- Botão de busca -->
         <div class="col-xl-4"></div>
         <!-- Botão de cadastro de nova vaga -->
         <div class="col-xl-4">
-          <button class="button-footer mb-3 mt-5  submit" id="cadastrar" type="submit">
-            <a :href="'processo-seletivo-dados-da-vaga-cadastro-edicao?tipo=cadastro'">Cadastrar Nova Vaga</a>
+          <button
+            class="button-footer mb-3 mt-4 submit"
+            id="cadastrar"
+            type="button"
+          >
+          <a class="button-footer submit" :href="'/cargo-cadastro-edicao?tipo=cadastro'">
+            CADASTRAR NOVO CARGO
+          </a>
           </button>
         </div>
       </div>
@@ -103,13 +105,12 @@ export default {
 
   data () {
     return {
-      processosSeletivos: []
+      cargos: []
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-
-    this.getListaDeProcessos()
+    this.getLista()
   },
   methods: {
     filtraDados () {
@@ -156,11 +157,11 @@ export default {
         }
       }
     },
-    getListaDeProcessos () {
+    getLista () {
       http
-        .get('processo-seletivo')
+        .get('remuneracao/lista')
         .then(response => {
-          this.processosSeletivos = response.data
+          this.cargos = response.data
         })
         .catch(error => {
           console.log(error)
@@ -215,13 +216,13 @@ body {
 /* Scroll */
 .my-custom-scrollbar {
 position: relative;
-height: 52vh;
+height: 59vh;
 overflow: auto;
 }
 
 .table-wrapper-scroll-y {
 display: block;
-height: 52vh;
+height: 59vh;
 }
 
 /* Input de busca */
@@ -244,29 +245,16 @@ height: 52vh;
   font-size: 20px;
 }
 
-/* Table - Coluna em Andamento */
-.search-table tbody > tr > td:nth-child(3) {
-  text-align: center;
-  font-weight: 700;
-}
-
 /* Table - Coluna1  */
-.search-table tbody > tr > td:nth-child(4) {
+.search-table tbody > tr > td:nth-child(3) {
   background-color: var(--color-blue-principal);
   font-weight: 700;
   text-align: center;
 }
 
 /* Table - Coluna2  */
-.search-table tbody > tr > td:nth-child(5) {
+.search-table tbody > tr > td:nth-child(4) {
   background-color: var(--color-magenta-principal);
-  font-weight: 700;
-  text-align: center;
-}
-
-/* Table - Coluna3  */
-.search-table tbody > tr > td:nth-child(6) {
-  background-color: var(--color-yellow-principal);
   font-weight: 700;
   text-align: center;
 }
@@ -291,10 +279,6 @@ height: 52vh;
   color: var(--color-red-progress) !important;
 }
 
-.formacao-em-andamento{
-  color: yellow !important;
-}
-
 /* Button do rodapé */
 
 .button-footer {
@@ -311,6 +295,10 @@ height: 52vh;
 .button-footer:hover {
   background-color: var(--color-yellow-principal);
   transition: 0.5s, 0.5s;
+}
+
+a:hover{
+  color: white;
 }
 
 #buscar {
@@ -352,12 +340,5 @@ height: 52vh;
 .recarregar:hover {
   background-color: #141863 !important;
 }
-a {
-  color: white;
-  text-decoration: none;
-}
-a:hover {
-  color: white !important;
-  text-decoration: none !important;
-}
+
 </style>
