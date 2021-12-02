@@ -186,6 +186,7 @@ body {
   border: 1px solid #CCC;
   border-radius: 5px;
   box-shadow: 4px 4px 4px #ccc;
+  background-color: white;
 } 
 
 /* alinhando conteudo de participantes ativos no programa */

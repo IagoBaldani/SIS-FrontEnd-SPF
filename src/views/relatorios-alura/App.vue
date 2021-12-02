@@ -350,6 +350,8 @@ export default {
 #btn-pdf {
   width: 300px;
   font-weight: bold;
+  color: white;
+  background-color: #ab0045;
 }
 #btn-xlsx {
   width: 300px;
