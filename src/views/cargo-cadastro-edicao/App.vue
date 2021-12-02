@@ -12,46 +12,49 @@
                     <div>
                         <label for="cargoInput" class="form-label mb-0 titulo">Cargo</label>
                         <input class="form-control" placeholder="Digite um cargo"  v-bind:value="cargos.cargo" type="text" name="cargo" id="inputCargo"/>
+                        <p id="erroCargo" class="erro none">Por favor, selecione um cargo </p>
                     </div>
                     <div>
                         <label for="bolsaAuxilio" class="form-label mb-0 mt-3 titulo">Bolsa auxílio</label>
                         <input type="number" name="bolsaAuxilio" class="form-control" v-bind:value="cargos.bolsa" placeholder="Valor bolsa auxílio" id="inputBolsaAuxilio"/>
+                        <p id="erroBolsa" class="erro none">Por favor, coloque um valor válido maior ou igual a 0. </p>
                     </div>
                     <div>
                         <label for="beneficios" class="form-label mb-0 mt-3 titulo">Benefícios</label>
                         <input type="number" name="beneficios" class="form-control" v-bind:value="cargos.beneficio" placeholder="Valor Benefícios" id="inputBeneficios"/>
+                        <p id="erroBeneficios" class="erro none">Por favor, coloque um valor válido maior ou igual a 0. </p>
                     </div>
                     <div>
                         <label for="convenio" class="form-label mb-0 mt-3 titulo">Convênio</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" placeholder="Valor convênio" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
-                        </div>
+                        <input type="number" class="form-control" placeholder="Valor convênio" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
+                        <p id="erroConvenio" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
                     </div>
-                    <div>
+                    <div class="mb-5">
                         <label for="horaExtra" class="form-label mb-0 mt-3 titulo">Hora extra</label>
-                        <div class="input-group mb-5">
-                            <input type="number" class="form-control" placeholder="Valor da hora extra" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
-                        </div>
+                        <input type="number" class="form-control" placeholder="Valor da hora extra" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
+                        <p id="erroHoraExtra" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
                     </div>
                 </div>
                 <div class="col-xl-4">
                     <div>
                         <label for="beneficioLegislacao" class="form-label mb-0 titulo">Benefício legislação</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" placeholder="Valor benefício legislação" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
-                        </div>
+                        <input type="number" class="form-control" placeholder="Valor benefício legislação" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
+                        <p id="erroBeneficioLegislacao" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
                     </div>
                     <div>
                         <label for="remuneracaoEsporadica" class="form-label mb-0 mt-3 titulo">Remuneração esporádica</label>
                         <input name="remuneracaoEsporadica" type="number" class="form-control" placeholder="Valor remuneração esporadica" v-bind:value="cargos.remunEsporadica" id="inputRemuneracaoEsporadica" />
+                        <p id="erroRemuneracaoEsporadica" class="erro none">Por favor, coloque um valor válido maior ou igual a 0. </p>
                     </div>
                     <div>
                         <label for="remuneracaoExtra" class="form-label mb-0 mt-3 titulo">Remuneração extra</label>
                         <input name="remuneracaoExtra" type="number" class="form-control" placeholder="Valor remuneração extra" v-bind:value="cargos.remunExtra" id="inputRemuneracaoExtra">
+                        <p id="erroRemuneracaoExtra" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
                     </div>
                     <div>
                         <label class="form-label mb-0 mt-3 titulo">Alura</label>
                         <input name="alura" type="number" class="form-control" placeholder="Valor Alura" v-bind:value="cargos.alura" id="inputAlura">
+                        <p id="erroAlura" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
                     </div>
                 </div>
                 <div class="col-xl-2"></div>
@@ -59,7 +62,8 @@
             <div class="row justify-content-evenly">
                 <div class="col-xl-4">
                     <div>
-                        <button type="button" class="btn-confirmar btn" data-bs-toggle="modal" data-bs-target="#exampleModal" @click.prevent="registrarDados">CONFIRMAR</button>
+                        <button type="button" class="btn-confirmar btn"  @click.prevent="registrarDados">CONFIRMAR</button>
+                        <p data-bs-toggle="modal" data-bs-target="#exampleModal" class="none" id="abreModal"></p>
                     </div>
                 </div>
                 <div class="col-xl-4"></div>
@@ -183,6 +187,9 @@ export default {
       this.cargoForm.remunEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value
       this.cargoForm.remunExtra = document.querySelector('#inputRemuneracaoExtra').value
       this.cargoForm.alura = document.querySelector('#inputAlura').value
+      if (this.validaCampos()) {
+        document.querySelector('#abreModal').click()
+      }
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -227,6 +234,68 @@ export default {
             console.log(error)
           })
       }
+    },
+    validaCampos () {
+      let erro = 0
+      let vazio = ''
+      if (this.cargoForm.cargo == vazio) {
+        document.querySelector('#erroCargo').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroCargo').classList.add('none')
+      }
+      if (this.cargoForm.bolsa == vazio || this.cargoForm.bolsa < 0) {
+        document.querySelector('#erroBolsa').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroBolsa').classList.add('none')
+      }
+      if (this.cargoForm.beneficio == vazio || this.cargoForm.beneficio < 0) {
+        document.querySelector('#erroBeneficios').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroBeneficios').classList.add('none')
+      }
+      if (this.cargoForm.convenio == vazio || this.cargoForm.convenio < 0) {
+        document.querySelector('#erroConvenio').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroConvenio').classList.add('none')
+      }
+      if (this.cargoForm.horaExtra == vazio || this.cargoForm.horaExtra < 0) {
+        document.querySelector('#erroHoraExtra').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroHoraExtra').classList.add('none')
+      }
+      if (this.cargoForm.beneficioLegislacao == vazio || this.cargoForm.beneficioLegislacao < 0) {
+        document.querySelector('#erroBeneficioLegislacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroBeneficioLegislacao').classList.add('none')
+      }
+      if (this.cargoForm.remunEsporadica == vazio || this.cargoForm.remunEsporadica < 0) {
+        document.querySelector('#erroRemuneracaoEsporadica').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroRemuneracaoEsporadica').classList.add('none')
+      }
+      if (this.cargoForm.remunExtra == vazio || this.cargoForm.remunExtra < 0) {
+        document.querySelector('#erroRemuneracaoExtra').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroRemuneracaoExtra').classList.add('none')
+      }
+      if (this.cargoForm.alura == vazio || this.cargoForm.alura < 0) {
+        document.querySelector('#erroAlura').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroAlura').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } 
+      return true
     }
   }
 }
@@ -319,5 +388,12 @@ body{
 .informacoes-modal {
   color: #737373 !important;
   font-size: 1.25rem;
+}
+.none {
+    display: none;
+}
+
+.erro {
+  color: red;
 }
 </style>
