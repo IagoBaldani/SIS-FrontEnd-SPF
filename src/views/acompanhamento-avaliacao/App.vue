@@ -23,18 +23,22 @@
                         <div class="mb-3">
                             <label for="tecnica" class="form-label fw-bold h5 titulo">Técnica</label>
                             <input type="number" class="form-control" id="tecnica" v-model="form.notaTecnica" step=".01" min="0" max="10">
+                            <p id="erroTecnica" class="erro none">Este campo não pode ser vazio, e a nota deve ser entre 0 e 10</p>
                         </div>
                         <div class="mb-3">
                             <label for="praticas-ageis" class="form-label fw-bold h5 titulo">Módulo práticas ágeis</label>
                             <input type="number" class="form-control" id="praticas-ageis" v-model="form.notaPraticasAgeis" step=".01" min="0.00" max="10.00">
+                            <p id="erroPraticas" class="erro none">Este campo não pode ser vazio, e a nota deve ser entre 0 e 10</p>
                         </div>
                         <div class="mb-3">
                             <label for="lideranca" class="form-label fw-bold h5 titulo">Módulo liderança</label>
                             <input type="number" class="form-control" id="lideranca" v-model="form.notaLideranca" step=".01" min="0" max="10">
+                            <p id="erroLideranca" class="erro none">Este campo não pode ser vazio, e a nota deve ser entre 0 e 10</p>
                         </div>
                         <div class="mb-3">
                             <label for="negocios" class="form-label fw-bold h5 titulo">Módulo negócios</label>
                             <input type="number" class="form-control" id="negocios" v-model="form.notaNegocios" step=".01" min="0" max="10">
+                            <p id="erroNegocio" class="erro none">Este campo não pode ser vazio, e a nota deve ser entre 0 e 10</p>
                         </div>
                         <div class="mb-3">
                             <label for="comportamental" class="form-label fw-bold h5 titulo" >Comportamental</label>
@@ -54,13 +58,11 @@
                         <p id="verificaCampos" class="none" @click="postForm()"></p>
                         <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
                         <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
-                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
+                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos! Incluindo os campos do desempenho</p>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
-
                     <table class="table table-bordered tabela">
-
                         <tbody>
                             <tr v-for="(avaliacao, index) in avaliacoes" v-bind:key="avaliacao">
                                 <th scope="row" class="w-50px titulo">{{++index}}</th>
@@ -75,9 +77,7 @@
             </div>
         </div>
     </main>
-
     <!--  MODAIS  -->
-
     <div class="modal fade" id="modalDeletar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-size">
             <div class="modal-content p-5 conteudoModal">
@@ -264,6 +264,7 @@
                     </form>
                 </div>
                 <p class="erro h4 none mt-3" id="preenchaModal">Preencha todos os campos!</p>
+                <p class="erro h4 none mt-3" id="preenchaModalNota">*As notas devem ser entre 1 e 4</p>
                 <div class="row d-flex">
                     <div class="col-lg-6">
                         <button  type="button" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100" @click="verificaFormModal()" >CONFIRMAR</button>
@@ -484,32 +485,81 @@ export default {
       let campoVazio = 0
       campos.forEach(element => {
         if (!element.value) {
+          document.querySelector('#preenchaModal').classList.remove('none')
+          campoVazio = 1
+        }
+      })
+      campos = document.querySelectorAll('#modalComportamental input')
+      campos.forEach(element => {
+        if (element.value > 4 || element.value <= 0) {
+          document.querySelector('#preenchaModalNota').classList.remove('none')
           campoVazio = 1
         }
       })
       if (campoVazio == 0) {
         this.getMedia()
         document.querySelector('#preenchaModal').classList.add('none')
+        document.querySelector('#preenchaModalNota').classList.add('none')
         document.getElementById('fechaModal').click()
-      } else {
-        document.querySelector('#preenchaModal').classList.remove('none')
-      }  
+      }
     },
     // função para ver se existe campo vazio no formulário
     verificaForm () {
-      let campos = document.querySelectorAll('input') 
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0) {
+      let notaTecnica = document.querySelector('#tecnica').value
+      let notaPratica = document.querySelector('#praticas-ageis').value
+      let notaLideranca = document.querySelector('#lideranca').value
+      let notaNegocio = document.querySelector('#negocios').value
+      let erro = 0
+      if (notaTecnica == '' || notaTecnica < 0 || notaTecnica > 10) {
+        document.querySelector('#erroTecnica').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTecnica').classList.add('none')
+        erro = 0
+      }
+      if (notaPratica == '' || notaPratica < 0 || notaPratica > 10) {
+        document.querySelector('#erroPraticas').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroPraticas').classList.add('none')
+        erro = 0
+      }
+      if (notaLideranca == '' || notaLideranca < 0 || notaLideranca > 10) {
+        document.querySelector('#erroLideranca').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroLideranca').classList.add('none')
+        erro = 0
+      }
+      if (notaNegocio == '' || notaNegocio < 0 || notaNegocio > 10) {
+        document.querySelector('#erroNegocio').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNegocio').classList.add('none')
+        erro = 0
+      }
+      if (this.form.avaliacaoDesempenhoForm.avaliacao == '' ||
+        this.form.avaliacaoDesempenhoForm.parecer == '' ||
+        this.form.avaliacaoDesempenhoForm.adaptacao == '' ||
+        this.form.avaliacaoDesempenhoForm.qualidade == '' ||
+        this.form.avaliacaoDesempenhoForm.capTecnica == '' ||
+        this.form.avaliacaoDesempenhoForm.comunicabilidade == '' ||
+        this.form.avaliacaoDesempenhoForm.apPratica == '' ||
+        this.form.avaliacaoDesempenhoForm.dedicacao == '' ||
+        this.form.avaliacaoDesempenhoForm.cooperacao == '' ||
+        this.form.avaliacaoDesempenhoForm.iniciativa == '' ||
+        this.form.avaliacaoDesempenhoForm.disciplina == '' ||
+        this.form.avaliacaoDesempenhoForm.organizacao == '' ||
+        this.form.avaliacaoDesempenhoForm.responsabilidade == '' ||
+        this.form.avaliacaoDesempenhoForm.sociabilidade == '') {
+        erro = 1
+      }
+      if (erro == 0) {
         document.querySelector('#preencha').classList.add('none')
         document.getElementById('verificaCampos').click()
       } else {
         document.querySelector('#preencha').classList.remove('none')
-      }  
+      }
     }
   }
 }
@@ -519,6 +569,14 @@ export default {
 /* body {
     background-color: #EBEBEB !important;
 } */
+
+.erro {
+    color: red;
+}
+
+.none{
+    display: none;
+}
 
 .grey-background {
     background-color: #EBEBEB;
