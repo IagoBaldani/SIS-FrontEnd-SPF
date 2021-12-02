@@ -48,9 +48,10 @@
             <input type="date" id="dataInicial" name="dataInicial" ref="dataInicial"/>
             <label class="labelData">até</label>
             <input type="date" id="dataFinal" name="dataFinal" ref="dataFinal"/>
-
+            <p id="dataInicioSelect" class="erro none"> Por favor selecione uma data de início válida </p>
+            <p id="dataFinalSelect" class="erro none"> Por favor selecione uma data de início válida </p>
             <!-- Botão consultar data -->
-            <input id="bottonConsultaData" class="btn btn-primary btn-lg"  v-on:click="selecionarData()" value="CONSULTAR">
+            <input id="bottonConsultaData" type="button" class="btn btn-primary btn-lg"  v-on:click="validaSelectData()" value="CONSULTAR">
           </div>
        </form>
 
@@ -166,6 +167,31 @@ export default {
         .then(response => (this.relatorioPeriodo = response.data))
     },
 
+    validaSelectData () {
+      this.dataInicial = this.$refs.dataInicial.value
+      this.dataFinal = this.$refs.dataFinal.value
+      let erro = 0
+      if (this.dataInicial == '') {
+        document.querySelector('#dataInicioSelect').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#dataInicioSelect').classList.add('none')
+        erro = 0
+      }
+      if (this.dataFinal == '') {
+        document.querySelector('#dataFinalSelect').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#dataFinalSelect').classList.add('none')
+        erro = 0
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.selecionarData()
+      }
+    },
+
     downloadRelatorioPDF () {
       location.href = 'http://localhost:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
     },
@@ -196,6 +222,16 @@ html {
 body {
   background-color: #ebebeb !important;
   
+}
+
+.none {
+  display: none;
+}
+
+.erro {
+  color: red;
+  font-size: 18px;
+  padding-left: 32px;
 }
 
 /* Relatório - Investimento */

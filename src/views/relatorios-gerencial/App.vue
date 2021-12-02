@@ -16,7 +16,7 @@
             aria-label="Default select example"
             v-on:click="totalFormacoes()"
           >
-            <option name="formacao" class="relatorio_opcao" disabled selected>
+            <option name="formacao" value="null" class="relatorio_opcao" disabled selected>
               Programa de formação
             </option>
             <option
@@ -38,7 +38,7 @@
             aria-label="Default select example"
             v-on:click="buscarTurmasDeUmaFormacao()"
           >
-            <option class="relatorio_opcao" disabled selected>Turma</option>
+            <option class="relatorio_opcao" value="null" disabled selected>Turma</option>
             <option
               class="relatorio_opcao"
               v-for="(turma, id) in turmasPrograma"
@@ -56,7 +56,7 @@
             class="form-select p-2 mb-3"
             aria-label="Default select example"
           >
-            <option class="relatorio_opcao" disabled selected>
+            <option class="relatorio_opcao" value="null" disabled selected>
               Escopo do relatório
             </option>
             <option class="relatorio_opcao">Alura</option>
@@ -65,11 +65,14 @@
             <option class="relatorio_opcao">Investimentos</option>
           </select>
         </label>
+        <p id="progFormacao" class="erro none">Por favor, selecione um programa de formação</p>
+        <p id="progTurma" class="erro none">Por favor, selecione uma turma</p>
+        <p id="progEscopo" class="erro none">Por favor, selecione o escopo do relatório</p>
         <!-- Select Botão -->
         <input
-          v-on:click="redirecionamento()"
+          v-on:click="validaForm()"
           id="botao"
-          type="submit"
+          type="button"
           class="relatorio_button"
           value="BUSCAR"
         />
@@ -454,7 +457,8 @@ export default {
       filtroAtivos: '',
       filtroEfetivados: '',
       filtroFormacoes: '',
-      nomePrograma: ''
+      nomePrograma: '',
+      erros: []
     }
   },
   beforeMount () {
@@ -548,6 +552,38 @@ export default {
       http.get('relatorios/formacoesEmAndamento').then((response) => {
         console.log((this.formacoesTotal = response.data))
       })
+    },
+    validaForm () {
+      var formacao = document.getElementById('select1').value
+      var turma = document.getElementById('select2').value
+      var escopo = document.getElementById('select3').value
+      let erro = 1
+      if (formacao == 'null') {
+        document.querySelector('#progFormacao').classList.remove('none')
+        erro = 1
+      } else {
+        erro = 0
+        document.querySelector('#progFormacao').classList.add('none')
+      }
+      if (turma == 'null') {
+        document.querySelector('#progTurma').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#progTurma').classList.add('none')
+        erro = 0
+      }
+      if (escopo == 'null') {
+        document.querySelector('#progEscopo').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#progEscopo').classList.add('none')
+        erro = 0
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.redirecionamento()
+      }
     }
   }
 }
@@ -559,6 +595,14 @@ main .dados_gerais-divCard {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.none {
+  display: none;
+}
+
+.erro {
+  color: red;
 }
 
 .dados_gerais-main .card {
