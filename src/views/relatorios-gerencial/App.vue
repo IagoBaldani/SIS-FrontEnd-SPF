@@ -434,15 +434,15 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
-import { http } from "../../services/Config";
-import Funcoes from "../../services/Funcoes";
+import Header from '@/components/Header.vue'
+import { http } from '../../services/Config'
+import Funcoes from '../../services/Funcoes'
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Header,
+    Header
   },
-  data() {
+  data () {
     return {
       numeroTotalDeCadaLista: [],
       ativosParticipantes: [],
@@ -451,106 +451,106 @@ export default {
       turmasPrograma: [],
       todasFormacoes: [],
       listagem: [],
-      filtroAtivos: "",
-      filtroEfetivados: "",
-      filtroFormacoes: "",
-      nomePrograma: "",
-    };
+      filtroAtivos: '',
+      filtroEfetivados: '',
+      filtroFormacoes: '',
+      nomePrograma: ''
+    }
   },
-  beforeMount() {
-    Funcoes.verificaToken();
+  beforeMount () {
+    Funcoes.verificaToken()
   },
 
-  mounted() {
-    http.get("relatorios").then((response) => {
-      this.numeroTotalDeCadaLista = response.data;
-    });
-    http.get("relatorios/formacoes").then((response) => {
-      this.todasFormacoes = response.data;
-    });
+  mounted () {
+    http.get('relatorios').then((response) => {
+      this.numeroTotalDeCadaLista = response.data
+    })
+    http.get('relatorios/formacoes').then((response) => {
+      this.todasFormacoes = response.data
+    })
   },
   computed: {
-    participantesAtivosComFiltro() {
+    participantesAtivosComFiltro () {
       if (this.filtroAtivos) {
-        let exp = new RegExp(this.filtroAtivos.trim(), "i");
+        let exp = new RegExp(this.filtroAtivos.trim(), 'i')
         return this.ativosParticipantes.filter((ativos) =>
           exp.test(ativos.nomeParticipante)
-        );
+        )
       } else {
-        return this.ativosParticipantes;
+        return this.ativosParticipantes
       }
     },
-    participantesEfetivadosComFiltro() {
+    participantesEfetivadosComFiltro () {
       if (this.filtroEfetivados) {
-        let exp = new RegExp(this.filtroEfetivados.trim(), "i");
+        let exp = new RegExp(this.filtroEfetivados.trim(), 'i')
         return this.efetivadosParticipantes.filter((efetivados) =>
           exp.test(efetivados.nomeParticipante)
-        );
+        )
       } else {
-        return this.efetivadosParticipantes;
+        return this.efetivadosParticipantes
       }
     },
-    formacoesComFiltro() {
+    formacoesComFiltro () {
       if (this.filtroFormacoes) {
-        let exp = new RegExp(this.filtroFormacoes.trim(), "i");
+        let exp = new RegExp(this.filtroFormacoes.trim(), 'i')
         return this.formacoesTotal.filter((formacoes) =>
           exp.test(formacoes.nomePrograma)
-        );
+        )
       } else {
-        return this.formacoesTotal;
+        return this.formacoesTotal
       }
-    },
+    }
   },
   methods: {
     redirecionamento: function () {
-      var formacao = document.getElementById("select1").value;
-      var turma = document.getElementById("select2").value;
-      var escopo = document.getElementById("select3").value;
-      var formulario = document.getElementById("formSelect");
-      if (escopo == "Alura") {
-        formulario.action = encodeURI("http://localhost:8080/relatorios-alura");
-        formulario.submit();
-      } else if (escopo == "Avaliações") {
+      var formacao = document.getElementById('select1').value
+      var turma = document.getElementById('select2').value
+      var escopo = document.getElementById('select3').value
+      var formulario = document.getElementById('formSelect')
+      if (escopo == 'Alura') {
+        formulario.action = encodeURI('http://localhost:8080/relatorios-alura')
+        formulario.submit()
+      } else if (escopo == 'Avaliações') {
         formulario.action = encodeURI(
-          "http://localhost:8080/relatorios-avaliacoes"
-        );
-        formulario.submit();
-      } else if (escopo == "Conclusões") {
+          'http://localhost:8080/relatorios-avaliacoes'
+        )
+        formulario.submit()
+      } else if (escopo == 'Conclusões') {
         formulario.action = encodeURI(
-          "http://localhost:8080/relatorios-conclusoes"
-        );
-        formulario.submit();
-      } else if (escopo == "Investimentos") {
+          'http://localhost:8080/relatorios-conclusoes'
+        )
+        formulario.submit()
+      } else if (escopo == 'Investimentos') {
         formulario.action = encodeURI(
-          "http://localhost:8080/relatorios-investimentos"
-        );
-        formulario.submit();
+          'http://localhost:8080/relatorios-investimentos'
+        )
+        formulario.submit()
       }
     },
     participantesAtivos: function () {
-      http.get("relatorios/participantesAtivos").then((response) => {
-        this.ativosParticipantes = response.data;
-      });
+      http.get('relatorios/participantesAtivos').then((response) => {
+        this.ativosParticipantes = response.data
+      })
     },
     participantesEfetivados: function () {
-      http.get("relatorios/participantesEfetivados").then((response) => {
-        this.efetivadosParticipantes = response.data;
-      });
+      http.get('relatorios/participantesEfetivados').then((response) => {
+        this.efetivadosParticipantes = response.data
+      })
     },
     buscarTurmasDeUmaFormacao: function () {
-      this.nomePrograma = document.querySelector("#select1").value;
+      this.nomePrograma = document.querySelector('#select1').value
       http.get(`relatorios/turmas/${this.nomePrograma}`).then((response) => {
-        this.turmasPrograma = response.data;
-      });
+        this.turmasPrograma = response.data
+      })
     },
 
     totalFormacoes: function () {
-      http.get("relatorios/formacoesEmAndamento").then((response) => {
-        console.log((this.formacoesTotal = response.data));
-      });
-    },
-  },
-};
+      http.get('relatorios/formacoesEmAndamento').then((response) => {
+        console.log((this.formacoesTotal = response.data))
+      })
+    }
+  }
+}
 </script>
 
 <style>

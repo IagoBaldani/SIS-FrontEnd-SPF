@@ -51,57 +51,56 @@
 <script>
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
-import  Funcoes from '../../services/Funcoes'
+import Funcoes from '../../services/Funcoes'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    Header,
+    Header
   },
-  data(){
-    return{
+  data () {
+    return {
       relatorio: {},
       parametrosUrl: {}
     }
   },
-  beforeMount(){
-    Funcoes.verificaToken();
+  beforeMount () {
+    Funcoes.verificaToken()
   },
 
-  created(){
-    this.getParams();
-    this.getInfo();
+  created () {
+    this.getParams()
+    this.getInfo()
   },
   methods: {
+    getParams () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
 
-   getParams() {
-      var query = location.search.slice(1);
-      var partes = query.split('&');
-      var data = {};
-
-       partes.forEach(function (parte) {
-        var chaveValor = parte.split('=');
-        var chave = chaveValor[0];
-        var valor = chaveValor[1];
-        data[chave] = valor;
-      });
-      this.parametrosUrl = data;
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+      this.parametrosUrl = data
     },
 
-    getInfo(){
+    getInfo () {
       http.get('conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/escopo=' + this.parametrosUrl.escopo)
-      .then(response => this.relatorio = response.data)
+        .then(response => (this.relatorio = response.data))
     },
 
-    downloadRelatorioPDF(){
+    downloadRelatorioPDF () {
       location.href = 'http://localhost:8081/api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
     },
 
-    downloadRelatorioXLSX(){
+    downloadRelatorioXLSX () {
       location.href = 'http://localhost:8081/api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
     }
   }
-};
+}
 </script>
 
 <style>
@@ -344,7 +343,6 @@ body {
     justify-content: space-evenly;
     margin-top: 4rem;
   }
-
 
   .gerar-pdf, .gerar-xlsx {
     min-width: 45%;
