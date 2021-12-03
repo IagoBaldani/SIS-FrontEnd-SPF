@@ -14,13 +14,13 @@
             <input name="nome" type="text" class="form-control mt-4" placeholder="Nome do participante" id="filtro-nome">
           </div>
           <div class="mb-3">
-            <select class="form-select mt-4" id="filtro-programa">
+            <select class="form-select mt-4" id="filtro-programa" required>
               <option disabled selected value="0">Programa de Formação</option>
               <option id="programa" v-bind:value="programa.nomePrograma" v-for="programa in programas" v-bind:key="programa">{{programa.nomePrograma}}</option>
             </select>
           </div>
           <div class="mb-3">
-            <select class="form-select mt-4" id="filtro-turmas" v-on:click="getTurmas()">
+            <select class="form-select mt-4" id="filtro-turmas" v-on:click="getTurmas()" required>
               <option disabled selected value="0">Turmas</option>
               <option id="turma" v-bind:value="turma.id" v-for="turma in turmas" v-bind:key="turma">{{turma.nomeTurma}}</option>
             </select>
@@ -37,7 +37,6 @@
             <table class="table table-bordered tabela mt-4 ">
               <tbody align="center">
               <tr class="nome" id="participante" v-for="participante in participantes" v-bind:key="participante">
-                <th scope="row" width="50">{{participante.cpf}}</th>
                 <td id="info-nome">{{participante.nome}}</td>
                 <td id="info-programa">{{participante.programa}}</td>
                 <td id="info-status"
@@ -108,7 +107,6 @@ export default {
       let programaProcurado = document.querySelector('#filtro-programa').value
       let nomeProcurado = document.querySelector('#filtro-nome').value
       let turmaProcurada = document.querySelector('#filtro-turmas').value
-      console.log(nomeProcurado)
       if (nomeProcurado == '') {
         http.get(`participante/0/${programaProcurado}/${turmaProcurada}`)
           .then(response => {

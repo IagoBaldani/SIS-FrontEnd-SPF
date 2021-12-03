@@ -22,7 +22,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputCpf">CPF</label>
-              <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" type="text" maxlength="12" v-model="cadastroParticipanteForm.cpf" >
+              <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" type="text" v-mask="['###.###.###-##']" maxlength="16" v-model="cadastroParticipanteForm.cpf" >
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputContato">Contato</label>
@@ -153,7 +153,9 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { mask } from 'vue-the-mask'
 export default {
+  directives: { mask },
   name: 'App',
   components: {
     Header

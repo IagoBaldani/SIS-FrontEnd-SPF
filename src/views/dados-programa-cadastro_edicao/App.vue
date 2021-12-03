@@ -18,8 +18,8 @@
                             class="form-control"
                             id="nome"
                             required
-                            placeholder="Java"
-                            v-model="modelNome"
+                            placeholder="Nome do Programa"
+                            v-model="programa.nome"
                         />
                     </div>
                     <div class="mb-3">
@@ -30,7 +30,7 @@
                             id="inicio"
                             required
                             placeholder="dd/MM/yyyy"
-                            v-model="modelInicio"
+                            v-model="programa.inicio"
                         />
                     </div>
                     <div class="mb-3">
@@ -41,12 +41,12 @@
                             id="termino"
                             required
                             placeholder="dd/MM/yyyy"
-                            v-model="modelTermino"
+                            v-model="programa.termino"
                         />
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label fw-bold mb-0 titulo">Instrutor</label>
-                        <select class="form-select" id="instrutores" v-model="programaForm.instrutor.nome">
+                        <select class="form-select" id="instrutores" v-model="programa.nomeCoordenador">
                             <option
                                 id="coordenador"
                                 v-for="instrutor in instrutores"
@@ -64,8 +64,8 @@
                             class="form-control"
                             id="turma"
                             required
-                            placeholder="2021.1"
-                            v-model="modelTurma"
+                            placeholder="Turma I"
+                            v-model="programa.turma"
                         />
                     </div>
                 </div>

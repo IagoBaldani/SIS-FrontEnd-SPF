@@ -21,22 +21,22 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Telefone</label>
-                            <input class="form-control disabledTextInput"  v-bind:value="instrutor.telefone" type="tel" disabled >
+                            <input class="form-control disabledTextInput"  v-bind:value="instrutor.telefone" v-mask="['(##) # ####-####']" type="tel" disabled >
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
-                            <input class="form-control disabledTextInput" v-bind:value="instrutor.cpf" type="text" disabled>
+                            <input class="form-control disabledTextInput" v-bind:value="instrutor.cpf" disabled v-mask="['###.###.###-##']" type="text">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
                             <input class="form-control disabledTextInput" v-bind:value="instrutor.email" type="email" disabled>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-4">
+                    <div class="col-xl-4">
 
                     </div>
                       <div class="col-xl-2">
-                    </div> -->
+                    </div>
                 </div>
             </fieldset>
             <div class="mt-5 row justify-content-evenly">
@@ -94,8 +94,10 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { mask } from 'vue-the-mask'
 
 export default {
+  directives: { mask },
   name: 'App',
   components: {
     Header
