@@ -161,11 +161,6 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
   },
-
-  mounted () {
-    
-  },
-
   methods: {
     putPrograma () {
       http.put('programa', this.programaForm)
