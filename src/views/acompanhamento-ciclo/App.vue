@@ -52,9 +52,7 @@
                                         <p id="nome-arquivo" class="ellipsis-overflow mb-0 titulo">Faça upload do comprovante</p>
                                     </div>
                                 </div>
-                                <div id="btn-close" class="clear-file none">X</div>
                             </label>
-
                         </div>
                         <button type="button" @click="postForm()"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>

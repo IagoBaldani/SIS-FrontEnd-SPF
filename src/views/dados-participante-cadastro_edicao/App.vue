@@ -27,7 +27,7 @@
               <label class="form-label fw-bold mb-0 titulo">CPF</label>
               <input id="participanteCpf" disabled
                 class="form-control disabledTextInput"
-                v-bind:value="formataCpfparaMostrar(participante.cpf)"
+                v-bind:value="participante.cpf"
                 type="text"
               />
             </div>
@@ -65,6 +65,33 @@
                 max="10"
             </div> --> 
             <div class="mb-3">
+                            <label class="form-label fw-bold h5 titulo">TCE</label>
+                            <input id="file" @change="formatoUpload()" class="none"  type="file" accept="application/pdf"/>
+                            <label for="file" class="btn-file d-flex justify-content-between">
+                                <div class="w-100">
+                                    <img src="@/assets/imgs/upload.svg" class="upload-img"/>
+                                    <div class= "d-inline-block w-75">
+                                        <p id="nome-arquivo" class="ellipsis-overflow mb-0 ">Faça upload do TCE</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <!-- <label class="form-label fw-bold h5 titulo mb-2">DISC</label>
+                        <div class="input-group">
+                            
+                             <input type="file" class="form-control mb-3" id="fileDisc" 
+                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                        </div> -->
+            <!-- <div class="mb-3"> 
+              <label class="form-label fw-bold mb-0 titulo">TCE</label><br />
+              <a href="#"
+                ><img
+                  src="@/assets/imgs/file_download_black_24dp.svg"
+                  alt=""
+                />tce.xls</a
+              >
+            </div>  -->
+            <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo"
                 >Instituição de Ensino</label
               >
@@ -84,7 +111,7 @@
             </div>
         <div class="col-xl-4">
          <button 
-            type="submit"
+            type="button"
             class="btn submit form-control"
             v-on:click="processaRequisicoes()"
             id="ativarParticipante">
@@ -92,16 +119,6 @@
           </button>
         </div>
         <div class="col-xl-2"></div>
-      
-            <!-- <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">TCE</label><br />
-              <a href="#"
-                ><img
-                  src="@/assets/imgs/file_download_black_24dp.svg"
-                  alt=""
-                />tce.xls</a
-              >
-            </div> -->
           </fieldset>
         </div>
         <div class="col-xl-4">
@@ -231,8 +248,9 @@ export default {
       const dataFormatada = `${dataPreForm.getUTCFullYear()}-${dataPreForm.getUTCMonth() + 1}-${dataPreForm.getUTCDate()}`
       return dataFormatada
     },
-    
     processaRequisicoes () {
+      var formData = new FormData() 
+      var comprovanteRematricula = document.getElementById('file').files[0] 
       this.atualizaStatusForm.nome = document.getElementById('participanteNome').value
       this.atualizaStatusForm.cpf = this.participante.cpf
       this.atualizaStatusForm.telefone = document.getElementById('participanteTelefone').value
@@ -242,10 +260,22 @@ export default {
       this.atualizaStatusForm.dataFimGraduacao = document.getElementById('participanteDataFimGraduacao').value
       this.atualizaStatusForm.observacao = document.getElementById('participanteObservacao').value
       this.atualizaStatusForm.email = document.getElementById('participanteEmail').value
-
-      console.log(this.atualizaStatusForm.email)
+      formData.append('nome', this.atualizaStatusForm.nome)
+      formData.append('cpf', this.atualizaStatusForm.cpf)
+      formData.append('telefone', this.atualizaStatusForm.telefone)
+      formData.append('fonteRecrutamento', this.atualizaStatusForm.fonteRecrutamento)
+      formData.append('nmFaculdade', this.atualizaStatusForm.nmFaculdade)
+      formData.append('curso', this.atualizaStatusForm.curso)
+      formData.append('dataFimGraduacao', this.atualizaStatusForm.dataFimGraduacao)
+      formData.append('observacao', this.atualizaStatusForm.observacao)
+      formData.append('email', this.atualizaStatusForm.email)
+      formData.append('tce', comprovanteRematricula)     
       http
-        .put('participante/atualizaParticipante', this.atualizaStatusForm)
+        .put('participante/atualizaParticipante', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data' 
+          }
+        })
         .then(response => {
           window.location.href = 'http://localhost:8080/dados-participante-busca'
         })
@@ -255,6 +285,15 @@ export default {
     },
     formataCpfparaMostrar (cpf) {
       return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+    },
+    formatoUpload () {
+      var texto = document.querySelector('#nome-arquivo')
+      let file = document.getElementById('file')
+      if (file.files.length == 0) {
+        texto.textContent = 'Faça upload do comprovante'
+      } else {
+        texto.textContent = file.files[0].name
+      }
     }
     // validaEmail (email) {
     //   var regex = (/^([a-zA-Z0-9_.+-])+\'@'(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/)
@@ -363,6 +402,27 @@ textarea {
 
 .rounded-circle {
   width: 150px;
+}
+
+.upload-img {
+    vertical-align: top; padding-top: 3px; margin-right: 1em;
+    width: 13px
+}
+
+.none {
+    display: none;
+}
+.btn-file {
+    background: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    color: #737373;
+    font-weight: 400 !important;
+    cursor: pointer;
+    font-weight: bold;
+    padding: .375rem .75rem;
+    width: 100%;
+    height: 38px;
 }
 
 @media (max-width: 1200px) {
