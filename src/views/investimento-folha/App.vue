@@ -23,24 +23,18 @@
               required
             >
               <option selected disabled value="">Formação</option>
-              <option>Java</option>
-              <option>Cobol</option>
-              <option>.Net</option>
-              <option>Mobile</option>
-              <option>Mainframe</option>
-              <option>Infraestrutura</option>
+              <option id="programa" v-bind:value="programa.nomePrograma" v-for="programa in programas" v-bind:key="programa">{{programa.nomePrograma}}</option>
             </select>
           </div>
           <div class="col-xl-3">
             <select
               class="filtro-turma turmas form-select mt-4"
               id="validationDefault04"
+              v-on:click="getTurmas()"
               required
             >
               <option selected disabled value="">Turmas</option>
-              <option>Turma I</option>
-              <option>Turma II</option>
-              <option>Turma III</option>
+              <option id="turma" v-bind:value="turma.id" v-for="turma in turmas" v-bind:key="turma.id">{{turma.nomeTurma}}</option>
             </select>
           </div>
           <div class="col-xl-2">
@@ -279,6 +273,8 @@ export default {
     return {
       participantes: [],
       cpfParticipantes: [],
+      programas: [],
+      turmas: [], 
       programaProcurado: '',
       turmaProcurada: '',
       form: {
@@ -299,6 +295,7 @@ export default {
   },
   beforeMount () {
     Funcoes.verificaToken()
+    this.getProgramas()
   },
   methods: {
     filtrarDados () {
@@ -326,7 +323,23 @@ export default {
         )
         .then(response => (this.cpfParticipantes = response.data))
     },
-
+    getProgramas () {
+      http.get('relatorios/formacoes')
+        .then(response => {
+          this.programas = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    getTurmas () {
+      let turmas = document.querySelector('.filtro-programa').value
+      console.log(turmas)
+      http.get(`relatorios/turmas/${turmas}`)
+        .then(response => {
+          this.turmas = response.data
+        })
+    },
     inserirInvestimento () {
       this.form.cpf = document.getElementById('nomeModal').value
       this.form.mesAno = document.querySelector('#mesAnoModal').value

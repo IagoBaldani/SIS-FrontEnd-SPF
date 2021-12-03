@@ -180,6 +180,12 @@ module.exports = {
       title: 'Dados da vaga - Cadastro/Edição',
       chunks: ['chunk-vendors', 'chunk-common', 'processo-seletivo-dados-da-vaga-cadastro-edicao']
     },
+    'dados-instrutor-cadastro': {
+      entry: './src/views/dados-instrutor-cadastro/main.js',
+      template: 'public/index.html',
+      title: 'Dados Instrutor -  Cadastro',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-cadastro']
+    },
     'processo-seletivo-dados-da-vaga-visualizacao': {
       entry: './src/views/processo-seletivo-dados-da-vaga-visualizacao/main.js',
       template: 'public/index.html',

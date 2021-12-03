@@ -27,6 +27,7 @@
               <input
                 class="form-control disabledTextInput"
                 v-bind:value="formataCpfparaMostrar(participante.cpf)"
+                v-mask="['###.###.###-##']"
                 type="text"
               />
             </div>
@@ -34,8 +35,9 @@
               <label class="form-label fw-bold mb-0 titulo">Contato</label>
               <input
                 class="form-control disabledTextInput"
-                v-bind:value="participante.telefone"
+                v-bind:value="formataTelefoneparaMostrar(participante.telefone)"
                 type="tel"
+                v-mask="['(##) # ####-####']"
                 disabled
                 readonly
               />
@@ -328,8 +330,10 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { mask } from 'vue-the-mask'
 
 export default {
+  directives: { mask },
   name: 'App',
   components: {
     Header
@@ -383,6 +387,9 @@ export default {
     },
     formataCpfparaMostrar (cpf) {
       return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+    },
+    formataTelefoneparaMostrar (telefone) {
+      return telefone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $3-$4')
     },
     processaRequisicoes (statusAtivo) {
       this.atualizaStatusForm.cpf = this.participante.cpf

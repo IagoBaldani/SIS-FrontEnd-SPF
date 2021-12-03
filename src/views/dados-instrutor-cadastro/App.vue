@@ -22,7 +22,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
-                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" disabled v-model="instrutor.cpf" type="text" />
+                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" :v-model="instrutor.cpf" v-mask="['###.###.###-##']" type="text" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
@@ -167,6 +167,9 @@ export default {
 
       return data
     },
+    formataCpfparaMostrar (cpf) {
+      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1$2$3$4')
+    },
     processaRequisicoes () {
       const dados = this.pegaDadosUrl()
       let cpf = dados.id
@@ -183,6 +186,7 @@ export default {
             console.log(error)
           })
       } else {
+        console.log(this.instrutorForm.cpf)
         http
           .post('instrutor', this.instrutorForm)
           .then(response => {
