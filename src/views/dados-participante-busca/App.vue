@@ -109,6 +109,15 @@ export default {
       let nomeProcurado = document.querySelector('#filtro-nome').value
       let turmaProcurada = document.querySelector('#filtro-turmas').value
       console.log(nomeProcurado)
+      if (nomeProcurado == '' && programaProcurado == '0' && turmaProcurada == '0') {
+        http.get('participante')
+          .then(response => {
+            console.log(this.participantes = response.data)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
       if (nomeProcurado == '') {
         http.get(`participante/0/${programaProcurado}/${turmaProcurada}`)
           .then(response => {
