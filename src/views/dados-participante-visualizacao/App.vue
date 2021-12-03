@@ -94,7 +94,16 @@
                 ><img
                   src="@/assets/imgs/file_download_black_24dp.svg"
                   alt=""
-                />tce.xls</a
+                />TCE.xls</a
+              >
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo">DISC</label><br />
+              <a href="#"
+                ><img
+                  src="@/assets/imgs/file_download_black_24dp.svg"
+                  alt=""
+                />DISC.pdf</a
               >
             </div>
           </fieldset>
