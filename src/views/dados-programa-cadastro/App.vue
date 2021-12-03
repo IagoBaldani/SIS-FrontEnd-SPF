@@ -12,13 +12,14 @@
             <div class="row d-flex justify-content-evenly">
                 <div class="col-xl-4">
                     <div class="mb-3">
-                        <label for="nome" class="form-label fw-bold mb-0 titulo">Nome</label>
+                        <label for="processo" class="form-label fw-bold mb-0 titulo">Nome</label>
                         <input
                             type="text"
                             class="form-control"
-                            id="nome"
+                            id="processo"
                             disabled
-                            placeholder="Java"
+                            required
+                            :value="processo.nome"
                         />
                     </div>
                     <div class="mb-3">
@@ -29,8 +30,8 @@
                             id="inicio"
                             required
                             placeholder="dd/MM/yyyy"
-                            v-model="modelInicio"
                         />
+                        <p id="erroDataInicio" class="erro none">Por favor insira uma data válida</p>
                     </div>
                     <div class="mb-3">
                         <label for="termino" class="form-label fw-bold mb-0 titulo">Término do Programa</label>
@@ -40,14 +41,15 @@
                             id="termino"
                             required
                             placeholder="dd/MM/yyyy"
-                            v-model="modelTermino"
                         />
+                        <p id="erroDataTermino" class="erro none">Por favor insira uma data válida</p>
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label fw-bold mb-0 titulo">Instrutor</label>
-                        <select class="form-select" id="instrutores" v-model="programaForm.instrutor.nome">
+                        <select class="form-select" id="instrutores">
+                            <option disabled selected value="">Instrutor</option>
                             <option
-                                id="coordenador"
+                                id="instrutor"
                                 v-for="instrutor in instrutores"
                                 v-bind:value="instrutor.nome"
                                 v-bind:key="instrutor.cpf"
@@ -55,6 +57,7 @@
                                 {{ instrutor.nome }}
                             </option>
                         </select>
+                        <p id="erroInstrutor" class="erro none">Por favor escolha um instrutor</p>
                     </div>
                     <div class="mb-3">
                         <label for="turma" class="form-label fw-bold mb-0 titulo">Turma</label>
@@ -63,9 +66,9 @@
                             class="form-control"
                             id="turma"
                             required
-                            placeholder="2021.1"
-                            v-model="modelTurma"
+                            placeholder="Turma I"
                         />
+                        <p id="erroTurma" class="erro none">Por favor insira uma turma</p>
                     </div>
                 </div>
                 <div class="col-xl-4"></div>
@@ -78,10 +81,9 @@
                             type="button"
                             name="botao-ok"
                             class="mt-5 form-control submit"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                            @click.prevent="enviarDados"/>
+                            v-on:click="validaForm()"/>
                     </div>
+                    <p id="chamaModal" hidden v-on:click="enviarDados" data-bs-toggle="modal" data-bs-target="#exampleModal"></p>
                     <div class="col-xl-4"></div>
                     <div class="col-xl-2"></div>
                 </div>
@@ -106,15 +108,15 @@
                             <ul class="fw-bold subtitulo text-start">
                                 Informações gerais:
                                 <li>Nome: <span class="titulo"> {{ programaForm.nome }} </span></li>
-                                <li>Início do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.inicio)}}</span></li>
-                                <li>Término do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.termino)}}</span></li>
-                                <li>Instrutor: <span class="titulo">{{ programaForm.instrutor.nome }}</span></li>
+                                <li>Início do Programa: <span class="titulo">{{this.formataDataParaExibicao(programaForm.inicio)}}</span></li>
+                                <li>Término do Programa: <span class="titulo">{{this.formataDataParaExibicao(programaForm.termino)}}</span></li>
+                                <li>Instrutor: <span class="titulo">{{ programaForm.instrutor }}</span></li>
                                 <li>Turma: <span class="titulo">{{ programaForm.turma }}</span></li>
                             </ul>
                         </div>
                         <div class="mt-3 modal-footer border-0 justify-content-around">
                             <div>
-                                <button type="button" class="btn submit-modal" v-on:click="putPrograma()">
+                                <button type="button" class="btn submit-modal" v-on:click="postPrograma">
                                     CONFIRMAR
                                 </button>
                             </div>
@@ -147,6 +149,7 @@ export default {
       responseStatus: '',
       instrutores: [],
       programa: {},
+      processo: {},
       programaForm: {
         nome: '',
         inicio: '',
@@ -161,14 +164,13 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
   },
-
   mounted () {
-    
+    this.getProcesso()
+    this.getInstrutor()
   },
-
   methods: {
-    putPrograma () {
-      http.put('programa', this.programaForm)
+    postPrograma () {
+      http.post('programa', this.programaForm)
         .then(response => {
           if (response.status == 200) {
             window.location.href = '/dados-programa-busca'
@@ -178,38 +180,65 @@ export default {
           console.log(error)
         })
     },
+    validaForm () {
+      let dataInicio = document.querySelector('#inicio').value
+      let dataFim = document.querySelector('#termino').value
+      let nomeInstrutor = document.querySelector('#instrutores').value
+      let nomeTurma = document.querySelector('#turma').value
+      let erro = 0
+      if (dataInicio == '') {
+        console.log('slaskajsbdkjasd')
+        document.querySelector('#erroDataInicio').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDataInicio').classList.add('none')
+        erro = 0
+      }
+      if (dataFim == '') {
+        document.querySelector('#erroDataTermino').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDataTermino').classList.add('none')
+        erro = 0
+      }
+      if (nomeInstrutor == '') {
+        document.querySelector('#erroInstrutor').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroInstrutor').classList.add('none')
+        erro = 0
+      }
+      if (nomeTurma == '') {
+        document.querySelector('#erroTurma').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTurma').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        document.querySelector('#chamaModal').click()
+      }
+    },
+    enviarDados () {
+      this.programaForm.nome = document.querySelector('#processo').value
+      this.programaForm.inicio = document.querySelector('#inicio').value
+      this.programaForm.termino = document.querySelector('#termino').value
+      this.programaForm.instrutor = document.querySelector('#instrutores').value
+      this.programaForm.turma = document.querySelector('#turma').value
+    },
+    getProcesso () {
+      http.get(`processo-seletivo/${this.id}`)
+        .then(response => console.log(this.processo = response.data))
+    },
     getInstrutor () {
       http.get('instrutor/status/ATIVO')
         .then(response => {
           this.instrutores = response.data
-          console.log(this.instrutores[0].nome)
         })
         .catch(error => {
           console.log(error)
         })
-    },
-
-    getPrograma (id) {
-      http.get(`programa/${id}`)
-        .then(response => {
-          this.programa = response.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-    enviarDados () {
-      this.programaForm.nome = this.modelNome
-      this.programaForm.inicio = this.modelInicio
-      this.programaForm.termino = this.modelTermino
-      this.programaForm.instrutor = this.modelInstrutor
-      this.programaForm.turma = this.modelTurma
-    },
-    carregaDados () {
-      this.modelNome = this.programaForm.nome
-      this.modelInicio = this.programaForm.inicio
-      this.modelTermino = this.programaForm.termino
-      this.modelTurma = this.programaForm.turma
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -228,7 +257,6 @@ export default {
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
       return dataFormatada
     }
   }
@@ -239,6 +267,14 @@ export default {
 <style>
 body {
     background-color: #ebebeb !important;
+}
+
+.erro {
+  color: red;
+}
+
+.none {
+  display: none;
 }
 
 .titulo {

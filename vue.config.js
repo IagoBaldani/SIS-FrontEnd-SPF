@@ -36,6 +36,12 @@ module.exports = {
       title: 'Programa de Formação - Cadastro e Edição',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-programa-cadastro_edicao']
     },
+    'dados-programa-cadastro': {
+      entry: './src/views/dados-programa-cadastro/main.js',
+      template: 'public/index.html',
+      title: 'Programa de Formação - Cadastro',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-programa-cadastro']
+    },
     'dados-programa-processo-seletivo': {
       entry: './src/views/dados-programa-processo-seletivo/main.js',
       template: 'public/index.html',

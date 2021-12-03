@@ -22,7 +22,7 @@
           <div class="mb-3">
             <select class="form-select mt-4" id="filtro-turmas" v-on:click="getTurmas()">
               <option disabled selected value="0">Turmas</option>
-              <option id="turma" v-bind:value="turma.id" v-for="turma in turmas" v-bind:key="turma">{{turma.nomeTurma}}</option>
+              <option id="turma" v-for="turma in turmas" v-bind:key="turma.id" v-bind:value="turma.nomeTurma">{{turma.nomeTurma}}</option>
             </select>
           </div>
         </div>

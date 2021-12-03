@@ -60,7 +60,7 @@
                   </td>
                   <td id="icones">
                     <a
-                      href="/dados-programa-cadastro_edicao?tipo=cadastro"
+                      :href="'/dados-programa-cadastro?id=' + processo.id"
                     >
                       <img
                         src="@/assets/imgs/preview_white_24dp.svg"

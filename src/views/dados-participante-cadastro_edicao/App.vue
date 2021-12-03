@@ -84,7 +84,7 @@
             </div>
         <div class="col-xl-4">
          <button 
-            type="submit"
+            type="button"
             class="btn submit form-control"
             v-on:click="processaRequisicoes()"
             id="ativarParticipante">
