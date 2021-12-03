@@ -557,7 +557,7 @@ export default {
       var formacao = document.getElementById('select1').value
       var turma = document.getElementById('select2').value
       var escopo = document.getElementById('select3').value
-      let erro = 1
+      let erro = 0
       if (formacao == 'null') {
         document.querySelector('#progFormacao').classList.remove('none')
         erro = 1
@@ -579,7 +579,10 @@ export default {
         document.querySelector('#progEscopo').classList.add('none')
         erro = 0
       }
-      if (erro == 1) {
+      // if (formacao != 'null' && turma != 'null' && escopo != 'null') {
+      //   erro = 0
+      // }
+      if (erro > 0) {
         return false
       } else {
         this.redirecionamento()

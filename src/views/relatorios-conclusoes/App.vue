@@ -20,19 +20,19 @@
             <!-- card de participantes ativos -->
             <h2 id="part-ativos">{{relatorio.participantesAtivos}}</h2>
             <p class="descricao">
-              Participantes ativos em todos os programas de formação.
+              Participantes ativos no programa {{relatorio.programadeformacao}} e na turma {{relatorio.turma}}.
             </p>
           </div>
           <div class="partEfetivados ">
             <!-- card de participantes efetivados -->
             <h2 id="part-efetivados">{{relatorio.participantesEfetivados}}</h2>
-            <p class="descricao">Participantes efetivados na empresa.</p>
+            <p class="descricao">Participantes efetivados no programa {{relatorio.programadeformacao}} e na turma {{relatorio.turma}}.</p>
           </div>
           <div class="dataConclusão ">
             <!-- card da data de conclusão -->
             <h2 id="data-conclusão">{{relatorio.dataConclusao}}</h2>
             <p class="descricao">
-              Data do ultimo ciclo de conclusões (não efetivados).
+              Data do ultimo ciclo de conclusões do programa {{relatorio.programadeformacao}} e na turma {{relatorio.turma}}.
             </p>
           </div>
         </div>
