@@ -41,7 +41,7 @@
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="filtrarDados()"
+              v-on:click="validaForm()"
             >
               Pesquisar
             </button>
@@ -136,6 +136,7 @@
                 aria-label="Default select example"
                 id="nomeModal"
               >
+                <option selected disabled>Instrutor</option>
                 <option
                   :value="cpfInstrutor.cpfInstrutor"
                   v-for="cpfInstrutor in cpfInstrutores"
@@ -144,6 +145,7 @@
                 >
               </select>
             </div>
+            <p id="erroNome" class="erro none">Por favor selecione um participante</p>
             <label id="modalconteudo">Mês e ano</label>
             <div class="input-group input-group-lg">
               <input
@@ -155,6 +157,7 @@
                 aria-describedby="inputGroup-sizing-lg"
               />
             </div>
+            <p id="erroData" class="erro none">O campo Mês e ano não pode ser vazio</p>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
               <div class="modalitens col-xl-6">
                 <label id="modalconteudo">Valor Hora</label>
@@ -170,6 +173,7 @@
                     aria-describedby="inputGroup-sizing-lg"
                   />
                 </div>
+                <p id="erroValorHora" class="erro none">O campo valor hora não pode ser vazio</p>
               </div>
               <div class="modalitens col-xl-6">
                 <label id="modalconteudo">Horas trabalhadas</label>
@@ -184,6 +188,7 @@
                     aria-describedby="inputGroup-sizing-lg"
                   />
                 </div>
+                <p id="erroHoras" class="erro none">O campo horas trabalhadas não pode ser vazio</p>
               </div>
             </div>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
@@ -208,14 +213,14 @@
           <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 modal-footer">
             <div class="row-xl-5">
               <button
-                v-on:click="inserirInvestimento()"
+                v-on:click="validaFormModal()"
                 id="confirmar"
                 type="button"
                 class="btn btn-secondary"
-                data-bs-dismiss="modal"
               >
                 CONFIRMAR
               </button>
+              <button id="fechaModal" type="button" data-bs-dismiss="modal" class="none"></button>
             </div>
             <div class="col-xl-5"></div>
           </div>
@@ -276,7 +281,67 @@ export default {
           this.pegarSalario()
         }) 
     },
-
+    validaForm () {
+      this.programaProcurado = document.querySelector('.filtro-programa').value
+      this.turmaProcurada = document.querySelector('.filtro-turma').value
+      let erro = 0
+      if (this.programaProcurado == '') {
+        erro = 1
+      } else {
+        erro = 0
+      }
+      if(this.turmaProcurada == '') {
+        erro = 1
+      } else {
+        erro = 0
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.filtrarDados()
+      }
+    },
+    validaFormModal () {
+      var participante = document.querySelector('#nomeModal').value
+      var dataLancamento = document.querySelector('#mesAnoModal').value
+      var valorHora = document.querySelector('#valorHoraModal').value
+      var horasTrabalhadas = document.querySelector('#horasTrabalhadasModal').value
+      let erro = 0
+      if (participante == 'Instrutor') {
+        document.querySelector('#erroNome').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNome').classList.add('none')
+        erro = 0
+      }
+      if ( dataLancamento == 0) {
+        document.querySelector('#erroData').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroData').classList.add('none')
+        erro = 0
+      }
+      if (valorHora == 0) {
+        document.querySelector('#erroValorHora').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroValorHora').classList.add('none')
+        erro = 0
+      }
+      if (horasTrabalhadas == 0) {
+        document.querySelector('#erroHoras').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroHoras').classList.add('none')
+        erro = 0
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.inserirInvestimento()
+        document.querySelector('#fechaModal').click()
+      }
+    },
     inserirInvestimento () {
       this.form.cpf = document.querySelector('#nomeModal').value
       this.form.mesAno = document.querySelector('#mesAnoModal').value
@@ -365,6 +430,15 @@ export default {
 <style>
 body {
   background: #ebebeb;
+}
+
+.erro {
+  color: red;
+  font-weight: bold;
+}
+
+.none {
+  display: none;
 }
 
 .tela {

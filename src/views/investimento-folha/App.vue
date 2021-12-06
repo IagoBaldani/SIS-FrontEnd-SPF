@@ -41,7 +41,7 @@
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="filtrarDados()"
+              v-on:click="validaForm()"
             >
               Pesquisar
             </button>
@@ -146,6 +146,7 @@
                   aria-label="Default select example"
                   id="nomeModal"
                 >
+                  <option selected disabled>Participante</option>
                   <option
                     :value="cpfParticipante.cpfParticipante"
                     v-for="cpfParticipante in cpfParticipantes"
@@ -154,6 +155,7 @@
                   >
                 </select>
               </div>
+              <p id="erroNome" class="erro none">Por favor selecione um participante</p>
               <label class="modalconteudo">Mês e ano</label>
               <div class="input-group input-group-lg">
                 <input
@@ -165,6 +167,7 @@
                   aria-describedby="inputGroup-sizing-lg"
                 />
               </div>
+              <p id="erroData" class="erro none">O campo Mês e ano não pode ser vazio</p>
               <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Remuneração</label>
@@ -179,6 +182,7 @@
                       aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
+                  <p id="erroRemun" class="erro none">O campo remuneração não pode ser vazio</p>
                 </div>
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Encargos</label>
@@ -193,6 +197,7 @@
                       aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
+                  <p id="erroEncargos" class="erro none">Por favor digite um valor válido, se for o caso digite 0</p>
                 </div>
               </div>
               <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
@@ -209,6 +214,7 @@
                       aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
+                  <p id="erroBeneficios" class="erro none">Por favor digite um valor válido, se for o caso digite 0</p>
                 </div>
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Total</label>
@@ -244,11 +250,11 @@
                   id="confirmar"
                   type="button"
                   class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                  v-on:click="inserirInvestimento()"
+                  v-on:click="validaFormModal()"
                 >
                   CONFIRMAR
                 </button>
+                <button type="button" id="fechaModal" data-bs-dismiss="modal" class="none"></button> 
               </div>
               <div class="col-xl-5"></div>
             </div>
@@ -299,23 +305,88 @@ export default {
   },
   methods: {
     filtrarDados () {
-      this.programaProcurado = document.querySelector('.filtro-programa').value
-      this.turmaProcurada = document.querySelector('.filtro-turma').value
-      
       http
-        .get(
-          'investimento-folha/' +
-            this.programaProcurado +
-            '/' +
-            this.turmaProcurada
-        )
-        .then(response => {
-          (this.participantes = response.data)
-          this.pegarSalario()
-        })
+      .get(
+        'investimento-folha/' +
+          this.programaProcurado +
+          '/' +
+          this.turmaProcurada
+      )
+      .then(response => {
+        (this.participantes = response.data)
+        this.pegarSalario()
+      })
       this.mudaVisibilidade()
     },
-
+    validaForm () {
+      this.programaProcurado = document.querySelector('.filtro-programa').value
+      this.turmaProcurada = document.querySelector('.filtro-turma').value
+      let erro = 0
+      if (this.programaProcurado == '') {
+        erro = 1
+      } else {
+        erro = 0
+      }
+      if(this.turmaProcurada == '') {
+        erro = 1
+      } else {
+        erro = 0
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.filtrarDados()
+      }
+    },
+    validaFormModal () {
+      var participante = document.querySelector('#nomeModal').value
+      var dataLancamento = document.querySelector('#mesAnoModal').value
+      var remuneracao = document.querySelector('#remuneracaoModal').value
+      var encargos = document.querySelector('#encargosModal').value
+      var beneficios = document.querySelector('#beneficiosModal').value
+      let erro = 0
+      if (participante == 'Participante') {
+        document.querySelector('#erroNome').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNome').classList.add('none')
+        erro = 0
+      }
+      if (dataLancamento == '') {
+        document.querySelector('#erroData').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroData').classList.add('none')
+        erro = 0
+      }
+      if (remuneracao == '') {
+        document.querySelector('#erroRemun').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroRemun').classList.add('none')
+        erro = 0
+      }
+      if(encargos == '') {
+        document.querySelector('#erroEncargos').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroEncargos').classList.add('none')
+        erro = 0
+      }
+      if (beneficios == '') {
+        document.querySelector('#erroBeneficios').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroBeneficios').classList.add('none')
+        erro = 0
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.inserirInvestimento()
+        document.getElementById('fechaModal').click()
+      }
+    },
     mostrarParticipantes () {
       http
         .get(
@@ -347,6 +418,7 @@ export default {
       this.form.encargos = document.querySelector('#encargosModal').value
       this.form.beneficios = document.querySelector('#beneficiosModal').value
       this.form.descricao = document.querySelector('#descricaoModal').value
+      console.log(this.form)
       http.post('/investimento-folha', this.form).then(response => {
       })
     },
@@ -411,6 +483,14 @@ export default {
 <style>
 body {
   background: #ebebeb;
+}
+
+.erro {
+  color: red;
+}
+
+.none {
+  display: none;
 }
 
 #botaoFolha {
