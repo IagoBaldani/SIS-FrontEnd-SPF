@@ -24,7 +24,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">CPF</label>
-              <input
+              <input id="cpfDoparticipante"
                 class="form-control disabledTextInput"
                 v-bind:value="formataCpfparaMostrar(participante.cpf)"
                 v-mask="['###.###.###-##']"
@@ -90,24 +90,12 @@
                 readonly
               />
             </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">TCE</label><br />
-              <a href="#"
-                ><img
-                  src="@/assets/imgs/file_download_black_24dp.svg"
-                  alt=""
-                />TCE.xls</a
-              >
+            <div class="mb-5 mt-5"  >
+                <a v-on:click="downloadTce()"   class="btn-registrar pointer" > DOWNLOAD TCE</a>
             </div>
-            <!-- <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">DISC</label><br />
-              <a href="#"
-                ><img
-                  src="@/assets/imgs/file_download_black_24dp.svg"
-                  alt=""
-                />DISC.pdf</a
-              >
-            </div> -->
+             <div class="mb-3" >
+                <a @click="downloadDisc()"  class="btn-registrar pointer" > DOWNLOAD DISC</a>
+            </div>
           </fieldset>
         </div>
         <div class="col-xl-4">
@@ -371,7 +359,7 @@ export default {
     getCargo (cpf) {
       http.get(`participante/completo/${cpf}`)
         .then(response => {
-          console.log(this.participante = response.data)
+          (this.participante = response.data)
         })
         .catch(error => {
           console.log(error)
@@ -382,8 +370,11 @@ export default {
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
     },
-    download () {
-      location.href = `http://localhost:8081/api/feedback/download/${this.id}`
+    downloadTce () {
+      location.href = `http://localhost:8081/api/participante/downloadTce/${this.participante.cpf}`
+    },
+    downloadDisc () {
+      location.href = `http://localhost:8081/api/participante/downloadDisc/${this.participante.cpf}`
     },
     formataCpfparaMostrar (cpf) {
       return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
@@ -508,7 +499,24 @@ textarea {
 .rounded-circle {
   width: 150px;
 }
+.btn-registrar{
+    margin-bottom: 0;
+    width:100%;
+    padding: 5px 5px;
+    background-color: #ffb700 !important;
+    color: white;
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+    border-style: none;
+    font-size: 20px;
 
+}
+.btn-registrar:hover{
+    background-color: #634700;
+    transition: 300ms;
+     color: white;
+}
 @media (max-width: 1200px) {
   .rounded-circle {
     margin-bottom: 3em;

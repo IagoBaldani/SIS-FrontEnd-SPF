@@ -78,7 +78,7 @@
                         </div>
                         <div class="col-lg-6" >
                             <h4 class="fw-bold titulo mb-3" >Download DISC:</h4>
-                            <a @click="download()" id="oioi" class="btn-registrar pointer" > DOWNLOAD</a>
+                            <a v-on:click="download()" id="oioi" class="btn-registrar pointer" > DOWNLOAD</a>
                         </div>
                     </div>
                     <div class="row">
