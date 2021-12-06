@@ -18,8 +18,7 @@
                             class="form-control"
                             id="nome"
                             disabled
-                            :placeholder="programa.nome"
-                            v-model="modelNome"
+                            :value="programa.nome"
                         />
                     </div>
                     <div class="mb-3">
@@ -80,7 +79,7 @@
                             class="mt-5 form-control submit"
                             data-bs-toggle="modal"
                             data-bs-target="#exampleModal"
-                            @click.prevent="enviarDados"/>
+                            v-on:click="enviarDados"/>
                     </div>
                     <div class="col-xl-4"></div>
                     <div class="col-xl-2"></div>
@@ -106,9 +105,9 @@
                             <ul class="fw-bold subtitulo text-start">
                                 Informações gerais:
                                 <li>Nome: <span class="titulo"> {{ this.programaForm.nome }} </span></li>
-                                <li>Início do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.inicio)}}</span></li>
-                                <li>Término do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.termino)}}</span></li>
-                                <li>Instrutor: <span class="titulo">{{ programaForm.instrutor.nome }}</span></li>
+                                <li>Início do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.dataInicio)}}</span></li>
+                                <li>Término do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.dataFim)}}</span></li>
+                                <li>Instrutor: <span class="titulo">{{ programaForm.instrutor }}</span></li>
                                 <li>Turma: <span class="titulo">{{ programaForm.turma }}</span></li>
                             </ul>
                         </div>
@@ -150,9 +149,10 @@ export default {
       instrutores: [],
       programa: {},
       programaForm: {
+        id: '',
         nome: '',
-        inicio: '',
-        termino: '',
+        dataInicio: '',
+        dataFim: '',
         instrutor: '',
         turma: ''
       }
@@ -162,6 +162,7 @@ export default {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
+    this.programaForm.id = dadosUrl.id
   },
   mounted () {
     this.getInstrutor()
@@ -169,6 +170,7 @@ export default {
   },
   methods: {
     putPrograma () {
+      console.log(this.programaForm)
       http.put('programa', this.programaForm)
         .then(response => {
           if (response.status == 200) {
@@ -201,16 +203,10 @@ export default {
     },
     enviarDados () {
       this.programaForm.nome = document.getElementById('nome').value
-      this.programaForm.inicio = document.getElementById('inicio')
-      this.programaForm.termino = document.getElementById('termino')
-      this.programaForm.instrutor = document.getElementById('coordenador')
-      this.programaForm.turma = document.getElementById('turma')
-    },
-    carregaDados () {
-      this.modelNome = this.programaForm.nome
-      this.modelInicio = this.programaForm.inicio
-      this.modelTermino = this.programaForm.termino
-      this.modelTurma = this.programaForm.turma
+      this.programaForm.dataInicio = document.getElementById('inicio').value
+      this.programaForm.dataFim = document.getElementById('termino').value
+      this.programaForm.instrutor = document.getElementById('instrutores').value
+      this.programaForm.turma = document.getElementById('turma').value
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
