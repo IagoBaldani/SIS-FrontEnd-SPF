@@ -306,16 +306,16 @@ export default {
   methods: {
     filtrarDados () {
       http
-      .get(
-        'investimento-folha/' +
+        .get(
+          'investimento-folha/' +
           this.programaProcurado +
           '/' +
           this.turmaProcurada
-      )
-      .then(response => {
-        (this.participantes = response.data)
-        this.pegarSalario()
-      })
+        )
+        .then(response => {
+          (this.participantes = response.data)
+          this.pegarSalario()
+        })
       this.mudaVisibilidade()
     },
     validaForm () {
@@ -327,7 +327,7 @@ export default {
       } else {
         erro = 0
       }
-      if(this.turmaProcurada == '') {
+      if (this.turmaProcurada == '') {
         erro = 1
       } else {
         erro = 0
@@ -366,7 +366,7 @@ export default {
         document.querySelector('#erroRemun').classList.add('none')
         erro = 0
       }
-      if(encargos == '') {
+      if (encargos == '') {
         document.querySelector('#erroEncargos').classList.remove('none')
         erro = 1
       } else {

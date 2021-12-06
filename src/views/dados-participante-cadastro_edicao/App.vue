@@ -22,6 +22,7 @@
                 v-bind:value="participante.nome"
                 type="text" 
               />
+              <p id="erroNome" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">CPF</label>
@@ -31,6 +32,7 @@
                 v-bind:value="participante.cpf"
                 type="text"
               />
+              <p id="erroCpf" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Contato</label>
@@ -40,10 +42,12 @@
                 v-mask="['(##) # ####-####']"
                 type="tel"
               />
+              <p id="erroContato" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
               <input required  v-bind:value="participante.email" class="form-control" type="email" id="participanteEmail">
+              <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo"
@@ -54,18 +58,8 @@
                 v-bind:value="participante.fonteRecrutamento"
                 type="text"
               />
+              <p id="erroFonte" class="none erro">Por favor, preencha este campo</p>
             </div>
-            <!-- <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo"
-                >Nota na prova de lógica</label
-              >
-              <input disabled
-                class="form-control disabledTextInput"
-                v-bind:value="participante.testeLogico"
-                type="number"
-                min="0"
-                max="10"
-            </div> --> 
             <div class="mb-3">
                             <label class="form-label fw-bold h5 titulo">TCE</label>
                             <input id="file" @change="formatoUpload()" class="none"  type="file" accept="application/pdf"/>
@@ -77,45 +71,13 @@
                                     </div>
                                 </div>
                             </label>
+                            <p id="erroTce" class="none erro">Por favor, preencha este campo</p>
                         </div>
-                        <!-- <label class="form-label fw-bold h5 titulo mb-2">DISC</label>
-                        <div class="input-group">
-                            
-                             <input type="file" class="form-control mb-3" id="fileDisc" 
-                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                        </div> -->
-            <!-- <div class="mb-3"> 
-              <label class="form-label fw-bold mb-0 titulo">TCE</label><br />
-              <a href="#"
-                ><img
-                  src="@/assets/imgs/file_download_black_24dp.svg"
-                  alt=""
-                />tce.xls</a
-              >
-            </div>  -->
-            <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo"
-                >Instituição de Ensino</label
-              >
-              <input id="participanteNomeFaculdade"
-                class="form-control disabledTextInput"
-                v-bind:value="participante.nmFaculdade"
-                type="text"
-              />
-            </div>
-            <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">Curso</label>
-              <input id="participanteCurso"
-                class="form-control disabledTextInput"
-                v-bind:value="participante.curso"
-                type="text"
-              />
-            </div>
         <div class="col-xl-4">
          <button 
             type="button"
             class="btn submit form-control"
-            v-on:click="processaRequisicoes()"
+            v-on:click="validaForm()"
             id="ativarParticipante">
               SALVAR
           </button>
@@ -134,26 +96,51 @@
                 v-bind:value="participante.dataFimGraduacao"
                 type="date"
               />
+              <p id="erroTerminoGraduacao" class="none erro">Por favor, preencha este campo</p>
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo"
                 >Início do programa</label
               >
               <input
+                id="participanteInicioPrograma"
                 class="form-control disabledTextInput"
-                v-bind:value="formataDataParaMostrar(participante.iniPrograma)"
-                type="text"
+                v-bind:value="participante.iniPrograma"
+                type="date"
               />
-            </div>
-            <div class="mb-3">
+              <p id="erroDataInicioGraduacao" class="none erro">Por favor, preencha este campo</p>
+            </div> -->
+            <!-- <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo"
                 >Término do programa</label
               >
               <input
+                id="participanteTerminoPrograma"
                 class="form-control disabledTextInput"
-                v-bind:value="formataDataParaMostrar(participante.fimPrograma)"
+                v-bind:value="participante.fimPrograma"
+                type="date"
+              />
+              <p id="erroDataFimGraduacao" class="none erro">Por favor, preencha este campo</p>
+            </div> -->
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo"
+                >Instituição de Ensino</label
+              >
+              <input id="participanteNomeFaculdade"
+                class="form-control disabledTextInput"
+                v-bind:value="participante.nmFaculdade"
                 type="text"
               />
+              <p id="erroFaculdade" class="none erro">Por favor, preencha este campo</p>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo">Curso</label>
+              <input id="participanteCurso"
+                class="form-control disabledTextInput"
+                v-bind:value="participante.curso"
+                type="text"
+              />
+              <p id="erroCurso" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Observação</label>
@@ -163,6 +150,7 @@
                 rows="10"
                 v-bind:value="participante.observacao"
               ></textarea>
+              <p id="erroObservacao" class="none erro">Por favor, preencha este campo</p>
             </div>
           </fieldset>
         </div>
@@ -247,12 +235,84 @@ export default {
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
     },
+    validaForm () {
+      var nome = document.getElementById('participanteNome').value
+      var contato = document.getElementById('participanteTelefone').value
+      var email = document.getElementById('participanteEmail').value
+      var fonteRecrutamento = document.getElementById('participanteFonteRecrutamento').value
+      var tce = document.getElementById('file')
+      var instituicaoEnsino = document.getElementById('participanteNomeFaculdade').value
+      var curso = document.getElementById('participanteCurso').value
+      var terminoGraduacao = document.getElementById('participanteDataFimGraduacao').value
+      var observacao = document.getElementById('participanteObservacao').value
+      let erro = 0
+      if (nome == '') {
+        document.querySelector('#erroNome').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNome').classList.add('none')
+      }
+      if (contato == '') {
+        document.querySelector('#erroContato').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroContato').classList.add('none')
+      }
+      if (email == '') {
+        document.querySelector('#erroEmail').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroEmail').classList.add('none')
+      }
+      if (fonteRecrutamento == '') {
+        document.querySelector('#erroFonte').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroFonte').classList.add('none')
+      }
+      if (tce.files.length <= 0) {
+        document.querySelector('#erroTce').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTce').classList.add('none')
+      }
+      if (instituicaoEnsino == '') {
+        document.querySelector('#erroFaculdade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroFaculdade').classList.add('none')
+      }
+      if (curso == '') {
+        document.querySelector('#erroCurso').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroCurso').classList.add('none')
+      }
+      if (terminoGraduacao == '') {
+        document.querySelector('#erroTerminoGraduacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTerminoGraduacao').classList.add('none')
+      }
+      if (observacao == '') {
+        document.querySelector('#erroObservacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroObservacao').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.processaRequisicoes()
+      }
+    },
     formataDataParaEnviar (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCFullYear()}-${dataPreForm.getUTCMonth() + 1}-${dataPreForm.getUTCDate()}`
       return dataFormatada
     },
     processaRequisicoes () {
+      console.log(this.dataFimGraduacao)
       var formData = new FormData() 
       var comprovanteRematricula = document.getElementById('file').files[0] 
       this.atualizaStatusForm.nome = document.getElementById('participanteNome').value
@@ -299,10 +359,6 @@ export default {
         texto.textContent = file.files[0].name
       }
     }
-    // validaEmail (email) {
-    //   var regex = (/^([a-zA-Z0-9_.+-])+\'@'(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/)
-    //   return regex.test(email)
-    // }
   }
 } 
  
@@ -348,6 +404,10 @@ body {
 
 .form-control {
   color: #737373 !important;
+}
+
+.none {
+  display: none;
 }
 
 textarea {
@@ -413,9 +473,11 @@ textarea {
     width: 13px
 }
 
-.none {
-    display: none;
+.erro {
+  color: red;
+  font-weight: bold;
 }
+
 .btn-file {
     background: #fff;
     border: 1px solid #ced4da;

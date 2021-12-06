@@ -436,6 +436,10 @@ body {
   color: #737373;
 }
 
+.pointer{
+  cursor: pointer;
+}
+
 .disabledTextInput {
   background-color: #d3caca !important;
   border: 1px solid #bcb3b3 !important;

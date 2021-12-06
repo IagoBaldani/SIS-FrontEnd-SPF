@@ -361,7 +361,6 @@ export default {
       var provaPratica = document.getElementById('inputProvaPratica').value
       var discNota = document.getElementById('inputDisc').value
       var curriculo = document.getElementById('fileCurriculo')
-      console.log(curriculo.files)
       var disc = document.getElementById('fileDisc').value
       var observacao = document.getElementById('inputObservacao').value
       let erro = 0
@@ -425,11 +424,10 @@ export default {
         document.querySelector('#discErro').classList.remove('none')
         erro = 1
       } else {
-        document.querySelector('#aprendizesErro').classList.add('none')
+        document.querySelector('#discErro').classList.add('none')
         erro = 0
       }
       if (curriculo.files.length <= 0) {
-        console.log('alo alo marciano')
         document.querySelector('#curriculoErro').classList.remove('none')
         erro = 1
       } else {
