@@ -17,7 +17,7 @@
           <div>
             <label class="form-label mb-0 mt-3 titulo">Instrutor responsável</label>
             <select class="form-select" v-model="formacoes.nomeInstrutor" id="inputNomeInstrutor">
-              <option selected>Selecione um instrutor</option>
+              <option selected disabled>Selecione um instrutor</option>
               <option v-for="instrutor in instrutores" :key="instrutor" v-bind:value="instrutor.nome">{{ instrutor.nome }}</option>
             </select>
 <!--            <input list="listaInstrutores" id="inputInstrutores" class="form-control" placeholder="Intrutor responsável pela formação">-->
@@ -57,7 +57,7 @@
           <fieldset disabled>
             <div>
               <label class="form-label mb-0 mt-3 titulo">Participantes totais</label>
-              <input name="qtdTotal" type="text" class="form-control" id="inputQtdTotal" placeholder="Quantidade total" disabled readonly v-model="formacoes.qtdTotal"/>
+              <input name="qtdTotal" type="text" class="form-control" id="inputQtdTotal" placeholder="Quantidade total" disabled v-model="formacoes.qtdTotal"/>
             </div>
           </fieldset>
         </div>
@@ -66,7 +66,9 @@
       <div class="row justify-content-evenly">
         <div class="col-xl-4 ">
           <div>
-            <button type="button" class="btn-confirmar btn" data-bs-toggle="modal" data-bs-target="#exampleModal" @click.prevent="geraFormulario">CONFIRMAR</button>
+            <p class="erro h4 none mt-3" id="erroCampos">Preencha todos os campos!</p>
+            <button type="button" class="btn-confirmar btn" @click="abreModal()">CONFIRMAR</button>
+            <p id="abreModal" data-bs-toggle="modal" data-bs-target="#exampleModal"></p>
           </div>
         </div>
         <div class="col-xl-4">
@@ -309,6 +311,29 @@ export default {
             console.log(error)
           })
       }
+    },
+
+    validaCampos () {
+      let campos = document.querySelectorAll('input:not(#inputQtdTotal), select')
+      console.log(campos)
+      let erro = 0
+      console.log(campos)
+      campos.forEach(element => {
+        if (element.value == '') {
+          erro = 1
+        }
+      })
+      if (erro == 1) return false
+      else return true
+    },
+    abreModal () {
+      if (this.validaCampos()) {
+        this.geraFormulario()
+        document.querySelector('#erroCampos').classList.add('none')
+        document.querySelector('#abreModal').click()
+      } else {
+        document.querySelector('#erroCampos').classList.remove('none')
+      }
     }
   }
 }
@@ -339,6 +364,14 @@ body{
 
 textarea {
   resize: none !important;
+}
+
+.erro {
+  color: red;
+}
+
+.none {
+  display: none
 }
 
 .download {
