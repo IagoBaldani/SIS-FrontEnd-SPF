@@ -38,11 +38,11 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputInstEnsino">Instituição de Ensino</label>
-              <input  class="form-control" id="inputInstEnsino" placeholder="Fatec Ourinhos" type="text" v-model="cadastroParticipanteForm.instituicaoEnsino">
+              <input  class="form-control" id="inputInstEnsino" type="text" v-model="cadastroParticipanteForm.instituicaoEnsino">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputCurso">Curso</label>
-              <input  class="form-control" id="inputCurso" placeholder="Análise e Desenvolvimento de Sistemas" type="text" v-model="cadastroParticipanteForm.curso">
+              <input  class="form-control" id="inputCurso" type="text" v-model="cadastroParticipanteForm.curso">
             </div>
         </div>
         <div class="col-xl-4">
