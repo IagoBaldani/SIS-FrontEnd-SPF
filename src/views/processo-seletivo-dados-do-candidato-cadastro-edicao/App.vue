@@ -19,8 +19,8 @@
               placeholder="Nome"
               v-model="candidato.nome"
             />
+            <p id="nomeErro" class="none erro">Por favor, preencha o campo nome</p>
           </div>
-
           <div class="mb-3">
             <label class="label-form">Contato</label>
             <input
@@ -31,6 +31,7 @@
               placeholder="(xx) xxxxx-xxxx"
               v-model="candidato.telefone"
             />
+            <p id="contatoErro" class="none erro">Por favor, preencha o campo telefone</p>
           </div>
 
           <div class="mb-3">
@@ -42,6 +43,7 @@
               placeholder="Fonte de recrutamento"
               v-model="candidato.fonteRecrutamento"
             />
+            <p id="fonteErro" class="none erro">Por favor, preencha o campo fonte de recrutamento</p>
           </div>
 
           <div class="mb-3">
@@ -53,6 +55,7 @@
               placeholder="2021/02/15"
               v-model="candidato.dataAgendamento"
             />
+            <p id="dataErro" class="none erro">Por favor, preencha o campo data agendamento</p>
           </div>
 
           <div class="mb-3">
@@ -61,9 +64,9 @@
               type="text"
               class="form-control"
               id="inputCurso"
-              placeholder="Curso"
               v-model="candidato.curso"
             />
+            <p id="cursoErro" class="none erro">Por favor, preencha o campo curso</p>
           </div>
           <div class="mt-0">
             <label class="label-form titulo mb-0">Resultado 1ª fase</label>
@@ -75,6 +78,7 @@
               <option value="REPROVADO_2_FASE" class="reprovado">Reprovado 2ª fase</option>
               <option value="STANDBY" class="standby">Stand By</option>
             </select>
+            <p id="resultadoErro" class="none erro">Por favor, preencha o campo resultado</p>
           </div>
         </div>
         <div class="col-md-4">
@@ -86,30 +90,38 @@
                 <option v-bind:value="processo.id" v-if="processo.status != 'FINALIZADA'">{{ processo.id }} - {{ processo.nome }}</option>
               </template>
             </select>
+            <p id="processoErro" class="none erro">Por favor, preencha o campo processo seletivo</p>
           </div>
           <div class="mb-3">
             <label class="label-form">Prova prática</label>
             <input type="number" class="form-control" id="inputProvaPratica" placeholder="Prova prática" v-model="candidato.testeLogico"/>
+            <p id="provaErro" class="none erro">Por favor, preencha o campo prova prática</p>
           </div>
 
           <div class="mb-3">
             <label class="label-form">DISC</label>
             <input type="text" class="form-control" id="inputDisc" placeholder="DISC" v-model="candidato.notaDisc"/>
+            <p id="discErro" class="none erro">Por favor, preencha o campo DISC</p>
           </div>
+
+          <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="acao()"></p>
 
           <div class="mb-3">
             <label class="label-form mb-0 titulo">Currículo candidato</label><br>
             <input type="file" class="form-control" id="fileCurriculo">
+            <p id="curriculoErro" class="none erro">Por favor, preencha o campo currículo</p>
           </div>
 
           <div class="mb-3">
             <label class="label-form mb-0 titulo">Disc xlsx</label><br>
             <input type="file" class="form-control" id="fileDisc">
+            <p id="discFileErro" class="none erro">Por favor, preencha o campo DISC</p>
           </div>
 
           <div class="mb-3">
             <label class="label-form">Observações Entrevista</label>
             <textarea rows="5" class="form-control" id="inputObservacao" v-model="candidato.observacao"></textarea>
+            <p id="observacaoErro" class="none erro">Por favor, preencha o campo observação</p>
           </div>
         </div>
       </div>
@@ -119,13 +131,10 @@
             <div for="exampleModal" class="confirmar">
               <div
                 type="button"
-                @onclick="acao()"
                 @click.prevent="enviarDados()"
                 class="bt"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
               >
-                <button type="button" class="btn-confirmar bt-footer largura">
+                <button type="button" class="btn-confirmar bt-footer largura" v-on:click="validaForm()">
                   CONFIRMAR
                 </button>
               </div>
@@ -341,6 +350,112 @@ export default {
           })
       }
     },
+    validaForm () {
+      var nome = document.getElementById('inputNome').value
+      var contato = document.getElementById('inputContato').value
+      var fonteRecrutamento = document.getElementById('inputFonteDeRecrutamento').value
+      var dataAgendamento = document.getElementById('inputDataAgendamento').value
+      var curso = document.getElementById('inputCurso').value
+      var resultado = document.getElementById('status').value
+      var processoSeletivo = document.getElementById('inputProcessoSeletivo').value
+      var provaPratica = document.getElementById('inputProvaPratica').value
+      var discNota = document.getElementById('inputDisc').value
+      var curriculo = document.getElementById('fileCurriculo')
+      console.log(curriculo.files)
+      var disc = document.getElementById('fileDisc').value
+      var observacao = document.getElementById('inputObservacao').value
+      let erro = 0
+      if (nome == '') {
+        document.querySelector('#nomeErro').classList.remove('none')
+        erro = 1
+      } else {
+        erro = 0
+        document.querySelector('#nomeErro').classList.add('none')
+      }
+      if (contato == '') {
+        document.querySelector('#contatoErro').classList.remove('none')
+        erro = 1
+      } else {
+        erro = 0
+        document.querySelector('#contatoErro').classList.add('none')
+      }
+      if (fonteRecrutamento == '') {
+        document.querySelector('#fonteErro').classList.remove('none')
+        erro = 1
+      } else {
+        erro = 0
+        document.querySelector('#fonteErro').classList.add('none')
+      }
+      if (dataAgendamento == '') {
+        document.querySelector('#dataErro').classList.remove('none')
+        erro = 1
+      } else {
+        erro = 0
+        document.querySelector('#dataErro').classList.add('none')
+      }
+      if (curso == '') {
+        document.querySelector('#cursoErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#cursoErro').classList.add('none')
+        erro = 0
+      }
+      if (resultado == '') {
+        document.querySelector('#resultadoErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#resultadoErro').classList.add('none')
+        erro = 0
+      }
+      if (processoSeletivo == '') {
+        document.querySelector('#processoErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#processoErro').classList.add('none')
+        erro = 0
+      }
+      if (provaPratica == '') {
+        document.querySelector('#provaErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#provaErro').classList.add('none')
+        erro = 0
+      }
+      if (discNota == '') {
+        document.querySelector('#discErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#aprendizesErro').classList.add('none')
+        erro = 0
+      }
+      if (curriculo.files.length <= 0) {
+        console.log('alo alo marciano')
+        document.querySelector('#curriculoErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#curriculoErro').classList.add('none')
+        erro = 0
+      }
+      if (disc == '') {
+        document.querySelector('#discFileErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#discFileErro').classList.add('none')
+        erro = 0
+      }
+      if (observacao == '') {
+        document.querySelector('#observacaoErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#observacaoErro').classList.add('none')
+        erro = 0
+      }
+      if (erro == 1) {
+        return false
+      } else if (erro == 0) {
+        document.getElementById('verificaCampos').click()
+      }
+    },
     pegaInstrutores () {
       http
         .get('processo-seletivo')
@@ -452,6 +567,15 @@ body {
 
 .btn-confirmar {
   background: var(--color-magenta-principal);
+}
+
+.erro {
+  font-weight: bold;
+  color: red;
+}
+
+.none {
+  display: none;
 }
 
 .btn-status {
