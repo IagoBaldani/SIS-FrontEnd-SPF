@@ -26,6 +26,7 @@
             <input
               type="tel"
               class="form-control"
+              v-mask="['(##) # ####-####']"
               id="inputContato"
               placeholder="(xx) xxxxx-xxxx"
               v-model="candidato.telefone"
@@ -88,7 +89,7 @@
           </div>
           <div class="mb-3">
             <label class="label-form">Prova prática</label>
-            <input type="text" class="form-control" id="inputProvaPratica" placeholder="Prova prática" v-model="candidato.testeLogico"/>
+            <input type="number" class="form-control" id="inputProvaPratica" placeholder="Prova prática" v-model="candidato.testeLogico"/>
           </div>
 
           <div class="mb-3">
@@ -163,7 +164,6 @@
                 <h2 class="nome">Candidato: {{ candidatoForm.fonteRecrutamento }}</h2>
                 <h2 class="nome">Data Agendamento: {{ candidatoForm.dataAgendamento }}</h2>
                 <h2 class="nome">Curso: {{ candidatoForm.curso }}</h2>
-                <h2 class="nome">Currículo:</h2>
                 <h2 class="nome">Observação: {{ candidatoForm.observacao }}</h2>
                 <h2 class="nome">Status: {{ candidatoForm.status }}</h2>
                 <h2 class="nome">Processo Seletivo: {{ candidatoForm.idProcessoSeletivo }}</h2>
@@ -187,8 +187,10 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '@/services/Funcoes'
 import { http } from '@/services/Config'
+import { mask } from 'vue-the-mask'
 
 export default {
+  directives: { mask },
   name: 'App',
   components: {
     Header

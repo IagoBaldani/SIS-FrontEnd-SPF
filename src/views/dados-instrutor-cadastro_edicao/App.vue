@@ -22,7 +22,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
-                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" disabled v-model="instrutor.cpf" type="text" />
+                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" v-mask="['###.###.###-##']" disabled v-model="instrutor.cpf" type="text" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>

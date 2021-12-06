@@ -99,7 +99,7 @@
                 />TCE.xls</a
               >
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">DISC</label><br />
               <a href="#"
                 ><img
@@ -107,7 +107,7 @@
                   alt=""
                 />DISC.pdf</a
               >
-            </div>
+            </div> -->
           </fieldset>
         </div>
         <div class="col-xl-4">

@@ -18,18 +18,19 @@
                             class="form-control"
                             id="nome"
                             disabled
-                            placeholder="Java"
+                            :placeholder="programa.nome"
+                            v-model="modelNome"
                         />
                     </div>
                     <div class="mb-3">
                         <label for="inicio" class="form-label fw-bold mb-0 titulo">Início do Programa</label>
                         <input
-                            type="date"
                             class="form-control"
+                            type="date"
                             id="inicio"
                             required
-                            placeholder="dd/MM/yyyy"
-                            v-model="modelInicio"
+                            :value="programa.inicio"
+                            
                         />
                     </div>
                     <div class="mb-3">
@@ -39,13 +40,13 @@
                             class="form-control"
                             id="termino"
                             required
-                            placeholder="dd/MM/yyyy"
-                            v-model="modelTermino"
+                            :value="programa.termino"
+                            
                         />
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label fw-bold mb-0 titulo">Instrutor</label>
-                        <select class="form-select" id="instrutores" v-model="programaForm.instrutor.nome">
+                        <select class="form-select" id="instrutores" v-model="programa.nomeCoordenador">
                             <option
                                 id="coordenador"
                                 v-for="instrutor in instrutores"
@@ -63,8 +64,7 @@
                             class="form-control"
                             id="turma"
                             required
-                            placeholder="2021.1"
-                            v-model="modelTurma"
+                            :value="programa.turma"
                         />
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                         <div class="mt-3">
                             <ul class="fw-bold subtitulo text-start">
                                 Informações gerais:
-                                <li>Nome: <span class="titulo"> {{ programaForm.nome }} </span></li>
+                                <li>Nome: <span class="titulo"> {{ this.programaForm.nome }} </span></li>
                                 <li>Início do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.inicio)}}</span></li>
                                 <li>Término do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.termino)}}</span></li>
                                 <li>Instrutor: <span class="titulo">{{ programaForm.instrutor.nome }}</span></li>
@@ -135,8 +135,10 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { mask } from 'vue-the-mask'
 
 export default {
+  directives: { mask },
   name: 'App',
   components: {
     Header
@@ -161,6 +163,10 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
   },
+  mounted () {
+    this.getInstrutor()
+    this.getPrograma()
+  },
   methods: {
     putPrograma () {
       http.put('programa', this.programaForm)
@@ -184,21 +190,21 @@ export default {
         })
     },
 
-    getPrograma (id) {
-      http.get(`programa/${id}`)
+    getPrograma () {
+      http.get(`programa/${this.id}`)
         .then(response => {
-          this.programa = response.data
+          console.log(this.programa = response.data)
         })
         .catch(error => {
           console.log(error)
         })
     },
     enviarDados () {
-      this.programaForm.nome = this.modelNome
-      this.programaForm.inicio = this.modelInicio
-      this.programaForm.termino = this.modelTermino
-      this.programaForm.instrutor = this.modelInstrutor
-      this.programaForm.turma = this.modelTurma
+      this.programaForm.nome = document.getElementById('nome').value
+      this.programaForm.inicio = document.getElementById('inicio')
+      this.programaForm.termino = document.getElementById('termino')
+      this.programaForm.instrutor = document.getElementById('coordenador')
+      this.programaForm.turma = document.getElementById('turma')
     },
     carregaDados () {
       this.modelNome = this.programaForm.nome

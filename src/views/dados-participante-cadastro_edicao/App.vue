@@ -27,6 +27,7 @@
               <label class="form-label fw-bold mb-0 titulo">CPF</label>
               <input id="participanteCpf" disabled
                 class="form-control disabledTextInput"
+                v-mask="['###.###.###-##']"
                 v-bind:value="participante.cpf"
                 type="text"
               />
@@ -36,6 +37,7 @@
               <input id="participanteTelefone"
                 class="form-control disabledTextInput"
                 v-bind:value="participante.telefone"
+                v-mask="['(##) # ####-####']"
                 type="tel"
               />
             </div>
@@ -182,8 +184,10 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { mask } from 'vue-the-mask'
 
 export default {
+  directives: { mask },
   name: 'App',
   components: {
     Header
