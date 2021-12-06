@@ -257,28 +257,24 @@ export default {
         document.querySelector('#nomeErro').classList.remove('none')
         erro = 1
       } else {
-        erro = 0
         document.querySelector('#nomeErro').classList.add('none')
       }
-      if (instrutor == '') {
+      if (instrutor == 'Selecione um instrutor') {
         document.querySelector('#instrutorErro').classList.remove('none')
         erro = 1
       } else {
-        erro = 0
         document.querySelector('#instrutorErro').classList.add('none')
       }
       if (dataInicio == '') {
         document.querySelector('#dataIErro').classList.remove('none')
         erro = 1
       } else {
-        erro = 0
         document.querySelector('#dataIErro').classList.add('none')
       }
       if (dataTermino == '') {
         document.querySelector('#dataTErro').classList.remove('none')
         erro = 1
       } else {
-        erro = 0
         document.querySelector('#dataTErro').classList.add('none')
       }
       if (qtdEstagiarios == '') {
@@ -286,21 +282,18 @@ export default {
         erro = 1
       } else {
         document.querySelector('#estagiariosErro').classList.add('none')
-        erro = 0
       }
       if (qtdTrainees == '') {
         document.querySelector('#traineesErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#traineesErro').classList.add('none')
-        erro = 0
       }
       if (qtdAprendizes == '') {
         document.querySelector('#aprendizesErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#aprendizesErro').classList.add('none')
-        erro = 0
       }
       if (erro == 1) {
         return false
