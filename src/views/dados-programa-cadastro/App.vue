@@ -188,7 +188,6 @@ export default {
       let nomeTurma = document.querySelector('#turma').value
       let erro = 0
       if (dataInicio == '') {
-        console.log('slaskajsbdkjasd')
         document.querySelector('#erroDataInicio').classList.remove('none')
         erro = 1
       } else {
@@ -275,6 +274,7 @@ body {
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 
 .none {

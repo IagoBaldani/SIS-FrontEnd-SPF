@@ -232,6 +232,7 @@ body {
   color: red;
   font-size: 18px;
   padding-left: 32px;
+  font-weight: bold;
 }
 
 /* Relatório - Investimento */

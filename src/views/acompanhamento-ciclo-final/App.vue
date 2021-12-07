@@ -446,6 +446,7 @@ export default {
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 
 .enviado {

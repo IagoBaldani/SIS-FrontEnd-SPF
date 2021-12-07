@@ -606,6 +606,7 @@ main .dados_gerais-divCard {
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 
 .dados_gerais-main .card {

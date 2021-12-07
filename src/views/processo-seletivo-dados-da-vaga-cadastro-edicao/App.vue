@@ -18,7 +18,7 @@
           <div>
             <label class="form-label mb-0 mt-3 titulo">Instrutor responsável</label>
             <select class="form-select" v-model="formacoes.nomeInstrutor" id="inputNomeInstrutor">
-              <option selected>Selecione um instrutor</option>
+              <option selected value="0">Selecione um instrutor</option>
               <option v-for="instrutor in instrutores" :key="instrutor" v-bind:value="instrutor.nome">{{ instrutor.nome }}</option>
             </select>
             <p id="instrutorErro" class="mb-0 erro none">Por favor, preencha o campo instrutor</p>
@@ -36,6 +36,7 @@
             <label class="form-label mb-0 mt-3 titulo">Data término</label>
             <input type="date" name="dataTermino" class="form-control" v-model="formacoes.dataFim" id="inputDataFin"/>
             <p id="dataTErro" class="mt-0 erro none">Por favor, preencha o campo data término</p>
+            <p id="dataErro" class="erro none">A data de término deve ser posterior a data de inicio</p>
           </div>
         </div>
         <div class="col-xl-4">
@@ -259,7 +260,7 @@ export default {
       } else {
         document.querySelector('#nomeErro').classList.add('none')
       }
-      if (instrutor == 'Selecione um instrutor') {
+      if (instrutor == 0) {
         document.querySelector('#instrutorErro').classList.remove('none')
         erro = 1
       } else {
@@ -276,6 +277,12 @@ export default {
         erro = 1
       } else {
         document.querySelector('#dataTErro').classList.add('none')
+      }
+      if (dataTermino < dataInicio) {
+        document.querySelector('#dataErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#dataErro').classList.add('none')
       }
       if (qtdEstagiarios == '') {
         document.querySelector('#estagiariosErro').classList.remove('none')

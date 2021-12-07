@@ -395,5 +395,6 @@ body{
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 </style>

@@ -241,6 +241,7 @@
                       aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
+                  <p id="erroObservacao" class="erro none">Por favor, preencha este campo</p>
                 </div>
               </div>
             </div>
@@ -344,41 +345,43 @@ export default {
       var remuneracao = document.querySelector('#remuneracaoModal').value
       var encargos = document.querySelector('#encargosModal').value
       var beneficios = document.querySelector('#beneficiosModal').value
+      var observacao = document.querySelector('#descricaoModal').value
       let erro = 0
       if (participante == 'Participante') {
         document.querySelector('#erroNome').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroNome').classList.add('none')
-        erro = 0
       }
       if (dataLancamento == '') {
         document.querySelector('#erroData').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroData').classList.add('none')
-        erro = 0
       }
       if (remuneracao == '') {
         document.querySelector('#erroRemun').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroRemun').classList.add('none')
-        erro = 0
       }
       if (encargos == '') {
         document.querySelector('#erroEncargos').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroEncargos').classList.add('none')
-        erro = 0
       }
       if (beneficios == '') {
         document.querySelector('#erroBeneficios').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroBeneficios').classList.add('none')
-        erro = 0
+      }
+      if (observacao == '') {
+        document.querySelector('#erroObservacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroObservacao').classList.add('none')
       }
       if (erro == 1) {
         return false
@@ -487,6 +490,7 @@ body {
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 
 .none {
