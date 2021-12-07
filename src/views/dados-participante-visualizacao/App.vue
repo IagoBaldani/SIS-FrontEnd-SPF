@@ -92,11 +92,11 @@
             </div>
             <div class="mb-3">
                 <label class="form-label mb-0 titulo">Donwload DISC</label><br>
-                <p v-on:click="downloadDisc()"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">DISC</p>
+                <p ><img  src="../../assets/imgs/file_upload_black_24dp.svg" class="download" v-on:click="downloadDisc()">DISC</p>
             </div>
             <div class="mb-3">
                 <label class="form-label mb-0 titulo">Donwload TCE</label><br>
-                <p v-on:click="downloadTce()"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">TCE</p>
+                <p><img  src="../../assets/imgs/file_upload_black_24dp.svg" class="download"  v-on:click="downloadTce()">TCE</p>
             </div>
           </fieldset>
         </div>
@@ -458,6 +458,7 @@ textarea {
 
 .download {
   transform: rotate(180deg) !important;
+  cursor:pointer !important;
 }
 
 .modal-body,
