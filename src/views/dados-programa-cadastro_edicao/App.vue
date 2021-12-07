@@ -29,8 +29,8 @@
                             id="inicio"
                             required
                             :value="programa.inicio"
-                            
                         />
+                        <p id="erroDataInicio" class="erro none">Por favor insira uma data válida</p>
                     </div>
                     <div class="mb-3">
                         <label for="termino" class="form-label fw-bold mb-0 titulo">Término do Programa</label>
@@ -40,8 +40,9 @@
                             id="termino"
                             required
                             :value="programa.termino"
-                            
                         />
+                        <p id="erroDataTermino" class="erro none">Por favor insira uma data válida</p>
+                        <p id="erroDataInicioTermino" class="erro none">A data de término deve ser posterior a data de inicio</p>
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label fw-bold mb-0 titulo">Instrutor</label>
@@ -55,6 +56,7 @@
                                 {{ instrutor.nome }}
                             </option>
                         </select>
+                        <p id="erroInstrutor" class="erro none">Por favor escolha um instrutor</p>
                     </div>
                     <div class="mb-3">
                         <label for="turma" class="form-label fw-bold mb-0 titulo">Turma</label>
@@ -62,9 +64,12 @@
                             type="text"
                             class="form-control"
                             id="turma"
+                            v-on:click="getTurmasDoProcesso()"
                             required
                             :value="programa.turma"
                         />
+                        <p id="erroTurma" class="erro none">Por favor insira uma turma</p>
+                        <p id="erroTurmaCadastrada" class="erro none">Esta turma já está cadastrada, por favor insira outra</p>
                     </div>
                 </div>
                 <div class="col-xl-4"></div>
@@ -77,10 +82,9 @@
                             type="button"
                             name="botao-ok"
                             class="mt-5 form-control submit"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                            v-on:click="enviarDados"/>
+                            v-on:click="validaForm()"/>
                     </div>
+                    <p id="chamaModal" hidden v-on:click="enviarDados" data-bs-toggle="modal" data-bs-target="#exampleModal"></p>
                     <div class="col-xl-4"></div>
                     <div class="col-xl-2"></div>
                 </div>
@@ -146,6 +150,7 @@ export default {
     return {
       id: '',
       responseStatus: '',
+      turmas: [],
       instrutores: [],
       programa: {},
       programaForm: {
@@ -181,17 +186,68 @@ export default {
           console.log(error)
         })
     },
+    validaForm () {
+      let dataInicio = document.querySelector('#inicio').value
+      let dataFim = document.querySelector('#termino').value
+      let nomeInstrutor = document.querySelector('#instrutores').value
+      let nomeTurma = document.querySelector('#turma').value
+      let erro = 0
+      if (dataInicio == '') {
+        document.querySelector('#erroDataInicio').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDataInicio').classList.add('none')
+      }
+      if (dataFim == '') {
+        document.querySelector('#erroDataTermino').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDataTermino').classList.add('none')
+      }
+      if (dataFim < dataInicio) {
+        document.querySelector('#erroDataInicioTermino').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDataInicioTermino').classList.add('none')
+      }
+      if (nomeInstrutor == '') {
+        document.querySelector('#erroInstrutor').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroInstrutor').classList.add('none')
+      }
+      if (nomeTurma == '') {
+        document.querySelector('#erroTurma').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTurma').classList.add('none')
+      }
+      this.turmas.forEach(turma => {
+        if (turma.nomeTurma == nomeTurma) {
+          erro = 1
+          document.querySelector('#erroTurmaCadastrada').classList.remove('none')
+        }
+        if (turma.nometurma == this.programa.nomeTurma) {
+          erro = 0
+          document.querySelector('#erroTurmaCadastrada').classList.add('none')
+        }
+      })
+      if (erro == 1) {
+        return false
+      } else {
+        document.querySelector('#erroTurmaCadastrada').classList.add('none')
+        document.querySelector('#chamaModal').click()
+      }
+    },
     getInstrutor () {
       http.get('instrutor/status/ATIVO')
         .then(response => {
           this.instrutores = response.data
-          console.log(this.instrutores[0].nome)
         })
         .catch(error => {
           console.log(error)
         })
     },
-
     getPrograma () {
       http.get(`programa/${this.id}`)
         .then(response => {
@@ -207,6 +263,10 @@ export default {
       this.programaForm.dataFim = document.getElementById('termino').value
       this.programaForm.instrutor = document.getElementById('instrutores').value
       this.programaForm.turma = document.getElementById('turma').value
+    },
+    getTurmasDoProcesso () {
+      http.get(`programa/buscar-programas-por-nome/${this.programa.nome}`)
+        .then(response => console.log(this.turmas = response.data))
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -236,6 +296,14 @@ export default {
 <style>
 body {
     background-color: #ebebeb !important;
+}
+
+.erro {
+  color: red;
+}
+
+.none {
+  display: none;
 }
 
 .titulo {
