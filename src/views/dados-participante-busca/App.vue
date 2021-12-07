@@ -36,20 +36,20 @@
           <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table class="table table-bordered tabela mt-4 ">
               <tbody align="center">
-              <tr class="nome" id="participante" v-for="participante in participantes" v-bind:key="participante">
-                <th scope="row" width="50">{{participante.cpf}}</th>
+              <tr class="nome" id="participante" v-for="(participante, index) in participantes" v-bind:key="participante">
+                <th scope="row" width="50">{{++index}}</th>
                 <td id="info-nome">{{participante.nome}}</td>
                 <td id="info-programa">{{participante.programa}}</td>
                 <td id="info-status"
                     v-bind:class="(participante.statusAtivo == 'ATIVO')?'ativo':'inativo'">
                   {{(participante.statusAtivo == 'ATIVO')?'Ativo':'Inativo'}}</td>
                 <td class="imagem rounded" width="50">
-                  <a :href="'/dados-participante-cadastro_edicao?id=' + participante.cpf ">
+                  <a  :href="'/dados-participante-cadastro_edicao?id=' + participante.cpf ">
                     <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem" />
                   </a>
                 </td>
                 <td class="imagem-coluna rounded" width="50">
-                  <a :href="'/dados-participante-visualizacao?id=' + participante.cpf">
+                  <a  :href="'/dados-participante-visualizacao?id=' + participante.cpf">
                     <img src="@/assets/imgs/account_circle_white_24dp.svg">
                   </a>
                 </td>

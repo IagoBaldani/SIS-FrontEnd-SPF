@@ -108,7 +108,7 @@
 
           <div class="mb-3">
             <label class="label-form mb-0 titulo">Currículo candidato</label><br>
-            <input type="file" class="form-control" id="fileCurriculo">
+            <input type="file" class="form-control" id="fileCurriculo"  accept="application/pdf">
             <p id="curriculoErro" class="none erro">Por favor, preencha o campo currículo</p>
           </div>
 
