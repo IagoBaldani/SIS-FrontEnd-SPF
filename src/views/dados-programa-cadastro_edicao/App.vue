@@ -168,10 +168,10 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
     this.programaForm.id = dadosUrl.id
+    this.getPrograma()
   },
   mounted () {
     this.getInstrutor()
-    this.getPrograma()
   },
   methods: {
     putPrograma () {
@@ -224,12 +224,15 @@ export default {
       }
       this.turmas.forEach(turma => {
         if (turma.nomeTurma == nomeTurma) {
+          console.log('Turma ja existente')
           erro = 1
           document.querySelector('#erroTurmaCadastrada').classList.remove('none')
-        }
-        if (turma.nometurma == this.programa.nomeTurma) {
-          erro = 0
-          document.querySelector('#erroTurmaCadastrada').classList.add('none')
+          if (nomeTurma == this.programa.turma) {
+            console.log('Não tem erro')
+            erro = 0
+            document.querySelector('#erroTurmaCadastrada').classList.add('none')
+          }
+          return
         }
       })
       if (erro == 1) {
