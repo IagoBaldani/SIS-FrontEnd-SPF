@@ -164,6 +164,21 @@
     </div>  
   </form>  
     <!-- fim do formulário -->
+
+    
+    <!-- Modal de confirmação -->
+  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração Efetuada com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </main>
  
 </template>
@@ -221,6 +236,9 @@ export default {
       })
       return data
     },
+    abrirModal() {
+        document.getElementById('abreModalInvisivel').click()
+      },
     getCargo (cpf) {
       http.get(`participante/completo/${cpf}`)
         .then(response => {
@@ -341,7 +359,10 @@ export default {
           }
         })
         .then(response => {
-          window.location.href = 'http://localhost:8080/dados-participante-busca'
+          this.abrirModal()
+          setTimeout(function () {
+               window.location.href = 'http://localhost:8080/dados-participante-busca'
+            }, 1500)
         })
         .catch(error => {
           console.log(error)
@@ -430,7 +451,10 @@ textarea {
   min-height: 55vh;
   flex-direction: column;
 }
-
+.modal-size {
+    width: 801px !important;
+    max-width: 801px !important;
+}
 .submit-modal,
 .cancel-modal {
   color: white !important;
