@@ -24,15 +24,12 @@
               <option disabled selected value="0">Turmas</option>
               <option id="turma" v-for="turma in turmas" v-bind:key="turma.id" v-bind:value="turma.nomeTurma">{{turma.nomeTurma}}</option>
             </select>
+            <p class="none erro mt-2 h5" id="selecioneTurma">Selecione uma turma!</p>
+            <p class="none erro mt-2 h5" id="insiraFiltro">Insira algum filtro!</p>
           </div>
         </div>
         <div class="col-xl-7" id="participantes">
-          <div class="aviso">
-            <h4 class="titulo fw-bold"> Não foi encontrado nenhum resultado com os parâmetros informados
-            </h4>
-            <button class="mt-3 form-control recarregar" @click="recarregaLista"> RECARREGAR
-              LISTA</button>
-          </div>
+          <h4 id="naoEncontrado" class="none text-center fw-bold">Nenhum resultado foi encontrado, recarregue ou busque novamente</h4>
           <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table class="table table-bordered tabela mt-4 ">
               <tbody align="center">
@@ -61,11 +58,12 @@
       </div>
       <div class="row justify-content-evenly">
         <div class="col-xl-4">
-          <button class="mt-5 form-control submit" @click="filtraDados()">BUSCAR</button>
+          <button id="recarrega" class="mt-3 form-control none recarregar" onclick="window.location.reload()"> RECARREGAR
+              LISTA</button>
+          <button  class="mt-1 form-control submit" @click="filtraDados()">BUSCAR</button>
         </div>
-        <div class="col-xl-7 justify-content-end d-flex">
-          <a href="/dados-candidato-participante-elegibilidade"
-             class="mt-5 form-control cadastro d-flex justify-content-center">SELEÇÃO PARA NOVO CADASTRO </a>
+        <div class="col-xl-7 justify-content-end  align-items-end d-flex">
+            <button class="mt-1 form-control submit d-flex w-50 justify-content-center cadastro" onclick="location.href='/dados-candidato-participante-elegibilidade'">SELEÇÃO PARA NOVO CADASTRO</button>
         </div>
       </div>
     </div>
@@ -105,28 +103,35 @@ export default {
         })
     },
     filtraDados () {
+      document.querySelector('#naoEncontrado').classList.add('none')
       let programaProcurado = document.querySelector('#filtro-programa').value
       let nomeProcurado = document.querySelector('#filtro-nome').value
       let turmaProcurada = document.querySelector('#filtro-turmas').value
-      console.log(nomeProcurado)
-      if (nomeProcurado == '' && programaProcurado == '0' && turmaProcurada == '0') {
-        http.get('participante')
-          .then(response => {
-            console.log(this.participantes = response.data)
-          })
-          .catch(error => {
-            console.log(error)
-          })
+      if (programaProcurado != '0' && turmaProcurada == '0') {
+        document.querySelector('#insiraFiltro').classList.add('none')
+        document.querySelector('#selecioneTurma').classList.remove('none')
       }
-      if (nomeProcurado == '') {
+      else if (nomeProcurado == '' && programaProcurado == '0' && turmaProcurada == '0') {
+        document.querySelector('#selecioneTurma').classList.add('none')
+        document.querySelector('#insiraFiltro').classList.remove('none')
+      }
+      else if (nomeProcurado == '') {
+        document.querySelector('#selecioneTurma').classList.add('none')
+        document.querySelector('#insiraFiltro').classList.add('none')
+        document.querySelector('#recarrega').classList.remove('none')
         http.get(`participante/0/${programaProcurado}/${turmaProcurada}`)
           .then(response => {
             this.participantes = response.data
+            if (response.data.length == 0) document.querySelector('#naoEncontrado').classList.remove('none')
           })
       } else {
+        document.querySelector('#selecioneTurma').classList.add('none')
+        document.querySelector('#insiraFiltro').classList.add('none')
+        document.querySelector('#recarrega').classList.remove('none')
         http.get(`participante/${nomeProcurado}/${programaProcurado}/${turmaProcurada}`)
           .then(response => {
             this.participantes = response.data
+            if (response.data.length == 0) document.querySelector('#naoEncontrado').classList.remove('none')
           })
       }
     },
@@ -210,11 +215,10 @@ a{
 }
 .cadastro{
   background-color: #FFB700 !important;
-  max-width: 575px !important;
 }
 .recarregar{
   background-color: #090B2E !important;
-  max-width: 50%;
+  max-width: 100%;
   cursor: pointer !important;
   transition: all linear 0.3s !important;
 }
@@ -235,6 +239,15 @@ a{
 .imagem-coluna{
   background-color: #FFB700 !important;
 }
+.none {
+  display: none;
+}
+
+.erro {
+  color: red;
+  font-weight: bold;
+}
+
 .my-custom-scrollbar {
   position: relative;
   height: 59vh;
