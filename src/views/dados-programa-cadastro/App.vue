@@ -43,6 +43,7 @@
                             placeholder="dd/MM/yyyy"
                         />
                         <p id="erroDataTermino" class="erro none">Por favor insira uma data válida</p>
+                        <p id="erroDataInicioTermino" class="erro none">A data de término deve ser posterior a data de inicio</p>
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label fw-bold mb-0 titulo">Instrutor</label>
@@ -192,21 +193,24 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroDataInicio').classList.add('none')
-        erro = 0
       }
       if (dataFim == '') {
         document.querySelector('#erroDataTermino').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroDataTermino').classList.add('none')
-        erro = 0
+      }
+      if (dataFim < dataInicio) {
+        document.querySelector('#erroDataInicioTermino').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDataInicioTermino').classList.add('none')
       }
       if (nomeInstrutor == '') {
         document.querySelector('#erroInstrutor').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroInstrutor').classList.add('none')
-        erro = 0
       }
       if (nomeTurma == '') {
         document.querySelector('#erroTurma').classList.remove('none')
