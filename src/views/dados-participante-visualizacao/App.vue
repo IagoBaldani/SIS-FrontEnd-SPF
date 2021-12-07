@@ -90,11 +90,13 @@
                 readonly
               />
             </div>
-            <div class="mb-5 mt-5"  >
-                <a v-on:click="downloadTce()"   class="btn-registrar pointer" > DOWNLOAD TCE</a>
+            <div class="mb-3">
+                <label class="form-label mb-0 titulo">Donwload DISC</label><br>
+                <p v-on:click="downloadDisc()"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">DISC</p>
             </div>
-             <div class="mb-3" >
-                <a @click="downloadDisc()"  class="btn-registrar pointer" > DOWNLOAD DISC</a>
+            <div class="mb-3">
+                <label class="form-label mb-0 titulo">Donwload TCE</label><br>
+                <p v-on:click="downloadTce()"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">TCE</p>
             </div>
           </fieldset>
         </div>
