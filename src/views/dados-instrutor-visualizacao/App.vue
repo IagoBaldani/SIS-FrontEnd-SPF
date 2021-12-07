@@ -67,10 +67,10 @@
                 </div>
                 <div class="modal-body d-flex justify-content-between">
                     <div>
-                        <h1 v-if="instrutor.status == 'ATIVO'" class="modal-title form-label fw-bold mb-0 titulo"> Deseja confirmar a desativação do
+                        <h1 v-if="instrutor.status == 'ATIVO'" class="modal-title form-label fw-bold mb-0 titulo"> Deseja inativar o
                             seguinte instrutor? </h1>
 
-                        <h1 v-else class="modal-title form-label fw-bold mb-0 titulo"> Deseja confirmar a ativação do
+                        <h1 v-else class="modal-title form-label fw-bold mb-0 titulo"> Deseja ativar o
                             seguinte instrutor? </h1>
                     </div>
                     <div class="conteudomodal" id="instrutor-modal">
