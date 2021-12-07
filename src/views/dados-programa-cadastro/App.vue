@@ -67,9 +67,9 @@
                             class="form-control"
                             id="turma"
                             required
-                            placeholder="Turma I"
                         />
                         <p id="erroTurma" class="erro none">Por favor insira uma turma</p>
+                        <p id="erroTurmaCadastrada" class="erro none">Esta turma já está cadastrada, por favor insira outra</p>
                     </div>
                 </div>
                 <div class="col-xl-4"></div>
@@ -148,6 +148,7 @@ export default {
     return {
       id: '',
       responseStatus: '',
+      turmas: [],
       instrutores: [],
       programa: {},
       processo: {},
@@ -164,6 +165,7 @@ export default {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
+    this.getTurmasDoProcesso()
   },
   mounted () {
     this.getProcesso()
@@ -188,7 +190,6 @@ export default {
       let nomeTurma = document.querySelector('#turma').value
       let erro = 0
       if (dataInicio == '') {
-        console.log('slaskajsbdkjasd')
         document.querySelector('#erroDataInicio').classList.remove('none')
         erro = 1
       } else {
@@ -218,9 +219,16 @@ export default {
       } else {
         document.querySelector('#erroTurma').classList.add('none')
       }
+      this.turmas.forEach(turma => {
+        if (turma.nomeTurma == nomeTurma) {
+          erro = 1
+          document.querySelector('#erroTurmaCadastrada').classList.remove('none')
+        }
+      })
       if (erro == 1) {
         return false
       } else {
+        document.querySelector('#erroTurmaCadastrada').classList.add('none')
         document.querySelector('#chamaModal').click()
       }
     },
@@ -257,6 +265,10 @@ export default {
       })
 
       return data
+    },
+    getTurmasDoProcesso () {
+      http.get(`programa/buscar-programas-por-processo/${this.id}`)
+        .then(response => console.log(this.turmas = response.data))
     },
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)
