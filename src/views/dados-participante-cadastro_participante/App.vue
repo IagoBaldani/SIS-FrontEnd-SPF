@@ -23,6 +23,7 @@
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputCpf">CPF</label>
               <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" type="text" v-mask="['###.###.###-##']" maxlength="16" v-model="cadastroParticipanteForm.cpf" >
+              <p id="erroCpf" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputContato">Contato</label>
@@ -39,26 +40,31 @@
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputInstEnsino">Instituição de Ensino</label>
               <input  class="form-control" id="inputInstEnsino" type="text" v-model="cadastroParticipanteForm.instituicaoEnsino">
+              <p id="erroinstituicaoEnsino" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputCurso">Curso</label>
               <input  class="form-control" id="inputCurso" type="text" v-model="cadastroParticipanteForm.curso">
+              <p id="erroCurso" class="none erro">Por favor, preencha este campo</p>
             </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputTerminoGraduacao">Término da graduação</label>
               <input  class="form-control" id="inputTerminoGraduacao" placeholder="20/12/2021" type="date" v-model="cadastroParticipanteForm.terminoGraduacao">
+              <p id="erroTerminoGraduacao" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
                 <label for="cargo" class="form-label fw-bold h5 titulo">Cargo</label>
                 <select class="form-select" id="filtro-programa" v-model="remuneracao">
                     <option v-for="cargo in cargos" :value="cargo" :key="cargo.id" >{{ cargo.nome }}</option>
                 </select>
+                <p id="erroCargo" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
-              <input  class="form-control" type="email" v-model="cadastroParticipanteForm.email">
+              <input  class="form-control" id="inputEmail" type="email" v-model="cadastroParticipanteForm.email">
+              <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
             </div>
             <!-- <div>
               <label for="file" class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
@@ -70,12 +76,13 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Turma</label>
-                <select required class="form-select" v-on:click="buscarTurmasDeUmaFormacao()" v-model="turmaSelecionada">
+                <select required class="form-select" id="selectTurma" v-on:click="buscarTurmasDeUmaFormacao()" v-model="turmaSelecionada">
                     <option class="relatorio_opcao" disabled selected>Turma</option>
                     <option class="relatorio_opcao" v-for="(turmasProgramaCandidato, id) in turmasProgramaCandidatos"
                     :key="id" :value="turmasProgramaCandidato">{{turmasProgramaCandidato.turmas}}
                     </option>
                 </select>
+                <p id="erroTurma" class="none erro">Por favor, preencha este campo</p>
             </div>
             <!-- <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Coordenador Técnico</label>
@@ -94,9 +101,10 @@
       </div>
       <div class="row justify-content-evenly">
         <div class="col-xl-4 ">
-          <button v-on:click="popularCargoTurma()" type="button" class="btn submit form-control" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <button v-on:click="validaForm()" type="button" class="btn submit form-control" >
             CONFIRMAR
           </button>
+          <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="popularCargoTurma()" ></p>
         </div>
         <div class="col-xl-4"></div>
         <div class="col-xl-2"></div>
@@ -244,6 +252,63 @@ export default {
       this.cadastroParticipanteForm.idRemuneracao = this.remuneracao.id
       this.cadastroParticipanteForm.idPrograma = this.turmaSelecionada.id
     },
+    validaForm () {
+      var cpf = document.getElementById('inputCpf').value
+      var instituicaoEnsino = document.getElementById('inputInstEnsino').value
+      var curso = document.getElementById('inputCurso').value
+      var terminoGraduacao = document.getElementById('inputTerminoGraduacao').value
+      var cargo = document.getElementById('filtro-programa').value
+      var email = document.getElementById('inputEmail').value
+      var turma = document.getElementById('selectTurma').value
+      let erro = 0
+      if (cpf == '') {
+        document.querySelector('#erroCpf').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroCpf').classList.add('none')
+      }
+      if (instituicaoEnsino == '') {
+        document.querySelector('#erroinstituicaoEnsino').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroinstituicaoEnsino').classList.add('none')
+      }
+      if (curso == '') {
+        document.querySelector('#erroCurso').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroCurso').classList.add('none')
+      }
+      if (terminoGraduacao == '') {
+        document.querySelector('#erroTerminoGraduacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTerminoGraduacao').classList.add('none')
+      }
+      if (cargo  == '') {
+        document.querySelector('#erroCargo').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroCargo').classList.add('none')
+      }
+      if (email == '') {
+        document.querySelector('#erroEmail').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroEmail').classList.add('none')
+      }
+      if (turma == '') {
+        document.querySelector('#erroTurma').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTurma').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        document.getElementById('verificaCampos').click()
+      }
+    },
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
@@ -344,6 +409,13 @@ body{
 }
 .envio-arquivo{
   cursor: pointer;
+}
+.none {
+  display: none;
+}
+.erro {
+  color: red;
+  font-weight: bold;
 }
 @media (max-width: 1200px) {
   .editar{
