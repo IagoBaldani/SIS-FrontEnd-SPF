@@ -35,7 +35,7 @@
               </h4>
               <button
                 class="mt-3 form-control recarregar"
-                @click="recarregaLista"
+                onclick="window.location.reload()"
               >
                 RECARREGAR LISTA
               </button>

@@ -15,22 +15,27 @@
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Nome</label>
                             <input class="form-control" id="inputNome"  placeholder="Nome" v-model="instrutor.nome" type="text" />
+                            <p id="erroNome" class="none erro">Por favor, preencha este campo</p>
                         </div>
                        <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Contato</label>
                             <input class="form-control" id="inputTelefone" placeholder="(xx)xxxxx-xxxx" v-mask="['(##) # ####-####']" v-model="instrutor.telefone" type="tel" />
+                            <p id="erroContato" class="none erro">Por favor, preencha este campo</p>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
                             <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" :v-model="instrutor.cpf" v-mask="['###.###.###-##']" type="text" />
+                            <p id="erroCpf" class="none erro">Por favor, preencha este campo</p>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
                             <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutor.email" type="email" />
+                            <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
                         </div>
                 </div>
                 <div class="col-xl-4">
-
+                  <p id="invisivel" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" v-on:click="enviarDados()"></p>
                 </div>
                 <div class="col-xl-2">
                 </div>
@@ -41,9 +46,8 @@
                      <div
                         type="button"
                         class="bt"
-                        @click.prevent="enviarDados()"
-                        data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"
+                        v-on:click="validaForm()"
+                        
                       >
                     <button type="button" class="btn submit form-control" >
                         CONFIRMAR
@@ -153,6 +157,42 @@ export default {
           console.log(`Erro: ${erro}`)
         })
     },
+    validaForm () {
+      var nome = document.getElementById('inputNome').value
+      var contato = document.getElementById('inputTelefone').value
+      var cpf = document.getElementById('inputCpf').value
+      var email = document.getElementById('inputEmail').value
+      let erro = 0
+      if (nome == '') {
+        document.querySelector('#erroNome').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNome').classList.add('none')
+      }
+      if (contato == '') {
+        document.querySelector('#erroContato').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroContato').classList.add('none')
+      }
+      if (cpf == '') {
+        document.querySelector('#erroCpf').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroCpf').classList.add('none')
+      }
+      if (email == '') {
+        document.querySelector('#erroEmail').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroEmail').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        document.getElementById('invisivel').click()
+      }
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -225,6 +265,15 @@ body{
 
 .subtitulo{
     color: #737373;
+}
+
+.erro {
+  color: red;
+  font-weight: bold;
+}
+
+.none {
+  display: none;
 }
 
 textarea{
