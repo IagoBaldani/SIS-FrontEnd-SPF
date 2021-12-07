@@ -102,6 +102,20 @@
         </div>
       </div>
     </div>
+
+     <!-- Modal de confirmação -->
+  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração Efetuada com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </main>
 </template>
 
@@ -157,6 +171,9 @@ export default {
           console.log(`Erro: ${erro}`)
         })
     },
+    abrirModal() {
+        document.getElementById('abreModalInvisivel').click()
+      },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -210,7 +227,10 @@ export default {
         http
           .put(`instrutor/altera/${cpf}`, this.instrutorForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+            this.abrirModal()
+             setTimeout(function () {
+                window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+             }, 1521)
           })
           .catch(error => {
             console.log(error)
@@ -273,7 +293,11 @@ textarea{
   background-color: #D3CACA !important;
   border: 1px solid #BCB3B3 !important;
 }
-
+.modal-size {
+    height:25px  !important;
+    width: 801px !important;
+    max-width: 801px !important;
+}
 .modal {
   display: none;
 }
@@ -327,10 +351,6 @@ button .largura {
 
 .input-arquivo{
     display: none;
-}
-
-.modal-content{
-    height: 80vh !important;
 }
 
 .ativo, .inativo{
