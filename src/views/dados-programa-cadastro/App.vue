@@ -287,6 +287,7 @@ body {
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 
 .none {

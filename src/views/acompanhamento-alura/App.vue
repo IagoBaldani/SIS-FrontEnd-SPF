@@ -423,6 +423,7 @@ body {
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 
 .enviado {

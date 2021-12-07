@@ -143,7 +143,6 @@ export default {
   methods: {
     enviarDados () {
       this.instrutorForm.nome = document.querySelector('#inputNome').value
-      this.instrutorForm.status = 'ATIVO'
       this.instrutorForm.cpf = document.getElementById('inputCpf').value
       this.instrutorForm.telefone = document.querySelector('#inputTelefone').value
       this.instrutorForm.email = document.querySelector('#inputEmail').value
