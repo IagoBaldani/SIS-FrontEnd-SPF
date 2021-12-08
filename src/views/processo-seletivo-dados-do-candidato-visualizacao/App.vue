@@ -54,7 +54,7 @@
                                 <input name="disc" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.notaDisc">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label mb-0 titulo">Currículo candidato</label><br>
+                                <label class="form-label mb-0 titulo ">Currículo candidato</label><br>
                                 <p @click="downloadCurriculo"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">curriculo.pdf</p>
                             </div>
                             <!-- <div class="mb-3">
@@ -170,6 +170,7 @@ textarea{
 
 .download{
     transform: rotate(180deg) !important;
+    cursor:pointer;
 }
 
 .subtitulo{

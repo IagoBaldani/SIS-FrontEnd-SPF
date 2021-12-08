@@ -81,7 +81,7 @@
         </div>
         <div class="col-xl-4">
           <div>
-            <button type="button" class="mt-4 btn btn-cancelar" v-if="tipo.tipoDaPagina == 'edicao' && formacoes.status != 'FINALIZADA'" @click="criaFormacao()">FINALIZAR PROCESSO SELETIVO</button>
+            <button type="button" class="mt-4 btn btn-cancelar" v-if="tipo.tipoDaPagina == 'edicao' && formacoes.status != 'FINALIZADA'" v-on:click="criaFormacao()">FINALIZAR PROCESSO SELETIVO</button>
           </div>
         </div>
         <div class="col-xl-2"></div>
@@ -145,6 +145,34 @@
       </div>
     </div>
   </div>
+
+   <!-- Modal de confirmação cadastro -->
+  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Cadastro efetuado com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação edição -->
+  <p class="none" id="abreModalInvisivelEdicao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoEdicao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacaoEdicao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração efetuada com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -308,22 +336,25 @@ export default {
         document.getElementById('verificaCampos').click()
       }
     },
-    criaFormacao () {
-      const dadosUrl = this.pegaDadosUrl()
-      var id = dadosUrl.id
+     criaFormacao () {
+       const dadosUrl = this.pegaDadosUrl()
+       var id = dadosUrl.id
 
-      this.geraFormulario()
-      this.formacoesForm.status = 'FINALIZADA'
+       this.geraFormulario()
+       this.formacoesForm.status = 'FINALIZADA'
 
-      http
-        .put(`processo-seletivo/${id}`, this.formacoesForm)
-        .then(response => {
-          window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
-        })
-        .catch(error => {
+       http
+         .put(`processo-seletivo/${id}`, this.formacoesForm)
+         .then(response => {
+          this.abrirModalEdicao()
+          setTimeout(function () {
+                window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+           }, 1521)
+         })
+         .catch(error => {
           console.log(error)
-        })
-    },
+         })
+     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -346,6 +377,12 @@ export default {
           console.log(error)
         })
     },
+    abrirModal() {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    abrirModalEdicao() {
+      document.getElementById('abreModalInvisivelEdicao').click()
+    },
     getInstrutores () {
       http
         .get('instrutor')
@@ -360,13 +397,17 @@ export default {
       const dadosUrl = this.pegaDadosUrl()
       var tipo = dadosUrl.tipo
       var id = dadosUrl.id
-
+      console.log(tipo)
       if (tipo == 'edicao') {
         this.formacoesForm.status = 'EM_ANDAMENTO'
+        console.log(tipo)
         http
           .put(`processo-seletivo/${id}`, this.formacoesForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+            this.abrirModalEdicao()
+            setTimeout(function () {
+               window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+            }, 1521)
           })
           .catch(error => {
             console.log(error)
@@ -376,7 +417,10 @@ export default {
         http
           .post('processo-seletivo', this.formacoesForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+            this.abrirModal()
+            setTimeout(function () {
+               window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+            }, 1521)
           })
           .catch(error => {
             console.log(error)
@@ -430,7 +474,10 @@ textarea {
   color: #fff !important;
   width: 100%;
 }
-
+.modal-size {
+    width: 801px !important;
+    max-width: 801px !important;
+}
 .btn-cancelar {
   background-color: #ffb700 !important;
   font-weight: bold !important;
