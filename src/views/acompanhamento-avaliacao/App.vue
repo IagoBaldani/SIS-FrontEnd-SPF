@@ -59,6 +59,7 @@
                         <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
                         <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
                         <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos! Incluindo os campos do desempenho</p>
+                        <p class="erro h4 none mt-3" id="deletado">Registro deletado com sucesso!</p>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
@@ -458,6 +459,10 @@ export default {
         .delete(`avaliacao/deletar/${this.avaliacaoModal.id}`)
         .then((response) => {
           this.getAvaliacao()
+          document.querySelector('#deletado').classList.remove('none')
+          setTimeout(function () {
+            document.querySelector('#deletado').classList.add('none')
+          }, 2000)
         })
         .catch((error) => {
           console.log(error)
