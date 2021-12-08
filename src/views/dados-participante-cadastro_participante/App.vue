@@ -51,13 +51,13 @@
         <div class="col-xl-4">
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputTerminoGraduacao">Término da graduação</label>
-              <input  class="form-control" id="inputTerminoGraduacao" placeholder="20/12/2021" type="date" v-model="cadastroParticipanteForm.terminoGraduacao">
+              <input  class="form-control" id="inputTerminoGraduacao"  type="date" v-model="cadastroParticipanteForm.terminoGraduacao">
               <p id="erroTerminoGraduacao" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
-                <label for="cargo" class="form-label fw-bold h5 titulo">Cargo</label>
-                <select class="form-select" id="filtro-programa" v-model="remuneracao">
-                    <option v-for="cargo in cargos" :value="cargo" :key="cargo.id" >{{ cargo.nome }}</option>
+                <label for="cargo"  id="selectRemuneracao" class="form-label fw-bold h5 titulo">Cargo</label>
+                <select class="form-select" id="filtro-programa" v-model="remuneracao.id">
+                    <option v-for="cargo in cargos" :value="cargo.id" :key="cargo.id" >{{ cargo.nome }}</option>
                 </select>
                 <p id="erroCargo" class="none erro">Por favor, preencha este campo</p>
             </div>
@@ -68,13 +68,14 @@
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold h5 titulo">TCE<br></label>
-                <input id="fileTce" @change="formatoUpload()"   type="file" accept="application/pdf"/>
+                <input id="fileTce"   type="file" accept="application/pdf"/>
                 <label for="file" class="btn-file d-flex justify-content-between">
                 </label>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Nome do Programa</label>
-              <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.nome" type="text">
+              <p id="idPrograma" :value="nomeProgramaCandidato.id" class="none"></p>
+              <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.id"  type="text">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Turma</label>
@@ -180,6 +181,7 @@ export default {
       cargos: [],
       turmasPrograma: [],
       nomePrograma: '',
+      idProgramaCandidato: '',
       cadastroParticipanteForm: {
         cpf: '',
         instituicaoEnsino: '',
@@ -218,23 +220,20 @@ export default {
       }     
     },
     enviarDados () {
-      // var formData = new FormData()
-      // var comprovanteRematricula = document.getElementById('file').files[0] 
       var formData = new FormData() 
       var arquivo = document.getElementById('fileTce').files[0]
-          formData.append('cpf', this.cadastroParticipanteForm.cpf)
-          formData.append('instituicaoEnsino', this.cadastroParticipanteForm.instituicaoEnsino)
-          formData.append('curso', this.cadastroParticipanteForm.curso)
-          formData.append('terminoGraduacao', this.cadastroParticipanteForm.terminoGraduacao)
-          formData.append('idRemuneracao', this.cadastroParticipanteForm.idRemuneracao)
-          formData.append('idCandidato', this.cadastroParticipanteForm.idCandidato)
-          formData.append('idPrograma', this.cadastroParticipanteForm.idPrograma)
-          formData.append('email', this.cadastroParticipanteForm.email)
+          formData.append('cpf', this.cadastroParticipanteForm.cpf) 
+          formData.append('instituicaoEnsino',this.cadastroParticipanteForm.instituicaoEnsino )
+          formData.append('curso',this.cadastroParticipanteForm.curso) 
+          formData.append('terminoGraduacao',document.getElementById('inputTerminoGraduacao'))
+          formData.append('idRemuneracao', this.remuneracao.id)
+          formData.append('idCandidato', this.id)
+          formData.append('idPrograma', document.getElementById('nomeProgramaCandidato').value)
+          formData.append('email', this.cadastroParticipanteForm.email) 
           formData.append('tce', arquivo)
-          console.log(formData)
-
-      http
-        .post('participante/salvarParticipante', this.formData, { 
+          console.log(this.remuneracao.id)
+        http
+        .post('participante/salvarParticipante', formData, { 
           headers: {
             'Content-Type': 'multipart/form-data' 
           }
@@ -354,7 +353,8 @@ export default {
     
     http.get(`candidato/programa-candidato-nome/${this.id}`)
       .then(response => (this.nomeProgramaCandidato = response.data))  
-  }
+  },
+  
 }
 </script>
 
