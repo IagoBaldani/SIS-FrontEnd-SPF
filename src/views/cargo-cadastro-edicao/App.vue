@@ -127,14 +127,28 @@
       </div>
     </div>
   </div>
- <!-- Modal de confirmação -->
+ <!-- Modal de confirmação edição -->
   <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
     <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-size">
             <div class="modal-content p-5 grey-background">
                 <div class="row mb-5">
                     <div class="col">
-                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração Efetuada com sucesso</h3>
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração efetuada com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Modal de confirmação cadastro -->
+  <p class="none" id="abreModalInvisivelCadastro" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoCadastro" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacaoCadastro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Cadastro efetuado com sucesso</h3>
                     </div>
                 </div>
             </div>
@@ -208,6 +222,9 @@ export default {
     abrirModal() {
         document.getElementById('abreModalInvisivel').click()
       },
+    abrirModalCadastro() {
+        document.getElementById('abreModalInvisivelCadastro').click()
+      },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -236,7 +253,7 @@ export default {
         http
           .post('remuneracao', this.cargoForm)
           .then(response => {
-            this.abrirModal()
+            this.abrirModalCadastro()
             setTimeout(function () {
             window.location.href = 'http://localhost:8080/cargo-listar'
           },1521)

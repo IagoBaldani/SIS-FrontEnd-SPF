@@ -242,6 +242,9 @@ export default {
       let qtdTrainees = document.querySelector('#inputQtdTrainees').value
       this.carregaQuantidade(qtdEstagiarios, qtdTrainees, qtdAprendizes)
     },
+     abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     carregaQuantidade (qtdE, qtdT, qtdA) {
       qtdA = parseInt(qtdA)
       qtdT = parseInt(qtdT)
