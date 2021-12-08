@@ -66,10 +66,12 @@
               <input  class="form-control" id="inputEmail" type="email" v-model="cadastroParticipanteForm.email">
               <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
             </div>
-            <!-- <div>
-              <label for="file" class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
-              <input id="file" @change="formatoUpload()" type="file" accept="application/pdf" class="none mb-4" />
-            </div> -->
+            <div class="mb-3">
+                <label class="form-label fw-bold h5 titulo">TCE<br></label>
+                <input id="fileTce" @change="formatoUpload()"   type="file" accept="application/pdf"/>
+                <label for="file" class="btn-file d-flex justify-content-between">
+                </label>
+            </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Nome do Programa</label>
               <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.nome" type="text">
@@ -218,10 +220,26 @@ export default {
     enviarDados () {
       // var formData = new FormData()
       // var comprovanteRematricula = document.getElementById('file').files[0] 
+      var formData = new FormData() 
+      var arquivo = document.getElementById('fileTce').files[0]
+          formData.append('cpf', this.cadastroParticipanteForm.cpf)
+          formData.append('instituicaoEnsino', this.cadastroParticipanteForm.instituicaoEnsino)
+          formData.append('curso', this.cadastroParticipanteForm.curso)
+          formData.append('terminoGraduacao', this.cadastroParticipanteForm.terminoGraduacao)
+          formData.append('idRemuneracao', this.cadastroParticipanteForm.idRemuneracao)
+          formData.append('idCandidato', this.cadastroParticipanteForm.idCandidato)
+          formData.append('idPrograma', this.cadastroParticipanteForm.idPrograma)
+          formData.append('email', this.cadastroParticipanteForm.email)
+          formData.append('tce', arquivo)
+          console.log(formData)
+
       http
-        .post('participante/salvarParticipante', this.cadastroParticipanteForm)
+        .post('participante/salvarParticipante', this.formData, { 
+          headers: {
+            'Content-Type': 'multipart/form-data' 
+          }
+        })
         .then(response => {
-          
         })
         .catch(error => {
           console.log(error)
@@ -285,7 +303,7 @@ export default {
       } else {
         document.querySelector('#erroTerminoGraduacao').classList.add('none')
       }
-      if (cargo  == '') {
+      if (cargo == '') {
         document.querySelector('#erroCargo').classList.remove('none')
         erro = 1
       } else {
@@ -367,6 +385,9 @@ body{
   background-color: #D3CACA;
   border: 1px solid #BCB3B3;
 }
+.cursor{
+  cursor: pointer;
+}
 .download{
   transform: rotate(180deg) !important;
 }
@@ -395,6 +416,7 @@ body{
   font-weight: bold !important;
   background-color: #FFB700 !important;
 }
+
 .input-arquivo{
   display: none;
 }
