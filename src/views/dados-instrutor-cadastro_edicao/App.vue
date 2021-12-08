@@ -139,7 +139,8 @@ export default {
         nome: '',
         status: '',
         cpf: '',
-        telefone: ''
+        telefone: '',
+        status: ''
       }
     }
   },
@@ -220,7 +221,7 @@ export default {
       const dados = this.pegaDadosUrl()
       let cpf = dados.id
       let tipo = dados.tipo
-
+      this.instrutorForm.status = this.instrutor.status
       if (tipo == 'edicao') {
         console.log(this.instrutorForm.cpf)
         http

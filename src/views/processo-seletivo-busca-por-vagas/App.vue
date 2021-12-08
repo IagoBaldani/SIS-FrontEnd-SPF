@@ -54,7 +54,7 @@
                     {{ ++index }}
                   </th>
                   <td class="info-nome">{{ processo.nome }}</td>
-                  <td class="em-andamento">Em andamento</td>
+                  <td v-bind:class="(processo.status == 'EM_ANDAMENTO')?'em-andamento':'finalizado'" class="statusProcesso">{{processo.status}}</td>
                   <td>
                     <a :href="'processo-seletivo-dados-da-vaga-visualizacao?id=' + processo.id">
                       <img src="../../assets/imgs/visibility_white_24dp.svg" alt=""/>

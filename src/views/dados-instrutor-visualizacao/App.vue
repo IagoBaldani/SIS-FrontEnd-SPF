@@ -88,6 +88,19 @@
             </div>
         </div>
     </div>
+    <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao"></p>
+    <div class="modal fade mt-5" id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração Efetuada com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -118,18 +131,23 @@ export default {
           console.log(`Erro: ${erro}`)
         })
     },
-
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     alteraStatus () {
       let cpf = this.instrutor.cpf
       console.log(cpf)
       http.put(`instrutor/status/altera/${cpf}`)
         .then(res => {
           this.instrutor = res.data
+          this.abrirModal()
+          setTimeout(function () {
+            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+          }, 1521)
         })
         .catch(erro => {
           console.log(`Erro: ${erro}`) 
         })
-      window.location.href = 'http://localhost:8080/dados-instrutor-busca'
     },
     
     pegaDadosUrl () {
@@ -143,14 +161,12 @@ export default {
         var valor = chaveValor[1]
         data[chave] = valor
       })
-
       return data
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
-
     this.getInstrutor(dadosUrl.id)
   }
 }

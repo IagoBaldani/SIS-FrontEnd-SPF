@@ -348,7 +348,7 @@ export default {
     },
     getInstrutores () {
       http
-        .get('instrutor')
+        .get('instrutor/status/ATIVO')
         .then(response => {
           this.instrutores = response.data
         })

@@ -72,11 +72,8 @@
         <div class="modal-content">
           <div class="modal-body d-flex justify-content-between">
             <div>
-              <h1 class="modal-title form-label fw-bold mb-0 titulo" v-if="instrutorForm.id == ''">
+              <h1 class="modal-title form-label fw-bold mb-0 titulo">
                 Deseja confirmar o cadastro?
-              </h1>
-              <h1 class="modal-title form-label fw-bold mb-0 titulo" v-else>
-                Deseja confirmar a edição do instrutor?
               </h1>
             </div>
             <div class="conteudomodal">
@@ -101,6 +98,19 @@
           </div>
         </div>
       </div>
+    </div>
+    <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size h-5">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Cadastro efetuado com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
   </main>
 </template>
@@ -193,6 +203,9 @@ export default {
         document.getElementById('invisivel').click()
       }
     },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -213,29 +226,32 @@ export default {
     processaRequisicoes () {
       const dados = this.pegaDadosUrl()
       let cpf = dados.id
-      let tipo = dados.tipo
-
-      if (tipo == 'edicao') {
-        console.log(this.instrutorForm.cpf)
-        http
-          .put(`instrutor/altera/${cpf}`, this.instrutorForm)
-          .then(response => {
-            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      } else {
+      // if (tipo == 'edicao') {
+      //   console.log(this.instrutorForm.cpf)
+      //   http
+      //     .put(`instrutor/altera/${cpf}`, this.instrutorForm)
+      //     .then(response => {
+      //       this.abrirModal()
+      //       setTimeout(function () {
+      //         window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+      //       }, 1521)
+      //     })
+      //     .catch(error => {
+      //       console.log(error)
+      //     })
+      // } else {
         console.log(this.instrutorForm.cpf)
         http
           .post('instrutor', this.instrutorForm)
           .then(response => {
-            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+            }, 1521)
           })
           .catch(error => {
             console.log(error)
           })
-      }
     }
   }
 }
@@ -285,6 +301,12 @@ textarea{
   border: 1px solid #BCB3B3 !important;
 }
 
+.modal-size {
+    height:5px  !important;
+    width: 801px !important;
+    max-width: 801px !important;
+}
+
 .modal {
   display: none;
 }
@@ -303,7 +325,6 @@ button .largura {
 }
 
 .modal-body{
-  min-height: 55vh;
   flex-direction: column;
   width: 100%;
 }
@@ -338,10 +359,6 @@ button .largura {
 
 .input-arquivo{
     display: none;
-}
-
-.modal-content{
-    height: 80vh !important;
 }
 
 .ativo, .inativo{
