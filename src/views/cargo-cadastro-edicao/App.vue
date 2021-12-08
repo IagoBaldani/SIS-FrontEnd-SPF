@@ -13,6 +13,7 @@
                         <label for="cargoInput" class="form-label mb-0 titulo">Cargo</label>
                         <input class="form-control" placeholder="Digite um cargo"  v-bind:value="cargos.cargo" type="text" name="cargo" id="inputCargo"/>
                         <p id="erroCargo" class="erro none">Por favor, selecione um cargo </p>
+                        <p id="erroCargoCadastrado" class="erro none">Este cargo já está cadastrada, por favor insira outro</p>
                     </div>
                     <div>
                         <label for="bolsaAuxilio" class="form-label mb-0 mt-3 titulo">Bolsa auxílio</label>
@@ -142,7 +143,7 @@
     </div>
 
      <!-- Modal de confirmação cadastro -->
-  <p class="none" id="abreModalInvisivelCadastro" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoCadastro" ></p>
+    <p class="none" id="abreModalInvisivelCadastro" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoCadastro" ></p>
     <div class="modal fade mt-5"  id="modalConfirmacaoCadastro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-size">
             <div class="modal-content p-5 grey-background">
@@ -155,7 +156,6 @@
         </div>
     </div>
   </main>
-  
 </template>
 
 <script>
@@ -191,7 +191,8 @@ export default {
         remunEsporadica: '',
         remunExtra: '',
         alura: ''
-      }
+      },
+      cargosCadastrados: []
     }
   },
   beforeMount () {
@@ -203,6 +204,9 @@ export default {
     if (tipo == 'edicao') {
       this.getCargo(id)
     }
+  },
+  mounted () {
+    this.getCargosCadastrados()
   },
   methods: {
     registrarDados () {
@@ -247,6 +251,11 @@ export default {
           console.log(error)
         })
     },
+    getCargosCadastrados () {
+      http.get('remuneracao/lista').then(response => {
+        console.log(this.cargosCadastrados = response.data)
+      })
+    },
     processarDados () {
       let dados = this.pegaDadosUrl()
       if (dados.tipo == 'cadastro') {
@@ -276,6 +285,7 @@ export default {
       }
     },
     validaCampos () {
+      let cargoDigitado = document.querySelector('#inputCargo').value
       let erro = 0
       let vazio = ''
       if (this.cargoForm.cargo == vazio) {
@@ -284,6 +294,16 @@ export default {
       } else {
         document.querySelector('#erroCargo').classList.add('none')
       }
+      this.cargosCadastrados.forEach(cargo => {
+        if (cargoDigitado == cargo.cargo) {
+          erro = 1
+          document.querySelector('#erroCargoCadastrado').classList.remove('none')
+          if (cargoDigitado == this.cargos.cargo) {
+            erro = 0
+            document.querySelector('#erroCargoCadastrado').classList.add('none')
+          }
+        }
+      })
       if (this.cargoForm.bolsa == vazio || this.cargoForm.bolsa < 0) {
         document.querySelector('#erroBolsa').classList.remove('none')
         erro = 1
@@ -334,7 +354,8 @@ export default {
       }
       if (erro == 1) {
         return false
-      } 
+      }
+      document.querySelector('#erroCargoCadastrado').classList.add('none')
       return true
     }
   }
