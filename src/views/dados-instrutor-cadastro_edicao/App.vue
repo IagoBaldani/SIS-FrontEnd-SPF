@@ -170,9 +170,9 @@ export default {
           console.log(`Erro: ${erro}`)
         })
     },
-    abrirModal() {
-        document.getElementById('abreModalInvisivel').click()
-      },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -227,9 +227,9 @@ export default {
           .put(`instrutor/altera/${cpf}`, this.instrutorForm)
           .then(response => {
             this.abrirModal()
-             setTimeout(function () {
-                window.location.href = 'http://localhost:8080/dados-instrutor-busca'
-             }, 1521)
+            setTimeout(function () {
+              window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+            }, 1521)
           })
           .catch(error => {
             console.log(error)

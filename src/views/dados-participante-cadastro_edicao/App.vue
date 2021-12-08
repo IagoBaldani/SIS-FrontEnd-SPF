@@ -165,7 +165,6 @@
   </form>  
     <!-- fim do formulário -->
 
-    
     <!-- Modal de confirmação -->
   <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
     <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -236,9 +235,9 @@ export default {
       })
       return data
     },
-    abrirModal() {
-        document.getElementById('abreModalInvisivel').click()
-      },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     getCargo (cpf) {
       http.get(`participante/completo/${cpf}`)
         .then(response => {
@@ -361,8 +360,8 @@ export default {
         .then(response => {
           this.abrirModal()
           setTimeout(function () {
-               window.location.href = 'http://localhost:8080/dados-participante-busca'
-            }, 1500)
+            window.location.href = 'http://localhost:8080/dados-participante-busca'
+          }, 1500)
         })
         .catch(error => {
           console.log(error)
