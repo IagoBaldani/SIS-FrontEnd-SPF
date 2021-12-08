@@ -216,8 +216,6 @@ export default {
       }     
     },
     enviarDados () {
-      // var formData = new FormData()
-      // var comprovanteRematricula = document.getElementById('file').files[0] 
       http
         .post('participante/salvarParticipante', this.cadastroParticipanteForm)
         .then(response => {
@@ -285,7 +283,7 @@ export default {
       } else {
         document.querySelector('#erroTerminoGraduacao').classList.add('none')
       }
-      if (cargo  == '') {
+      if (cargo == '') {
         document.querySelector('#erroCargo').classList.remove('none')
         erro = 1
       } else {

@@ -21,7 +21,7 @@
             />
             <p id="nomeErro" class="none erro">Por favor, preencha o campo nome</p>
           </div>
-          <div class="mb-3">
+          <div class="mt-4 mb-3">
             <label class="label-form">Contato</label>
             <input
               type="tel"
@@ -34,7 +34,7 @@
             <p id="contatoErro" class="none erro">Por favor, preencha o campo telefone</p>
           </div>
 
-          <div class="mb-3">
+          <div class="mt-4 mb-3">
             <label class="label-form" >Fonte de recrutamento</label>
             <input
               type="text"
@@ -46,7 +46,7 @@
             <p id="fonteErro" class="none erro">Por favor, preencha o campo fonte de recrutamento</p>
           </div>
 
-          <div class="mb-3">
+          <div class="mt-4 mb-3">
             <label class="label-form">Data agendamento</label>
             <input
               type="date"
@@ -57,18 +57,7 @@
             />
             <p id="dataErro" class="none erro">Por favor, preencha o campo data agendamento</p>
           </div>
-
-          <div class="mb-3">
-            <label class="label-form">Curso</label>
-            <input
-              type="text"
-              class="form-control"
-              id="inputCurso"
-              v-model="candidato.curso"
-            />
-            <p id="cursoErro" class="none erro">Por favor, preencha o campo curso</p>
-          </div>
-          <div class="mt-0">
+          <div class="mt-4">
             <label class="label-form titulo mb-0">Resultado 1ª fase</label>
             <select class="form-select" v-model="candidato.status" id="status">
               <option value="SEM_STATUS" selected>Sem status</option>
@@ -172,7 +161,6 @@
                 <h2 class="nome">Contato: {{ candidatoForm.telefone }}</h2>
                 <h2 class="nome">Candidato: {{ candidatoForm.fonteRecrutamento }}</h2>
                 <h2 class="nome">Data Agendamento: {{ candidatoForm.dataAgendamento }}</h2>
-                <h2 class="nome">Curso: {{ candidatoForm.curso }}</h2>
                 <h2 class="nome">Observação: {{ candidatoForm.observacao }}</h2>
                 <h2 class="nome">Status: {{ candidatoForm.status }}</h2>
                 <h2 class="nome">Processo Seletivo: {{ candidatoForm.idProcessoSeletivo }}</h2>
@@ -228,7 +216,6 @@ export default {
         telefone: '',
         fonteRecrutamento: '',
         dataAgendamento: '',
-        curso: '',
         testeLogico: '',
         notaDisc: '',
         observacao: '',
@@ -264,16 +251,15 @@ export default {
         modal.removeAttribute('style')
       })
     },
-    abrirModal() {
-        document.getElementById('abreModalInvisivel').click()
-      },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     enviarDados () {
       this.candidatoForm.id = this.candidato.id
       this.candidatoForm.nome = document.querySelector('#inputNome').value
       this.candidatoForm.telefone = document.querySelector('#inputContato').value
       this.candidatoForm.fonteRecrutamento = document.querySelector('#inputFonteDeRecrutamento').value
       this.candidatoForm.dataAgendamento = document.querySelector('#inputDataAgendamento').value
-      this.candidatoForm.curso = document.querySelector('#inputCurso').value
       this.candidatoForm.testeLogico = document.querySelector('#inputProvaPratica').value
       this.candidatoForm.notaDisc = document.querySelector('#inputDisc').value
       this.candidatoForm.observacao = document.querySelector('#inputObservacao').value
@@ -316,7 +302,6 @@ export default {
         formDataAtualizar.append('fonteRecrutamento', this.candidatoForm.fonteRecrutamento)
         formDataAtualizar.append('telefone', this.candidatoForm.telefone)
         formDataAtualizar.append('dataAgendamento', this.candidatoForm.dataAgendamento)
-        formDataAtualizar.append('curso', this.candidatoForm.curso)
         formDataAtualizar.append('testeLogico', this.candidatoForm.testeLogico)
         formDataAtualizar.append('notaDisc', this.candidatoForm.notaDisc)
         formDataAtualizar.append('observacao', this.candidatoForm.observacao)
@@ -333,8 +318,8 @@ export default {
           .then(response => {
             this.abrirModal()
             setTimeout(function () {
-               window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
-            },1500) 
+              window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
+            }, 1500) 
           })
           .catch(error => {
             console.log(error)
@@ -348,7 +333,6 @@ export default {
         formData.append('fonteRecrutamento', this.candidatoForm.fonteRecrutamento)
         formData.append('telefone', this.candidatoForm.telefone)
         formData.append('dataAgendamento', this.candidatoForm.dataAgendamento)
-        formData.append('curso', this.candidatoForm.curso)
         formData.append('testeLogico', this.candidatoForm.testeLogico)
         formData.append('notaDisc', this.candidatoForm.notaDisc)
         formData.append('observacao', this.candidatoForm.observacao)
@@ -375,7 +359,6 @@ export default {
       var contato = document.getElementById('inputContato').value
       var fonteRecrutamento = document.getElementById('inputFonteDeRecrutamento').value
       var dataAgendamento = document.getElementById('inputDataAgendamento').value
-      var curso = document.getElementById('inputCurso').value
       var resultado = document.getElementById('status').value
       var processoSeletivo = document.getElementById('inputProcessoSeletivo').value
       var provaPratica = document.getElementById('inputProvaPratica').value
@@ -388,85 +371,67 @@ export default {
         document.querySelector('#nomeErro').classList.remove('none')
         erro = 1
       } else {
-        erro = 0
         document.querySelector('#nomeErro').classList.add('none')
       }
       if (contato == '') {
         document.querySelector('#contatoErro').classList.remove('none')
         erro = 1
       } else {
-        erro = 0
         document.querySelector('#contatoErro').classList.add('none')
       }
       if (fonteRecrutamento == '') {
         document.querySelector('#fonteErro').classList.remove('none')
         erro = 1
       } else {
-        erro = 0
         document.querySelector('#fonteErro').classList.add('none')
       }
       if (dataAgendamento == '') {
         document.querySelector('#dataErro').classList.remove('none')
         erro = 1
       } else {
-        erro = 0
         document.querySelector('#dataErro').classList.add('none')
-      }
-      if (curso == '') {
-        document.querySelector('#cursoErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#cursoErro').classList.add('none')
-        erro = 0
       }
       if (resultado == '') {
         document.querySelector('#resultadoErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#resultadoErro').classList.add('none')
-        erro = 0
       }
       if (processoSeletivo == '') {
         document.querySelector('#processoErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#processoErro').classList.add('none')
-        erro = 0
       }
       if (provaPratica == '') {
         document.querySelector('#provaErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#provaErro').classList.add('none')
-        erro = 0
       }
       if (discNota == '') {
         document.querySelector('#discErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#discErro').classList.add('none')
-        erro = 0
       }
       if (curriculo.files.length <= 0) {
         document.querySelector('#curriculoErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#curriculoErro').classList.add('none')
-        erro = 0
       }
       if (disc == '') {
         document.querySelector('#discFileErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#discFileErro').classList.add('none')
-        erro = 0
       }
       if (observacao == '') {
         document.querySelector('#observacaoErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#observacaoErro').classList.add('none')
-        erro = 0
       }
       if (erro == 1) {
         return false

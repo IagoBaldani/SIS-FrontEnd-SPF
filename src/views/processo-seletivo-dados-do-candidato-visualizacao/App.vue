@@ -29,10 +29,6 @@
                                 <input name="dataAgendamento" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="formataDataParaMostrar(candidato.dataAgendamento)">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label mb-0 titulo">Curso</label>
-                                <input name="curso" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.curso">
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Status</label>
                                 <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na primeira fase" v-if="candidato.status=='APROVADO_1_FASE'">
                                 <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na segunda fase" v-else-if="candidato.status=='APROVADO_2_FASE'">
