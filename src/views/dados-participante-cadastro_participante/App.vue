@@ -114,7 +114,7 @@
       </div>
     </div>
     <!-- fim do formulário -->
-  </main>
+  
 
   <!-- modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -158,6 +158,20 @@
       </div>
     </div>
   </div>
+   <!-- Modal de confirmação -->
+  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Cadastro efetuado com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </main>
 </template>
 
 <script>
@@ -230,6 +244,9 @@ export default {
         document.querySelector('#preencha').classList.remove('none')
       }     
     },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     enviarDados () {
       var formData = new FormData() 
       var arquivo = document.getElementById('fileTce').files[0]
@@ -256,7 +273,10 @@ export default {
       this.redirecionar()
     },
     redirecionar () {
-      location.href = '/dados-participante-busca'
+      this.abrirModal()
+        setTimeout(function () {
+        location.href = '/dados-participante-busca'
+          },1521)
     },
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)

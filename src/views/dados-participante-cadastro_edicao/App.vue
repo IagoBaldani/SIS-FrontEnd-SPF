@@ -172,7 +172,7 @@
             <div class="modal-content p-5 grey-background">
                 <div class="row mb-5">
                     <div class="col">
-                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração Efetuada com sucesso</h3>
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Participante salvo com sucesso</h3>
                     </div>
                 </div>
             </div>
