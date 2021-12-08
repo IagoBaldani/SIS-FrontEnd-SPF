@@ -67,8 +67,8 @@
               <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold h5 titulo">TCE<br></label>
-                <input id="fileTce"   type="file" accept="application/pdf"/>
+                <label class="form-label fw-bold h5 titulo">TCE</label>
+                <input id="fileTce" type="file" accept="application/pdf"/>
                 <label for="file" class="btn-file d-flex justify-content-between">
                 </label>
             </div>
@@ -79,7 +79,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Turma</label>
-                <select required class="form-select" id="selectTurma" v-on:click="buscarTurmasDeUmaFormacao()" v-model="turmaSelecionada">
+                <select required class="form-select" id="selectTurma" v-on:click="buscarTurmasDeUmaFormacao()">
                     <option class="relatorio_opcao" disabled selected>Turma</option>
                     <option class="relatorio_opcao" v-for="(turmasProgramaCandidato, id) in turmasProgramaCandidatos"
                     :key="id" :value="turmasProgramaCandidato.id">{{turmasProgramaCandidato.turmas}}
@@ -104,7 +104,7 @@
       </div>
       <div class="row justify-content-evenly">
         <div class="col-xl-4 ">
-          <button v-on:click="validaForm()" type="button" class="btn submit form-control" >
+          <button v-on:click="validaForm(), buscarTurmaPorId(), buscarCargoPorId()" type="button" class="btn submit form-control" >
             CONFIRMAR
           </button>
           <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="popularCargoTurma()" ></p>
@@ -138,10 +138,10 @@
                 <li>Instituição de Ensino: <span class="titulo"> {{cadastroParticipanteForm.instituicaoEnsino}} </span></li>
                 <li>Curso: <span class="titulo"> {{cadastroParticipanteForm.curso}} </span></li>
                 <li>Término da Graduação: <span class="titulo"> {{formataDataParaMostrar(cadastroParticipanteForm.terminoGraduacao)}} </span></li>
-                <li>Cargo: <span class="titulo">{{ remuneracao.cargo }}</span></li>
+                <li>Cargo: <span class="titulo">{{ cargo.cargo }}</span></li>
                 <li>Email: <span class="titulo">{{ cadastroParticipanteForm.email }}</span></li>
                 <!-- <li>Salário: <span class="titulo"> {{participante.salario}}</span></li> -->
-                <li>Programa de Formação - Turma: <span class="titulo"> {{turmaSelecionada}}</span></li>
+                <li>Programa de Formação - Turma: <span class="titulo"> {{turmaSelecionada.turmas}}</span></li>
                 <li>Observação: <span class="titulo"> {{candidato.observacao}}</span></li>
               </ul>
             </div>
@@ -179,6 +179,7 @@ export default {
       remuneracao: {},
       turmaSelecionada: {},
       cargos: [],
+      cargo: {},
       turmasPrograma: [],
       nomePrograma: '',
       idProgramaCandidato: '',
@@ -203,6 +204,16 @@ export default {
     buscarTurmasDeUmaFormacao () {
       http.get(`candidato/programa-candidato-turmas/${this.nomeProgramaCandidato.nome}`)
         .then(response => (this.turmasProgramaCandidatos = response.data)) 
+    },
+    buscarTurmaPorId () {
+      var idPrograma = document.querySelector('#selectTurma').value
+      http.get(`programa/buscarFormacaoPorId/${idPrograma}`)
+        .then(response => (this.turmaSelecionada = response.data))
+    },
+    buscarCargoPorId () {
+      var idCargo = document.getElementById('filtro-programa').value
+      http.get(`remuneracao/${idCargo}`)
+        .then(response => (this.cargo = response.data)) 
     },
     validaCampos () {
       let campos = document.querySelectorAll('input')
@@ -373,6 +384,9 @@ body{
 }
 .ativo{
   color: green;
+}
+#fileTce{
+  margin-left: 15px;
 }
 .inativo{
   color: darkred;
