@@ -75,14 +75,14 @@
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Nome do Programa</label>
               <p id="idPrograma" :value="nomeProgramaCandidato.id" class="none"></p>
-              <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.id"  type="text">
+              <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.nome"  type="text">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Turma</label>
                 <select required class="form-select" id="selectTurma" v-on:click="buscarTurmasDeUmaFormacao()" v-model="turmaSelecionada">
                     <option class="relatorio_opcao" disabled selected>Turma</option>
                     <option class="relatorio_opcao" v-for="(turmasProgramaCandidato, id) in turmasProgramaCandidatos"
-                    :key="id" :value="turmasProgramaCandidato">{{turmasProgramaCandidato.turmas}}
+                    :key="id" :value="turmasProgramaCandidato.id">{{turmasProgramaCandidato.turmas}}
                     </option>
                 </select>
                 <p id="erroTurma" class="none erro">Por favor, preencha este campo</p>
@@ -138,10 +138,10 @@
                 <li>Instituição de Ensino: <span class="titulo"> {{cadastroParticipanteForm.instituicaoEnsino}} </span></li>
                 <li>Curso: <span class="titulo"> {{cadastroParticipanteForm.curso}} </span></li>
                 <li>Término da Graduação: <span class="titulo"> {{formataDataParaMostrar(cadastroParticipanteForm.terminoGraduacao)}} </span></li>
-                <li>Cargo: <span class="titulo">{{ remuneracao.nome }}</span></li>
+                <li>Cargo: <span class="titulo">{{ remuneracao.cargo }}</span></li>
                 <li>Email: <span class="titulo">{{ cadastroParticipanteForm.email }}</span></li>
                 <!-- <li>Salário: <span class="titulo"> {{participante.salario}}</span></li> -->
-                <li>Programa de Formação - Turma: <span class="titulo"> {{turmaSelecionada.turmas}}</span></li>
+                <li>Programa de Formação - Turma: <span class="titulo"> {{turmaSelecionada}}</span></li>
                 <li>Observação: <span class="titulo"> {{candidato.observacao}}</span></li>
               </ul>
             </div>
@@ -222,17 +222,16 @@ export default {
     enviarDados () {
       var formData = new FormData() 
       var arquivo = document.getElementById('fileTce').files[0]
-          formData.append('cpf', this.cadastroParticipanteForm.cpf) 
-          formData.append('instituicaoEnsino',this.cadastroParticipanteForm.instituicaoEnsino )
-          formData.append('curso',this.cadastroParticipanteForm.curso) 
-          formData.append('terminoGraduacao',document.getElementById('inputTerminoGraduacao'))
-          formData.append('idRemuneracao', this.remuneracao.id)
-          formData.append('idCandidato', this.id)
-          formData.append('idPrograma', document.getElementById('nomeProgramaCandidato').value)
-          formData.append('email', this.cadastroParticipanteForm.email) 
-          formData.append('tce', arquivo)
-          console.log(this.remuneracao.id)
-        http
+      formData.append('cpf', this.cadastroParticipanteForm.cpf) 
+      formData.append('instituicaoEnsino', this.cadastroParticipanteForm.instituicaoEnsino)
+      formData.append('curso', this.cadastroParticipanteForm.curso) 
+      formData.append('terminoGraduacao', document.getElementById('inputTerminoGraduacao').value)
+      formData.append('idRemuneracao', this.remuneracao.id)
+      formData.append('idCandidato', this.id)
+      formData.append('idPrograma', document.getElementById('selectTurma').value)
+      formData.append('email', this.cadastroParticipanteForm.email) 
+      formData.append('tce', arquivo)
+      http
         .post('participante/salvarParticipante', formData, { 
           headers: {
             'Content-Type': 'multipart/form-data' 
@@ -353,7 +352,7 @@ export default {
     
     http.get(`candidato/programa-candidato-nome/${this.id}`)
       .then(response => (this.nomeProgramaCandidato = response.data))  
-  },
+  }
   
 }
 </script>
