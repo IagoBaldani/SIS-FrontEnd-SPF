@@ -57,8 +57,19 @@
             />
             <p id="dataErro" class="none erro">Por favor, preencha o campo data agendamento</p>
           </div>
-          <div class="mt-4">
-            <label class="label-form titulo mb-0">Resultado 1ª fase</label>
+
+          <div class="mb-3">
+            <label class="label-form">Curso</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputCurso"
+              v-model="candidato.curso"
+            />
+            <p id="cursoErro" class="none erro">Por favor, preencha o campo curso</p>
+          </div>
+          <div class="mt-0">
+            <label class="label-form titulo mb-0">Resultado</label>
             <select class="form-select" v-model="candidato.status" id="status">
               <option value="SEM_STATUS" selected>Sem status</option>
               <option value="APROVADO_1_FASE" class="aprovado">Aprovado 1ª fase</option>
@@ -89,7 +100,7 @@
 
           <div class="mb-3">
             <label class="label-form">DISC</label>
-            <input type="text" class="form-control" id="inputDisc" placeholder="DISC" v-model="candidato.notaDisc"/>
+            <input type="text" class="form-control" id="inputDisc" v-mask="['d:## i:## s:## c:##']"  placeholder="Digite a nota do DISC" v-model="candidato.notaDisc"/>
             <p id="discErro" class="none erro">Por favor, preencha o campo DISC</p>
           </div>
 
@@ -159,8 +170,9 @@
               <div class="col-xl-5 mb-3">
                 <h2 class="nome">Nome: {{ candidatoForm.nome }}</h2>
                 <h2 class="nome">Contato: {{ candidatoForm.telefone }}</h2>
-                <h2 class="nome">Candidato: {{ candidatoForm.fonteRecrutamento }}</h2>
-                <h2 class="nome">Data Agendamento: {{ candidatoForm.dataAgendamento }}</h2>
+                <h2 class="nome">Fonte de Recrutamento: {{ candidatoForm.fonteRecrutamento }}</h2>
+                <h2 class="nome">Data Agendamento: {{ candidatoForm.dataAgendamento}} </h2>
+                <h2 class="nome">Curso: {{ candidatoForm.curso }}</h2>
                 <h2 class="nome">Observação: {{ candidatoForm.observacao }}</h2>
                 <h2 class="nome">Status: {{ candidatoForm.status }}</h2>
                 <h2 class="nome">Processo Seletivo: {{ candidatoForm.idProcessoSeletivo }}</h2>
@@ -347,7 +359,10 @@ export default {
             }
           })
           .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
             window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
+          },1521)
           })
           .catch(error => {
             console.log(error)
@@ -449,13 +464,15 @@ export default {
           console.log(error)
         })
     }
-  }
+  },
+  formataDataParaExibicao (data) {
+    const dataPreForm = new Date(data)
+    const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+
+    return dataFormatada
 }
-function formataDataParaExibicao (data) {
-  const dataPreForm = new Date(data)
-  const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-  return dataFormatada
 }
+
 </script>
 
 <style>

@@ -239,7 +239,10 @@ export default {
         http
           .post('instrutor', this.instrutorForm)
           .then(response => {
+            this.abrirModal()
+             setTimeout(function () {
             window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+          },1521)
           })
           .catch(error => {
             console.log(error)

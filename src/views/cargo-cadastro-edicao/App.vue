@@ -70,8 +70,7 @@
                 <div class="col-xl-2"></div>
             </div>
         </div>
-    </main>
-
+  
     <!--Model-->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog modal-dialog-centered">
@@ -128,6 +127,21 @@
       </div>
     </div>
   </div>
+ <!-- Modal de confirmação -->
+  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração Efetuada com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </main>
+  
 </template>
 
 <script>
@@ -191,6 +205,9 @@ export default {
         document.querySelector('#abreModal').click()
       }
     },
+    abrirModal() {
+        document.getElementById('abreModalInvisivel').click()
+      },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -219,7 +236,10 @@ export default {
         http
           .post('remuneracao', this.cargoForm)
           .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
             window.location.href = 'http://localhost:8080/cargo-listar'
+          },1521)
           })
           .catch(error => {
             console.log(error)
@@ -228,7 +248,10 @@ export default {
         http
           .put(`remuneracao/${dados.id}`, this.cargoForm)
           .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
             window.location.href = 'http://localhost:8080/cargo-listar'
+          },1521)
           })
           .catch(error => {
             console.log(error)
