@@ -232,6 +232,7 @@ export default {
           formData.append('email', this.cadastroParticipanteForm.email)
           formData.append('tce', arquivo)
           console.log(formData)
+
       http
         .post('participante/salvarParticipante', this.formData, { 
           headers: {
@@ -302,7 +303,7 @@ export default {
       } else {
         document.querySelector('#erroTerminoGraduacao').classList.add('none')
       }
-      if (cargo  == '') {
+      if (cargo == '') {
         document.querySelector('#erroCargo').classList.remove('none')
         erro = 1
       } else {
