@@ -163,7 +163,7 @@
                 <div class="row mt-5">
                     <div class="col-lg-6">
                         <button type="submit"
-                            class="btn btn-danger sis-red-btn mt-3 fw-bold fs-5 w-100" @click="deleteById()" data-bs-dismiss="modal">CONFIRMAR</button>
+                            class="btn btn-danger sis-red-btn mt-3 fw-bold fs-5 w-100" @click="deleteById(),deletarFormularioModal()" data-bs-dismiss="modal">CONFIRMAR</button>
                     </div>
                     <div class="col-lg-6">
                         <button type="submit" class="btn btn-warning sis-yellow-btn fw-bold fs-5 mt-3 w-100" data-bs-dismiss="modal">CANCELAR</button>
@@ -339,7 +339,32 @@
               </div>
             </div>
         </div>
-  
+        <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Formulário registrado com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de Exclusão -->
+    <p class="none" id="abreModalInvisivelExclusao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoExclusao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacaoExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabelExclusao">Formulário excluído com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -398,6 +423,12 @@ export default {
       this.avaliacaoModal = avaliacao
       this.indiceModal = index
       this.modalDesempenho = this.avaliacaoModal.notaComportamental
+    },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    abrirModalExclusao() {
+      document.getElementById('abreModalInvisivelExclusao').click()
     },
     // é usada para capturar as informações na url para ser passada nas requisições
     pegaDadosUrl () {
@@ -458,16 +489,21 @@ export default {
         .delete(`avaliacao/deletar/${this.avaliacaoModal.id}`)
         .then((response) => {
           this.getAvaliacao()
-          alert('Formulario deletado com sucesso!')
           document.querySelector('#deletado').classList.remove('none')
           setTimeout(function () {
             document.querySelector('#deletado').classList.add('none')
-          }, 2000)
+          }, 1500)
         })
         .catch((error) => {
           console.log(error)
         })
     },
+    deletarFormularioModal () {
+        this.abrirModalExclusao()
+        setTimeout(function () {
+        document.location.reload(true)
+         }, 1500)
+},
     // função para gerar a média dos campos do modal, para exibir a nota comportamental no formulario
     getMedia () {
       this.media = (this.form.avaliacaoDesempenhoForm.qualidade + 
@@ -562,8 +598,10 @@ export default {
       if (erro == 0) {
         document.querySelector('#preencha').classList.add('none')
         document.getElementById('verificaCampos').click()
-        document.location.reload(true)
-        alert('Formulário enviado com sucesso')
+        this.abrirModal()
+        setTimeout(function () {
+            document.location.reload(true)
+            }, 1500) 
       } else {
         document.querySelector('#preencha').classList.remove('none')
       }
