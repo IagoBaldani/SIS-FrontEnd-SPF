@@ -43,7 +43,8 @@
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
               <table class="table table-bordered tabela mt-4">
                 <tbody align="center">
-                  <tr id="instrutor" v-for="instrutor in instrutores" :key="instrutor">
+                  <tr id="instrutor" v-for="(instrutor,index) in instrutores" :key="instrutor">
+                     <td scope="row">{{++index}}</td>
                     <td id="info-nome">{{ instrutor.nome }}</td>
                     <td id="info-status" width="320" v-bind:class="instrutor.status == 'ATIVO' ? 'ativo' : 'inativo'">
                       {{ (instrutor.status == 'ATIVO'?'Ativo':'Inativo')}}
