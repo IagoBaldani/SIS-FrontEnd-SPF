@@ -29,7 +29,7 @@
                     <div class="aviso">
                         <h4 class="titulo fw-bold"> Não foi encontrado nenhum resultado com os parâmetros
                             informados </h4>
-                        <button class="mt-3 form-control recarregar" @click="recarregaLista"> RECARREGAR LISTA
+                        <button class="mt-3 form-control recarregar" onclick="window.location.reload()"> RECARREGAR LISTA
                         </button>
                     </div>
                     <div class="table-wrapper-scroll-y my-custom-scrollbar">
