@@ -1,5 +1,5 @@
 <template>
-    <Header link="../acompanhamento-gerencial"/>
+    <Header :link="`../acompanhamento-gerencial?id=${this.id}`"/>
     <main>
         <div class="container-fluid">
             <div class="row justify-content-evenly mt-5 mb-3">

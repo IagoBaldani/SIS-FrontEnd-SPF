@@ -1,5 +1,5 @@
 <template>
-    <Header link="../acompanhamento-gerencial"/>
+    <Header :link="`../acompanhamento-gerencial?id=${this.id}`"/>
     <main>
         <div class="container-fluid">
             <div class="row justify-content-evenly mt-5 mb-3">
@@ -27,8 +27,9 @@
                             <label for="anotacoes" class="form-label mb-0 fw-bold titulo">Anotações</label>
                             <textarea v-model="form.anotacoes" rows="8" class="form-control mb-3" id="anotacoes"></textarea>
                         </div>
-                        <div class="input-group">
+                        <div>
                             <!--<input class="input-file" type="file">-->
+                            <p class="form-label mb-0 fw-bold titulo d-block">Insira o arquivo do Disc</p>
                              <input type="file" class="form-control" id="disc" 
                              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                         </div>
