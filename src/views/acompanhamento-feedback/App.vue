@@ -20,8 +20,9 @@
                     <form>
                         <div class="mb-3">
                             <p for="anotacao" class="form-label fw-bold mb-0 titulo">Data do Feedback</p>
-                            <input v-model="form.data" type="date" class="form-control" id="anotacao"
+                            <input v-model="form.data" type="date" class="form-control" id="dataFeed"
                                 placeholder="Digite a data do feedback">
+                                <p class="erro none" id="erroData" >Coloque uma data válida</p>
                         </div>
                         <div class="mb-3">
                             <label for="anotacoes" class="form-label mb-0 fw-bold titulo">Anotações</label>
@@ -30,14 +31,11 @@
                         <div>
                             <!--<input class="input-file" type="file">-->
                             <p class="form-label mb-0 fw-bold titulo d-block">Insira o arquivo do Disc</p>
-                             <input type="file" class="form-control" id="disc" 
+                             <input type="file" class="form-control" id="campoDisc" 
                              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                              <p class="erro none" id="erroDisc" >Insira o DISC</p>
                         </div>
                         <button class="btn-registrar mt-4 " type="button" @click="postForm()" >REGISTRAR</button>
-                        <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
-                        <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
-                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
-                        <p class="erro h4 none mt-3" id="deletado">Registro deletado com sucesso!</p>
                     </form>
                 </div>
                 <div class="col-lg-7">
@@ -131,7 +129,33 @@
                 </div>
             </div>
         </div>
-        
+        <!-- Modal de confirmação -->
+  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Feedback cadastrado  com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Exclusão -->
+    <p class="none" id="abreModalInvisivelExclusao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoExclusao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacaoExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabelExclusao">Feedback excluído com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </main>
 </template>
 
@@ -159,7 +183,6 @@ export default {
       indiceModal: {}
     }
   },
-
   beforeMount () {
     this.id = this.pegaDadosUrl().id
     this.getParticipanteNome()
@@ -178,6 +201,11 @@ export default {
           console.log(error)
         })
     },
+    validadorDeCampos () {
+      var campoData = document.getElementById('dataFeed')
+      var campoDisc = document.getElementById('campoDisc')
+
+    },
     // metodo para retornar os feedbacks.
     getFeedback () {
       http
@@ -191,22 +219,12 @@ export default {
     },
     //  metodo para enviar o post com o form
     postForm () {
-      let campos = document.querySelectorAll('input')
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (this.form.anotacoes == '') campoVazio = 1
-      if (campoVazio == 0) {
-        document.querySelector('#preencha').classList.add('none')
-        document.querySelector('#aguarde').classList.remove('none')
         var formData = new FormData()
         var disc = document.getElementById('disc').files[0]
         formData.append('data', this.form.data)
         formData.append('anotacoes', this.form.anotacoes)
         formData.append('disc', disc)
+
         http
           .post(`feedback/novo/${this.id}`, formData, {
             headers: {
@@ -214,30 +232,24 @@ export default {
             }
           })
           .then((response) => {
-            this.getFeedback()
-            document.querySelector('#aguarde').classList.add('none')
-            document.querySelector('#enviado').classList.remove('none')
+            this.abrirModal()
             setTimeout(function () {
-              document.querySelector('#enviado').classList.add('none')
-            }, 2000)
+             document.location.reload(true) 
+            }, 1500)
           })
           .catch((error) => {
             console.log(error)
           })
-      } else {
-        document.querySelector('#preencha').classList.remove('none')
-      }
-    }, 
+      }, 
     // método para deletar o o feedback.
     deleteById () {
       http  
         .delete(`/feedback/deletar/${this.feedbackModal.id}`)
         .then((response) => {
-          this.getFeedback()
-          document.querySelector('#deletado').classList.remove('none')
-          setTimeout(function () {
-            document.querySelector('#deletado').classList.add('none')
-          }, 2000)
+          this.abrirModalExclusao()
+           setTimeout(function () {
+             document.location.reload(true) 
+            }, 1500)
         })
         .catch((error) => {
           console.log(error)
@@ -247,7 +259,12 @@ export default {
     download () {
       location.href = `http://localhost:8081/api/feedback/download/${this.feedbackModal.id}`
     },
-
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    abrirModalExclusao() {
+      document.getElementById('abreModalInvisivelExclusao').click()
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
