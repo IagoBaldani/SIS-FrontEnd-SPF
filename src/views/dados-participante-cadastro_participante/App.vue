@@ -1,5 +1,5 @@
 <template>
-  <Header/>
+  <Header link="../dados-candidato-participante-elegibilidade"/>
   <main>
     <!-- ínicio do formulário -->
     <div class="container-fluid" id="participante candidato">
@@ -115,8 +115,6 @@
       </div>
     </div>
     <!-- fim do formulário -->
-  
-
   <!-- modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog modal-dialog-centered">
@@ -276,9 +274,9 @@ export default {
     },
     redirecionar () {
       this.abrirModal()
-        setTimeout(function () {
+      setTimeout(function () {
         location.href = '/dados-participante-busca'
-          },1521)
+      }, 1521)
     },
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)

@@ -1,6 +1,6 @@
 <template>
   <div class="background">
-    <Header />
+    <Header link="../relatorios-gerencial"/>
     <main>
       <div class="container" id="relatorio">
         <!-- Informações do programa e turma selecionados -->

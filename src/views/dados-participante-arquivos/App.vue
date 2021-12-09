@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header link="../login"/>
     <main>
         <!-- ínicio do formulário -->
         <div class="container-fluid" id="instrutor">

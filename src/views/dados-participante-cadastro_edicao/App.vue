@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../dados-participante-busca"/>
   <main>
     <!-- ínicio do formulário -->
   <form>

@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header link="../acompanhamento-gerencial"/>
     <main>
         <div class="container-fluid">
 

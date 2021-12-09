@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../home"/>
   <div class="container">
     <div class="row g-2 g-lg-3">
       <div class="col-xl-4">

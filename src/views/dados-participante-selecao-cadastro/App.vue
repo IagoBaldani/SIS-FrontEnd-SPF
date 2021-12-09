@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <Header link="../dados-candidato-participante-elegibilidade"/>
     <main>
       <div class="container-fluid">
         <div class="row justify-content-evenly mt-4 mb-3">

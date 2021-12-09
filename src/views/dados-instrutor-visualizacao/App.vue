@@ -1,5 +1,5 @@
 <template>
-  <Header/>
+  <Header link="../dados-instrutor-busca"/>
   <main>
         <!-- ínicio do formulário -->
         <div class="container-fluid" id="instrutor">
@@ -43,7 +43,7 @@
                 <div class="col-xl-4 ">
                     <button v-if="instrutor.status == 'ATIVO'" type="button" class="btn submit form-control" data-bs-toggle="modal"
                         data-bs-target="#exampleModal">
-                        DESATIVAR INSTRUTOR
+                        INATIVAR INSTRUTOR
                     </button>
                     <button v-else type="button" class="btn submit form-control" data-bs-toggle="modal"
                         data-bs-target="#exampleModal">
