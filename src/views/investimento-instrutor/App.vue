@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../investimento-folha"/>
   <div class="container">
     <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
       <div class="col-xl-4">
@@ -228,6 +228,19 @@
       </div>
     </div>
   </div>
+  <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Inserção efetuada com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -280,6 +293,9 @@ export default {
           (this.instrutores = response.data)
           this.pegarSalario()
         }) 
+    },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
     },
     validaForm () {
       this.programaProcurado = document.querySelector('.filtro-programa').value
@@ -351,7 +367,12 @@ export default {
       ).value
       http
         .post('/instrutor/salvar-invest', this.form)
-        .then(response => console.log(response.data))
+        .then(response => {
+          this.abrirModal()
+          setTimeout(function () {
+            window.location.href = 'http://localhost:8080/investimento-instrutor'
+          }, 1500) 
+        })
     },
 
     pegarSalario () {

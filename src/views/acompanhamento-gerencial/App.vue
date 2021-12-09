@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header link="../acompanhamento-busca-participante"/>
     <main>
         <section>
             <div class="container">

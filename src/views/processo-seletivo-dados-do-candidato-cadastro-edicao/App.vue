@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../processo-seletivo-busca-por-candidato"/>
   <main>
     <div class="container-fluid">
       <div class="row justify-content-evenly">
@@ -56,17 +56,6 @@
               v-model="candidato.dataAgendamento"
             />
             <p id="dataErro" class="none erro">Por favor, preencha o campo data agendamento</p>
-          </div>
-
-          <div class="mb-3">
-            <label class="label-form">Curso</label>
-            <input
-              type="text"
-              class="form-control"
-              id="inputCurso"
-              v-model="candidato.curso"
-            />
-            <p id="cursoErro" class="none erro">Por favor, preencha o campo curso</p>
           </div>
           <div class="mt-0">
             <label class="label-form titulo mb-0">Resultado</label>
@@ -172,7 +161,6 @@
                 <h2 class="nome">Contato: {{ candidatoForm.telefone }}</h2>
                 <h2 class="nome">Fonte de Recrutamento: {{ candidatoForm.fonteRecrutamento }}</h2>
                 <h2 class="nome">Data Agendamento: {{ candidatoForm.dataAgendamento}} </h2>
-                <h2 class="nome">Curso: {{ candidatoForm.curso }}</h2>
                 <h2 class="nome">Observação: {{ candidatoForm.observacao }}</h2>
                 <h2 class="nome">Status: {{ candidatoForm.status }}</h2>
                 <h2 class="nome">Processo Seletivo: {{ candidatoForm.idProcessoSeletivo }}</h2>
@@ -191,7 +179,20 @@
     </div>
 
      <!-- Modal de confirmação -->
-  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <p class="none" id="abreModalInvisivelCriacao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoCriacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacaoCriacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Cadastro efetuado com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
     <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-size">
             <div class="modal-content p-5 grey-background">
@@ -265,6 +266,9 @@ export default {
     },
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()
+    },
+    abrirModalCriacao () {
+      document.getElementById('abreModalInvisivelCriacao').click()
     },
     enviarDados () {
       this.candidatoForm.id = this.candidato.id
@@ -359,7 +363,7 @@ export default {
             }
           })
           .then(response => {
-            this.abrirModal()
+            this.abrirModalCriacao()
             setTimeout(function () {
             window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
           },1521)

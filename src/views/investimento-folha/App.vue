@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../home"/>
   <div class="container">
     <div class="row g-2 g-lg-3">
       <div class="col-xl-4">
@@ -264,6 +264,19 @@
       </div>
     </div>
   </div>
+  <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Inserção efetuada com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -338,6 +351,9 @@ export default {
       } else {
         this.filtrarDados()
       }
+    },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
     },
     validaFormModal () {
       var participante = document.querySelector('#nomeModal').value
@@ -423,9 +439,12 @@ export default {
       this.form.descricao = document.querySelector('#descricaoModal').value
       console.log(this.form)
       http.post('/investimento-folha', this.form).then(response => {
+        this.abrirModal()
+        setTimeout(function () {
+          window.location.href = 'http://localhost:8080/investimento-folha'
+        }, 1500) 
       })
     },
-
     pegarSalario () {
       let salario = 0
       this.participantes.forEach(participante => {

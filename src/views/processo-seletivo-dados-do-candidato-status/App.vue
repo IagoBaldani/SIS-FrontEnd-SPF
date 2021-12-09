@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../login"/>
 
   <main>
     <form class="container-fluid" action="" method="POST">

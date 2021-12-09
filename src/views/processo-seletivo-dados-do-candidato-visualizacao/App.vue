@@ -1,6 +1,6 @@
 <template>
         <main>
-            <Header />
+            <Header link="../processo-seletivo-busca-por-candidato"/>
             <div class="container-fluid" >
                 <div class="row mt-5 justify-content-evenly">
                     <div class="div-titulo col-lg-4">

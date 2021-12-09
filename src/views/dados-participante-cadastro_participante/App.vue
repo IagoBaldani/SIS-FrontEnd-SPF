@@ -1,5 +1,5 @@
 <template>
-  <Header/>
+  <Header link="../dados-candidato-participante-elegibilidade"/>
   <main>
     <!-- ínicio do formulário -->
     <div class="container-fluid" id="participante candidato">
@@ -65,21 +65,22 @@
               <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
               <input  class="form-control" id="inputEmail" type="email" v-model="cadastroParticipanteForm.email">
               <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
+              <p id="erroEmailInvalido" class="none erro">Por favor, insira um e-mail válido</p>
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold h5 titulo">TCE<br></label>
-                <input id="fileTce"   type="file" accept="application/pdf"/>
+                <label class="form-label fw-bold h5 titulo">TCE</label>
+                <input id="fileTce" type="file" accept="application/pdf"/>
                 <label for="file" class="btn-file d-flex justify-content-between">
                 </label>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Nome do Programa</label>
-               <!-- <p id="idPrograma" :value="nomeProgramaCandidato.id" class="none"></p> -->
-              <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.id"  type="text">
+              <p id="idPrograma" :value="nomeProgramaCandidato.id" class="none"></p>
+              <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.nome"  type="text">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Turma</label>
-                <select required class="form-select" id="selectTurma" v-on:click="buscarTurmasDeUmaFormacao()" v-model="turmaSelecionada">
+                <select required class="form-select" id="selectTurma" v-on:click="buscarTurmasDeUmaFormacao()">
                     <option class="relatorio_opcao" disabled selected>Turma</option>
                     <option class="relatorio_opcao" v-for="(turmasProgramaCandidato, id) in turmasProgramaCandidatos"
                     :key="id" :value="turmasProgramaCandidato.id">{{turmasProgramaCandidato.turmas}}
@@ -104,7 +105,7 @@
       </div>
       <div class="row justify-content-evenly">
         <div class="col-xl-4 ">
-          <button v-on:click="validaForm()" type="button" class="btn submit form-control" >
+          <button v-on:click="validaForm(), buscarTurmaPorId(), buscarCargoPorId()" type="button" class="btn submit form-control" >
             CONFIRMAR
           </button>
           <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="popularCargoTurma()" ></p>
@@ -114,8 +115,6 @@
       </div>
     </div>
     <!-- fim do formulário -->
-  </main>
-
   <!-- modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog modal-dialog-centered">
@@ -138,7 +137,7 @@
                 <li>Instituição de Ensino: <span class="titulo"> {{cadastroParticipanteForm.instituicaoEnsino}} </span></li>
                 <li>Curso: <span class="titulo"> {{cadastroParticipanteForm.curso}} </span></li>
                 <li>Término da Graduação: <span class="titulo"> {{formataDataParaMostrar(cadastroParticipanteForm.terminoGraduacao)}} </span></li>
-                <li>Cargo: <span class="titulo">{{ remuneracao.nome }}</span></li>
+                <li>Cargo: <span class="titulo">{{ cargo.cargo }}</span></li>
                 <li>Email: <span class="titulo">{{ cadastroParticipanteForm.email }}</span></li>
                 <!-- <li>Salário: <span class="titulo"> {{participante.salario}}</span></li> -->
                 <li>Programa de Formação - Turma: <span class="titulo"> {{turmaSelecionada.turmas}}</span></li>
@@ -158,6 +157,20 @@
       </div>
     </div>
   </div>
+   <!-- Modal de confirmação -->
+  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Cadastro efetuado com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </main>
 </template>
 
 <script>
@@ -179,6 +192,7 @@ export default {
       remuneracao: {},
       turmaSelecionada: {},
       cargos: [],
+      cargo: {},
       turmasPrograma: [],
       nomePrograma: '',
       idProgramaCandidato: '',
@@ -196,13 +210,24 @@ export default {
         id: '',
         nome: ''
       },
-      turmasProgramaCandidatos: []
+      turmasProgramaCandidatos: [],
+      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     }
   },
   methods: {
     buscarTurmasDeUmaFormacao () {
       http.get(`candidato/programa-candidato-turmas/${this.nomeProgramaCandidato.nome}`)
         .then(response => (this.turmasProgramaCandidatos = response.data)) 
+    },
+    buscarTurmaPorId () {
+      var idPrograma = document.querySelector('#selectTurma').value
+      http.get(`programa/buscarFormacaoPorId/${idPrograma}`)
+        .then(response => (this.turmaSelecionada = response.data))
+    },
+    buscarCargoPorId () {
+      var idCargo = document.getElementById('filtro-programa').value
+      http.get(`remuneracao/${idCargo}`)
+        .then(response => (this.cargo = response.data)) 
     },
     validaCampos () {
       let campos = document.querySelectorAll('input')
@@ -219,20 +244,22 @@ export default {
         document.querySelector('#preencha').classList.remove('none')
       }     
     },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     enviarDados () {
       var formData = new FormData() 
       var arquivo = document.getElementById('fileTce').files[0]
-          formData.append('cpf', this.cadastroParticipanteForm.cpf) 
-          formData.append('instituicaoEnsino',this.cadastroParticipanteForm.instituicaoEnsino )
-          formData.append('curso',this.cadastroParticipanteForm.curso) 
-          formData.append('terminoGraduacao',document.getElementById('inputTerminoGraduacao'))
-          formData.append('idRemuneracao', this.remuneracao.id)
-          formData.append('idCandidato', this.id)
-          formData.append('idPrograma', document.getElementById('selectTurma').value)
-          formData.append('email', this.cadastroParticipanteForm.email) 
-          formData.append('tce', arquivo)
-          console.log(this.remuneracao.id)
-        http
+      formData.append('cpf', this.cadastroParticipanteForm.cpf) 
+      formData.append('instituicaoEnsino', this.cadastroParticipanteForm.instituicaoEnsino)
+      formData.append('curso', this.cadastroParticipanteForm.curso) 
+      formData.append('terminoGraduacao', document.getElementById('inputTerminoGraduacao').value)
+      formData.append('idRemuneracao', this.remuneracao.id)
+      formData.append('idCandidato', this.id)
+      formData.append('idPrograma', document.getElementById('selectTurma').value)
+      formData.append('email', this.cadastroParticipanteForm.email) 
+      formData.append('tce', arquivo)
+      http
         .post('participante/salvarParticipante', formData, { 
           headers: {
             'Content-Type': 'multipart/form-data' 
@@ -246,7 +273,10 @@ export default {
       this.redirecionar()
     },
     redirecionar () {
-      location.href = '/dados-participante-busca'
+      this.abrirModal()
+      setTimeout(function () {
+        location.href = '/dados-participante-busca'
+      }, 1521)
     },
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)
@@ -314,6 +344,12 @@ export default {
       } else {
         document.querySelector('#erroEmail').classList.add('none')
       }
+      if (!this.reg.test(email)) {
+        erro = 1
+        document.querySelector('#erroEmailInvalido').classList.remove('none')
+      } else {
+        document.querySelector('#erroEmailInvalido').classList.add('none')
+      }
       if (turma == '') {
         document.querySelector('#erroTurma').classList.remove('none')
         erro = 1
@@ -353,7 +389,7 @@ export default {
     
     http.get(`candidato/programa-candidato-nome/${this.id}`)
       .then(response => (this.nomeProgramaCandidato = response.data))  
-  },
+  }
   
 }
 </script>
@@ -374,6 +410,9 @@ body{
 }
 .ativo{
   color: green;
+}
+#fileTce{
+  margin-left: 15px;
 }
 .inativo{
   color: darkred;

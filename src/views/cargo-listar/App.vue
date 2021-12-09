@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../home"/>
   <main>
     <div class="container-fluid px-5">
       <!-- Título da Página -->

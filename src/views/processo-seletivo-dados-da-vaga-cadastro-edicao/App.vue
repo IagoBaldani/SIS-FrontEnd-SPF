@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../processo-seletivo-busca-por-vagas"/>
 
   <main>
     <div class="container-fluid">
@@ -241,6 +241,9 @@ export default {
       let qtdEstagiarios = document.querySelector('#inputQtdEstagiarios').value
       let qtdTrainees = document.querySelector('#inputQtdTrainees').value
       this.carregaQuantidade(qtdEstagiarios, qtdTrainees, qtdAprendizes)
+    },
+     abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
     },
     carregaQuantidade (qtdE, qtdT, qtdA) {
       qtdA = parseInt(qtdA)

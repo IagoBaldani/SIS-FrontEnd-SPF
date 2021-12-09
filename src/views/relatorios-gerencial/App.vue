@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../home"/>
   <main id="mainModal">
     <!-- Início Select Relatório -->
     <section class="relatorio_main container">
@@ -579,12 +579,9 @@ export default {
         document.querySelector('#progEscopo').classList.add('none')
         erro = 0
       }
-      // if (formacao != 'null' && turma != 'null' && escopo != 'null') {
-      //   erro = 0
-      // }
       if (erro > 0) {
         return false
-      } else {
+      } else if (formacao != 'null' && turma != 'null' && escopo != 'null') { 
         this.redirecionamento()
       }
     }

@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header link="../dados-instrutor-busca"/>
     <main>
         <!-- ínicio do formulário -->
         <div class="container-fluid" id="instrutor">
@@ -31,6 +31,7 @@
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
                             <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutor.email" type="email" />
                             <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
+                            <p id="erroEmailInvalido" class="none erro">Por favor, insira um e-mail válido</p>
                         </div>
                 </div>
                 <div class="col-xl-4">
@@ -141,7 +142,8 @@ export default {
         cpf: '',
         telefone: '',
         status: ''
-      }
+      },
+      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     }
   },
   beforeMount () {
@@ -210,6 +212,12 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroEmail').classList.add('none')
+      }
+      if (!this.reg.test(email)) {
+        erro = 1
+        document.querySelector('#erroEmailInvalido').classList.remove('none')
+      } else {
+        document.querySelector('#erroEmailInvalido').classList.add('none')
       }
       if (erro == 1) {
         return false
