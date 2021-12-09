@@ -92,11 +92,11 @@
             </div>
             <div class="mb-3">
                 <label class="form-label mb-0 titulo">Donwload DISC</label><br>
-                <p ><img  src="../../assets/imgs/file_upload_black_24dp.svg" class="download" v-on:click="downloadDisc()">DISC</p>
+                <p ><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download" v-on:click="downloadDisc()">DISC</p>
             </div>
             <div class="mb-3">
-                <label class="form-label mb-0 titulo">Donwload TCE</label><br>
-                <p><img  src="../../assets/imgs/file_upload_black_24dp.svg" class="download"  v-on:click="downloadTce()">TCE</p>
+                <label target="_blank" class="form-label mb-0 titulo">Donwload TCE</label><br>
+                <a><img  src="../../assets/imgs/file_upload_black_24dp.svg" class="download"  v-on:click="downloadTce()">TCE</a>
             </div>
           </fieldset>
         </div>
@@ -372,8 +372,9 @@ export default {
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
     },
+
     downloadTce () {
-      location.href = `http://localhost:8081/api/participante/downloadTce/${this.participante.cpf}`
+      window.open(`http://localhost:8081/api/participante/downloadTce/${this.participante.cpf}`)
     },
     downloadDisc () {
       location.href = `http://localhost:8081/api/participante/downloadDisc/${this.participante.cpf}`

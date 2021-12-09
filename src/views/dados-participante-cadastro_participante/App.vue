@@ -74,7 +74,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Nome do Programa</label>
-              <p id="idPrograma" :value="nomeProgramaCandidato.id" class="none"></p>
+               <!-- <p id="idPrograma" :value="nomeProgramaCandidato.id" class="none"></p> -->
               <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.id"  type="text">
             </div>
             <div class="mb-3">
@@ -82,7 +82,7 @@
                 <select required class="form-select" id="selectTurma" v-on:click="buscarTurmasDeUmaFormacao()" v-model="turmaSelecionada">
                     <option class="relatorio_opcao" disabled selected>Turma</option>
                     <option class="relatorio_opcao" v-for="(turmasProgramaCandidato, id) in turmasProgramaCandidatos"
-                    :key="id" :value="turmasProgramaCandidato">{{turmasProgramaCandidato.turmas}}
+                    :key="id" :value="turmasProgramaCandidato.id">{{turmasProgramaCandidato.turmas}}
                     </option>
                 </select>
                 <p id="erroTurma" class="none erro">Por favor, preencha este campo</p>
@@ -228,7 +228,7 @@ export default {
           formData.append('terminoGraduacao',document.getElementById('inputTerminoGraduacao'))
           formData.append('idRemuneracao', this.remuneracao.id)
           formData.append('idCandidato', this.id)
-          formData.append('idPrograma', document.getElementById('nomeProgramaCandidato').value)
+          formData.append('idPrograma', document.getElementById('selectTurma').value)
           formData.append('email', this.cadastroParticipanteForm.email) 
           formData.append('tce', arquivo)
           console.log(this.remuneracao.id)
