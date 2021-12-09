@@ -290,18 +290,18 @@ export default {
       //       console.log(error)
       //     })
       // } else {
-        console.log(this.instrutorForm.cpf)
-        http
-          .post('instrutor', this.instrutorForm)
-          .then(response => {
-            this.abrirModal()
-            setTimeout(function () {
-              window.location.href = 'http://localhost:8080/dados-instrutor-busca'
-            }, 1521)
-          })
-          .catch(error => {
-            console.log(error)
-          })
+      console.log(this.instrutorForm.cpf)
+      http
+        .post('instrutor', this.instrutorForm)
+        .then(response => {
+          this.abrirModal()
+          setTimeout(function () {
+            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+          }, 1521)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }

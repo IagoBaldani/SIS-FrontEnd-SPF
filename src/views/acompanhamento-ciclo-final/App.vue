@@ -1,5 +1,5 @@
 <template>
-    <Header link="../acompanhamento-ciclo"/>
+    <Header :link="`../acompanhamento-ciclo?id=${this.id}`"/>
     <main>
         <div class="container-fluid">
             <div class="row justify-content-evenly mt-5 mb-3">

@@ -35,8 +35,8 @@
                     <div class="table-wrapper-scroll-y my-custom-scrollbar">
                         <table class="table table-bordered tabela mt-4 " id="tab">
                             <tbody align="center">
-                            <tr class="programa" v-for="programa in programas" v-bind:key="programa">
-                                <th scope="row" width="50">{{ programa.id }}</th>
+                            <tr class="programa" v-for="(programa, index) in programas" v-bind:key="programa">
+                                <th scope="row" width="50">{{++index}}</th>
                                 <td id="info-nome"> {{ programa.nome }}</td>
                                 <td>{{ programa.turma }}</td>
                                 <td id="info-status" class="info-status"
