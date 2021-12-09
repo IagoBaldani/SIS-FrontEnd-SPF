@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <Header link="../informacoes-gerais-gerencial"/>
     <main>
       <div class="container-fluid">
         <div class="row justify-content-evenly mt-4 mb-3">

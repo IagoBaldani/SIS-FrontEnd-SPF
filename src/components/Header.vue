@@ -16,7 +16,7 @@
           <img src="@/assets/imgs/outline_logout_white_24dp.png" />
         </div>
       </a>
-      <a v-else href="javascript:history.back()">
+      <a v-else :href="link">
         <div class="rollback btn-header">
           <img src="@/assets/imgs/arrow_back_white_24dp.svg" />
         </div>
@@ -29,7 +29,8 @@
 export default {
   name: 'Header',
   props: {
-    page: String
+    page: String,
+    link: ''
   }
 }
 </script>

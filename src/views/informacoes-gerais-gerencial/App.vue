@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../home"/>
   <main>
       <section>
         <div class="container-custom">

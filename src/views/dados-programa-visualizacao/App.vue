@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../dados-programa-busca"/>
   <main>
     <div class="container-fluid">
       <div class="row mt-4 justify-content-evenly">
