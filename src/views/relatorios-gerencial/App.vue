@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../home"/>
   <main id="mainModal">
     <!-- Início Select Relatório -->
     <section class="relatorio_main container">

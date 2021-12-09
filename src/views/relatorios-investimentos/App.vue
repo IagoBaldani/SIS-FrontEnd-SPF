@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../relatorios-gerencial"/>
 
   <main>
 

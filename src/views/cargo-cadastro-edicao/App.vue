@@ -1,5 +1,5 @@
 <template>
-  <Header/>
+  <Header link="../cargo-listar"/>
       <main>
         <div class="container-fluid">
             <div class="row justify-content-evenly">

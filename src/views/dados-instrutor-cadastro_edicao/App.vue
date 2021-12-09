@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header link="../dados-instrutor-busca"/>
     <main>
         <!-- ínicio do formulário -->
         <div class="container-fluid" id="instrutor">

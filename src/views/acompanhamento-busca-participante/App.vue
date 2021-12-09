@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header link="../home"/>
     <main>
         <!--Escrita de busca por participantes-->
         <div class="container-fluid">
