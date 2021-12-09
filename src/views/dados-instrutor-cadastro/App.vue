@@ -26,6 +26,7 @@
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
                             <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" :v-model="instrutor.cpf" v-mask="['###.###.###-##']" type="text" />
                             <p id="erroCpf" class="none erro">Por favor, preencha este campo</p>
+                            <p id="erroCpfInvalido" class="none erro">Por favor, insira um CPF válido</p>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
@@ -169,6 +170,40 @@ export default {
           console.log(`Erro: ${erro}`)
         })
     },
+    validaCpf (cpf) {
+      cpf = cpf.replaceAll('.', '')
+      cpf = cpf.replace('-', '')
+      console.log(cpf)
+      var Soma
+      var Resto
+      Soma = 0
+      if (cpf == "00000000000") {
+        console.log('cpf zerado')
+        return false
+      } 
+      for (var i=1; i<=9; i++) {
+        Soma = Soma + parseInt(cpf.substring(i-1, i)) * (11 - i)
+      }
+      Resto = (Soma * 10) % 11
+      if ((Resto == 10) || (Resto == 11)) {
+        Resto = 0
+      }  
+      if (Resto != parseInt(cpf.substring(9, 10))) {
+        return false
+      } 
+      Soma = 0
+      for (var i = 1; i <= 10; i++) {
+        Soma = Soma + parseInt(cpf.substring(i-1, i)) * (12 - i)
+      } 
+      Resto = (Soma * 10) % 11
+      if ((Resto == 10) || (Resto == 11)) {
+        Resto = 0
+      }  
+      if (Resto != parseInt(cpf.substring(10, 11))) {
+        return false
+      } 
+      return true
+    },
     validaForm () {
       var nome = document.getElementById('inputNome').value
       var contato = document.getElementById('inputTelefone').value
@@ -192,6 +227,13 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroCpf').classList.add('none')
+      }
+      if (!this.validaCpf(cpf)) {
+        console.log('validei o cpf')
+        erro = 1
+        document.querySelector('#erroCpfInvalido').classList.remove('none')
+      } else {
+        document.querySelector('#erroCpfInvalido').classList.add('none')
       }
       if (email == '') {
         document.querySelector('#erroEmail').classList.remove('none')
