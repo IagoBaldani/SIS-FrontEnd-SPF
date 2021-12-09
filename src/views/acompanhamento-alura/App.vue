@@ -162,13 +162,39 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div>
-                            <button type="submit"  @click="deleteById()" class="btn btn-primary mt-2 fw-bold w-100 botao" data-bs-dismiss="modal" >CONFIRMAR</button>
+                            <button type="submit"  @click="deleteById(),deletarFormularioModal()" class="btn btn-primary mt-2 fw-bold w-100 botao" data-bs-dismiss="modal" >CONFIRMAR</button>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div>
                             <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botaocanc" data-bs-dismiss="modal" >CANCELAR</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Formulário registrado com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de Exclusão -->
+    <p class="none" id="abreModalInvisivelExclusao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoExclusao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacaoExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabelExclusao">Formulário excluído com sucesso</h3>
                     </div>
                 </div>
             </div>
@@ -222,6 +248,12 @@ export default {
           console.log(error)
         })
     },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    abrirModalExclusao() {
+      document.getElementById('abreModalInvisivelExclusao').click()
+    },
     // requisição do tipo post para enviar as informações obtidas do formulário
     postForm () {
       http
@@ -253,6 +285,12 @@ export default {
           console.log(error)
         })
     },
+    deletarFormularioModal () {
+        this.abrirModalExclusao()
+        setTimeout(function () {
+        document.location.reload(true)
+         }, 1500)
+},
     // requisição do tipo get para popular a tabela com os dados.
     getAlura () {
       http
@@ -264,7 +302,7 @@ export default {
           console.log(error)
         })
     },
-
+    
     validaCampos () {
       var quantidadeHoras = document.getElementById('inputQuantidade').value
       var mesAvaliado = document.getElementById('inputMes').value
@@ -329,6 +367,10 @@ export default {
       if (erro == 1) {
         return false
       } else {
+        this.abrirModal()
+        setTimeout(function () {
+            document.location.reload(true)
+            }, 1500) 
         document.getElementById('invisivel').click()
       }
     },
