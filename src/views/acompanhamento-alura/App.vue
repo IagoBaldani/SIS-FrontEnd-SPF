@@ -20,34 +20,36 @@
                     <form>
                         <div class="mb-3">
                             <label for="qtdHoras" class="form-label fw-bold mb-0 titulo">Quantidade de Horas</label>
+                            <input id="inputQuantidade" name="qtdHoras" v-model="form.qtdHoras" max="40" min="0" type="number" required class="form-control campo">
+                            <p id="erroQuantidade" class="erro none">Por favor, preencha este campo</p>
                             <p id="qtdHoras" class="erro none">Valores válidos: 0 - 40</p>
-                            <input name="qtdHoras" v-model="form.qtdHoras" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="mAvaliado" class="form-label fw-bold mb-0 titulo">Mês avaliado</label>
+                            <input id="inputMes" name="mAvaliado" max="18" min="0" v-model="form.mesAvaliado" type="number" required class="form-control campo">
+                            <p id="mesErro" class="erro none">Por favor, preencha este campo</p>
                             <p id="mesAval" class="erro none">Valores válidos: 0 - 18</p>
-                            <input name="mAvaliado" v-model="form.mesAvaliado" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="sAvaliada" class="form-label fw-bold mb-0 titulo">Semana avaliada</label>
+                            <input id="inputSemana" name="sAvaliada" max="5" min="0" v-model="form.semanaAvaliada" type="number" required class="form-control campo">
+                            <p id="semanaErro" class="erro none">Por favor, preencha este campo</p>
                             <p id="semAval" class="erro none">Valores válidos: 0 - 5</p>
-                            <input name="sAvaliada"  v-model="form.semanaAvaliada" type="number" required class="form-control campo">
                         </div>
                         <div class="mb-3">
                             <label for="dtRegistro" class="form-label fw-bold mb-0 titulo">Data do Registro</label>
-                            <input name="dtRegistro"  v-model="form.dataRegistro" type="date" required class="form-control campo">
+                            <input id="inputData" name="dtRegistro"  v-model="form.dataRegistro" type="date" required class="form-control campo">
+                            <p id="erroData" class="erro none">Por favor, preencha este campo</p>
                         </div>
                         <div class="mb-3">
                             <label for="hMinima" class="form-label fw-bold mb-0 titulo">Horas mínimas semanais</label>
+                            <input name="hMinima" max="40" min="0" id="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
+                            <p id="ErroHoras" class="erro none">Por favor, preencha este campo</p>
                             <p id="hrMin" class="erro none">Valores válidos: 0 - 40</p>
-                            <input name="hMinima" id="hMinima" v-model="form.hrMinSemana" type="number" required class="form-control campo">
                         </div>
-                        <button type="button" @click="postForm()" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
-                        <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
-                        <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
-                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos (corretamente)!</p>
-                        <p class="erro h4 none mt-3" id="deletado">Registro deletado com sucesso!</p>
+                        <button type="button" @click="validaCampos()" class="btn btn-primary mt-2 fw-bold w-100 botao">REGISTRAR</button>
                     </form>
+                    <p id="invisivel" v-on:click="postForm()"></p>
                 </div>
                 <div  class="col-lg-7">
                     <div style="overflow-y: scroll; max-height:335px;">
@@ -160,13 +162,39 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div>
-                            <button type="submit"  @click="deleteById()" class="btn btn-primary mt-2 fw-bold w-100 botao" data-bs-dismiss="modal" >CONFIRMAR</button>
+                            <button type="submit"  @click="deleteById(),deletarFormularioModal()" class="btn btn-primary mt-2 fw-bold w-100 botao" data-bs-dismiss="modal" >CONFIRMAR</button>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div>
                             <button type="submit" class="btn btn-primary mt-2 fw-bold w-100 botaocanc" data-bs-dismiss="modal" >CANCELAR</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Formulário registrado com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de Exclusão -->
+    <p class="none" id="abreModalInvisivelExclusao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoExclusao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacaoExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabelExclusao">Formulário excluído com sucesso</h3>
                     </div>
                 </div>
             </div>
@@ -220,34 +248,27 @@ export default {
           console.log(error)
         })
     },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    abrirModalExclusao() {
+      document.getElementById('abreModalInvisivelExclusao').click()
+    },
     // requisição do tipo post para enviar as informações obtidas do formulário
     postForm () {
-      let campos = document.querySelectorAll('input')
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0 && this.validaCampos()) {
-        document.querySelector('#preencha').classList.add('none')
-        document.querySelector('#aguarde').classList.remove('none')
-        http
-          .post(`alura/novo/${this.id}`, this.form)
-          .then((response) => {
-            this.getAlura()
-            document.querySelector('#aguarde').classList.add('none')
-            document.querySelector('#enviado').classList.remove('none')
-            setTimeout(function () {
-              document.querySelector('#enviado').classList.add('none')
-            }, 2000)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      } else {
-        document.querySelector('#preencha').classList.remove('none')
-      }
+      http
+        .post(`alura/novo/${this.id}`, this.form)
+        .then((response) => {
+          this.getAlura()
+          document.querySelector('#aguarde').classList.add('none')
+          document.querySelector('#enviado').classList.remove('none')
+          setTimeout(function () {
+            document.querySelector('#enviado').classList.add('none')
+          }, 2000)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     // Requisição para deletar um registro.
     deleteById () {
@@ -257,13 +278,19 @@ export default {
           this.getAlura()
           document.querySelector('#deletado').classList.remove('none')
           setTimeout(function () {
-              document.querySelector('#deletado').classList.add('none')
+            document.querySelector('#deletado').classList.add('none')
           }, 2000)
         })
         .catch((error) => {
           console.log(error)
         })
     },
+    deletarFormularioModal () {
+        this.abrirModalExclusao()
+        setTimeout(function () {
+        document.location.reload(true)
+         }, 1500)
+},
     // requisição do tipo get para popular a tabela com os dados.
     getAlura () {
       http
@@ -275,28 +302,63 @@ export default {
           console.log(error)
         })
     },
-
+    
     validaCampos () {
+      var quantidadeHoras = document.getElementById('inputQuantidade').value
+      var mesAvaliado = document.getElementById('inputMes').value
+      var semanaAvaliada = document.getElementById('inputSemana').value
+      var dataRegistro = document.getElementById('inputData').value
+      var horasMinimasSemanais = document.getElementById('hMinima').value
       let erro = 0
-      if (this.form.qtdHoras > 40 || this.form.qtdHoras < 0) {
+      if (quantidadeHoras == '') {
+        document.querySelector('#erroQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroQuantidade').classList.add('none')
+      }
+      if (quantidadeHoras > 40 || quantidadeHoras < 0) {
         document.querySelector('#qtdHoras').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#qtdHoras').classList.add('none')
       }
-      if (this.form.mesAvaliado > 18 || this.form.mesAvaliado < 0) {
+      if (mesAvaliado == '') {
+        document.querySelector('#mesErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#mesErro').classList.add('none')
+      }
+      if (mesAvaliado > 18 || mesAvaliado < 0) {
         document.querySelector('#mesAval').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#mesAval').classList.add('none')
       }
-      if (this.form.semanaAvaliada > 5 || this.form.semanaAvaliada < 0) {
+      if (semanaAvaliada == '') {
+        document.querySelector('#semanaErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#semanaErro').classList.add('none')
+      }
+      if (semanaAvaliada > 5 || semanaAvaliada < 0) {
         document.querySelector('#semAval').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#semAval').classList.add('none')
       }
-      if (this.form.hrMinSemana > 40 || this.form.hrMinSemana < 0) {
+      if (dataRegistro == '') {
+        document.querySelector('#erroData').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroData').classList.add('none')
+      }
+      if (horasMinimasSemanais == '') {
+        document.querySelector('#ErroHoras').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#ErroHoras').classList.add('none')
+      }
+      if (horasMinimasSemanais > 40 || horasMinimasSemanais < 0) {
         document.querySelector('#hrMin').classList.remove('none')
         erro = 1
       } else {
@@ -304,8 +366,13 @@ export default {
       }
       if (erro == 1) {
         return false
-      } 
-      return true
+      } else {
+        this.abrirModal()
+        setTimeout(function () {
+            document.location.reload(true)
+            }, 1500) 
+        document.getElementById('invisivel').click()
+      }
     },
 
     formataDataParaMostrar (data) {
