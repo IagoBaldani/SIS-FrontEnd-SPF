@@ -30,7 +30,6 @@
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
                             <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutor.email" type="email" />
-                            <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
                             <p id="erroEmailInvalido" class="none erro">Por favor, insira um e-mail válido</p>
                         </div>
                 </div>
@@ -208,10 +207,10 @@ export default {
         document.querySelector('#erroContato').classList.add('none')
       }
       if (email == '') {
-        document.querySelector('#erroEmail').classList.remove('none')
+        document.querySelector('#erroEmailInvalido').classList.remove('none')
         erro = 1
       } else {
-        document.querySelector('#erroEmail').classList.add('none')
+        document.querySelector('#erroEmailInvalido').classList.add('none')
       }
       if (!this.reg.test(email)) {
         erro = 1
@@ -248,9 +247,9 @@ export default {
           .post('instrutor', this.instrutorForm)
           .then(response => {
             this.abrirModal()
-             setTimeout(function () {
-            window.location.href = 'http://localhost:8080/dados-instrutor-busca'
-          },1521)
+            setTimeout(function () {
+              window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+            }, 1521)
           })
           .catch(error => {
             console.log(error)
