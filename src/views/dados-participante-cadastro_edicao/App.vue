@@ -48,6 +48,7 @@
               <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
               <input required  v-bind:value="participante.email" class="form-control" type="email" id="participanteEmail">
               <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
+              <p id="erroEmailInvalido" class="none erro">Por favor, insira um e-mail válido</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo"
@@ -98,30 +99,6 @@
               />
               <p id="erroTerminoGraduacao" class="none erro">Por favor, preencha este campo</p>
             </div>
-            <!-- <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo"
-                >Início do programa</label
-              >
-              <input
-                id="participanteInicioPrograma"
-                class="form-control disabledTextInput"
-                v-bind:value="participante.iniPrograma"
-                type="date"
-              />
-              <p id="erroDataInicioGraduacao" class="none erro">Por favor, preencha este campo</p>
-            </div> -->
-            <!-- <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo"
-                >Término do programa</label
-              >
-              <input
-                id="participanteTerminoPrograma"
-                class="form-control disabledTextInput"
-                v-bind:value="participante.fimPrograma"
-                type="date"
-              />
-              <p id="erroDataFimGraduacao" class="none erro">Por favor, preencha este campo</p>
-            </div> -->
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo"
                 >Instituição de Ensino</label
@@ -211,7 +188,8 @@ export default {
         email: ''
       },
       todasFormacoes: [],
-      turmasProgramaCandidato: []
+      turmasProgramaCandidato: [],
+      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     }
   },
 
@@ -281,6 +259,12 @@ export default {
       } else {
         document.querySelector('#erroEmail').classList.add('none')
       }
+      if (!this.reg.test(email)) {
+        erro = 1
+        document.querySelector('#erroEmailInvalido').classList.remove('none')
+      } else {
+        document.querySelector('#erroEmailInvalido').classList.add('none')
+      }
       if (fonteRecrutamento == '') {
         document.querySelector('#erroFonte').classList.remove('none')
         erro = 1
@@ -329,7 +313,6 @@ export default {
       return dataFormatada
     },
     processaRequisicoes () {
-      console.log(this.dataFimGraduacao)
       var formData = new FormData() 
       var comprovanteRematricula = document.getElementById('file').files[0] 
       this.atualizaStatusForm.nome = document.getElementById('participanteNome').value

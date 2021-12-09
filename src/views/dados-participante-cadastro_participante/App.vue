@@ -65,6 +65,7 @@
               <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
               <input  class="form-control" id="inputEmail" type="email" v-model="cadastroParticipanteForm.email">
               <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
+              <p id="erroEmailInvalido" class="none erro">Por favor, insira um e-mail válido</p>
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold h5 titulo">TCE</label>
@@ -211,7 +212,8 @@ export default {
         id: '',
         nome: ''
       },
-      turmasProgramaCandidatos: []
+      turmasProgramaCandidatos: [],
+      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     }
   },
   methods: {
@@ -343,6 +345,12 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroEmail').classList.add('none')
+      }
+      if (!this.reg.test(email)) {
+        erro = 1
+        document.querySelector('#erroEmailInvalido').classList.remove('none')
+      } else {
+        document.querySelector('#erroEmailInvalido').classList.add('none')
       }
       if (turma == '') {
         document.querySelector('#erroTurma').classList.remove('none')
