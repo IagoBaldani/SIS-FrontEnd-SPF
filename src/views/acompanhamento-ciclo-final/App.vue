@@ -117,6 +117,10 @@
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/ conclusão</h4>
                             <p class="grey-font h4 text-decoration-underline" @click="download()">comprovante.pdf</p>
                         </div>
+                        <div class="mb-4">
+                            <h4 class="fw-bold titulo">Observação:</h4>
+                            <p class="grey-font h4 ellipsis-overflow">{{ form.campoObservacao }}</p>
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-2 mt-5">

@@ -321,6 +321,7 @@ import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
 import { mask } from 'vue-the-mask'
+import { variavel } from '../../services/Variavel'
 
 export default {
   directives: { mask },
@@ -374,10 +375,10 @@ export default {
     },
 
     downloadTce () {
-      window.open(`http://localhost:8081/api/participante/downloadTce/${this.participante.cpf}`)
+      window.open( variavel.href = `api/participante/downloadTce/${this.participante.cpf}`)
     },
     downloadDisc () {
-      location.href = `http://localhost:8081/api/participante/downloadDisc/${this.participante.cpf}`
+      location.href = variavel.href = `api/participante/downloadDisc/${this.participante.cpf}`
     },
     formataCpfparaMostrar (cpf) {
       return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
@@ -396,7 +397,7 @@ export default {
       http
         .put('participante/atualizaStatus', this.atualizaStatusForm)
         .then(response => {
-          window.location.href = 'http://localhost:8080/dados-participante-busca'
+          window.location.href = variavel.href = 'dados-participante-busca'
         })
         .catch(error => {
           console.log(error)

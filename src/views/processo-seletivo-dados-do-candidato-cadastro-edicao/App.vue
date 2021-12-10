@@ -212,6 +212,7 @@ import Header from '@/components/Header.vue'
 import Funcoes from '@/services/Funcoes'
 import { http } from '@/services/Config'
 import { mask } from 'vue-the-mask'
+import { variavel } from '../../services/Variavel'
 
 export default {
   directives: { mask },
@@ -334,7 +335,7 @@ export default {
           .then(response => {
             this.abrirModal()
             setTimeout(function () {
-              window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-candidato'
             }, 1500) 
           })
           .catch(error => {
@@ -365,7 +366,7 @@ export default {
           .then(response => {
             this.abrirModalCriacao()
             setTimeout(function () {
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
+            window.location.href = variavel.href = 'processo-seletivo-busca-por-candidato'
           },1521)
           })
           .catch(error => {

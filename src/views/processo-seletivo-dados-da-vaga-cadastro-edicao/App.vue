@@ -179,6 +179,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
+import { variavel } from '../../services/Variavel'
 
 export default {
   name: 'App',
@@ -351,7 +352,7 @@ export default {
          .then(response => {
           this.abrirModalEdicao()
           setTimeout(function () {
-                window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+                window.location.href =  variavel.href = '-seletivo-busca-por-vagas'
            }, 1521)
          })
          .catch(error => {
@@ -409,7 +410,7 @@ export default {
           .then(response => {
             this.abrirModalEdicao()
             setTimeout(function () {
-               window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+               window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
             }, 1521)
           })
           .catch(error => {
@@ -422,7 +423,7 @@ export default {
           .then(response => {
             this.abrirModal()
             setTimeout(function () {
-               window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-vagas'
+               window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
             }, 1521)
           })
           .catch(error => {

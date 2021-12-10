@@ -283,6 +283,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { variavel } from '../../services/Variavel'
 
 export default {
   name: 'App',
@@ -441,7 +442,7 @@ export default {
       http.post('/investimento-folha', this.form).then(response => {
         this.abrirModal()
         setTimeout(function () {
-          window.location.href = 'http://localhost:8080/investimento-folha'
+          window.location.href = variavel.href = 'investimento-folha'
         }, 1500) 
       })
     },

@@ -30,6 +30,7 @@
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
                             <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutor.email" type="email" />
+                            <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
                             <p id="erroEmailInvalido" class="none erro">Por favor, insira um e-mail válido</p>
                         </div>
                 </div>
@@ -124,6 +125,7 @@ import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
 import { mask } from 'vue-the-mask'
+import { variavel } from '../../services/Variavel'
 
 export default {
   directives: { mask },
@@ -207,12 +209,12 @@ export default {
         document.querySelector('#erroContato').classList.add('none')
       }
       if (email == '') {
-        document.querySelector('#erroEmailInvalido').classList.remove('none')
+        document.querySelector('#erroEmail').classList.remove('none')
         erro = 1
       } else {
-        document.querySelector('#erroEmailInvalido').classList.add('none')
+        document.querySelector('#erroEmail').classList.add('none')
       }
-      if (!this.reg.test(email)) {
+      if (!this.reg.test(email) && email != '') {
         erro = 1
         document.querySelector('#erroEmailInvalido').classList.remove('none')
       } else {
@@ -236,7 +238,7 @@ export default {
           .then(response => {
             this.abrirModal()
             setTimeout(function () {
-              window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+              window.location.href = variavel.href = 'dados-instrutor-busca'
             }, 1521)
           })
           .catch(error => {
@@ -248,7 +250,7 @@ export default {
           .then(response => {
             this.abrirModal()
             setTimeout(function () {
-              window.location.href = 'http://localhost:8080/dados-instrutor-busca'
+              window.location.href =  variavel.href = 'dados-instrutor-busca'
             }, 1521)
           })
           .catch(error => {

@@ -442,6 +442,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
+import { variavel } from '../../services/Variavel'
 export default {
   name: 'App',
   components: {
@@ -515,21 +516,21 @@ export default {
       var escopo = document.getElementById('select3').value
       var formulario = document.getElementById('formSelect')
       if (escopo == 'Alura') {
-        formulario.action = encodeURI('http://localhost:8080/relatorios-alura')
+        formulario.action = encodeURI( window.location.href =  variavel.href ='/relatorios-alura')
         formulario.submit()
       } else if (escopo == 'Avaliações') {
         formulario.action = encodeURI(
-          'http://localhost:8080/relatorios-avaliacoes'
+          window.location.href =  variavel.href ='relatorios-avaliacoes'
         )
         formulario.submit()
       } else if (escopo == 'Conclusões') {
         formulario.action = encodeURI(
-          'http://localhost:8080/relatorios-conclusoes'
+          window.location.href =  variavel.href ='relatorios-conclusoes'
         )
         formulario.submit()
       } else if (escopo == 'Investimentos') {
         formulario.action = encodeURI(
-          'http://localhost:8080/relatorios-investimentos'
+          window.location.href =  variavel.href ='relatorios-investimentos'
         )
         formulario.submit()
       }
