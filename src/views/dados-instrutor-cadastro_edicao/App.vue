@@ -21,6 +21,7 @@
                             <label class="form-label fw-bold mb-0 titulo">Contato</label>
                             <input class="form-control" id="inputTelefone" placeholder="(xx)xxxxx-xxxx" v-mask="['(##) # ####-####']" v-model="instrutor.telefone" type="tel" />
                             <p id="erroContato" class="none erro">Por favor, preencha este campo</p>
+                            <p id="erroTamanho" class="erro none">Este campo precisa ter 11 dígitos</p>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
@@ -205,8 +206,12 @@ export default {
       if (contato == '') {
         document.querySelector('#erroContato').classList.remove('none')
         erro = 1
-      } else {
+      } else if (contato.length != 16) {
         document.querySelector('#erroContato').classList.add('none')
+        document.querySelector('#erroTamanho').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTamanho').classList.add('none')
       }
       if (email == '') {
         document.querySelector('#erroEmail').classList.remove('none')
@@ -250,7 +255,7 @@ export default {
           .then(response => {
             this.abrirModal()
             setTimeout(function () {
-              window.location.href =  variavel.href = 'dados-instrutor-busca'
+              window.location.href = variavel.href = 'dados-instrutor-busca'
             }, 1521)
           })
           .catch(error => {

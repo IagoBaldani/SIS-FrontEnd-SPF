@@ -43,6 +43,7 @@
                 type="tel"
               />
               <p id="erroContato" class="none erro">Por favor, preencha este campo</p>
+              <p id="erroTamanho" class="erro none">Contato precisa ter 11 dígitos</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
@@ -251,8 +252,12 @@ export default {
       if (contato == '') {
         document.querySelector('#erroContato').classList.remove('none')
         erro = 1
-      } else {
+      } else if (contato.length != 16) {
         document.querySelector('#erroContato').classList.add('none')
+        document.querySelector('#erroTamanho').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTamanho').classList.add('none')
       }
       if (email == '') {
         document.querySelector('#erroEmail').classList.remove('none')

@@ -31,6 +31,7 @@
               v-model="candidato.telefone"
             />
             <p id="contatoErro" class="none erro">Por favor, preencha o campo telefone</p>
+            <p id="erroTamanho" class="erro none">Este campo precisa ter 11 dígitos!</p>
           </div>
 
           <div class="mt-4 mb-3">
@@ -394,8 +395,12 @@ export default {
       if (contato == '') {
         document.querySelector('#contatoErro').classList.remove('none')
         erro = 1
-      } else {
+      } else if (contato.length != 16) {
         document.querySelector('#contatoErro').classList.add('none')
+        document.querySelector('#erroTamanho').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroTamanho').classList.add('none')
       }
       if (fonteRecrutamento == '') {
         document.querySelector('#fonteErro').classList.remove('none')
