@@ -50,8 +50,8 @@
                             <label class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
                             
                             <input id="file" @change="formatoUpload()" class="none"  type="file" accept="application/pdf"/>
-                            <label for="file" class="btn-file d-flex justify-content-between">
-                                <div class="w-100">
+                            <label for="file" class="btn-file d-flex justify-content-between" id="input-file">
+                                <div class="w-100" >
                                     <img src="@/assets/imgs/upload.svg" class="upload-img"/>
                                     <div class= "d-inline-block w-75">
                                         <p id="nome-arquivo" class="ellipsis-overflow mb-0 titulo">Faça upload do comprovante</p>
@@ -62,6 +62,7 @@
                         </div>
                         <button type="button" @click="postForm()"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
+                        <p id="conclusoes-finalizadas" class="fw-bold erro h5 none">*Não é possível mais realizar registros de conclusões!</p>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
@@ -212,6 +213,16 @@ export default {
         .get(`ciclo/${this.id}`)
         .then((response) => {
           this.conclusoes = response.data
+          if (this.conclusoes.length > 0) {
+            if (this.conclusoes[(this.conclusoes.length - 1)].status == 'FINAL') {
+              document.querySelector('#data-alteracao').setAttribute('disabled', 'disabled')
+              document.querySelector('#filtro-programa').setAttribute('disabled', 'disabled')
+              document.querySelector('#file').setAttribute('disabled', 'disabled')
+              document.querySelector('#input-file').setAttribute('style', 'cursor:default;background-color:#e9ecef')
+              document.querySelectorAll('button').forEach(element => element.classList.add('none'))
+              document.querySelector('#conclusoes-finalizadas').classList.remove('none')
+            }
+          }
         })
         .catch((error) => {
           console.log(error)
@@ -268,17 +279,15 @@ export default {
             }
           })
           .then((response) => {
-            this.getCiclo()
-            document.querySelector('#aguarde').classList.add('none')
+            document.querySelector('#abreModalInvisivel').click()
+            setTimeout(function () {
+              document.location.reload(true)
+            }, 2000)
           })
           .catch((error) => {
             console.log(error)
           })
-        document.querySelector('#abreModalInvisivel').click()
-        setTimeout(function () {
-          document.querySelector('#abreModalInvisivel').click()
-        }, 1500)
-        document.location.reload(true)
+        
       }    
     },
     // carrega o modal com as informações dos ciclos, e cria a tabela com os indices corretos.
@@ -320,7 +329,7 @@ export default {
     },
     // Endereço da API para fazer download do arquivo.
     download () {
-      location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
+      window.open(`http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`)
     }
   }
 }
