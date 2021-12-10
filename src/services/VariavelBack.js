@@ -1,9 +1,2 @@
-import axios from 'axios'
-import Cookie from 'js-cookie'
 
-export const variavelBack = axios.create({
-  baseURL: 'http://localhost:8081/api/',
-  headers: {
-    Authorization: `Bearer ${Cookie.get('login_token')}`
-  }
-})
+export const variavelBack = 'http://192.168.30.162:8081/api/'  

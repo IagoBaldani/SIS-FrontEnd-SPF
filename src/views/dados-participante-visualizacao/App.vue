@@ -377,10 +377,10 @@ export default {
     },
 
     downloadTce () {
-      window.open( variavelBack.href =`api/participante/downloadTce/${this.participante.cpf}`)
+      window.open( variavelBack + `participante/downloadTce/${this.participante.cpf}`)
     },
     downloadDisc () {
-      location.href = variavelBack.href =`api/participante/downloadDisc/${this.participante.cpf}`
+      location.href = variavelBack + `participante/downloadDisc/${this.participante.cpf}`
     },
     formataCpfparaMostrar (cpf) {
       return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')

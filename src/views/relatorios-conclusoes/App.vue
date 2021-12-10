@@ -94,11 +94,11 @@ export default {
     },
 
     downloadRelatorioPDF () {
-      location.href = variavelBack.href = 'api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
+      location.href = variavelBack +  'conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
     },
 
     downloadRelatorioXLSX () {
-      location.href = variavelBack.href = 'api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
+      location.href = variavelBack +  'conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
     }
   }
 }

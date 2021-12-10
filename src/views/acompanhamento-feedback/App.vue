@@ -165,7 +165,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
-
+import { variavelBack } from '../../services/VariavelBack'
 export default {
   name: 'App',
   components: {
@@ -283,7 +283,8 @@ export default {
     },
     // endereço da API para fazer donwload  do arquivo
     download () {
-      location.href = variavelBack.href = `api/feedback/download/${this.feedbackModal.id}`
+      console.log(this.feedbackModal.id)
+      location.href = variavelBack + `feedback/download/${this.feedbackModal.id}`
     },
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()

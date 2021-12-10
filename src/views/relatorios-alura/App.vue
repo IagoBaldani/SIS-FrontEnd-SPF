@@ -211,7 +211,7 @@ export default {
     },
     downloadRelatorioPDF () {
       location.href =
-        variavelBack.href ='api/relatorio-alura/formacao=' +
+        variavelBack + 'relatorio-alura/formacao=' +
         this.parametrosUrl.formacao +
         '/turma=' +
         this.parametrosUrl.turma +
@@ -219,7 +219,7 @@ export default {
     },
     downloadRelatorioXLSX () {
       location.href =
-        variavelBack.href ='api/relatorio-alura/formacao=' +
+        variavelBack + 'relatorio-alura/formacao=' +
         this.parametrosUrl.formacao +
         '/turma=' +
         this.parametrosUrl.turma +

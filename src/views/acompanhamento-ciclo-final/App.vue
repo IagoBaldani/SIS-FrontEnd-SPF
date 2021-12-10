@@ -145,7 +145,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
-
+import { variavelBack } from '../../services/VariavelBack'
 export default {
   name: 'App',
   components: {
@@ -249,7 +249,7 @@ export default {
     },
     //  Endereço da API para fazer download do arquivo
     download () {
-      location.href = variavelBack.href =`api/ciclo/download/${this.conclusaoModal.id}`
+      location.href = variavelBack + `ciclo/download/${this.conclusaoModal.id}`
     },
     // funcão que valida os campos, caso estejam vazios uma notificação é exibida.
     validaCampos () {

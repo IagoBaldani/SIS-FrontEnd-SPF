@@ -334,7 +334,7 @@ export default {
     },
     // Endereço da API para fazer download do arquivo.
     download () {
-      window.open(variavelBack.href =`api/ciclo/download/${this.conclusaoModal.id}`)
+      window.open(variavelBack +`ciclo/download/${this.conclusaoModal.id}`)
     }
   }
 }

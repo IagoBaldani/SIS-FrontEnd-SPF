@@ -194,11 +194,11 @@ export default {
     },
 
     downloadRelatorioPDF () {
-      location.href = variavelBack.href = 'api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
+      location.href = variavelBack +  'investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
     },
 
     downloadRelatorioXLSX () {
-      location.href = variavelBack.href ='api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/xlsx'
+      location.href = variavelBack + 'investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/xlsx'
     }
   }
 }

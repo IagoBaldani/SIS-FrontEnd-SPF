@@ -193,7 +193,7 @@ export default {
 
     downloadRelatorioPDF () {
       location.href =
-        variavelBack.href = 'api/relatorio-avaliacao/formacao=' +
+        variavelBack +  'relatorio-avaliacao/formacao=' +
         this.parametrosUrl.formacao +
         '/turma=' +
         this.parametrosUrl.turma +
@@ -202,7 +202,7 @@ export default {
 
     downloadRelatorioXLSX () {
       location.href =
-        variavelBack.href ='api/relatorio-avaliacao/formacao=' +
+        variavelBack +  'relatorio-avaliacao/formacao=' +
         this.parametrosUrl.formacao +
         '/turma=' +
         this.parametrosUrl.turma +

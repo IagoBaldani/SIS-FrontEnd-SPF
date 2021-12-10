@@ -11,7 +11,7 @@
                 <h2>Se você viu isso, parabens, você é programador</h2>
                 <div class="col-xl-2"></div>
             </div>
-            <form method="POST" :action="variavelBack.href =`api/arquivos/id`">
+            <form method="POST" :action="variavelBack + `arquivos/id`">
               <div class="row justify-content-evenly">
                   <div class="col-xl-4">
                     <div class="mb-3">

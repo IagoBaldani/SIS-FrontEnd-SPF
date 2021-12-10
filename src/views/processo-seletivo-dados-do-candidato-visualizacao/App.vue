@@ -123,10 +123,10 @@ export default {
       return data
     },
     downloadDisc () {
-      window.location.href = variavelBack.href = `candidato/download-disc/${this.id}`
+      window.location.href = variavelBack + `candidato/download-disc/${this.id}`
     },
     downloadCurriculo () {
-      window.location.href = variavelBack.href = `candidato/download-curriculo/${this.id}`
+      window.location.href = variavelBack + `candidato/download-curriculo/${this.id}`
     },
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)

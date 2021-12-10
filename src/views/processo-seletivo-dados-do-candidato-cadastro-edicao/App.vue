@@ -364,7 +364,7 @@ export default {
           .then(response => {
             this.abrirModalCriacao()
             setTimeout(function () {
-              window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-candidato'
             }, 1521)
           })
           .catch(error => {
