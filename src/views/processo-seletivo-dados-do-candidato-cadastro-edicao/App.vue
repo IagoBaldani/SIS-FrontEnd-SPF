@@ -16,7 +16,6 @@
               type="text"
               class="form-control"
               id="inputNome"
-              placeholder="Nome"
               v-model="candidato.nome"
             />
             <p id="nomeErro" class="none erro">Por favor, preencha o campo nome</p>
@@ -40,7 +39,6 @@
               type="text"
               class="form-control"
               id="inputFonteDeRecrutamento"
-              placeholder="Fonte de recrutamento"
               v-model="candidato.fonteRecrutamento"
             />
             <p id="fonteErro" class="none erro">Por favor, preencha o campo fonte de recrutamento</p>
@@ -83,7 +81,7 @@
           </div>
           <div class="mb-3">
             <label class="label-form">Prova prática</label>
-            <input type="number" class="form-control" id="inputProvaPratica" placeholder="Prova prática" v-model="candidato.testeLogico"/>
+            <input type="number" class="form-control" id="inputProvaPratica"  v-model="candidato.testeLogico"/>
             <p id="provaErro" class="none erro">Por favor, preencha o campo prova prática</p>
           </div>
 
@@ -365,8 +363,8 @@ export default {
           .then(response => {
             this.abrirModalCriacao()
             setTimeout(function () {
-            window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
-          },1521)
+              window.location.href = 'http://localhost:8080/processo-seletivo-busca-por-candidato'
+            }, 1521)
           })
           .catch(error => {
             console.log(error)
@@ -474,7 +472,7 @@ export default {
     const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
 
     return dataFormatada
-}
+  }
 }
 
 </script>

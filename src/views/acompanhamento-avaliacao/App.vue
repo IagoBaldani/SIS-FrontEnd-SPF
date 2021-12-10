@@ -22,23 +22,27 @@
                     <form>
                         <div class="mb-3">
                             <label for="tecnica" class="form-label fw-bold h5 titulo">Técnica</label>
-                            <input type="number" class="form-control" id="tecnica" v-model="form.notaTecnica" step=".01" min="0" max="10">
-                            <p id="erroTecnica" class="erro none">Este campo não pode ser vazio, e a nota deve ser entre 0 e 10</p>
+                            <input type="number" class="form-control" id="tecnicaNotas" v-model="form.notaTecnica" min="0" max="10">
+                            <p id="erroTecnica" class="erro none">Preencha este campo</p>
+                            <p id="erroNota" class="erro none">A nota deve ser entre 0 - 10</p>
                         </div>
                         <div class="mb-3">
                             <label for="praticas-ageis" class="form-label fw-bold h5 titulo">Módulo práticas ágeis</label>
-                            <input type="number" class="form-control" id="praticas-ageis" v-model="form.notaPraticasAgeis" step=".01" min="0.00" max="10.00">
-                            <p id="erroPraticas" class="erro none">Este campo não pode ser vazio, e a nota deve ser entre 0 e 10</p>
+                            <input type="number" class="form-control" id="praticas-ageis" v-model="form.notaPraticasAgeis" min="0.00" max="10.00">
+                            <p id="erroPraticas" class="erro none">Preencha este campo</p>
+                            <p id="erroNotaPratica" class="erro none">A nota deve ser entre 0 - 10</p>
                         </div>
                         <div class="mb-3">
                             <label for="lideranca" class="form-label fw-bold h5 titulo">Módulo liderança</label>
-                            <input type="number" class="form-control" id="lideranca" v-model="form.notaLideranca" step=".01" min="0" max="10">
-                            <p id="erroLideranca" class="erro none">Este campo não pode ser vazio, e a nota deve ser entre 0 e 10</p>
+                            <input type="number" class="form-control" id="lideranca" v-model="form.notaLideranca" min="0" max="10">
+                            <p id="erroLideranca" class="erro none">Preencha este campo</p>
+                            <p id="erroNotaLideranca" class="erro none">A nota deve ser entre 0 - 10</p>
                         </div>
                         <div class="mb-3">
                             <label for="negocios" class="form-label fw-bold h5 titulo">Módulo negócios</label>
                             <input type="number" class="form-control" id="negocios" v-model="form.notaNegocios" step=".01" min="0" max="10">
-                            <p id="erroNegocio" class="erro none">Este campo não pode ser vazio, e a nota deve ser entre 0 e 10</p>
+                            <p id="erroNegocio" class="erro none">Preencha este campo</p>
+                            <p id="erroNotaNegocio" class="erro none">A nota deve ser entre 0 - 10</p>
                         </div>
                         <div class="mb-3">
                             <label for="comportamental" class="form-label fw-bold h5 titulo" >Comportamental</label>
@@ -51,14 +55,15 @@
                                         data-bs-target="#modalComportamental">+</button>
                                 </div>
                             </div>
+                            <p id="erroComportamental" class="erro none">Não esqueça de preencher as notas comportamentais!</p>
                         </div>
 
                         <button type="button" 
                             class="btn btn-danger sis-red-btn mt-3 mb-1 fw-bold fs-5 w-100" @click="verificaForm()">REGISTRAR</button>
                         <p id="verificaCampos" class="none" @click="postForm()"></p>
+                        <p id="populaForm" class="none" @click="getMedia().toFixed(2)"></p>
                         <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
                         <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
-                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos! Incluindo os campos do desempenho</p>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
@@ -185,89 +190,115 @@
                     <form class="col-lg-6">
                         <div class="comboBox w-100 mb-3" id="avaliacao-comportamental">
                             <label class="form-label fw-bold h5 titulo">Avaliação:</label>
-                            <select class="form-select" id="inputModal" v-model="form.avaliacaoDesempenhoForm.avaliacao">
+                            <select class="form-select" id="avaliacaoModal" v-model="form.avaliacaoDesempenhoForm.avaliacao">
+                                <option selected disabled value="0">Selecione uma avaliação</option>
                                 <option :value="'FORAM_SUPERADAS'">Foram superadas</option>
                                 <option :value="'FORAM_ATENDIDAS_PLENAMENTE'">Foram atendidas plenamente</option>
                                 <option :value="'FORAM_ATENDIDAS_PARCIALMENTE'">Foram atendidas parcialmente</option>
                                 <option :value="'NAO_FORAM_ATENDIDAS'">Não foram atendidas</option>
                             </select>
+                            <p id="erroAvaliacao" class="erro none">Por favor, preencha este campo</p>
                         </div>
                         <div class="mb-3">
                             <label for="adaptacao" class="form-label fw-bold h5 titulo">Adaptação:</label>
-                            <input type="number" class="form-control" id="adaptacao" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="adaptacaoModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.adaptacao">
+                                <p id="erroAdaptacao" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaAdaptacao" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="tecnica" class="form-label fw-bold h5 titulo">Capacitação Técnica:</label>
-                            <input type="number" class="form-control" id="tecnica" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="tecnicaModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.capTecnica">
+                                <p id="erroCapacitacao" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaCapacitacao" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="aprendizagem" class="form-label fw-bold h5 titulo">Aprendizagem prática:</label>
-                            <input type="number" class="form-control" id="aprendizagem" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="aprendizagemModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.apPratica">
+                                <p id="erroAprendizagem" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaAprendizagem" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="cooperacao" class="form-label fw-bold h5 titulo">Cooperação:</label>
-                            <input type="number" class="form-control" id="cooperacao" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="cooperacaoModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.cooperacao">
+                                <p id="erroCooperacao" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaCooperacao" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="disciplina" class="form-label fw-bold h5 titulo">Disciplina</label>
-                            <input type="number" class="form-control" id="disciplina" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="disciplinaModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.disciplina">
+                                <p id="erroDisciplina" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaDisciplina" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="responsabilidade" class="form-label fw-bold h5 titulo">Responsabilidade:</label>
-                            <input type="number" class="form-control" id="responsabilidade" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="responsabilidadeModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.responsabilidade">
+                                <p id="erroResponsabilidade" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaResponsabilidade" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                     </form>
                     <form class="col-lg-6">
                         <div class="comboBox w-100 mb-3" id="parecer">
                             <label class="form-label fw-bold h5 titulo">Parecer:</label>
                             <select class="form-select" id="filtro-parecer" v-model="form.avaliacaoDesempenhoForm.parecer">
+                                <option disabled selected value="0">Selecione um status</option>
                                 <option :value="'APROVADO'">Aprovado</option>
                                 <option :value="'REPROVADO'">Reprovado</option>
                             </select>
+                            <p id="erroParecer" class="erro none">Por favor, preencha este campo</p>
                         </div>
                         <div class="mb-3">
                             <label for="qualidade" class="form-label fw-bold h5 titulo">Qualidade:</label>
-                            <input type="number" class="form-control" id="qualidade" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="qualidadeModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.qualidade">
+                                <p id="erroQualidade" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaQualidade" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="comunicabilidade" class="form-label fw-bold h5 titulo">Comunicabilidade:</label>
-                            <input type="number" class="form-control" id="comunicabilidade" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="comunicabilidadeModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.comunicabilidade">
+                                <p id="erroComunicabilidade" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaComunicabilidade" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="dedicacao" class="form-label fw-bold h5 titulo">Dedicação:</label>
-                            <input type="number" class="form-control" id="dedicacao" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="dedicacaoModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.dedicacao">
+                                <p id="erroDedicacao" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaDedicacao" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="iniciativa" class="form-label fw-bold h5 titulo">Iniciativa:</label>
-                            <input type="number" class="form-control" id="iniciativa" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="iniciativaModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.iniciativa">
+                                <p id="erroIniciativa" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaIniciativa" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="organizacao" class="form-label fw-bold h5 titulo">Organização:</label>
-                            <input type="number" class="form-control" id="organizacao" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="organizacaoModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.organizacao">
+                                <p id="erroOrganizacao" class="erro none">Por favor, preencha este campo</p>
+                                <p id="erroNotaOrganizacao" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                         <div class="mb-3">
                             <label for="sociabilidade" class="form-label fw-bold h5 titulo">Sociabilidade:</label>
-                            <input type="number" class="form-control" id="sociabilidade" step=".01" min="0" max="4"
+                            <input type="number" class="form-control" id="sociabilidadeModal" step=".01" min="0" max="4"
                                 v-model="form.avaliacaoDesempenhoForm.sociabilidade">
+                                <p id="ErroSociabilidade" class="erro none">Por favor, preencha este campo</p>
+                                <p id="ErroNotaSociabilidade" class="erro none">A nota deve ser entre 0 - 4</p>
                         </div>
                     </form>
                 </div>
-                <p class="erro h4 none mt-3" id="preenchaModal">Preencha todos os campos!</p>
-                <p class="erro h4 none mt-3" id="preenchaModalNota">*As notas devem ser entre 1 e 4</p>
                 <div class="row d-flex">
                     <div class="col-lg-6">
-                        <button  type="button" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100" @click="verificaFormModal()" >CONFIRMAR</button>
+                        <button  type="button" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100" @click="verificaForm()" >CONFIRMAR</button>
                         <p data-bs-toggle="modal" id="fechaModal" class="none"></p>
                     </div>
                     <div class="col-lg-6">
@@ -427,7 +458,7 @@ export default {
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()
     },
-    abrirModalExclusao() {
+    abrirModalExclusao () {
       document.getElementById('abreModalInvisivelExclusao').click()
     },
     // é usada para capturar as informações na url para ser passada nas requisições
@@ -499,11 +530,11 @@ export default {
         })
     },
     deletarFormularioModal () {
-        this.abrirModalExclusao()
-        setTimeout(function () {
+      this.abrirModalExclusao()
+      setTimeout(function () {
         document.location.reload(true)
-         }, 1500)
-},
+      }, 1500)
+    },
     // função para gerar a média dos campos do modal, para exibir a nota comportamental no formulario
     getMedia () {
       this.media = (this.form.avaliacaoDesempenhoForm.qualidade + 
@@ -521,89 +552,242 @@ export default {
       return this.media
     },
     // verifica os campos do formulário, caso tenha algum vazio um paragrafo aparece para notificar.  
-    verificaFormModal () {
-      let campos = document.querySelectorAll('#modalComportamental input , #modalComportamental select') 
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          document.querySelector('#preenchaModal').classList.remove('none')
-          campoVazio = 1
-        }
-      })
-      campos = document.querySelectorAll('#modalComportamental input')
-      campos.forEach(element => {
-        if (element.value > 4 || element.value <= 0) {
-          document.querySelector('#preenchaModalNota').classList.remove('none')
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0) {
-        this.getMedia()
-        document.querySelector('#preenchaModal').classList.add('none')
-        document.querySelector('#preenchaModalNota').classList.add('none')
-        document.getElementById('fechaModal').click()
-      }
-    },
     // função para ver se existe campo vazio no formulário
     verificaForm () {
-      let notaTecnica = document.querySelector('#tecnica').value
+      let notaTecnica = document.querySelector('#tecnicaNotas').value
       let notaPratica = document.querySelector('#praticas-ageis').value
       let notaLideranca = document.querySelector('#lideranca').value
       let notaNegocio = document.querySelector('#negocios').value
+      let avaliacao = document.querySelector('#avaliacaoModal').value
+      let adaptacao = document.querySelector('#adaptacaoModal').value
+      let capacitacaoTecnica = document.querySelector('#tecnicaModal').value
+      let aprendizagemPratica = document.querySelector('#aprendizagemModal').value
+      let parecer = document.querySelector('#filtro-parecer').value
+      let qualidade = document.querySelector('#qualidadeModal').value
+      let comunicabilidade = document.querySelector('#comunicabilidadeModal').value
+      let dedicacao = document.querySelector('#dedicacaoModal').value
+      let cooperacao = document.querySelector('#cooperacaoModal').value
+      let disciplina = document.querySelector('#disciplinaModal').value
+      let responsabilidade = document.querySelector('#responsabilidadeModal').value
+      let iniciativa = document.querySelector('#iniciativaModal').value
+      let organizacao = document.querySelector('#organizacaoModal').value
+      let sociabilidade = document.querySelector('#sociabilidadeModal').value
       let erro = 0
-      if (notaTecnica == '' || notaTecnica < 0 || notaTecnica > 10) {
+      document.getElementById('erroComportamental').classList.remove('none')
+      if (notaTecnica == '') {
         document.querySelector('#erroTecnica').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroTecnica').classList.add('none')
-        erro = 0
       }
-      if (notaPratica == '' || notaPratica < 0 || notaPratica > 10) {
+      if (notaTecnica < 0 || notaTecnica > 10) {
+        document.querySelector('#erroNota').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNota').classList.add('none')
+      }
+      if (notaPratica == '') {
         document.querySelector('#erroPraticas').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroPraticas').classList.add('none')
-        erro = 0
       }
-      if (notaLideranca == '' || notaLideranca < 0 || notaLideranca > 10) {
+      if (notaPratica < 0 || notaPratica > 10) {
+        document.querySelector('#erroNotaPratica').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaPratica').classList.add('none')
+      }
+      if (notaLideranca == '') {
         document.querySelector('#erroLideranca').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroLideranca').classList.add('none')
-        erro = 0
       }
-      if (notaNegocio == '' || notaNegocio < 0 || notaNegocio > 10) {
+      if (notaLideranca < 0 || notaLideranca > 10) {
+        document.querySelector('#erroNotaLideranca').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaLideranca').classList.add('none')
+      }
+      if (notaNegocio == '') {
         document.querySelector('#erroNegocio').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroNegocio').classList.add('none')
-        erro = 0
       }
-      if (this.form.avaliacaoDesempenhoForm.avaliacao == '' ||
-        this.form.avaliacaoDesempenhoForm.parecer == '' ||
-        this.form.avaliacaoDesempenhoForm.adaptacao == '' ||
-        this.form.avaliacaoDesempenhoForm.qualidade == '' ||
-        this.form.avaliacaoDesempenhoForm.capTecnica == '' ||
-        this.form.avaliacaoDesempenhoForm.comunicabilidade == '' ||
-        this.form.avaliacaoDesempenhoForm.apPratica == '' ||
-        this.form.avaliacaoDesempenhoForm.dedicacao == '' ||
-        this.form.avaliacaoDesempenhoForm.cooperacao == '' ||
-        this.form.avaliacaoDesempenhoForm.iniciativa == '' ||
-        this.form.avaliacaoDesempenhoForm.disciplina == '' ||
-        this.form.avaliacaoDesempenhoForm.organizacao == '' ||
-        this.form.avaliacaoDesempenhoForm.responsabilidade == '' ||
-        this.form.avaliacaoDesempenhoForm.sociabilidade == '') {
+      if (notaNegocio < 0 || notaNegocio > 10) {
+        document.querySelector('#erroNotaNegocio').classList.remove('none')
         erro = 1
-      }
-      if (erro == 0) {
-        document.querySelector('#preencha').classList.add('none')
-        document.getElementById('verificaCampos').click()
-        this.abrirModal()
-        setTimeout(function () {
-            document.location.reload(true)
-            }, 1500) 
       } else {
-        document.querySelector('#preencha').classList.remove('none')
+        document.querySelector('#erroNotaNegocio').classList.add('none')
+      }
+      if (avaliacao == 0) {
+        document.querySelector('#erroAvaliacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroAvaliacao').classList.add('none')
+      }
+      if (adaptacao == '') {
+        document.querySelector('#erroAdaptacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroAdaptacao').classList.add('none')
+      }
+      if (adaptacao < 0 || adaptacao > 4) {
+        document.querySelector('#erroNotaAdaptacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaAdaptacao').classList.add('none')
+      }
+      if (capacitacaoTecnica == '') {
+        document.querySelector('#erroCapacitacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroCapacitacao').classList.add('none')
+      }
+      if (capacitacaoTecnica < 0 || capacitacaoTecnica > 4) {
+        document.querySelector('#erroNotaCapacitacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaCapacitacao').classList.add('none')
+      }
+      if (aprendizagemPratica == '') {
+        document.querySelector('#erroAprendizagem').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroAprendizagem').classList.add('none')
+      }
+      if (aprendizagemPratica < 0 || aprendizagemPratica > 4) {
+        document.querySelector('#erroNotaAprendizagem').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaAprendizagem').classList.add('none')
+      }
+      if (parecer == 0) {
+        document.querySelector('#erroParecer').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroParecer').classList.add('none')
+      }
+      if (qualidade == '') {
+        document.querySelector('#erroQualidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroQualidade').classList.add('none')
+      }
+      if (qualidade < 0 || qualidade > 4) {
+        document.querySelector('#erroNotaQualidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaQualidade').classList.add('none')
+      }
+      if (comunicabilidade == '') {
+        document.querySelector('#erroComunicabilidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroComunicabilidade').classList.add('none')
+      }
+      if (comunicabilidade < 0 || comunicabilidade > 4) {
+        document.querySelector('#erroNotaComunicabilidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaComunicabilidade').classList.add('none')
+      }
+      if (dedicacao == '') {
+        document.querySelector('#erroDedicacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDedicacao').classList.add('none')
+      }
+      if (dedicacao < 0 || dedicacao > 4) {
+        document.querySelector('#erroNotaDedicacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaDedicacao').classList.add('none')
+      }
+      if (cooperacao == '') {
+        document.querySelector('#erroCooperacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroCooperacao').classList.add('none')
+      }
+      if (cooperacao < 0 || cooperacao > 4) {
+        document.querySelector('#erroNotaCooperacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaCooperacao').classList.add('none')
+      }
+      if (disciplina == '') {
+        document.querySelector('#erroDisciplina').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDisciplina').classList.add('none')
+      }
+      if (disciplina < 0 || disciplina > 4) {
+        document.querySelector('#erroNotaDisciplina').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaDisciplina').classList.add('none')
+      }
+      if (responsabilidade == '') {
+        document.querySelector('#erroResponsabilidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroResponsabilidade').classList.add('none')
+      }
+      if (responsabilidade < 0 || responsabilidade > 4) {
+        document.querySelector('#erroNotaResponsabilidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaResponsabilidade').classList.add('none')
+      }
+      if (iniciativa == '') {
+        document.querySelector('#erroIniciativa').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroIniciativa').classList.add('none')
+      }
+      if (iniciativa < 0 || iniciativa > 4) {
+        document.querySelector('#erroNotaIniciativa').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaIniciativa').classList.add('none')
+      }
+      if (organizacao == '') {
+        document.querySelector('#erroOrganizacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroOrganizacao').classList.add('none')
+      }
+      if (organizacao < 0 || organizacao > 4) {
+        document.querySelector('#erroNotaOrganizacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaOrganizacao').classList.add('none')
+      }
+      if (sociabilidade == '') {
+        document.querySelector('#erroSociabilidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroSociabilidade').classList.add('none')
+      }
+      if (sociabilidade < 0 || sociabilidade > 4) {
+        document.querySelector('#erroNotaSociabilidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNotaSociabilidade').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } else if (erro == 0) {
+        document.getElementById('erroComportamental').classList.add('none')
+        document.getElementById('populaForm').click()
+        document.getElementById('abreModalInvisivel').click()
+        document.getElementById('verificaCampos').click()
+        setTimeout(function () {
+          document.location.reload(true)
+        }, 1500) 
       }
     }
   }

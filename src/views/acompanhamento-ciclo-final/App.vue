@@ -33,7 +33,7 @@
                         </div>
                         <div class="mb-3">
                             <label id="menes" for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
-                            <input type="text" class="form-control" id="cargo-efetivado" placeholder="Analista Desenvolvedor Java" v-model="form.cargoEfetivado">
+                            <input type="text" class="form-control" id="cargo-efetivado" v-model="form.cargoEfetivado">
                         </div>
                     </form>
                 </div>
