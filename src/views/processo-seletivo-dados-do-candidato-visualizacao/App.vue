@@ -57,10 +57,10 @@
                                 <label class="form-label mb-0 titulo ">Currículo candidato</label><br>
                                 <p @click="downloadCurriculo"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">curriculo.pdf</p>
                             </div>
-                            <!-- <div class="mb-3">
+                            <div class="mb-3">
                               <label class="form-label mb-0 titulo">Arquivo disc</label><br>
                               <p @click="downloadDisc"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">disc.xlsx</p>
-                            </div> -->
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Observações</label>
                                 <textarea name="observacoes" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.observacao" rows="5"></textarea>
@@ -122,7 +122,7 @@ export default {
       return data
     },
     downloadDisc () {
-      location.href = `http://localhost:8081/api/participante/downloadDisc/${this.id}`
+      location.href = `http://localhost:8081/api/candidato/download-disc/${this.id}`
     },
     downloadCurriculo () {
       location.href = `http://localhost:8081/api/candidato/download-curriculo/${this.id}`

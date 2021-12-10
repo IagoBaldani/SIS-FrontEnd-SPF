@@ -125,7 +125,7 @@
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/conclusão:</h4>
-                            <p  class="grey-font h4 text-decoration-underline pointer" @click="download()">comprovante.pdf</p>
+                            <p  class="grey-font h4 text-decoration-underline pointer" @click="download()" download="TCE" >comprovante.pdf</p>
                         </div>
                         <div class="mb-4" v-if="conclusaoModal.status == 'PROGRESSIVA'" >
                             <h4 class="fw-bold titulo">Cargo:</h4>

@@ -375,10 +375,10 @@ export default {
     },
 
     downloadTce () {
-      window.open( variavel.href = `api/participante/downloadTce/${this.participante.cpf}`)
+      window.open(`http://localhost:8081/api/participante/downloadTce/${this.participante.cpf}`)
     },
     downloadDisc () {
-      location.href = variavel.href = `api/participante/downloadDisc/${this.participante.cpf}`
+      location.href =  `http://localhost:8081/api/participante/downloadDisc/${this.participante.cpf}`
     },
     formataCpfparaMostrar (cpf) {
       return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
