@@ -162,6 +162,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
+import { variavel } from '../../services/Variavel'
 
 export default {
   name: 'App',
@@ -264,7 +265,7 @@ export default {
           .then(response => {
             this.abrirModalCadastro()
             setTimeout(function () {
-            window.location.href = 'http://localhost:8080/cargo-listar'
+            window.location.href = variavel.href = 'cargo-listar'
           },1521)
           })
           .catch(error => {
@@ -276,7 +277,7 @@ export default {
           .then(response => {
             this.abrirModal()
             setTimeout(function () {
-            window.location.href = 'http://localhost:8080/cargo-listar'
+            window.location.href = variavel.href = 'cargo-listar'
           },1521)
           })
           .catch(error => {
