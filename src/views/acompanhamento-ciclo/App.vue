@@ -62,7 +62,7 @@
                         </div>
                         <button type="button" @click="postForm()"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
-                        <p id="conclusoes-finalizadas" class="fw-bold erro h5 none">*Não é possível mais realizar registros de conclusões!</p>
+                        <p id="conclusoes-finalizadas" class="fw-bold erro h5 none">*Não é possível realizar registros de conclusões!</p>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
@@ -141,6 +141,10 @@
                             <h4 class="fw-bold titulo">Data da alteração:</h4>
                             <p class="grey-font h4">{{formataDataParaMostrar(conclusaoModal.dataRegistro)}}</p>
                         </div>
+                    </div>
+                    <div v-if="conclusaoModal.status == 'FINAL'" class="col-lg-12">
+                      <h4 class="fw-bold titulo">Observação:</h4>
+                      <p class="grey-font h4">{{ conclusaoModal.observacao }}</p>
                     </div>
                 </div>
             </div>
