@@ -349,7 +349,7 @@ export default {
       } else {
         document.querySelector('#erroCpf').classList.add('none')
       }
-      if (!this.validaCpf(cpf)) {
+      if (!this.validaCpf(cpf) && cpf != '') {
         console.log('validei o cpf')
         erro = 1
         document.querySelector('#erroCpfInvalido').classList.remove('none')
@@ -386,7 +386,7 @@ export default {
       } else {
         document.querySelector('#erroEmail').classList.add('none')
       }
-      if (!this.reg.test(email)) {
+      if (!this.reg.test(email) && email != '') {
         erro = 1
         document.querySelector('#erroEmailInvalido').classList.remove('none')
       } else {

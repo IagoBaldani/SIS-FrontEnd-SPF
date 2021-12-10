@@ -30,6 +30,7 @@
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
                             <input class="form-control" id="inputEmail" placeholder="nome@email.com" v-model="instrutor.email" type="email" />
+                            <p id="erroEmail" class="none erro">Por favor, preencha este campo</p>
                             <p id="erroEmailInvalido" class="none erro">Por favor, insira um e-mail válido</p>
                         </div>
                 </div>
@@ -207,12 +208,12 @@ export default {
         document.querySelector('#erroContato').classList.add('none')
       }
       if (email == '') {
-        document.querySelector('#erroEmailInvalido').classList.remove('none')
+        document.querySelector('#erroEmail').classList.remove('none')
         erro = 1
       } else {
-        document.querySelector('#erroEmailInvalido').classList.add('none')
+        document.querySelector('#erroEmail').classList.add('none')
       }
-      if (!this.reg.test(email)) {
+      if (!this.reg.test(email) && email != '') {
         erro = 1
         document.querySelector('#erroEmailInvalido').classList.remove('none')
       } else {

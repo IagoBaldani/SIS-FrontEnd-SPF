@@ -259,7 +259,7 @@ export default {
       } else {
         document.querySelector('#erroEmail').classList.add('none')
       }
-      if (!this.reg.test(email)) {
+      if (!this.reg.test(email) && email != '') {
         erro = 1
         document.querySelector('#erroEmailInvalido').classList.remove('none')
       } else {
