@@ -52,6 +52,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
+import { variavelBack} from '../../services/VariavelBack'
 
 export default {
   name: 'App',
@@ -93,11 +94,11 @@ export default {
     },
 
     downloadRelatorioPDF () {
-      location.href = 'http://localhost:8081/api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
+      location.href = variavelBack.href = 'api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
     },
 
     downloadRelatorioXLSX () {
-      location.href = 'http://localhost:8081/api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
+      location.href = variavelBack.href = 'api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
     }
   }
 }

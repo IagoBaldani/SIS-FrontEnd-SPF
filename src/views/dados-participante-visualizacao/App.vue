@@ -322,6 +322,8 @@ import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
 import { mask } from 'vue-the-mask'
 import { variavel } from '../../services/Variavel'
+import { variavelBack} from '../../services/VariavelBack'
+
 
 export default {
   directives: { mask },
@@ -375,10 +377,10 @@ export default {
     },
 
     downloadTce () {
-      window.open(`http://localhost:8081/api/participante/downloadTce/${this.participante.cpf}`)
+      window.open( variavelBack.href =`api/participante/downloadTce/${this.participante.cpf}`)
     },
     downloadDisc () {
-      location.href =  `http://localhost:8081/api/participante/downloadDisc/${this.participante.cpf}`
+      location.href = variavelBack.href =`api/participante/downloadDisc/${this.participante.cpf}`
     },
     formataCpfparaMostrar (cpf) {
       return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')

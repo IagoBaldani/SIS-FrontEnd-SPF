@@ -156,6 +156,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { variavelBack} from '../../services/VariavelBack'
 
 export default {
   name: 'App',
@@ -333,7 +334,7 @@ export default {
     },
     // Endereço da API para fazer download do arquivo.
     download () {
-      window.open(`http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`)
+      window.open(variavelBack.href =`api/ciclo/download/${this.conclusaoModal.id}`)
     }
   }
 }

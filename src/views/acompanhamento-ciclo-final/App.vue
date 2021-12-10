@@ -250,7 +250,7 @@ export default {
     },
     //  Endereço da API para fazer download do arquivo
     download () {
-      location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
+      location.href = variavelBack.href =`api/ciclo/download/${this.conclusaoModal.id}`
     },
     // funcão que valida os campos, caso estejam vazios uma notificação é exibida.
     validaCampos () {

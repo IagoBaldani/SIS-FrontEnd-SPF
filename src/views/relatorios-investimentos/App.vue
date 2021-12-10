@@ -115,6 +115,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
+import { variavelBack} from '../../services/VariavelBack'
 
 export default {
   name: 'App',
@@ -193,11 +194,11 @@ export default {
     },
 
     downloadRelatorioPDF () {
-      location.href = 'http://localhost:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
+      location.href = variavelBack.href = 'api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
     },
 
     downloadRelatorioXLSX () {
-      location.href = 'http://localhost:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/xlsx'
+      location.href = variavelBack.href ='api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/xlsx'
     }
   }
 }

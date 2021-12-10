@@ -143,6 +143,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
+import { variavelBack} from '../../services/VariavelBack'
 
 export default {
   name: 'App',
@@ -192,7 +193,7 @@ export default {
 
     downloadRelatorioPDF () {
       location.href =
-        'http://localhost:8081/api/relatorio-avaliacao/formacao=' +
+        variavelBack.href = 'api/relatorio-avaliacao/formacao=' +
         this.parametrosUrl.formacao +
         '/turma=' +
         this.parametrosUrl.turma +
@@ -201,7 +202,7 @@ export default {
 
     downloadRelatorioXLSX () {
       location.href =
-        'http://localhost:8081/api/relatorio-avaliacao/formacao=' +
+        variavelBack.href ='api/relatorio-avaliacao/formacao=' +
         this.parametrosUrl.formacao +
         '/turma=' +
         this.parametrosUrl.turma +

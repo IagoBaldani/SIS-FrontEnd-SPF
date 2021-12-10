@@ -283,7 +283,7 @@ export default {
     },
     // endereço da API para fazer donwload  do arquivo
     download () {
-      location.href = `http://localhost:8081/api/feedback/download/${this.feedbackModal.id}`
+      location.href = variavelBack.href = `api/feedback/download/${this.feedbackModal.id}`
     },
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()

@@ -10,7 +10,7 @@
                 <div class="col-xl-4"></div>
                 <div class="col-xl-2"></div>
             </div>
-            <form method="POST" :action="`http://localhost:8081/api/arquivos/id`">
+            <form method="POST" :action="variavelBack.href =`api/arquivos/id`">
               <div class="row justify-content-evenly">
                   <div class="col-xl-4">
                     <div class="mb-3">
@@ -51,6 +51,7 @@ import Header from '@/components/Header.vue'
 import axios from 'axios'
 import Cookie from 'js-cookie'
 import Funcoes from '../../services/Funcoes'
+import { variavelBack} from '../../services/VariavelBack'
 
 let config = {
   headers: {

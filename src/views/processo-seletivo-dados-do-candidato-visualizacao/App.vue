@@ -78,6 +78,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
+import { variavelBack} from '../../services/VariavelBack'
 
 export default {
   name: 'App',
@@ -122,10 +123,10 @@ export default {
       return data
     },
     downloadDisc () {
-      location.href = `http://localhost:8081/api/candidato/download-disc/${this.id}`
+      location.href =  variavelBack.href =`api/candidato/download-disc/${this.id}`
     },
     downloadCurriculo () {
-      location.href = `http://localhost:8081/api/candidato/download-curriculo/${this.id}`
+      location.href =  variavelBack.href =`api/candidato/download-curriculo/${this.id}`
     },
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
