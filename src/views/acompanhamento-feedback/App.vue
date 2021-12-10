@@ -27,6 +27,7 @@
                         <div class="mb-3">
                             <label for="anotacoes" class="form-label mb-0 fw-bold titulo">Anotações</label>
                             <textarea v-model="form.anotacoes" rows="8" class="form-control mb-3" id="anotacoes"></textarea>
+                            <p class="erro none" id="erroObs" >Coloque uma observação</p>
                         </div>
                         <div>
                             <!--<input class="input-file" type="file">-->
@@ -35,8 +36,9 @@
                              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                               <p class="erro none" id="erroDisc" >Insira o DISC</p>
                         </div>
-                        <button class="btn-registrar mt-4 " type="button" @click="postForm()" >REGISTRAR</button>
+                        <button class="btn-registrar mt-4 " type="button" @click="validadorDeCampos()" >REGISTRAR</button>
                     </form>
+                    <p id="invisivel" v-on:click="postForm()"></p>
                 </div>
                 <div class="col-lg-7">
                     <div class="master-table">
@@ -202,8 +204,33 @@ export default {
         })
     },
     validadorDeCampos () {
-      var campoData = document.getElementById('dataFeed')
-      var campoDisc = document.getElementById('campoDisc')
+      var campoData = document.getElementById('dataFeed').value
+      var campoDisc = document.getElementById('campoDisc').value
+      var campoObs = document.getElementById('anotacoes').value
+       let erro = 0
+      if (campoData == '') {
+        document.querySelector('#erroData').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroData').classList.add('none')
+      }
+      if (campoDisc == '') {
+        document.querySelector('#erroDisc').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDisc').classList.add('none')
+      }
+      if (campoObs == '') {
+        document.querySelector('#erroObs').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroObs').classList.add('none')
+      } 
+      if(erro == 1) {
+        return false
+      } else {
+         document.getElementById('invisivel').click()
+      }
 
     },
     // metodo para retornar os feedbacks.
@@ -220,11 +247,10 @@ export default {
     //  metodo para enviar o post com o form
     postForm () {
         var formData = new FormData()
-        var disc = document.getElementById('disc').files[0]
+        var disc = document.getElementById('campoDisc').files[0]
         formData.append('data', this.form.data)
         formData.append('anotacoes', this.form.anotacoes)
         formData.append('disc', disc)
-
         http
           .post(`feedback/novo/${this.id}`, formData, {
             headers: {
@@ -240,7 +266,7 @@ export default {
           .catch((error) => {
             console.log(error)
           })
-      }, 
+    }, 
     // método para deletar o o feedback.
     deleteById () {
       http  
@@ -482,5 +508,9 @@ textarea  {
 .pointer {
   cursor: pointer;
   background-color: #FFB700 !important
+}
+.erro {
+  color: red;
+  font-weight: bold;
 }
 </style>
