@@ -28,6 +28,7 @@
               {{ formacao.nomePrograma }}
             </option>
           </select>
+          <p id="progFormacao" class="erro none">Por favor, selecione um programa de formação</p>
 
           <!-- Select Turma -->
           <select
@@ -47,6 +48,7 @@
               {{ turma.nomeTurma }}
             </option>
           </select>
+          <p id="progTurma" class="erro none">Por favor, selecione uma turma</p>
 
           <!-- Select Escopo do relatório -->
           <select
@@ -64,10 +66,8 @@
             <option class="relatorio_opcao">Conclusões</option>
             <option class="relatorio_opcao">Investimentos</option>
           </select>
+          <p id="progEscopo" class="erro none">Por favor, selecione o escopo do relatório</p>
         </label>
-        <p id="progFormacao" class="erro none">Por favor, selecione um programa de formação</p>
-        <p id="progTurma" class="erro none">Por favor, selecione uma turma</p>
-        <p id="progEscopo" class="erro none">Por favor, selecione o escopo do relatório</p>
         <!-- Select Botão -->
         <input
           v-on:click="validaForm()"
@@ -392,6 +392,7 @@
                 <thead class="modal_table-thead">
                   <tr>
                     <th>Programa de formação</th>
+                    <th>Nome da turma</th>
                   </tr>
                 </thead>
               </table>
@@ -407,6 +408,7 @@
                     v-bind:key="id"
                   >
                     <td>{{ formacoes.nomePrograma }}</td>
+                    <td>{{ formacoes.nomeTurma }}</td>
                     <td class="modal_table-imagem-forAndamento rounded">
                       <img src="@/assets/imgs/usuario.svg" alt="Imagem" />
                     </td>
@@ -440,6 +442,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
+import { variavel } from '../../services/Variavel'
 export default {
   name: 'App',
   components: {
@@ -458,6 +461,7 @@ export default {
       filtroEfetivados: '',
       filtroFormacoes: '',
       nomePrograma: '',
+      nomeTurma: '',
       erros: []
     }
   },
@@ -512,21 +516,21 @@ export default {
       var escopo = document.getElementById('select3').value
       var formulario = document.getElementById('formSelect')
       if (escopo == 'Alura') {
-        formulario.action = encodeURI('http://localhost:8080/relatorios-alura')
+        formulario.action = encodeURI( window.location.href =  variavel.href ='/relatorios-alura')
         formulario.submit()
       } else if (escopo == 'Avaliações') {
         formulario.action = encodeURI(
-          'http://localhost:8080/relatorios-avaliacoes'
+          window.location.href =  variavel.href ='relatorios-avaliacoes'
         )
         formulario.submit()
       } else if (escopo == 'Conclusões') {
         formulario.action = encodeURI(
-          'http://localhost:8080/relatorios-conclusoes'
+          window.location.href =  variavel.href ='relatorios-conclusoes'
         )
         formulario.submit()
       } else if (escopo == 'Investimentos') {
         formulario.action = encodeURI(
-          'http://localhost:8080/relatorios-investimentos'
+          window.location.href =  variavel.href ='relatorios-investimentos'
         )
         formulario.submit()
       }
@@ -604,6 +608,7 @@ main .dados_gerais-divCard {
 .erro {
   color: red;
   font-weight: bold;
+  font-size: 15px;
 }
 
 .dados_gerais-main .card {

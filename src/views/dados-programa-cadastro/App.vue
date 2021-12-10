@@ -151,6 +151,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { variavel } from '../../services/Variavel'
 
 export default {
   name: 'App',
@@ -191,7 +192,7 @@ export default {
           if (response.status == 200) {
             this.abrirModal()
             setTimeout(function () {
-              window.location.href = 'http://localhost:8080/dados-programa-busca'
+              window.location.href = variavel.href = 'dados-programa-busca'
             }, 1500) 
           }
         })

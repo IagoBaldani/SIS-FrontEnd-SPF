@@ -74,6 +74,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { variavel } from '../../services/Variavel'
 export default {
   name: 'App',
   components: {

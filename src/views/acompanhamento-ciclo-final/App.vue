@@ -30,6 +30,7 @@
                         <div class="mb-3">
                             <label for="data-alteracao" class="form-label fw-bold h5 titulo">Data</label>
                             <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao">
+                            <p class="fw-bold erro mt-0 none" id="erroData">Selecione uma data!</p>
                         </div>
                         <div class="mb-3">
                             <label id="menes" for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
@@ -52,6 +53,7 @@
                                 </div>
                                 <div id="btn-close" class="clear-file none">X</div>
                             </label>
+                            <p class="fw-bold erro mt-0 none" id="erroArquivo">Selecione um arquivo!</p>
                         </div>
                         <div class="mb-3">
                             <label for="observacoes"  class="form-label fw-bold h5 titulo">Observações</label>
@@ -70,13 +72,25 @@
             </div>
             <div class="row justify-content-evenly">
                 <div class="col-lg-4">
-                    <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
                 </div>
                 <div class="col-lg-7 d-flex justify-content-end">
                 </div>
             </div>
         </div>
     </main>
+
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Conclusão salva com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="modalUltimoCiclo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-size">
@@ -101,6 +115,10 @@
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/ conclusão</h4>
                             <p class="grey-font h4 text-decoration-underline" @click="download()">comprovante.pdf</p>
+                        </div>
+                        <div class="mb-4">
+                            <h4 class="fw-bold titulo">Observação:</h4>
+                            <p class="grey-font h4 ellipsis-overflow">{{ form.campoObservacao }}</p>
                         </div>
                     </div>
                 </div>
@@ -143,12 +161,13 @@ export default {
         comprovante: '',
         campoObservacao: ''
       },
-      id: {}
+      id: ''
     }
   },
 
   beforeMount () {
     this.id = this.pegaDadosUrl().id
+    console.log(this.id)
     this.getParticipanteNome()
     Funcoes.verificaToken()
   },
@@ -173,6 +192,7 @@ export default {
       formData.append('cargoEfetivado', this.form.cargoEfetivado)
       formData.append('comprovante', comprovanteRematricula)
       formData.append('campoObservacao', this.form.campoObservacao)
+      var id = this.id
       http
         .post(`ciclo/registrociclofinal/${this.id}`, formData, {
           headers: {
@@ -180,11 +200,17 @@ export default {
           }
         })
         .then((response) => {
+          document.querySelector('#abreModalInvisivel').click()
+          setTimeout(function () {
+            console.log(id)
+            location.href = '/acompanhamento-ciclo/App.vue?id=' + id 
+          }, 1500)
         })
         .catch((error) => {
           console.log(error)
         })
-      location.href = `../acompanhamento-ciclo/App.vue?id=${this.id}`  
+      
+        
     },
 
     carregaModal (conclusao) {
@@ -228,19 +254,28 @@ export default {
     },
     // funcão que valida os campos, caso estejam vazios uma notificação é exibida.
     validaCampos () {
-      let campos = document.querySelectorAll('input')
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0) {
-        document.querySelector('#preencha').classList.add('none')
-        document.getElementById('abreModal').click()
+      var erro = true
+      if (this.form.dataAlteracao == '') {
+        document.querySelector('#erroData').classList.remove('none')
+        erro = false
       } else {
-        document.querySelector('#preencha').classList.remove('none')
-      }     
+        document.querySelector('#erroData').classList.add('none')
+      }  
+      if (document.querySelector('#cargo-efetivado').value == '') {
+        document.querySelector('#erroCargo').classList.remove('none')
+        erro = false
+      } else {
+        document.querySelector('#erroCargo').classList.add('none')
+      }  
+      if (document.querySelector('#file').files.length == 0) {
+        document.querySelector('#erroArquivo').classList.remove('none')
+        erro = false
+      } else {
+        document.querySelector('#erroArquivo').classList.add('none')
+      }
+      if (erro) {
+        document.querySelector('#abreModal').click()
+      }
     }
   }
 }

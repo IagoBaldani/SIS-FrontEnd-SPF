@@ -30,35 +30,39 @@
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
-                        <div class="mb-3">
+                        <div class="mb-3" id="campo">
                             <label for="data-alteracao" class="form-label fw-bold h5 titulo">Data da alteração</label>
-                            <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao">
+                            
+                            <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao"/>
+                            <p class="fw-bold erro mb-0 none" id="erroData">Preencha este campo!</p>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3" id="campo">
                             <label for="cargo" class="form-label fw-bold h5 titulo">Cargo</label>
+                            
                             <select class="form-select" id="filtro-programa" v-model="form.cargo">
                                 <!--<option value="0" id="cargo" selected disabled>Selecione o Cargo</option>-->
                                 <option :value="cargo.cargo" v-for="cargo in cargos" :key="cargo.id">{{ cargo.cargo }}</option>
                             </select>
+                            <p class="fw-bold erro mb-0 none" id="erroSelect">Selecione um cargo!</p>
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3" id="campo">
                             <label class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
+                            
                             <input id="file" @change="formatoUpload()" class="none"  type="file" accept="application/pdf"/>
-                            <label for="file" class="btn-file d-flex justify-content-between">
-                                <div class="w-100">
+                            <label for="file" class="btn-file d-flex justify-content-between" id="input-file">
+                                <div class="w-100" >
                                     <img src="@/assets/imgs/upload.svg" class="upload-img"/>
                                     <div class= "d-inline-block w-75">
                                         <p id="nome-arquivo" class="ellipsis-overflow mb-0 titulo">Faça upload do comprovante</p>
                                     </div>
                                 </div>
                             </label>
+                            <p class="fw-bold erro mb-0 none" id="erroArquivo">Insira um arquivo!</p>
                         </div>
                         <button type="button" @click="postForm()"
                             class="btn btn-danger sis-red-btn mt-5 mb-5 fw-bold fs-5 w-100">REGISTRAR</button>
-                        <p class="none h4" id="aguarde">Enviando formulário, aguarde...</p>
-                        <p class="none h4 enviado" id="enviado">Formulário enviado</p>
-                        <p class="erro h4 none" id="preencha">Preencha todos os campos!</p>
+                        <p id="conclusoes-finalizadas" class="fw-bold erro h5 none">*Não é possível realizar registros de conclusões!</p>
                     </form>
                 </div>
                 <div class="col-lg-7 d-flex flex-column align-items-end mb-3 div-tabela justify-content-between">
@@ -92,6 +96,19 @@
 
     <!--  MODAL  -->
 
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Conclusão salva com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="modalCiclo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-size">
             <div class="modal-content p-5 grey-background">
@@ -108,7 +125,7 @@
                         </div>
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/conclusão:</h4>
-                            <p  class="grey-font h4 text-decoration-underline pointer" @click="download()">comprovante.pdf</p>
+                            <p  class="grey-font h4 text-decoration-underline pointer" @click="download()" download="TCE" >comprovante.pdf</p>
                         </div>
                         <div class="mb-4" v-if="conclusaoModal.status == 'PROGRESSIVA'" >
                             <h4 class="fw-bold titulo">Cargo:</h4>
@@ -124,6 +141,10 @@
                             <h4 class="fw-bold titulo">Data da alteração:</h4>
                             <p class="grey-font h4">{{formataDataParaMostrar(conclusaoModal.dataRegistro)}}</p>
                         </div>
+                    </div>
+                    <div v-if="conclusaoModal.status == 'FINAL'" class="col-lg-12">
+                      <h4 class="fw-bold titulo">Observação:</h4>
+                      <p class="grey-font h4">{{ conclusaoModal.observacao }}</p>
                     </div>
                 </div>
             </div>
@@ -196,6 +217,16 @@ export default {
         .get(`ciclo/${this.id}`)
         .then((response) => {
           this.conclusoes = response.data
+          if (this.conclusoes.length > 0) {
+            if (this.conclusoes[(this.conclusoes.length - 1)].status == 'FINAL') {
+              document.querySelector('#data-alteracao').setAttribute('disabled', 'disabled')
+              document.querySelector('#filtro-programa').setAttribute('disabled', 'disabled')
+              document.querySelector('#file').setAttribute('disabled', 'disabled')
+              document.querySelector('#input-file').setAttribute('style', 'cursor:default;background-color:#e9ecef')
+              document.querySelectorAll('button').forEach(element => element.classList.add('none'))
+              document.querySelector('#conclusoes-finalizadas').classList.remove('none')
+            }
+          }
         })
         .catch((error) => {
           console.log(error)
@@ -203,16 +234,42 @@ export default {
     },
     // faz a requisição do tipo POST e envia o FormData no body.
     postForm () {
-      let campos = document.querySelectorAll('input')
+      let campos = document.querySelectorAll('#campo')
       let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
+      // campos.forEach(campo => {
+      //   if (campo.querySelector('input, select').value == '') {
+      //     console.log(campo.querySelector('input, select').value)
+      //     campo.querySelector('#preencha').classList.remove('none')
+      //     campoVazio += 1
+      //   } else {
+      //     console.log(campo.querySelector('input, select').value)
+      //     campo.querySelector('#preencha').classList.add('none')
+          
+      //   }
+      // })
+      // console.log(campoVazio)\
+      if (this.form.dataAlteracao == '') {
+        console.log(this.form.dataAlteracao)
+        document.querySelector('#erroData').classList.remove('none')
+        campoVazio = 1;
+      } else {
+        console.log(this.form.dataAlteracao)
+        document.querySelector('#erroData').classList.add('none')
+      }
+      if (campos[1].querySelector('select').value == '') {
+        document.querySelector('#erroSelect').classList.remove('none')
+        campoVazio = 1;
+      } else {
+        document.querySelector('#erroSelect').classList.add('none')
+      }
+      if (campos[2].querySelector('input').files.length == 0) {
+        document.querySelector('#erroArquivo').classList.remove('none')
+        campoVazio = 1;
+      } else {
+        document.querySelector('#erroArquivo').classList.add('none')
+      }
+
       if (campoVazio == 0) {
-        document.querySelector('#preencha').classList.add('none')
-        document.querySelector('#aguarde').classList.remove('none')
         var formData = new FormData()
         var comprovanteRematricula = document.getElementById('file').files[0] 
         formData.append('resultado', this.form.resultado)
@@ -226,18 +283,15 @@ export default {
             }
           })
           .then((response) => {
-            this.getCiclo()
-            document.querySelector('#aguarde').classList.add('none')
-            document.querySelector('#enviado').classList.remove('none')
+            document.querySelector('#abreModalInvisivel').click()
             setTimeout(function () {
-              document.querySelector('#enviado').classList.add('none')
+              document.location.reload(true)
             }, 2000)
           })
           .catch((error) => {
             console.log(error)
           })
-      } else {
-        document.querySelector('#preencha').classList.remove('none')
+        
       }    
     },
     // carrega o modal com as informações dos ciclos, e cria a tabela com os indices corretos.
@@ -279,7 +333,7 @@ export default {
     },
     // Endereço da API para fazer download do arquivo.
     download () {
-      location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
+      window.open(`http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`)
     }
   }
 }
