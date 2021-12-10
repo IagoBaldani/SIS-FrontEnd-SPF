@@ -277,8 +277,8 @@ export default {
           .then(response => {
             this.abrirModal()
             setTimeout(function () {
-            window.location.href = variavel.href = 'cargo-listar'
-          },1521)
+              window.location.href = variavel.href = 'cargo-listar'
+            }, 1521)
           })
           .catch(error => {
             console.log(error)

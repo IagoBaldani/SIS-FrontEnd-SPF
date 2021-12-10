@@ -19,11 +19,11 @@
                         <fieldset class="mb-3">
                             <legend class="form-label fw-bold h5 titulo">Resultado (Efetivado)</legend>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="EFETIVADO" id="sim" class="me-2" v-model="form.resultado">
+                                <input type="radio" checked name="reajuste" value="EFETIVADO" id="sim" class="me-2" v-model="form.resultado">
                                 <label for="sim" class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
-                                <input type="radio"  checked name="reajuste" value="NAO_EFETIVADO" id="nao" class="me-2" v-model="form.resultado">
+                                <input type="radio" name="reajuste" value="NAO_EFETIVADO" id="nao" class="me-2" v-model="form.resultado">
                                 <label for="nao" class="option">Não</label>
                             </div>
                         </fieldset>
@@ -35,6 +35,7 @@
                         <div class="mb-3">
                             <label id="menes" for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
                             <input type="text" class="form-control" id="cargo-efetivado" v-model="form.cargoEfetivado">
+                            <p class="fw-bold erro mt-0 none" id="erroCargo">Preencha este campo!</p>
                         </div>
                     </form>
                 </div>
@@ -155,7 +156,7 @@ export default {
       participante: {}, // objeto para receber as informações do participante.
       
       form: {
-        resultado: 'NAO_EFETIVADO',
+        resultado: 'EFETIVADO',
         dataAlteracao: '',
         cargoEfetivado: '',
         comprovante: '',
@@ -209,8 +210,6 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-      
-        
     },
 
     carregaModal (conclusao) {
