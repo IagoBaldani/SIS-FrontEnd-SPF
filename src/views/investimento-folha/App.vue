@@ -41,7 +41,7 @@
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="validaForm()"
+              v-on:click="validaForm(), mostrarBtnAdicionar()"
             >
               Pesquisar
             </button>
@@ -105,7 +105,7 @@
             <button
               id="botaoAdicionarManualmente"
               type="button"
-              class="btn-lg"
+              class="btn-lg btnAdicionar"
               v-on:click="mostrarParticipantes()"
             >
               ADICIONAR MANUALMENTE
@@ -156,7 +156,7 @@
                 </select>
               </div>
               <p id="erroNome" class="erro none">Por favor selecione um participante</p>
-              <label class="modalconteudo">Mês e ano</label>
+              <label class="modalconteudo">Dia, mês e ano</label>
               <div class="input-group input-group-lg">
                 <input
                   id="mesAnoModal"
@@ -167,7 +167,7 @@
                   aria-describedby="inputGroup-sizing-lg"
                 />
               </div>
-              <p id="erroData" class="erro none">O campo Mês e ano não pode ser vazio</p>
+              <p id="erroData" class="erro none">O campo Dia, mês e ano não pode ser vazio</p>
               <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Remuneração</label>
@@ -498,6 +498,12 @@ export default {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
+    },
+
+    mostrarBtnAdicionar () {
+      let btnAdicionar = document.querySelector('.btnAdicionar')
+
+      btnAdicionar.style.display = 'flex'
     }
   }
 }
@@ -724,6 +730,10 @@ body {
   #botaoAdicionarManualmente {
     width: max-content;
     margin-left: 0px;
+  }
+
+  .btnAdicionar {
+    display: none;
   }
 }
 

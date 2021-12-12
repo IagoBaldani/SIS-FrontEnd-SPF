@@ -41,7 +41,7 @@
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="validaForm()"
+              v-on:click="validaForm(), mostrarBtnAdicionar()"
             >
               Pesquisar
             </button>
@@ -86,8 +86,7 @@
       <div class="mensagem col-xl-12">
         Por favor, filtre os campos Formação e Turma para continuar
       </div>
-    </div>
-    <div class="container overflow-hidden botoes">
+       <div class="container overflow-hidden botoes">
       <div class="teste row g-2 g-lg-3">
         <div
           class="botãoFinal col-xl-7"
@@ -97,13 +96,14 @@
           <button
             id="botaoAdicionarManualmente"
             type="button"
-            class="btn-lg"
+            class="btn-lg btnAdicionar"
             v-on:click="mostrarInstrutor()"
           >
             ADICIONAR MANUALMENTE
           </button>
         </div>
       </div>
+    </div>
     </div>
   </div>
   <!-- Modal -->
@@ -146,7 +146,7 @@
               </select>
             </div>
             <p id="erroNome" class="erro none">Por favor selecione um participante</p>
-            <label id="modalconteudo">Mês e ano</label>
+            <label id="modalconteudo">Dia, mês e ano</label>
             <div class="input-group input-group-lg">
               <input
                 id="mesAnoModal"
@@ -157,7 +157,7 @@
                 aria-describedby="inputGroup-sizing-lg"
               />
             </div>
-            <p id="erroData" class="erro none">O campo Mês e ano não pode ser vazio</p>
+            <p id="erroData" class="erro none">O campo Dia, mês e ano não pode ser vazio</p>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
               <div class="modalitens col-xl-6">
                 <label id="modalconteudo">Valor Hora</label>
@@ -444,6 +444,12 @@ export default {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
+    },
+
+    mostrarBtnAdicionar () {
+      let btnAdicionar = document.querySelector('.btnAdicionar')
+
+      btnAdicionar.style.display = 'flex'
     }
   }
 }
@@ -503,6 +509,10 @@ body {
   font-weight: bold;
   color: #ffffff;
   border: none;
+}
+
+.btnAdicionar {
+  display: none;
 }
 
 #filtro-nome {
