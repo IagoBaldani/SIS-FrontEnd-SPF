@@ -61,7 +61,8 @@
                     </a>
                   </td>
                   <td>
-                    <a :href="'/processo-seletivo-dados-da-vaga-cadastro-edicao?id=' + processo.id + '&tipo=edicao'">
+                    <a  class="editor" v-on:click="habilitaEdicao(processo.status, processo.id)" >
+                    <!-- <a class="none" id="validadorEdicao" :href="'/processo-seletivo-dados-da-vaga-cadastro-edicao?id=' + processo.id + '&tipo=edicao'"/> -->
                     <img src="../../assets/imgs/settings_white_24dp.svg" alt=""/>
                     </a>
                   </td>
@@ -87,6 +88,19 @@
         </div>
       </div>
     </div>
+    <!-- Modal com lembrete de bloqueio de edição  -->
+     <p class="none" id="abreModalInvisivelEdicao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoEdicao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacaoEdicao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Não é possivel editar um processo-seletivo já finalizado</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </main>
 </template>
 
@@ -103,13 +117,14 @@ export default {
 
   data () {
     return {
-      processosSeletivos: []
+      processosSeletivos: [],
+      idSelecionado: ''
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-
     this.getListaDeProcessos()
+    this.idSelecionado = ''
   },
   methods: {
     filtraDados () {
@@ -156,6 +171,24 @@ export default {
         }
       }
     },
+    habilitaEdicao (processo, idProcesso) {
+      this.idSelecionado = idProcesso 
+      console.log(this.idSelecionado)
+      console.log(idProcesso)
+      if(processo != 'FINALIZADA') {  
+        // document.querySelector('#validadorEdicao').click() 
+        window.location.href="/processo-seletivo-dados-da-vaga-cadastro-edicao?id=" + idProcesso + "&tipo=edicao"
+      } else {
+        this.abrirModalEdicao()
+        setTimeout(function () {
+         document.location.reload(true)
+        }, 1521)
+      }
+    },
+    abrirModalEdicao() {
+      document.getElementById('abreModalInvisivelEdicao').click()  
+    },
+
     getListaDeProcessos () {
       http
         .get('processo-seletivo')
@@ -237,7 +270,9 @@ height: 52vh;
   font-size: 20px;
   text-align: center;
 }
-
+.editor{
+  cursor: pointer;
+}
 /* Table - Coluna Processo Seletivo Java */
 .search-table tbody > tr > td:nth-child(2) {
   font-weight: 500;

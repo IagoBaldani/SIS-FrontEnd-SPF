@@ -81,7 +81,7 @@
         </div>
         <div class="col-xl-4">
           <div>
-            <button type="button" class="mt-4 btn btn-cancelar" v-if="tipo.tipoDaPagina == 'edicao' && formacoes.status != 'FINALIZADA'" v-on:click="criaFormacao()">FINALIZAR PROCESSO SELETIVO</button>
+            <button type="button" class="mt-4 btn btn-cancelar"  v-on:click="criaFormacao()">FINALIZAR PROCESSO SELETIVO</button>
           </div>
         </div>
         <div class="col-xl-2"></div>
@@ -227,7 +227,6 @@ export default {
   },
   beforeMount () {
     Funcoes.verificaToken()
-
     this.getInstrutores()
 
     const dadosUrl = this.pegaDadosUrl()
