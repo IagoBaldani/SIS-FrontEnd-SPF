@@ -16,7 +16,7 @@
               type="text"
               class="form-control"
               id="inputNome"
-              v-model="candidato.nome"
+              :value="candidato.nome"
             />
             <p id="nomeErro" class="none erro">Por favor, preencha o campo nome</p>
           </div>
@@ -28,7 +28,7 @@
               v-mask="['(##) # ####-####']"
               id="inputContato"
               placeholder="(xx) xxxxx-xxxx"
-              v-model="candidato.telefone"
+              :value="candidato.telefone"
             />
             <p id="contatoErro" class="none erro">Por favor, preencha o campo telefone</p>
             <p id="erroTamanho" class="erro none">Este campo precisa ter 11 dígitos!</p>
@@ -40,7 +40,7 @@
               type="text"
               class="form-control"
               id="inputFonteDeRecrutamento"
-              v-model="candidato.fonteRecrutamento"
+              :value="candidato.fonteRecrutamento"
             />
             <p id="fonteErro" class="none erro">Por favor, preencha o campo fonte de recrutamento</p>
           </div>
@@ -52,13 +52,13 @@
               class="form-control"
               id="inputDataAgendamento"
               placeholder="2021/02/15"
-              v-model="candidato.dataAgendamento"
+              :value="candidato.dataAgendamento"
             />
             <p id="dataErro" class="none erro">Por favor, preencha o campo data agendamento</p>
           </div>
           <div class="mt-0">
             <label class="label-form titulo mb-0">Resultado</label>
-            <select class="form-select" v-model="candidato.status" id="status">
+            <select class="form-select" :value="candidato.status" id="status">
               <option value="SEM_STATUS" selected>Sem status</option>
               <option value="APROVADO_1_FASE" class="aprovado">Aprovado 1ª fase</option>
               <option value="REPROVADO_1_FASE" class="reprovado">Reprovado 1ª fase</option>
@@ -72,7 +72,7 @@
         <div class="col-md-4">
           <div class="mb-3">
             <label class="label-form">Processo Seletivo</label>
-            <select id="inputProcessoSeletivo" class="form-select" v-model="candidato.processoSeletivoId">
+            <select id="inputProcessoSeletivo" class="form-select" :value-="candidato.processoSeletivoId">
               <option selected>Selecione o Processo Seletivo</option>
               <template v-for="processo in processosSeletivos" v-bind:key="processo">
                 <option v-bind:value="processo.id" v-if="processo.status != 'FINALIZADA'">{{ processo.id }} - {{ processo.nome }}</option>
@@ -82,14 +82,16 @@
           </div>
           <div class="mb-3">
             <label class="label-form">Prova prática</label>
-            <input type="number" class="form-control" id="inputProvaPratica"  v-model="candidato.testeLogico"/>
+            <input type="number"  class="form-control" id="inputProvaPratica"  :value="candidato.testeLogico" min="0" max="10" maxlength="10"/>
             <p id="provaErro" class="none erro">Por favor, preencha o campo prova prática</p>
+            <p id="erroProvaPratica" class="none erro">A nota deve ser entre 0 - 10</p>
           </div>
 
           <div class="mb-3">
             <label class="label-form">DISC</label>
-            <input type="text" class="form-control" id="inputDisc" v-mask="['d:## i:## s:## c:##']"  placeholder="Digite a nota do DISC" v-model="candidato.notaDisc"/>
+            <input type="text" class="form-control" id="inputDisc" v-mask="['d:## i:## s:## c:##']"  placeholder="Digite a nota do DISC" :value="candidato.notaDisc"/>
             <p id="discErro" class="none erro">Por favor, preencha o campo DISC</p>
+            <p id="discErroNota" class="none erro">A nota deve ser entre 0 - 10C</p>
           </div>
 
           <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="acao()"></p>
@@ -108,7 +110,7 @@
 
           <div class="mb-3">
             <label class="label-form">Observações Entrevista</label>
-            <textarea rows="5" class="form-control" id="inputObservacao" v-model="candidato.observacao"></textarea>
+            <textarea rows="5" class="form-control" id="inputObservacao" :value="candidato.observacao"></textarea>
             <p id="observacaoErro" class="none erro">Por favor, preencha o campo observação</p>
           </div>
         </div>
@@ -154,27 +156,33 @@
                 Deseja confirmar a edição do participante?
               </h1>
             </div>
-            <div class="conteudomodal">
-              <div class="col-xl-5 mb-3">
-                <h2 class="nome">Nome: {{ candidatoForm.nome }}</h2>
-                <h2 class="nome">Contato: {{ candidatoForm.telefone }}</h2>
-                <h2 class="nome">Fonte de Recrutamento: {{ candidatoForm.fonteRecrutamento }}</h2>
-                <h2 class="nome">Data Agendamento: {{ candidatoForm.dataAgendamento}} </h2>
-                <h2 class="nome">Observação: {{ candidatoForm.observacao }}</h2>
-                <h2 class="nome">Status: {{ candidatoForm.status }}</h2>
-                <h2 class="nome">Processo Seletivo: {{ candidatoForm.idProcessoSeletivo }}</h2>
-              </div>
-              <div class="col-xl-2"></div>
-              <div class="col-xl-5 mt-5"></div>
+            <div class="conteudomodal d-flex flex-column justify-content-center mb-0">
+                        <div class="mt-3">
+                            <ul class="fw-bold subtitulo text-start">
+                                Informações gerais:
+                                <li>Nome: <span class="titulo"> {{ candidatoForm.nome }} </span></li>
+                                <li>Contato: <span class="titulo"> {{ candidatoForm.telefone }} </span></li>
+                                <li>Fonte de Recrutamento: <span class="titulo"> {{ candidatoForm.fonteRecrutamento}} </span></li>
+                                <li>Data de Agendamento: <span class="titulo">{{candidatoForm.dataAgendamento}}</span></li>
+                                <li>Observação: <span class="titulo">{{ candidatoForm.observacao }}</span></li>
+                                <li>Status: <span class="titulo">{{ candidatoForm.status }}</span></li>
+                                <li>Processo Seletivo: <span class="titulo">{{ candidatoForm.idProcessoSeletivo}}</span></li>
+                            </ul>
+                        </div>
+                        <div class="mt-3 modal-footer border-0 justify-content-around">
+                            <div>
+                                <button type="button" class="btn submit" @click="processaRequisicoes">CONFIRMAR</button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn cancel" data-bs-dismiss="modal">
+                                    CANCELAR
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="modal-footer border-0 justify-content-around">
-            <div>
-              <button type="button" class="btn submit" @click="processaRequisicoes">CONFIRMAR</button>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
 
      <!-- Modal de confirmação -->
@@ -432,11 +440,23 @@ export default {
       } else {
         document.querySelector('#provaErro').classList.add('none')
       }
+      if (provaPratica < 0 ||provaPratica > 10) {
+        document.querySelector('#erroProvaPratica').classList.remove('none')
+        erro = 1
+      }else{
+        document.querySelector('#erroProvaPratica').classList.add('none')
+      }
       if (discNota == '') {
         document.querySelector('#discErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#discErro').classList.add('none')
+      }
+      if (discNota  < 0 || discNota > 10 ) {
+        document.querySelector('#discErroNota').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#discErroNota').classList.add('none')
       }
       if (curriculo.files.length <= 0) {
         document.querySelector('#curriculoErro').classList.remove('none')
@@ -473,13 +493,12 @@ export default {
         })
     }
   },
-  formataDataParaExibicao (data) {
-    const dataPreForm = new Date(data)
-    const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
-    return dataFormatada
+    formataDataParaMostrar (data) {
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
+    }
   }
-}
 
 </script>
 
@@ -647,10 +666,10 @@ button .largura {
 }
 
 .conteudomodal {
-  display: block;
-  text-align: left;
-  margin-left: 100px;
-  color: var(--color-blue-footer) !important;
+   display: flex;
+    justify-content: center;
+    min-height: 40vh;
+    font-size: 21px;
 }
 
 .btn.submit.form-control {
