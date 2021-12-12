@@ -258,6 +258,11 @@ module.exports = {
       title: 'Cargos | Edição',
       chunks: ['chunk-vendors', 'chunk-common', 'cargo-cadastro-edicao']
     },
-   
+    'cargo-cadastro': {
+      entry: './src/views/cargo-cadastro/main.js',
+      template: 'public/index.html',
+      title: 'Cargos',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-cadastro']
+    },
   }
 }

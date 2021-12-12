@@ -3,7 +3,7 @@
       <main>
         <div class="container-fluid">
             <div class="row justify-content-evenly">
-                <h3 class="titulo col-xl-4 mt-5">Edição cargo:</h3>
+                <h3 class="titulo col-xl-4 mt-5">Cadastro cargo:</h3>
                 <div class="col-xl-4"></div>
                 <div class="col-xl-2"></div>
             </div>
@@ -119,7 +119,7 @@
         </div>
         <div class="modal-footer border-0 justify-content-around">
           <div>
-            <button type="button" class="btn submit" @click="processarDados">CONFIRMAR</button>
+            <button type="button" class="btn" @click="processarDados">CONFIRMAR</button>
           </div>
           <div>
             <button type="button" class="btn cancel" data-bs-dismiss="modal">CANCELAR</button>
@@ -355,10 +355,9 @@ export default {
       }
       if (erro == 1) {
         return false
-      }else{
-        document.querySelector('#erroCargoCadastrado').classList.add('none')
-        return true
       }
+      document.querySelector('#erroCargoCadastrado').classList.add('none')
+      return true
     }
   }
 }

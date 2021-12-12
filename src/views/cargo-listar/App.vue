@@ -82,7 +82,7 @@
             id="cadastrar"
             type="button"
           >
-          <a class="button-footer submit" :href="'/cargo-cadastro-edicao?tipo=cadastro'">
+          <a class="button-footer submit" :href="'/cargo-cadastro?tipo=cadastro'">
             CADASTRAR NOVO CARGO
           </a>
           </button>
