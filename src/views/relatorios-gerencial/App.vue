@@ -242,6 +242,7 @@
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
+              onclick="window.location.reload()"
             >
               Fechar
             </button>
@@ -337,6 +338,7 @@
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
+              onclick="window.location.reload()"
             >
               Fechar
             </button>
@@ -426,6 +428,7 @@
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
+              onclick="window.location.reload()"
             >
               Fechar
             </button>
