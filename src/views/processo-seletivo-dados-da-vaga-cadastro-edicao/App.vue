@@ -130,6 +130,9 @@
                 <div class="alinharDiv">
                   <span class="informacoes-modal">Quantidade de aprendizes: {{ formacoesForm.qtdAprendizes }}</span>
                 </div>
+                <div class="alinharDiv">
+                  <span class="informacoes-modal">Participantes Totais: {{ formacoesForm.qtdTotal }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -179,6 +182,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
+import { variavelBack } from '../../services/Variavel'
 import { variavel } from '../../services/Variavel'
 
 export default {
@@ -276,6 +280,7 @@ export default {
       this.formacoesForm.qtdEstagiario = document.querySelector('#inputQtdEstagiarios').value
       this.formacoesForm.qtdAprendizes = document.querySelector('#inputQtdAprendizes').value
       this.formacoesForm.qtdTrainees = document.querySelector('#inputQtdTrainees').value
+      this.formacoesForm.qtdTotal = document.querySelector('#inputQtdTotal').value
     },
     validaForm () {
       var nome = document.getElementById('inputNome').value
@@ -343,16 +348,14 @@ export default {
      criaFormacao () {
        const dadosUrl = this.pegaDadosUrl()
        var id = dadosUrl.id
-
        this.geraFormulario()
        this.formacoesForm.status = 'FINALIZADA'
-
        http
          .put(`processo-seletivo/${id}`, this.formacoesForm)
          .then(response => {
           this.abrirModalEdicao()
           setTimeout(function () {
-                window.location.href =  variavel.href = '-seletivo-busca-por-vagas'
+                window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
            }, 1521)
          })
          .catch(error => {
