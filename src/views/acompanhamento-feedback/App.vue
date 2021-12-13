@@ -31,10 +31,9 @@
                         </div>
                         <div>
                             <!--<input class="input-file" type="file">-->
-                            <p class="form-label mb-0 fw-bold titulo d-block">Insira o arquivo do Disc</p>
+                            <p class="form-label mb-0 fw-bold titulo d-block">Insira o arquivo do DISC</p>
                              <input type="file" class="form-control" id="campoDisc" 
                              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                              <p class="erro none" id="erroDisc" >Insira o DISC</p>
                         </div>
                         <button class="btn-registrar mt-4 " type="button" @click="validadorDeCampos()" >REGISTRAR</button>
                     </form>
@@ -49,7 +48,7 @@
                                 <tr v-for="(feedback, index) in feedbacks" :key="feedback">
                                     <td scope="row">{{++index}}</td>
                                     <td>{{feedback.anotacao}}</td>
-                                    <td @click="carregaModal(feedback, index)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
+                                    <td @click="carregaModal(feedback, index), validacaoDownload()" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
                                         <img class="imgicon" name="imglogo" src="@/assets/imgs/visibility_white_24dp.svg"></td>
                                 </tr>
                             </tbody>
@@ -78,7 +77,7 @@
                             <h4 class="fw-bold titulo">Anotações do feedback</h4>
                             <textarea v-model="feedbackModal.anotacao" disabled class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
-                        <div class="col-lg-6" >
+                        <div class="col-lg-6 none" id="downloadModal">
                             <h4 class="fw-bold titulo mb-3" >Download DISC:</h4>
                             <a v-on:click="download()" id="oioi" class="btn-registrar pointer" > DOWNLOAD</a>
                         </div>
@@ -214,12 +213,6 @@ export default {
       } else {
         document.querySelector('#erroData').classList.add('none')
       }
-      if (campoDisc == '') {
-        document.querySelector('#erroDisc').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroDisc').classList.add('none')
-      }
       if (campoObs == '') {
         document.querySelector('#erroObs').classList.remove('none')
         erro = 1
@@ -247,9 +240,14 @@ export default {
     postForm () {
       var formData = new FormData()
       var disc = document.getElementById('campoDisc').files[0]
-      formData.append('data', this.form.data)
-      formData.append('anotacoes', this.form.anotacoes)
-      formData.append('disc', disc)
+      if (disc != null) {
+        formData.append('data', this.form.data)
+        formData.append('anotacoes', this.form.anotacoes)
+        formData.append('disc', disc)
+      } else {
+        formData.append('data', this.form.data)
+        formData.append('anotacoes', this.form.anotacoes)
+      }
       http
         .post(`feedback/novo/${this.id}`, formData, {
           headers: {
@@ -266,6 +264,14 @@ export default {
           console.log(error)
         })
     }, 
+    validacaoDownload () {
+      console.log(this.feedbackModal)
+      if (this.feedbackModal.disc == undefined) {
+        document.getElementById('downloadModal').classList.add('none')
+      } else {
+        document.getElementById('downloadModal').classList.remove('none')
+      }
+    },
     // método para deletar o o feedback.
     deleteById () {
       http  

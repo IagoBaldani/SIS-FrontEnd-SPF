@@ -312,7 +312,7 @@ export default {
         return false
       } 
       for (var i = 1; i <= 9; i++) {
-        Soma = Soma + parseInt(cpf.substring(i-1, i)) * (11 - i)
+        Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i)
       }
       Resto = (Soma * 10) % 11
       if ((Resto == 10) || (Resto == 11)) {
@@ -322,8 +322,8 @@ export default {
         return false
       } 
       Soma = 0
-      for (var i = 1; i <= 10; i++) {
-        Soma = Soma + parseInt(cpf.substring(i-1, i)) * (12 - i)
+      for (i = 1; i <= 10; i++) {
+        Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (12 - i)
       } 
       Resto = (Soma * 10) % 11
       if ((Resto == 10) || (Resto == 11)) {

@@ -12,7 +12,7 @@
         <div class="col-xl-4">
           <div class="mb-3">
             <label class="form-label fw-bold mb-0 titulo">Nome:</label>
-            <input name="nome" type="text" class="form-control mt-1" placeholder="Nome do participante" id="filtro-nome">
+            <input name="nome" type="text" class="form-control mt-1" id="filtro-nome">
           </div>
           <div class="mb-3">
             <label class="form-label fw-bold mb-0 titulo">Programa de Formação:</label>

@@ -12,12 +12,12 @@
         <div class="row justify-content-evenly">
           <div class="col-xl-4">
             <div class="mb-3">
+              <label>Nome</label>
               <input
                 name="filtro"
                 type="text"
                 class="form-control mt-4"
                 id="filtro-nome"
-                placeholder="Nome"
               />
             </div>
             <div class="mb-3">
