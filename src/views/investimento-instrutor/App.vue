@@ -41,7 +41,7 @@
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="validaForm(), mostrarBtnAdicionar()"
+              v-on:click="validaForm()"
             >
               Pesquisar
             </button>
@@ -285,7 +285,6 @@ export default {
     filtrarDados () {
       this.programaProcurado = document.querySelector('.filtro-programa').value
       this.turmaProcurada = document.querySelector('.filtro-turma').value
-      this.mudaVisibilidade()
       http
         .get(
           'instrutor/buscar-instrutor/' +
@@ -295,6 +294,7 @@ export default {
         )
         .then(response => {
           (this.instrutores = response.data)
+          this.mudaVisibilidade()
           this.pegarSalario()
         }) 
     },

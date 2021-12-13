@@ -41,7 +41,7 @@
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="validaForm(), mostrarBtnAdicionar()"
+              v-on:click="validaForm()"
             >
               Pesquisar
             </button>
@@ -324,6 +324,7 @@ export default {
   },
   methods: {
     filtrarDados () {
+      console.log('Entrei aqui')
       http
         .get(
           'investimento-folha/' +
@@ -334,19 +335,21 @@ export default {
         .then(response => {
           (this.participantes = response.data)
           this.pegarSalario()
+          this.mudaVisibilidade()
         })
-      this.mudaVisibilidade()
     },
     validaForm () {
       this.programaProcurado = document.querySelector('.filtro-programa').value
       this.turmaProcurada = document.querySelector('.filtro-turma').value
       let erro = 0
       if (this.programaProcurado == '') {
+        console.log('Erro programa')
         erro = 1
       } else {
         erro = 0
       }
       if (this.turmaProcurada == '') {
+        console.log('Erro turma')
         erro = 1
       } else {
         erro = 0
