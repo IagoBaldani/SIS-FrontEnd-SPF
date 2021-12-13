@@ -105,10 +105,10 @@
             <button
               id="botaoAdicionarManualmente"
               type="button"
-              class="btn-lg btnAdicionar"
+              class="btn-lg btnAdicionar none"
               v-on:click="mostrarParticipantes()"
             >
-              ADICIONAR MANUALMENTE
+              ADICIONAR SALÁRIO
             </button>
           </div>
         </div>
@@ -156,7 +156,7 @@
                 </select>
               </div>
               <p id="erroNome" class="erro none">Por favor selecione um participante</p>
-              <label class="modalconteudo">Dia, mês e ano</label>
+              <label class="modalconteudo">Data</label>
               <div class="input-group input-group-lg">
                 <input
                   id="mesAnoModal"
@@ -167,7 +167,7 @@
                   aria-describedby="inputGroup-sizing-lg"
                 />
               </div>
-              <p id="erroData" class="erro none">O campo Dia, mês e ano não pode ser vazio</p>
+              <p id="erroData" class="erro none">O campo data não pode ser vazio</p>
               <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Remuneração</label>
@@ -183,6 +183,7 @@
                     />
                   </div>
                   <p id="erroRemun" class="erro none">O campo remuneração não pode ser vazio</p>
+                  <p id="erroRemunQuantidade" class="erro none">Valor alto demais!</p>
                 </div>
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Encargos</label>
@@ -198,6 +199,7 @@
                     />
                   </div>
                   <p id="erroEncargos" class="erro none">Por favor digite um valor válido, se for o caso digite 0</p>
+                  <p id="erroEncargosQuantidade" class="erro none">Valor alto demais!</p>
                 </div>
               </div>
               <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
@@ -215,6 +217,7 @@
                     />
                   </div>
                   <p id="erroBeneficios" class="erro none">Por favor digite um valor válido, se for o caso digite 0</p>
+                  <p id="erroBeneficiosQuantidade" class="erro none">Valor alto demais!</p>
                 </div>
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Total</label>
@@ -272,6 +275,7 @@
                 <div class="row mb-5">
                     <div class="col">
                         <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Inserção efetuada com sucesso</h3>
+                        <h4 class="mt-4 modal-title fw-bold titulo text-center" id="redirecionar">Redirecionando...</h4>
                     </div>
                 </div>
             </div>
@@ -382,17 +386,35 @@ export default {
       } else {
         document.querySelector('#erroRemun').classList.add('none')
       }
+      if (remuneracao > 10000) {
+        document.querySelector('#erroRemunQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroRemunQuantidade').classList.add('none')
+      }
       if (encargos == '') {
         document.querySelector('#erroEncargos').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroEncargos').classList.add('none')
       }
+      if (encargos > 10000) {
+        document.querySelector('#erroEncargosQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroEncargosQuantidade').classList.add('none')
+      }
       if (beneficios == '') {
         document.querySelector('#erroBeneficios').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroBeneficios').classList.add('none')
+      }
+      if (beneficios > 10000) {
+        document.querySelector('#erroBeneficiosQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroBeneficiosQuantidade').classList.add('none')
       }
       if (observacao == '') {
         document.querySelector('#erroObservacao').classList.remove('none')
@@ -489,8 +511,10 @@ export default {
     mudaVisibilidade () {
       let mensagem = document.querySelector('.mensagem')
       let extremo = document.querySelector('.extremo')
+      let botao = document.querySelector('#botaoAdicionarManualmente')
 
       mensagem.style.display = 'none'
+      botao.style.display = 'flex'
       extremo.style.display = 'flex'
     },
 
@@ -563,6 +587,10 @@ body {
 }
 
 .extremo {
+  display: none;
+}
+
+.none {
   display: none;
 }
 
@@ -697,6 +725,17 @@ body {
 #exampleModalLabel {
   font-family: Montserrat;
   font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  font-weight: bold;
+  text-align: center;
+}
+
+#redirecionar {
+  font-family: Montserrat;
+  font-size: 30px;
   font-style: normal;
   font-weight: 700;
   line-height: 24px;
