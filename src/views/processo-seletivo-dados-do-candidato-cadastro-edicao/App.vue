@@ -75,7 +75,7 @@
           <div class="mb-3">
             <label class="label-form">Processo Seletivo</label>
             <select id="inputProcessoSeletivo" class="form-select" :value-="candidato.processoSeletivoId">
-              <option selected>Selecione o Processo Seletivo</option>
+              <option selected value="0">Selecione o Processo Seletivo</option>
               <template v-for="processo in processosSeletivos" v-bind:key="processo">
                 <option v-bind:value="processo.id" v-if="processo.status != 'FINALIZADA'">{{ processo.id }} - {{ processo.nome }}</option>
               </template>
@@ -93,7 +93,6 @@
             <label class="label-form">DISC</label>
             <input type="text" class="form-control" id="inputDisc" v-mask="['d:### i:### s:### c:###']"  placeholder="Digite a nota do DISC" :value="candidato.notaDisc"/>
             <p id="discErro" class="none erro">Por favor, preencha o campo DISC</p>
-            <p id="discErroNota" class="none erro">A nota deve ser entre 0 - 10C</p>
           </div>
 
           <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="acao()"></p>
@@ -101,14 +100,14 @@
           <div class="mb-3">
             <label class="label-form mb-0 titulo">Currículo candidato</label><br>
             <input  type="file" class="form-control" id="fileCurriculo"  accept="application/pdf">
-            <p v-if="tipoReq == 'edicao' " id="curriculo" class="lembrete" >Já existe um arquivo de curriculo, deseja substituir ?</p>
+            <p v-if="tipoReq == 'edicao' " id="curriculo" class="lembrete" >Já existe um arquivo de curriculo. Deseja substituir ?</p>
             <p id="curriculoErro" class="none erro">Por favor, preencha o campo currículo</p>
           </div>
 
           <div class="mb-3">
             <label class="label-form mb-0 titulo">Disc xlsx</label><br>
             <input type="file" class="form-control" id="fileDisc">
-            <p v-if="tipoReq  == 'edicao'" id="curriculo" class="lembrete" >Já existe um arquivo de Disc, deseja substituir ?</p>
+            <p v-if="tipoReq  == 'edicao'" id="curriculo" class="lembrete" >Já existe um arquivo de Disc. Deseja substituir ?</p>
             <p id="discFileErro" class="none erro">Por favor, preencha o campo DISC</p>
           </div>
 
@@ -253,7 +252,7 @@ export default {
       processosSeletivos: {},
       statusProcesso: '',
       idRetorno: '',
-      tipoReq:'',
+      tipoReq: '',
       statusParticipante: '' 
     }
   },
@@ -363,7 +362,7 @@ export default {
           })
       } else if (tipo == 'edicao' && discAtualizar == '' && curriculoAtualizar != '') {
         console.log('editando com curriculo')
-        var formDataAtualizar = new FormData()  
+        formDataAtualizar = new FormData()  
         formDataAtualizar.append('id', this.candidatoForm.id)
         formDataAtualizar.append('nome', this.candidatoForm.nome)
         formDataAtualizar.append('fonteRecrutamento', this.candidatoForm.fonteRecrutamento)
@@ -390,9 +389,9 @@ export default {
           .catch(error => {
             console.log(error)
           })
-          } else if (tipo == 'edicao' && discAtualizar != '' && curriculoAtualizar == '') {
+      } else if (tipo == 'edicao' && discAtualizar != '' && curriculoAtualizar == '') {
         console.log('editando com disc')
-        var formDataAtualizar = new FormData()  
+        formDataAtualizar = new FormData()  
         formDataAtualizar.append('id', this.candidatoForm.id)
         formDataAtualizar.append('nome', this.candidatoForm.nome)
         formDataAtualizar.append('fonteRecrutamento', this.candidatoForm.fonteRecrutamento)
@@ -419,10 +418,9 @@ export default {
           .catch(error => {
             console.log(error)
           })
-          
       } else if (tipo == 'edicao' && discAtualizar == '' && curriculoAtualizar == '') {
         console.log('editando sem nada')
-        var formDataAtualizar = new FormData()  
+        formDataAtualizar = new FormData()  
         formDataAtualizar.append('id', this.candidatoForm.id)
         formDataAtualizar.append('nome', this.candidatoForm.nome)
         formDataAtualizar.append('fonteRecrutamento', this.candidatoForm.fonteRecrutamento)
@@ -448,7 +446,7 @@ export default {
           .catch(error => {
             console.log(error)
           })
-       } else if (tipo == 'cadastro') {
+      } else if (tipo == 'cadastro') {
         var formData = new FormData()
         var disc = document.getElementById('fileDisc').files[0]
         var curriculo = document.getElementById('fileCurriculo').files[0]
@@ -477,7 +475,7 @@ export default {
             setTimeout(function () {
               // window.location.href = variavel.href = 'processo-seletivo-busca-por-candidato' + '?id=' + this.idRetorno +  
               //   + '&status=' + this.statusProcesso
-             window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
             }, 1521)
           })
           .catch(error => {
@@ -532,7 +530,7 @@ export default {
       } else {
         document.querySelector('#resultadoErro').classList.add('none')
       }
-      if (processoSeletivo == '') {
+      if (processoSeletivo == 0) {
         document.querySelector('#processoErro').classList.remove('none')
         erro = 1
       } else {
@@ -544,43 +542,37 @@ export default {
       } else {
         document.querySelector('#provaErro').classList.add('none')
       }
-      if (provaPratica < 0 ||provaPratica > 10) {
+      if (provaPratica < 0 || provaPratica > 10) {
         document.querySelector('#erroProvaPratica').classList.remove('none')
         erro = 1
-      }else{
+      } else {
         document.querySelector('#erroProvaPratica').classList.add('none')
       }
-       if (discNota == '') {
-         document.querySelector('#discErro').classList.remove('none')
-         erro = 1
-       } else {
-         document.querySelector('#discErro').classList.add('none')
-       }
-       if (discNota  < 0 || discNota > 10 ) {
-         document.querySelector('#discErroNota').classList.remove('none')
-         erro = 1
-       } else {
-         document.querySelector('#discErroNota').classList.add('none')
-       }
+      if (discNota == '') {
+        document.querySelector('#discErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#discErro').classList.add('none')
+      }
       if (observacao == '') {
         document.querySelector('#observacaoErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#observacaoErro').classList.add('none')
       }
-      if (this.tipo == 'cadastro'){
+      if (this.tipo == 'cadastro') {
         if (curriculo == '') {
-         document.querySelector('#curriculoErro').classList.remove('none')
-         erro = 1
-       } else {
-         document.querySelector('#curriculoErro').classList.add('none')
-       }
-       if (disc == '') {
-         document.querySelector('#discFileErro').classList.remove('none')
-         erro = 1
-       } else {
-         document.querySelector('#discFileErro').classList.add('none')
-       }
+          document.querySelector('#curriculoErro').classList.remove('none')
+          erro = 1
+        } else {
+          document.querySelector('#curriculoErro').classList.add('none')
+        }
+        if (disc == '') {
+          document.querySelector('#discFileErro').classList.remove('none')
+          erro = 1
+        } else {
+          document.querySelector('#discFileErro').classList.add('none')
+        }
       }
       if (erro == 1) {
         return false
@@ -599,12 +591,12 @@ export default {
         })
     }
   },
-    formataDataParaMostrar (data) {
-      const dataPreForm = new Date(data)
-      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-      return dataFormatada
-    }
+  formataDataParaMostrar (data) {
+    const dataPreForm = new Date(data)
+    const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+    return dataFormatada
   }
+}
 
 </script>
 
