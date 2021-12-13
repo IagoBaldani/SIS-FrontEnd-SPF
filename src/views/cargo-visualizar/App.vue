@@ -18,23 +18,23 @@
                             </div>
                             <div class="mb-3">
                               <label for="beneficios" class="form-label mb-0 titulo">Benefícios</label>
-                              <input name="beneficios" type="text" class="form-control disabledTextInput" v-bind:placeholder="cargos.beneficio">
+                              <input name="beneficios" type="text" class="form-control disabledTextInput" v-bind:placeholder="'R$ ' + cargos.beneficio">
                             </div>
                             <div class="mb-3">
                                 <label for="bolsaAuxilio" class="form-label mb-0 titulo">Bolsa auxílio</label>
-                                <input name="bolsaAuxilio" type="text" class="form-control disabledTextInput" v-bind:placeholder="cargos.bolsa">
+                                <input name="bolsaAuxilio" type="text" class="form-control disabledTextInput" v-bind:placeholder="'R$ ' + cargos.bolsa">
                             </div>
                             <div class="mb-3">
                                 <label for="convenio" class="form-label mb-0 titulo">Convênio</label>
-                                <input name="convenio" type="text" class="form-control disabledTextInput" v-bind:placeholder="cargos.convenio">
+                                <input name="convenio" type="text"  class="form-control disabledTextInput" v-bind:placeholder="'R$ ' + cargos.convenio">
                             </div>
                             <div class="mb-3">
                                 <label for="horaExtra" class="form-label mb-0 titulo">Hora Extra</label>
-                                <input name="horaExtra" type="text" class="form-control disabledTextInput"  v-bind:placeholder="cargos.horaExtra">
+                                <input name="horaExtra" type="text" class="form-control disabledTextInput"  v-bind:placeholder="'R$ ' + cargos.horaExtra">
                             </div>
                             <div class="mb-3">
                                 <label for="beneficioLegislacao" class="form-label mb-0 titulo">Benefício legislação</label>
-                                <input name="beneficioLegislacao" type="text" class="form-control disabledTextInput" v-bind:placeholder="cargos.beneficioLegislacao">
+                                <input name="beneficioLegislacao" type="text" class="form-control disabledTextInput" v-bind:placeholder="'R$ ' + cargos.beneficioLegislacao">
                             </div>
 
                         </fieldset>
@@ -43,15 +43,15 @@
                         <fieldset disabled>
                             <div class="mb-3">
                               <label for="remuneracaoEsporadica" class="form-label mb-0 titulo">Remuneração esporádica</label>
-                              <input name="remuneracaoEsporadica" type="text" class="form-control disabledTextInput" v-bind:placeholder="cargos.remunEsporadica">
+                              <input name="remuneracaoEsporadica" type="text" class="form-control disabledTextInput" v-bind:placeholder="'R$ ' + cargos.remunEsporadica">
                             </div>
                             <div class="mb-3">
                                 <label for="remuneracaoExtra" class="form-label mb-0 titulo">Remuneração extra</label>
-                                <input name="remuneracaoExtra" type="text" class="form-control disabledTextInput" v-bind:placeholder="cargos.remunExtra">
+                                <input name="remuneracaoExtra" type="text" class="form-control disabledTextInput" v-bind:placeholder="'R$ ' + cargos.remunExtra">
                             </div>
                             <div class="mb-3">
                                 <label for="alura" class="form-label mb-0 titulo">Alura</label>
-                                <input name="alura" type="text" class="form-control disabledTextInput" v-bind:placeholder="cargos.alura">
+                                <input name="alura" type="text" class="form-control disabledTextInput" v-bind:placeholder="'R$ ' + cargos.alura">
                             </div>
                         </fieldset>
                     </div>
@@ -66,9 +66,11 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
+import { mask } from 'vue-the-mask'
 
 export default {
   name: 'App',
+  directives: { mask },
   components: {
     Header
   },
