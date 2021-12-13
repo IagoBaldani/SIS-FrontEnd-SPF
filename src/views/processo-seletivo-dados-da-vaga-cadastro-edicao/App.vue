@@ -81,7 +81,7 @@
         </div>
         <div class="col-xl-4">
           <div>
-            <button type="button" class="mt-4 btn btn-cancelar"  v-on:click="criaFormacao()">FINALIZAR PROCESSO SELETIVO</button>
+            <button type="button" v-if="this.tipoTela == 'edicao'" class="mt-4 btn btn-cancelar"  v-on:click="criaFormacao()">FINALIZAR PROCESSO SELETIVO</button>
           </div>
         </div>
         <div class="col-xl-2"></div>
@@ -202,6 +202,7 @@ export default {
         qtdTrainees: '',
         status: ''
       },
+      tipoTela:'',
       formacoesForm: {
         nome: '',
         nomeInstrutor: '',
@@ -221,7 +222,7 @@ export default {
       },
       instrutores: {},
       qtdTotal: {
-        qtdTotal: ''
+      qtdTotal: ''
       }
     }
   },
@@ -232,7 +233,7 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     let id = dadosUrl.id
     let tipo = dadosUrl.tipo
-
+    this.tipoTela = tipo
     if (tipo == 'edicao') {
       this.getProcesso(id)
       this.formacoes.qtdTotal = this.formacoes.qtdTrainee + this.formacoes.qtdEstagiario + this.formacoes.qtdAprendiz
