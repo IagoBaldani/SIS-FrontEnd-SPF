@@ -17,7 +17,7 @@
                     </div>
                     <div>
                         <label for="bolsaAuxilio" class="form-label mb-0 mt-3 titulo">Bolsa auxílio</label>
-                        <input type="number"  name="bolsaAuxilio" class="form-control" v-bind:value="cargos.bolsa" id="inputBolsaAuxilio"/>
+                        <money  name="bolsaAuxilio" class="form-control" v-bind="money" id="inputBolsaAuxilio"></money>{{cargos.bolsa}}
                         <p id="erroBolsa" class="erro none">Por favor, coloque um valor válido maior ou igual a 0. </p>
                     </div>
                     <div>
@@ -164,15 +164,22 @@ import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
 import { variavel } from '../../services/Variavel'
 import { mask } from 'vue-the-mask'
+import { Money } from 'v-money'
 
 export default {
   name: 'App',
   directives: { mask },
   components: {
-    Header
+    Header,
   },
   data () {
     return {
+      money: {
+        decimal: ',',
+        thousands: '.',prefix: 'R$ ',
+        suffix: ' #',
+        precision: 2,
+        masked: false},
       cargos: {
         cargo: '',
         bolsa: '',
