@@ -49,7 +49,8 @@
             <label class="labelData">até</label>
             <input type="date" id="dataFinal" name="dataFinal" ref="dataFinal"/>
             <p id="dataInicioSelect" class="erro none"> Por favor selecione uma data de início válida </p>
-            <p id="dataFinalSelect" class="erro none"> Por favor selecione uma data de início válida </p>
+            <p id="dataFinalSelect" class="erro none"> Por favor selecione uma data de término válida </p>
+            <p id="dataInvalida" class="erro none"> A data de término deve ser posterior a data de inicio </p>
             <!-- Botão consultar data -->
             <input id="bottonConsultaData" type="button" class="btn btn-primary btn-lg"  v-on:click="validaSelectData()" value="CONSULTAR">
           </div>
@@ -93,7 +94,7 @@
           <button
             id="botao_pdf"
             type="button"
-            class="btn btn-primary btn-lg"
+            class="btn btn-primary btn-lg none"
             v-on:click="downloadRelatorioPDF()">GERAR PDF
           </button>
         </div>
@@ -102,7 +103,7 @@
           <button
             id="botao_xlsx"
             type="button"
-            class="btn btn-primary btn-lg"
+            class="btn btn-primary btn-lg none"
             v-on:click="downloadRelatorioXLSX()">GERAR XLSX
           </button>
         </div>
@@ -165,7 +166,11 @@ export default {
 
       http
         .get('investimentos/investimentoPeriodoSelecionado/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal)
-        .then(response => (this.relatorioPeriodo = response.data))
+        .then(response => {
+          this.relatorioPeriodo = response.data
+          document.querySelector('#botao_pdf').classList.remove('none')
+          document.querySelector('#botao_xlsx').classList.remove('none')
+        })
     },
 
     validaSelectData () {
@@ -185,6 +190,13 @@ export default {
       } else {
         document.querySelector('#dataFinalSelect').classList.add('none')
         erro = 0
+      }
+      if (this.dataFinal < this.dataInicial && this.dataInicial != '' && this.dataFinal != '') {
+        erro = 1
+        document.querySelector('#dataInvalida').classList.remove('none')
+      } else {
+        erro = 0
+        document.querySelector('#dataInvalida').classList.add('none')
       }
       if (erro == 1) {
         return false
