@@ -60,7 +60,7 @@
           <div class="mt-0">
             <label class="label-form titulo mb-0">Resultado</label>
             <select class="form-select" :value="candidato.status" id="status">
-              <option :value="statusParticipante" selected> {{ statusParticipante }}</option>
+              <!-- <option value="candadidato.status" selected >{{ candidato.status }}</option> -->
               <option value="SEM_STATUS" >Sem status</option>
               <option value="APROVADO_1_FASE" class="aprovado">Aprovado 1ª fase</option>
               <option value="REPROVADO_1_FASE" class="reprovado">Reprovado 1ª fase</option>
@@ -77,7 +77,7 @@
             <select id="inputProcessoSeletivo" class="form-select" :value-="candidato.processoSeletivoId">
               <option selected value="0">Selecione o Processo Seletivo</option>
               <template v-for="processo in processosSeletivos" v-bind:key="processo">
-                <option v-bind:value="processo.id" v-if="processo.status != 'FINALIZADA'">{{ processo.id }} - {{ processo.nome }}</option>
+                <option v-bind:value="processo.id" v-if="processo.status != 'FINALIZADA'" selected>{{ processo.id }} - {{ processo.nome }}</option>
               </template>
             </select>
             <p id="processoErro" class="none erro">Por favor, preencha o campo processo seletivo</p>
@@ -91,7 +91,7 @@
 
           <div class="mb-3">
             <label class="label-form">DISC</label>
-            <input type="text" class="form-control" id="inputDisc" v-mask="['d:### i:### s:### c:###']"  placeholder="Digite a nota do DISC" :value="candidato.notaDisc"/>
+            <input type="text" class="form-control" id="inputDisc" v-mask="['d:## i:## s:## c:##']"  placeholder="Digite a nota do DISC" :value="candidato.notaDisc"/>
             <p id="discErro" class="none erro">Por favor, preencha o campo DISC</p>
           </div>
 
