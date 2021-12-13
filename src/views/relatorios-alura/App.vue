@@ -163,7 +163,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
-import { variavelBack} from '../../services/VariavelBack'
+import { variavelBack } from '../../services/VariavelBack'
 export default {
   name: 'App',
   components: {
