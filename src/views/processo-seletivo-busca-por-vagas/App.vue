@@ -67,7 +67,7 @@
                     </a>
                   </td>
                   <td>
-                    <a :href="'/processo-seletivo-busca-por-candidato?id=' + processo.id"><img src="../../assets/imgs/Pattern.svg" alt="" /></a>
+                    <a :href="'/processo-seletivo-busca-por-candidato?id=' + processo.id + '&status=' + processo.status"><img src="../../assets/imgs/Pattern.svg" alt="" /></a>
                   </td>
                 </tr>
               </tbody>

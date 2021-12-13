@@ -1,6 +1,7 @@
 <template>
         <main>
-            <Header link="../processo-seletivo-busca-por-candidato"/>
+            <Header :link="`../processo-seletivo-busca-por-candidato?id=${this.idRetorno}` 
+              + `&status=${this.statusProcesso}`"   />
             <div class="container-fluid" >
                 <div class="row mt-5 justify-content-evenly">
                     <div class="div-titulo col-lg-4">
@@ -88,7 +89,9 @@ export default {
   data () {
     return {
       candidato: {},
-      id: {}
+      id: {},
+      statusProcesso: '',
+      idRetorno: ''
     }
   },
   beforeMount () {
@@ -96,8 +99,9 @@ export default {
 
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
-
     this.getCandidato(this.id)
+    this.idRetorno = dadosUrl.idProcesso
+    this.statusProcesso = dadosUrl.statusProcesso
   },
   methods: {
     getCandidato (id) {
