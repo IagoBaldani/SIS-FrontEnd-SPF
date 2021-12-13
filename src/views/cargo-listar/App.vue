@@ -18,7 +18,6 @@
                 type="text"
                 class="form-control mb-3"
                 id="filtrar-tabela"
-                placeholder="Estágiario 1"
                 @input="filtraDados"
               />
             </div>

@@ -34,7 +34,7 @@
                     {{ relatorio.notaMediaAvaliacaoTecnica }}
                   </h1>
                   <p class="card-text" id="texto-nota-tecnica">
-                    Nota máedia da avaliação técnica.
+                    Nota média da avaliação técnica.
                   </p>
                 </div>
               </div>
@@ -143,7 +143,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
-import { variavelBack} from '../../services/VariavelBack'
+import { variavelBack } from '../../services/VariavelBack'
 
 export default {
   name: 'App',
@@ -193,7 +193,7 @@ export default {
 
     downloadRelatorioPDF () {
       location.href =
-        variavelBack +  'relatorio-avaliacao/formacao=' +
+        variavelBack + 'relatorio-avaliacao/formacao=' +
         this.parametrosUrl.formacao +
         '/turma=' +
         this.parametrosUrl.turma +
@@ -202,7 +202,7 @@ export default {
 
     downloadRelatorioXLSX () {
       location.href =
-        variavelBack +  'relatorio-avaliacao/formacao=' +
+        variavelBack + 'relatorio-avaliacao/formacao=' +
         this.parametrosUrl.formacao +
         '/turma=' +
         this.parametrosUrl.turma +
@@ -353,6 +353,7 @@ export default {
 #btn-pdf {
   width: 300px;
   font-weight: bold;
+  background-color: #ab0045;
 }
 
 #btn-xlsx {
