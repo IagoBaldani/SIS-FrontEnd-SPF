@@ -207,7 +207,7 @@ export default {
       var campoData = document.getElementById('dataFeed').value
       var campoDisc = document.getElementById('campoDisc').value
       var campoObs = document.getElementById('anotacoes').value
-       let erro = 0
+      let erro = 0
       if (campoData == '') {
         document.querySelector('#erroData').classList.remove('none')
         erro = 1
@@ -226,12 +226,11 @@ export default {
       } else {
         document.querySelector('#erroObs').classList.add('none')
       } 
-      if(erro == 1) {
+      if (erro == 1) {
         return false
       } else {
-         document.getElementById('invisivel').click()
+        document.getElementById('invisivel').click()
       }
-
     },
     // metodo para retornar os feedbacks.
     getFeedback () {
@@ -246,26 +245,26 @@ export default {
     },
     //  metodo para enviar o post com o form
     postForm () {
-        var formData = new FormData()
-        var disc = document.getElementById('campoDisc').files[0]
-        formData.append('data', this.form.data)
-        formData.append('anotacoes', this.form.anotacoes)
-        formData.append('disc', disc)
-        http
-          .post(`feedback/novo/${this.id}`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data' 
-            }
-          })
-          .then((response) => {
-            this.abrirModal()
-            setTimeout(function () {
-             document.location.reload(true) 
-            }, 1500)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+      var formData = new FormData()
+      var disc = document.getElementById('campoDisc').files[0]
+      formData.append('data', this.form.data)
+      formData.append('anotacoes', this.form.anotacoes)
+      formData.append('disc', disc)
+      http
+        .post(`feedback/novo/${this.id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data' 
+          }
+        })
+        .then((response) => {
+          this.abrirModal()
+          setTimeout(function () {
+            document.location.reload(true) 
+          }, 1500)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }, 
     // método para deletar o o feedback.
     deleteById () {
@@ -273,9 +272,9 @@ export default {
         .delete(`/feedback/deletar/${this.feedbackModal.id}`)
         .then((response) => {
           this.abrirModalExclusao()
-           setTimeout(function () {
-             document.location.reload(true) 
-            }, 1500)
+          setTimeout(function () {
+            document.location.reload(true) 
+          }, 1500)
         })
         .catch((error) => {
           console.log(error)
@@ -289,7 +288,7 @@ export default {
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()
     },
-    abrirModalExclusao() {
+    abrirModalExclusao () {
       document.getElementById('abreModalInvisivelExclusao').click()
     },
     pegaDadosUrl () {
