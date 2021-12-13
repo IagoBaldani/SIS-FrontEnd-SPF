@@ -74,7 +74,7 @@
                   <td>
                     <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id 
                       + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso=' 
-                      + this.idProcessoSeletivo + '&statusParticipante' + candidato.status" >
+                      + this.idProcessoSeletivo + '&statusParticipante=' + candidato.status" >
                       <img
                         src="../../assets/imgs/manage_accounts_white_24dp.svg"
                         alt=""
@@ -96,9 +96,10 @@
           <button
             class="button-footer mt-5 submit"
             id="cadastrar"
-            type="button"
-          >
-            <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?tipo=cadastro'">
+            type="button">
+            <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?tipo=cadastro' + '&statusProcesso=' + this.statusProcesso + '&idProcesso=' 
+                      + this.idProcessoSeletivo"
+            >
               Cadastrar novo candidato
             </a>
           </button>

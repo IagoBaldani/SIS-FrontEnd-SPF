@@ -11,17 +11,20 @@
       <div class="row justify-content-evenly">
         <div class="col-xl-4">
           <div class="mb-3">
-            <input name="nome" type="text" class="form-control mt-4" placeholder="Nome do participante" id="filtro-nome">
+            <label class="form-label fw-bold mb-0 titulo">Nome:</label>
+            <input name="nome" type="text" class="form-control mt-1" placeholder="Nome do participante" id="filtro-nome">
           </div>
           <div class="mb-3">
-            <select class="form-select mt-4" id="filtro-programa">
-              <option disabled selected value="0">Programa de Formação</option>
+            <label class="form-label fw-bold mb-0 titulo">Programa de Formação:</label>
+            <select class="form-select mt-1" id="filtro-programa">
+              <option selected value="0">Buscar todos</option>
               <option id="programa" v-bind:value="programa.nomePrograma" v-for="programa in programas" v-bind:key="programa">{{programa.nomePrograma}}</option>
             </select>
           </div>
           <div class="mb-3">
-            <select class="form-select mt-4" id="filtro-turmas" v-on:click="getTurmas()">
-              <option disabled selected value="0">Turmas</option>
+            <label class="form-label fw-bold mb-0 titulo">Turma:</label>
+            <select class="form-select mt-1" id="filtro-turmas" v-on:click="getTurmas()">
+              <option selected value="0">Buscar todas</option>
               <option id="turma" v-for="turma in turmas" v-bind:key="turma.id" v-bind:value="turma.nomeTurma">{{turma.nomeTurma}}</option>
             </select>
             <p class="none erro mt-2 h5" id="selecioneTurma">Selecione uma turma!</p>
@@ -30,6 +33,8 @@
         </div>
         <div class="col-xl-7" id="participantes">
           <h4 id="naoEncontrado" class="none text-center fw-bold">Nenhum resultado foi encontrado, recarregue ou busque novamente</h4>
+          <button id="recarrega" class="mt-3 form-control none recarregar" onclick="window.location.reload()"> RECARREGAR
+              LISTA</button>
           <div class="table-wrapper-scroll-y my-custom-scrollbar">
             <table class="table table-bordered tabela mt-4 ">
               <tbody align="center">
@@ -58,8 +63,6 @@
       </div>
       <div class="row justify-content-evenly">
         <div class="col-xl-4">
-          <button id="recarrega" class="mt-3 form-control none recarregar" onclick="window.location.reload()"> RECARREGAR
-              LISTA</button>
           <button  class="mt-1 form-control submit" @click="filtraDados()">BUSCAR</button>
         </div>
         <div class="col-xl-7 justify-content-end  align-items-end d-flex">
@@ -113,17 +116,18 @@ export default {
         document.querySelector('#selecioneTurma').classList.remove('none')
       }
       else if (nomeProcurado == '' && programaProcurado == '0' && turmaProcurada == '0') {
-        document.querySelector('#selecioneTurma').classList.add('none')
-        document.querySelector('#insiraFiltro').classList.remove('none')
+        window.location.reload(true)
       }
       else if (nomeProcurado == '') {
         document.querySelector('#selecioneTurma').classList.add('none')
         document.querySelector('#insiraFiltro').classList.add('none')
-        document.querySelector('#recarrega').classList.remove('none')
         http.get(`participante/0/${programaProcurado}/${turmaProcurada}`)
           .then(response => {
             this.participantes = response.data
-            if (response.data.length == 0) document.querySelector('#naoEncontrado').classList.remove('none')
+            if (response.data.length == 0) {
+              document.querySelector('#recarrega').classList.remove('none')
+              document.querySelector('#naoEncontrado').classList.remove('none')
+            }
           })
       } else {
         document.querySelector('#selecioneTurma').classList.add('none')

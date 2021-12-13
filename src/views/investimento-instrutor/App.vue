@@ -96,10 +96,10 @@
           <button
             id="botaoAdicionarManualmente"
             type="button"
-            class="btn-lg btnAdicionar"
+            class="btn-lg btnAdicionar none"
             v-on:click="mostrarInstrutor()"
           >
-            ADICIONAR MANUALMENTE
+            ADICIONAR SALÁRIO
           </button>
         </div>
       </div>
@@ -146,7 +146,7 @@
               </select>
             </div>
             <p id="erroNome" class="erro none">Por favor selecione um participante</p>
-            <label id="modalconteudo">Dia, mês e ano</label>
+            <label id="modalconteudo">Data</label>
             <div class="input-group input-group-lg">
               <input
                 id="mesAnoModal"
@@ -157,7 +157,7 @@
                 aria-describedby="inputGroup-sizing-lg"
               />
             </div>
-            <p id="erroData" class="erro none">O campo Dia, mês e ano não pode ser vazio</p>
+            <p id="erroData" class="erro none">O campo data não pode ser vazio</p>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
               <div class="modalitens col-xl-6">
                 <label id="modalconteudo">Valor Hora</label>
@@ -174,6 +174,7 @@
                   />
                 </div>
                 <p id="erroValorHora" class="erro none">O campo valor hora não pode ser vazio</p>
+                <p id="erroValorHoraQuantidade" class="erro none">Valor alto demais!</p>
               </div>
               <div class="modalitens col-xl-6">
                 <label id="modalconteudo">Horas trabalhadas</label>
@@ -189,6 +190,7 @@
                   />
                 </div>
                 <p id="erroHoras" class="erro none">O campo horas trabalhadas não pode ser vazio</p>
+                <p id="erroHorasQuantidade" class="erro none">Valor alto demais!</p>
               </div>
             </div>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
@@ -236,6 +238,7 @@
                 <div class="row mb-5">
                     <div class="col">
                         <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Inserção efetuada com sucesso</h3>
+                        <h4 class="mt-4 modal-title fw-bold titulo text-center" id="redirecionar">Redirecionando...</h4>
                     </div>
                 </div>
             </div>
@@ -307,7 +310,7 @@ export default {
       } else {
         erro = 0
       }
-      if(this.turmaProcurada == '') {
+      if (this.turmaProcurada == '') {
         erro = 1
       } else {
         erro = 0
@@ -329,34 +332,43 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroNome').classList.add('none')
-        erro = 0
       }
-      if ( dataLancamento == 0) {
+      if (dataLancamento == '') {
         document.querySelector('#erroData').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroData').classList.add('none')
-        erro = 0
       }
-      if (valorHora == 0) {
+      if (valorHora == '') {
         document.querySelector('#erroValorHora').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroValorHora').classList.add('none')
-        erro = 0
       }
-      if (horasTrabalhadas == 0) {
+      if (valorHora > 10000) {
+        document.querySelector('#erroValorHoraQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroValorHoraQuantidade').classList.add('none')
+      }
+      if (horasTrabalhadas == '') {
         document.querySelector('#erroHoras').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroHoras').classList.add('none')
-        erro = 0
+      }
+      if (horasTrabalhadas > 1000) {
+        document.querySelector('#erroHorasQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroHorasQuantidade').classList.add('none')
       }
       if (erro == 1) {
         return false
       } else {
         this.inserirInvestimento()
         document.querySelector('#fechaModal').click()
+        window.location.reload()
       }
     },
     inserirInvestimento () {
@@ -435,8 +447,10 @@ export default {
     mudaVisibilidade () {
       let mensagem = document.querySelector('.mensagem')
       let extremo = document.querySelector('.extremo')
+      let botao = document.querySelector('#botaoAdicionarManualmente')
 
       mensagem.style.display = 'none'
+      botao.style.display = 'flex'
       extremo.style.display = 'flex'
     },
 
@@ -643,6 +657,17 @@ body {
 #exampleModalLabel {
   font-family: Montserrat;
   font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  font-weight: bold;
+  text-align: center;
+}
+
+#redirecionar {
+  font-family: Montserrat;
+  font-size: 30px;
   font-style: normal;
   font-weight: 700;
   line-height: 24px;
