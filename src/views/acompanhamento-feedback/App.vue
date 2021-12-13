@@ -266,7 +266,7 @@ export default {
     }, 
     validacaoDownload () {
       console.log(this.feedbackModal)
-      if (this.feedbackModal.disc == undefined) {
+      if (this.feedbackModal.download == false) {
         document.getElementById('downloadModal').classList.add('none')
       } else {
         document.getElementById('downloadModal').classList.remove('none')
