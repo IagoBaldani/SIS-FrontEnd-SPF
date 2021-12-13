@@ -82,7 +82,7 @@
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Turma</label>
                 <select required class="form-select" id="selectTurma" v-on:click="buscarTurmasDeUmaFormacao()">
-                    <option class="relatorio_opcao" disabled selected>Turma</option>
+                    <option class="relatorio_opcao" disabled selected value="0">Turma</option>
                     <option class="relatorio_opcao" v-for="(turmasProgramaCandidato, id) in turmasProgramaCandidatos"
                     :key="id" :value="turmasProgramaCandidato.id">{{turmasProgramaCandidato.turmas}}
                     </option>
@@ -307,11 +307,11 @@ export default {
       var Soma
       var Resto
       Soma = 0
-      if (cpf == "00000000000") {
+      if (cpf == '00000000000') {
         console.log('cpf zerado')
         return false
       } 
-      for (var i=1; i<=9; i++) {
+      for (var i = 1; i <= 9; i++) {
         Soma = Soma + parseInt(cpf.substring(i-1, i)) * (11 - i)
       }
       Resto = (Soma * 10) % 11
@@ -392,7 +392,7 @@ export default {
       } else {
         document.querySelector('#erroEmailInvalido').classList.add('none')
       }
-      if (turma == '') {
+      if (turma == 0) {
         document.querySelector('#erroTurma').classList.remove('none')
         erro = 1
       } else {
