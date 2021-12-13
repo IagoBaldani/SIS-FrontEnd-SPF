@@ -61,7 +61,10 @@
                   <td class="sem-status" v-if="candidato.status == 'SEM_STATUS'">Sem Status</td>
                   <td class="stand" v-if="candidato.status == 'STANDBY'">Standby</td>
                   <td>
-                    <a :href="'/processo-seletivo-dados-do-candidato-visualizacao?id=' + candidato.id">
+                    <a :href="'/processo-seletivo-dados-do-candidato-visualizacao?id=' + candidato.id
+                     + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
+                     + this.idProcessoSeletivo + '&statusParticipante' + candidato.status" 
+                    >
                       <img
                         src="../../assets/imgs/account_circle_white_24dp.svg"
                         alt=""
@@ -69,7 +72,9 @@
                     </a>
                   </td>
                   <td>
-                    <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id + '&tipo=edicao'">
+                    <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id 
+                      + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso=' 
+                      + this.idProcessoSeletivo + '&statusParticipante' + candidato.status" >
                       <img
                         src="../../assets/imgs/manage_accounts_white_24dp.svg"
                         alt=""
@@ -114,18 +119,28 @@ export default {
   },
   data () {
     return {
-      candidatos: []
+      candidatos: [],
+      statusProcesso: '',
+      idProcessoSeletivo: ''
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
     let idProcesso = dadosUrl.id
+    this.idProcessoSeletivo = idProcesso
+    this.statusProcesso = dadosUrl.status
+    console.log(this.statusProcesso)
     if (idProcesso != null && idProcesso != '') {
       this.getListaDaFormacao(idProcesso)
     } else {
       this.getLista()
     }
+  },
+  beforeUpdate () {
+    if(this.statusProcesso == 'FINALIZADA'){
+       document.querySelector('#cadastrar').classList.add('invisivel')
+     } 
   },
   methods: {
     filtraDados () {
@@ -255,6 +270,10 @@ body {
 }
 .home.btn-header {
   background-color: var(--color-yellow-principal);
+}
+.divBtn {
+  display: none;
+
 }
 .rollback.btn-header {
   background-color: var(--color-magenta-principal);

@@ -44,15 +44,19 @@
           <fieldset disabled>
             <div class="form-group mb-3">
               <label>Quantidade de Estagiários</label>
-              <input type="text" class="form-control" v-model="processoSeletivo.qtdEstagiario" disabled/>
+              <input type="number" class="form-control" id="qtdEstagiario" v-model="processoSeletivo.qtdEstagiario" disabled/>
             </div>
             <div class="form-group mb-3">
               <label>Quantidade de Trainees</label>
-              <input type="text" class="form-control" v-model="processoSeletivo.qtdTrainee" disabled/>
+              <input type="number" class="form-control" id="qtdTrainee" v-model="processoSeletivo.qtdTrainee" disabled/>
             </div>
             <div class="form-group mb-3">
               <label>Quantidade de Aprendizes</label>
-              <input type="text" class="form-control" v-model="processoSeletivo.qtdAprendiz" disabled/>
+              <input type="number" class="form-control"  id="qtdAprendiz" v-model="processoSeletivo.qtdAprendiz" disabled/>
+            </div>
+             <div class="form-group mb-3">
+              <label>Quantidade de Participantes</label>
+              <input  class="form-control" id="inputQtdTotal" v-model="this.total" disabled/> 
             </div>
           </fieldset>
       </div>
@@ -73,16 +77,20 @@ export default {
   },
   data () {
     return {
-      processoSeletivo: {}
+      processoSeletivo: {},
+      total: ''
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-
+   
     const dadosUrl = this.pegaDadosUrl()
     let id = dadosUrl.id
 
     this.getProcessoSeletivo(id)
+  },
+  mounted () {
+    this.carregaQuantidade()
   },
   methods: {
     getProcessoSeletivo (id) {
@@ -111,7 +119,14 @@ export default {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
-    }
+    },
+    carregaQuantidade () {
+       let qtdAprendiz = document.querySelector('#qtdAprendiz').value
+       let qtdTrainee = document.querySelector('#qtdTrainee').value
+       let qtdEstagiario = document.querySelector('#qtdAprendiz').value
+       this.total = qtdAprendiz + qtdTrainee + qtdEstagiario
+       console.log(this.total)
+    },
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
-  <Header link="../processo-seletivo-busca-por-candidato"/>
+  <Header :link="`../processo-seletivo-busca-por-candidato?id=${this.idRetorno}` 
+    + `&status=${this.statusProcesso}`"   />
   <main>
     <div class="container-fluid">
       <div class="row justify-content-evenly">
@@ -245,7 +246,9 @@ export default {
         disc: '',
         curriculo: ''
       },
-      processosSeletivos: {}
+      processosSeletivos: {},
+      statusProcesso: '',
+      idRetorno: ''
     }
   },
   beforeMount () {
@@ -254,7 +257,9 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     let id = dadosUrl.id
     let tipo = dadosUrl.tipo
-
+    this.idRetorno = dadosUrl.idProcesso
+    this.statusProcesso = dadosUrl.statusProcesso
+    console.log(this.statusProcesso)
     if (tipo == 'edicao') {
       this.getCandidato(id)
     }
@@ -446,30 +451,30 @@ export default {
       }else{
         document.querySelector('#erroProvaPratica').classList.add('none')
       }
-      if (discNota == '') {
-        document.querySelector('#discErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#discErro').classList.add('none')
-      }
-      if (discNota  < 0 || discNota > 10 ) {
-        document.querySelector('#discErroNota').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#discErroNota').classList.add('none')
-      }
-      if (curriculo.files.length <= 0) {
-        document.querySelector('#curriculoErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#curriculoErro').classList.add('none')
-      }
-      if (disc == '') {
-        document.querySelector('#discFileErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#discFileErro').classList.add('none')
-      }
+       if (discNota == '') {
+         document.querySelector('#discErro').classList.remove('none')
+         erro = 1
+       } else {
+         document.querySelector('#discErro').classList.add('none')
+       }
+       if (discNota  < 0 || discNota > 10 ) {
+         document.querySelector('#discErroNota').classList.remove('none')
+         erro = 1
+       } else {
+         document.querySelector('#discErroNota').classList.add('none')
+       }
+       if (curriculo.files.length <= 0) {
+         document.querySelector('#curriculoErro').classList.remove('none')
+         erro = 1
+       } else {
+         document.querySelector('#curriculoErro').classList.add('none')
+       }
+       if (disc == '') {
+         document.querySelector('#discFileErro').classList.remove('none')
+         erro = 1
+       } else {
+         document.querySelector('#discFileErro').classList.add('none')
+       }
       if (observacao == '') {
         document.querySelector('#observacaoErro').classList.remove('none')
         erro = 1
