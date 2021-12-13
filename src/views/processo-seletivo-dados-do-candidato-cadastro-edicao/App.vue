@@ -60,7 +60,8 @@
           <div class="mt-0">
             <label class="label-form titulo mb-0">Resultado</label>
             <select class="form-select" :value="candidato.status" id="status">
-              <option value="SEM_STATUS" selected>Sem status</option>
+              <option :value="statusParticipante" selected> {{ statusParticipante }}</option>
+              <option value="SEM_STATUS" >Sem status</option>
               <option value="APROVADO_1_FASE" class="aprovado">Aprovado 1ª fase</option>
               <option value="REPROVADO_1_FASE" class="reprovado">Reprovado 1ª fase</option>
               <option value="APROVADO_2_FASE" class="aprovado">Aprovado 2ª fase</option>
@@ -90,7 +91,7 @@
 
           <div class="mb-3">
             <label class="label-form">DISC</label>
-            <input type="text" class="form-control" id="inputDisc" v-mask="['d:## i:## s:## c:##']"  placeholder="Digite a nota do DISC" :value="candidato.notaDisc"/>
+            <input type="text" class="form-control" id="inputDisc" v-mask="['d:### i:### s:### c:###']"  placeholder="Digite a nota do DISC" :value="candidato.notaDisc"/>
             <p id="discErro" class="none erro">Por favor, preencha o campo DISC</p>
             <p id="discErroNota" class="none erro">A nota deve ser entre 0 - 10C</p>
           </div>
@@ -99,13 +100,15 @@
 
           <div class="mb-3">
             <label class="label-form mb-0 titulo">Currículo candidato</label><br>
-            <input type="file" class="form-control" id="fileCurriculo"  accept="application/pdf">
+            <input  type="file" class="form-control" id="fileCurriculo"  accept="application/pdf">
+            <p v-if="tipoReq == 'edicao' " id="curriculo" class="lembrete" >Já existe um arquivo de curriculo, deseja substituir ?</p>
             <p id="curriculoErro" class="none erro">Por favor, preencha o campo currículo</p>
           </div>
 
           <div class="mb-3">
             <label class="label-form mb-0 titulo">Disc xlsx</label><br>
             <input type="file" class="form-control" id="fileDisc">
+            <p v-if="tipoReq  == 'edicao'" id="curriculo" class="lembrete" >Já existe um arquivo de Disc, deseja substituir ?</p>
             <p id="discFileErro" class="none erro">Por favor, preencha o campo DISC</p>
           </div>
 
@@ -164,7 +167,7 @@
                                 <li>Nome: <span class="titulo"> {{ candidatoForm.nome }} </span></li>
                                 <li>Contato: <span class="titulo"> {{ candidatoForm.telefone }} </span></li>
                                 <li>Fonte de Recrutamento: <span class="titulo"> {{ candidatoForm.fonteRecrutamento}} </span></li>
-                                <li>Data de Agendamento: <span class="titulo">{{candidatoForm.dataAgendamento}}</span></li>
+                                <li>Data de Agendamento: <span class="titulo">{{ candidatoForm.dataAgendamento }}</span></li>
                                 <li>Observação: <span class="titulo">{{ candidatoForm.observacao }}</span></li>
                                 <li>Status: <span class="titulo">{{ candidatoForm.status }}</span></li>
                                 <li>Processo Seletivo: <span class="titulo">{{ candidatoForm.idProcessoSeletivo}}</span></li>
@@ -244,11 +247,14 @@ export default {
         status: '',
         idProcessoSeletivo: '',
         disc: '',
-        curriculo: ''
+        curriculo: '',
+        dataFormatadaCerta: ''
       },
       processosSeletivos: {},
       statusProcesso: '',
-      idRetorno: ''
+      idRetorno: '',
+      tipoReq:'',
+      statusParticipante: '' 
     }
   },
   beforeMount () {
@@ -257,13 +263,14 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     let id = dadosUrl.id
     let tipo = dadosUrl.tipo
+    this.tipoReq = dadosUrl.tipo
     this.idRetorno = dadosUrl.idProcesso
     this.statusProcesso = dadosUrl.statusProcesso
-    console.log(this.statusProcesso)
+    this.statusParticipante = dadosUrl.statusParticipante
+    console.log(this.tipoReq)
     if (tipo == 'edicao') {
       this.getCandidato(id)
     }
-
     this.pegaInstrutores()
   },
   methods: {
@@ -321,11 +328,12 @@ export default {
       const dados = this.pegaDadosUrl()
       let id = dados.id
       let tipo = dados.tipo
-
-      if (tipo == 'edicao') {
-        var formDataAtualizar = new FormData()
-        var discAtualizar = document.getElementById('fileDisc').files[0]
-        var curriculoAtualizar = document.getElementById('fileCurriculo').files[0]
+      var discAtualizar = document.getElementById('fileDisc').value
+      console.log(discAtualizar)
+      var curriculoAtualizar = document.getElementById('fileCurriculo').value
+      if (tipo == 'edicao' && discAtualizar != '' && curriculoAtualizar != '') {
+        console.log('editando completo')
+        var formDataAtualizar = new FormData()  
         formDataAtualizar.append('id', this.candidatoForm.id)
         formDataAtualizar.append('nome', this.candidatoForm.nome)
         formDataAtualizar.append('fonteRecrutamento', this.candidatoForm.fonteRecrutamento)
@@ -347,13 +355,100 @@ export default {
           .then(response => {
             this.abrirModal()
             setTimeout(function () {
-              window.location.href = variavel.href = 'processo-seletivo-busca-por-candidato'
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
             }, 1500) 
           })
           .catch(error => {
             console.log(error)
           })
-      } else if (tipo == 'cadastro') {
+      } else if (tipo == 'edicao' && discAtualizar == '' && curriculoAtualizar != '') {
+        console.log('editando com curriculo')
+        var formDataAtualizar = new FormData()  
+        formDataAtualizar.append('id', this.candidatoForm.id)
+        formDataAtualizar.append('nome', this.candidatoForm.nome)
+        formDataAtualizar.append('fonteRecrutamento', this.candidatoForm.fonteRecrutamento)
+        formDataAtualizar.append('telefone', this.candidatoForm.telefone)
+        formDataAtualizar.append('dataAgendamento', this.candidatoForm.dataAgendamento)
+        formDataAtualizar.append('testeLogico', this.candidatoForm.testeLogico)
+        formDataAtualizar.append('notaDisc', this.candidatoForm.notaDisc)
+        formDataAtualizar.append('observacao', this.candidatoForm.observacao)
+        formDataAtualizar.append('status', this.candidatoForm.status)
+        formDataAtualizar.append('idProcessoSeletivo', this.candidatoForm.idProcessoSeletivo)
+        formDataAtualizar.append('curriculo', curriculoAtualizar)
+        http
+          .put(`candidato/${id}`, formDataAtualizar, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
+            }, 1500) 
+          })
+          .catch(error => {
+            console.log(error)
+          })
+          } else if (tipo == 'edicao' && discAtualizar != '' && curriculoAtualizar == '') {
+        console.log('editando com disc')
+        var formDataAtualizar = new FormData()  
+        formDataAtualizar.append('id', this.candidatoForm.id)
+        formDataAtualizar.append('nome', this.candidatoForm.nome)
+        formDataAtualizar.append('fonteRecrutamento', this.candidatoForm.fonteRecrutamento)
+        formDataAtualizar.append('telefone', this.candidatoForm.telefone)
+        formDataAtualizar.append('dataAgendamento', this.candidatoForm.dataAgendamento)
+        formDataAtualizar.append('testeLogico', this.candidatoForm.testeLogico)
+        formDataAtualizar.append('notaDisc', this.candidatoForm.notaDisc)
+        formDataAtualizar.append('observacao', this.candidatoForm.observacao)
+        formDataAtualizar.append('status', this.candidatoForm.status)
+        formDataAtualizar.append('idProcessoSeletivo', this.candidatoForm.idProcessoSeletivo)
+        formDataAtualizar.append('disc', discAtualizar)
+        http
+          .put(`candidato/${id}`, formDataAtualizar, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
+            }, 1500) 
+          })
+          .catch(error => {
+            console.log(error)
+          })
+          
+      } else if (tipo == 'edicao' && discAtualizar == '' && curriculoAtualizar == '') {
+        console.log('editando sem nada')
+        var formDataAtualizar = new FormData()  
+        formDataAtualizar.append('id', this.candidatoForm.id)
+        formDataAtualizar.append('nome', this.candidatoForm.nome)
+        formDataAtualizar.append('fonteRecrutamento', this.candidatoForm.fonteRecrutamento)
+        formDataAtualizar.append('telefone', this.candidatoForm.telefone)
+        formDataAtualizar.append('dataAgendamento', this.candidatoForm.dataAgendamento)
+        formDataAtualizar.append('testeLogico', this.candidatoForm.testeLogico)
+        formDataAtualizar.append('notaDisc', this.candidatoForm.notaDisc)
+        formDataAtualizar.append('observacao', this.candidatoForm.observacao)
+        formDataAtualizar.append('status', this.candidatoForm.status)
+        formDataAtualizar.append('idProcessoSeletivo', this.candidatoForm.idProcessoSeletivo)
+        http
+          .put(`candidato/${id}`, formDataAtualizar, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
+            }, 1500) 
+          })
+          .catch(error => {
+            console.log(error)
+          })
+       } else if (tipo == 'cadastro') {
         var formData = new FormData()
         var disc = document.getElementById('fileDisc').files[0]
         var curriculo = document.getElementById('fileCurriculo').files[0]
@@ -377,8 +472,12 @@ export default {
           })
           .then(response => {
             this.abrirModalCriacao()
+            console.log(this.idRetorno)
+            console.log(this.statusProcesso)
             setTimeout(function () {
-              window.location.href = variavel.href = 'processo-seletivo-busca-por-candidato'
+              // window.location.href = variavel.href = 'processo-seletivo-busca-por-candidato' + '?id=' + this.idRetorno +  
+              //   + '&status=' + this.statusProcesso
+             window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
             }, 1521)
           })
           .catch(error => {
@@ -395,7 +494,7 @@ export default {
       var processoSeletivo = document.getElementById('inputProcessoSeletivo').value
       var provaPratica = document.getElementById('inputProvaPratica').value
       var discNota = document.getElementById('inputDisc').value
-      var curriculo = document.getElementById('fileCurriculo')
+      var curriculo = document.getElementById('fileCurriculo').value
       var disc = document.getElementById('fileDisc').value
       var observacao = document.getElementById('inputObservacao').value
       let erro = 0
@@ -463,7 +562,14 @@ export default {
        } else {
          document.querySelector('#discErroNota').classList.add('none')
        }
-       if (curriculo.files.length <= 0) {
+      if (observacao == '') {
+        document.querySelector('#observacaoErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#observacaoErro').classList.add('none')
+      }
+      if (this.tipo == 'cadastro'){
+        if (curriculo == '') {
          document.querySelector('#curriculoErro').classList.remove('none')
          erro = 1
        } else {
@@ -475,11 +581,6 @@ export default {
        } else {
          document.querySelector('#discFileErro').classList.add('none')
        }
-      if (observacao == '') {
-        document.querySelector('#observacaoErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#observacaoErro').classList.add('none')
       }
       if (erro == 1) {
         return false
@@ -624,7 +725,10 @@ body {
 #prova {
   background-color: var(--color-background-form-input);
 }
-
+.lembrete {
+  color: #19B200;
+  font-weight: 500;
+}
 /* Início da chamada do modal */
 
 .modal {
