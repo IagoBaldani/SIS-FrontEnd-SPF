@@ -175,7 +175,8 @@
                     <input
                       @input="escutaQuantidades"
                       id="remuneracaoModal"
-                      type="number"
+                      type="text"
+                      v-money="money"
                       class="form-control"
                       placeholder="R$"
                       aria-label="Sizing example input"
@@ -191,7 +192,8 @@
                     <input
                       @input="escutaQuantidades"
                       id="encargosModal"
-                      type="number"
+                      type="text"
+                      v-money="money"
                       class="form-control"
                       placeholder="R$"
                       aria-label="Sizing example input"
@@ -209,9 +211,10 @@
                     <input
                       id="beneficiosModal"
                       @input="escutaQuantidades"
-                      type="number"
+                      type="text"
                       class="form-control"
                       placeholder="R$"
+                      v-money="money"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-lg"
                     />
@@ -225,7 +228,8 @@
                     <input
                       id="inputQtdTotal"
                       disabled
-                      type="number"
+                      type="text"
+                      v-money="money"
                       class="form-control"
                       placeholder="R$"
                       aria-label="Sizing example input"
@@ -288,14 +292,24 @@ import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
 import { variavel } from '../../services/Variavel'
+import { mask } from 'vue-the-mask'
+import { VMoney } from 'v-money'
 
 export default {
   name: 'App',
+  directives: { mask, money: VMoney },
   components: {
     Header
   },
   data () {
     return {
+      money: {
+        decimal: ',',
+        thousands: '.',
+        prefix: 'R$ ',
+        suffix: '',
+        precision: 2
+      },
       participantes: [],
       cpfParticipantes: [],
       programas: [],
@@ -485,9 +499,9 @@ export default {
     },
 
     escutaQuantidades () {
-      let remuneracao = document.querySelector('#remuneracaoModal').value
-      let encargos = document.querySelector('#encargosModal').value
-      let beneficios = document.querySelector('#beneficiosModal').value
+      let remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.') // não está funcionando a matemática aqui
+      let encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      let beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.carregaQuantidade(remuneracao, encargos, beneficios)
     },
 

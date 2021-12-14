@@ -17,45 +17,53 @@
                     </div>
                     <div>
                         <label for="bolsaAuxilio" class="form-label mb-0 mt-3 titulo">Bolsa auxílio</label>
-                        <money  name="bolsaAuxilio" class="form-control" v-bind="money" id="inputBolsaAuxilio"></money>{{cargos.bolsa}}
-                        <p id="erroBolsa" class="erro none">Por favor, coloque um valor válido maior ou igual a 0. </p>
+                         <input class="form-control" v-money="money" id="inputBolsaAuxilio" v-bind:value="cargos.bolsa"/>
+                        <p id="erroBolsa" class="erro none">Por favor, preencha este campo</p>
+                        <p id="erroBolsaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="beneficios" class="form-label mb-0 mt-3 titulo">Benefícios</label>
-                        <input type="text" v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" name="beneficios" class="form-control" v-bind:value="cargos.beneficio" id="inputBeneficios"/>
-                        <p id="erroBeneficios" class="erro none">Por favor, coloque um valor válido maior ou igual a 0. </p>
+                        <input type="text" v-money="money" name="beneficios" class="form-control" v-bind:value="cargos.beneficio" id="inputBeneficios"/>
+                        <p id="erroBeneficios" class="erro none">Por favor, preencha este campo</p>
+                        <p id="erroBeneficiosQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="convenio" class="form-label mb-0 mt-3 titulo">Convênio</label>
-                        <input type="text" v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" class="form-control" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
-                        <p id="erroConvenio" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
+                        <input type="text" v-money="money" class="form-control" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
+                        <p id="erroConvenio" class="erro none">Por favor, preencha este campo</p>
+                        <p id="erroConvenioQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div class="mb-5">
                         <label for="horaExtra" class="form-label mb-0 mt-3 titulo">Hora extra</label>
-                        <input type="text" v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" class="form-control" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
-                        <p id="erroHoraExtra" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
+                        <input type="text" v-money="money" class="form-control" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
+                        <p id="erroHoraExtra" class="erro none">Por favor, preencha este campo</p>
+                        <p id="erroHoraExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                 </div>
                 <div class="col-xl-4">
                     <div>
                         <label for="beneficioLegislacao" class="form-label mb-0 titulo">Benefício legislação</label>
-                        <input type="text" v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" class="form-control" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
-                        <p id="erroBeneficioLegislacao" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
+                        <input type="text" v-money="money" class="form-control" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
+                        <p id="erroBeneficioLegislacao" class="erro none">Por favor, preencha este campo</p>
+                        <p id="erroBeneficioLegislacaoQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoEsporadica" class="form-label mb-0 mt-3 titulo">Remuneração esporádica</label>
-                        <input name="remuneracaoEsporadica" type="text" v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" class="form-control" v-bind:value="cargos.remunEsporadica" id="inputRemuneracaoEsporadica" />
-                        <p id="erroRemuneracaoEsporadica" class="erro none">Por favor, coloque um valor válido maior ou igual a 0. </p>
+                        <input name="remuneracaoEsporadica" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunEsporadica" id="inputRemuneracaoEsporadica" />
+                        <p id="erroRemuneracaoEsporadica" class="erro none">Por favor, preencha este campo</p>
+                        <p id="erroRemuneracaoEsporadicaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoExtra" class="form-label mb-0 mt-3 titulo">Remuneração extra</label>
-                        <input name="remuneracaoExtra" type="text" v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" class="form-control" v-bind:value="cargos.remunExtra" id="inputRemuneracaoExtra">
-                        <p id="erroRemuneracaoExtra" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
+                        <input name="remuneracaoExtra" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunExtra" id="inputRemuneracaoExtra">
+                        <p id="erroRemuneracaoExtra" class="erro none">Por favor, preencha este campo</p>
+                        <p id="erroRemuneracaoExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div> 
                         <label class="form-label mb-0 mt-3 titulo">Alura</label>
-                        <input name="alura" type="text" v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" class="form-control" v-bind:value="cargos.alura" id="inputAlura">
-                        <p id="erroAlura" class="erro none">Por favor, coloque um valor válido maior ou igual a 0.</p>
+                        <input name="alura" type="text" v-money="money" class="form-control" v-bind:value="cargos.alura" id="inputAlura">
+                        <p id="erroAlura" class="erro none">Por favor, preencha este campo</p>
+                        <p id="erroAluraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                 </div>
                 <div class="col-xl-2"></div>
@@ -90,28 +98,28 @@
                   <span class="informacoes-modal">Cargo: {{ cargoForm.cargo }}</span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Bolsa auxílio: {{ cargoForm.bolsa }} </span>
+                  <span class="informacoes-modal">Bolsa auxílio: R$ {{ cargoForm.bolsa }} </span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Benefícios: {{ cargoForm.beneficio }}</span>
+                  <span class="informacoes-modal">Benefícios: R$ {{ cargoForm.beneficio }}</span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Convenio: {{ cargoForm.convenio }}</span>
+                  <span class="informacoes-modal">Convenio: R$ {{ cargoForm.convenio }}</span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Hora extra: {{ cargoForm.horaExtra }}</span>
+                  <span class="informacoes-modal">Hora extra: R$ {{ cargoForm.horaExtra }}</span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Benefício Legislação: {{ cargoForm.beneficioLegislacao }}</span>
+                  <span class="informacoes-modal">Benefício Legislação: R$ {{ cargoForm.beneficioLegislacao }}</span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Remuneração esporádica: {{ cargoForm.remunEsporadica }}</span>
+                  <span class="informacoes-modal">Remuneração esporádica: R$ {{ cargoForm.remunEsporadica }}</span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Remuneração extra: {{ cargoForm.remunExtra }}</span>
+                  <span class="informacoes-modal">Remuneração extra: R$ {{ cargoForm.remunExtra }}</span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Alura: {{ cargoForm.alura }}</span>
+                  <span class="informacoes-modal">Alura: R$ {{ cargoForm.alura }}</span>
                 </div>
               </div>
             </div>
@@ -164,22 +172,23 @@ import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
 import { variavel } from '../../services/Variavel'
 import { mask } from 'vue-the-mask'
-import { Money } from 'v-money'
+import { VMoney } from 'v-money'
 
 export default {
   name: 'App',
-  directives: { mask },
+  directives: { mask, money: VMoney },
   components: {
-    Header,
+    Header
   },
   data () {
     return {
       money: {
         decimal: ',',
-        thousands: '.',prefix: 'R$ ',
-        suffix: ' #',
-        precision: 2,
-        masked: false},
+        thousands: '.',
+        prefix: 'R$ ',
+        suffix: '',
+        precision: 2
+      },
       cargos: {
         cargo: '',
         bolsa: '',
@@ -221,24 +230,24 @@ export default {
   methods: {
     registrarDados () {
       this.cargoForm.cargo = document.querySelector('#inputCargo').value
-      this.cargoForm.bolsa = document.querySelector('#inputBolsaAuxilio').value
-      this.cargoForm.beneficio = document.querySelector('#inputBeneficios').value.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.convenio = document.querySelector('#inputConvenio').value.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.horaExtra = document.querySelector('#inputHoraExtra').value.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.beneficioLegislacao = document.querySelector('#inputBeneficioLegislacao').value.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.remunEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.remunExtra = document.querySelector('#inputRemuneracaoExtra').value.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.alura = document.querySelector('#inputAlura').value.replace('R$ ', '').replace(',', '.').replace(' ', '')
+      this.cargoForm.bolsa = document.querySelector('#inputBolsaAuxilio').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.beneficio = document.querySelector('#inputBeneficios').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.convenio = document.querySelector('#inputConvenio').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.horaExtra = document.querySelector('#inputHoraExtra').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.beneficioLegislacao = document.querySelector('#inputBeneficioLegislacao').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.remunEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.remunExtra = document.querySelector('#inputRemuneracaoExtra').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.alura = document.querySelector('#inputAlura').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       if (this.validaCampos()) {
         document.querySelector('#abreModal').click()
       }
     },
-    abrirModal() {
-        document.getElementById('abreModalInvisivel').click()
-      },
-    abrirModalCadastro() {
-        document.getElementById('abreModalInvisivelCadastro').click()
-      },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    abrirModalCadastro () {
+      document.getElementById('abreModalInvisivelCadastro').click()
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -274,8 +283,8 @@ export default {
           .then(response => {
             this.abrirModalCadastro()
             setTimeout(function () {
-            window.location.href = variavel.href = 'cargo-listar'
-          },1521)
+              window.location.href = variavel.href = 'cargo-listar'
+            }, 1521)
           })
           .catch(error => {
             console.log(error)
@@ -296,9 +305,16 @@ export default {
     },
     validaCampos () {
       let cargoDigitado = document.querySelector('#inputCargo').value
+      let bolsaAux = document.querySelector('#inputBolsaAuxilio').value
+      let beneficios = document.querySelector('#inputBeneficios').value
+      let convenio = document.querySelector('#inputConvenio').value
+      let horaExtra = document.querySelector('#inputHoraExtra').value
+      let beneficioLegislacao = document.querySelector('#inputBeneficioLegislacao').value
+      let remuneracaoEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value
+      let remuneracaoExtra = document.querySelector('#inputRemuneracaoExtra').value
+      let alura = document.querySelector('#inputAlura').value
       let erro = 0
-      let vazio = ''
-      if (this.cargoForm.cargo == vazio) {
+      if (cargoDigitado == '') {
         document.querySelector('#erroCargo').classList.remove('none')
         erro = 1
       } else {
@@ -314,57 +330,105 @@ export default {
           }
         }
       })
-      if (this.cargoForm.bolsa == vazio || this.cargoForm.bolsa < 0) {
+      if (bolsaAux == '') {
         document.querySelector('#erroBolsa').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroBolsa').classList.add('none')
       }
-      if (this.cargoForm.beneficio == vazio || this.cargoForm.beneficio < 0) {
+      if (bolsaAux < 0) {
+        document.querySelector('#erroBolsaQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroBolsaQuantidade').classList.add('none')
+      }
+      if (beneficios == '') {
         document.querySelector('#erroBeneficios').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroBeneficios').classList.add('none')
       }
-      if (this.cargoForm.convenio == vazio || this.cargoForm.convenio < 0) {
+      if (beneficios < 0) {
+        document.querySelector('#erroBeneficiosQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroBeneficiosQuantidade').classList.add('none')
+      }
+      if (convenio == '') {
         document.querySelector('#erroConvenio').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroConvenio').classList.add('none')
       }
-      if (this.cargoForm.horaExtra == vazio || this.cargoForm.horaExtra < 0) {
+      if (convenio < 0) {
+        document.querySelector('#erroConvenioQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroConvenioQuantidade').classList.add('none')
+      }
+      if (horaExtra == '') {
         document.querySelector('#erroHoraExtra').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroHoraExtra').classList.add('none')
       }
-      if (this.cargoForm.beneficioLegislacao == vazio || this.cargoForm.beneficioLegislacao < 0) {
+      if (horaExtra < 0) {
+        document.querySelector('#erroHoraExtraQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroHoraExtraQuantidade').classList.add('none')
+      }
+      if (beneficioLegislacao == '') {
         document.querySelector('#erroBeneficioLegislacao').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroBeneficioLegislacao').classList.add('none')
       }
-      if (this.cargoForm.remunEsporadica == vazio || this.cargoForm.remunEsporadica < 0) {
+      if (beneficioLegislacao < 0) {
+        document.querySelector('#erroBeneficioLegislacaoQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroBeneficioLegislacaoQuantidade').classList.add('none')
+      }
+      if (remuneracaoEsporadica == '') {
         document.querySelector('#erroRemuneracaoEsporadica').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroRemuneracaoEsporadica').classList.add('none')
       }
-      if (this.cargoForm.remunExtra == vazio || this.cargoForm.remunExtra < 0) {
+      if (remuneracaoEsporadica < 0) {
+        document.querySelector('#erroRemuneracaoEsporadicaQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroRemuneracaoEsporadicaQuantidade').classList.add('none')
+      }
+      if (remuneracaoExtra == '') {
         document.querySelector('#erroRemuneracaoExtra').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroRemuneracaoExtra').classList.add('none')
       }
-      if (this.cargoForm.alura == vazio || this.cargoForm.alura < 0) {
+      if (remuneracaoExtra < 0) {
+        document.querySelector('#erroRemuneracaoExtraQuantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroRemuneracaoExtraQuantidade').classList.add('none')
+      }
+      if (alura == '') {
         document.querySelector('#erroAlura').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroAlura').classList.add('none')
       }
+      if (alura < 0) {
+        document.querySelector('#erroAluraQUantidade').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroAluraQUantidade').classList.add('none')
+      }
       if (erro == 1) {
         return false
-      }else{
+      } else {
         document.querySelector('#erroCargoCadastrado').classList.add('none')
         return true
       }

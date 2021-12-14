@@ -196,7 +196,7 @@ export default {
             this.abrirModal()
             setTimeout(function () {
               window.location.href = '/dados-programa-busca'
-            }, 1521 )
+            }, 1521)
           }
         })
         .catch(error => {
@@ -249,7 +249,6 @@ export default {
             erro = 0
             document.querySelector('#erroTurmaCadastrada').classList.add('none')
           }
-          return
         }
       })
       if (erro == 1) {
@@ -288,9 +287,9 @@ export default {
       http.get(`programa/buscar-programas-por-nome/${this.programa.nome}`)
         .then(response => console.log(this.turmas = response.data))
     },
-    abrirModal() {
-        document.getElementById('abreModalInvisivel').click()
-      },
+    abrirModaln () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -427,7 +426,4 @@ textarea {
     min-height: 40vh;
     font-size: 21px;
 }
-
-
-
 </style>

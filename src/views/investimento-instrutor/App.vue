@@ -251,14 +251,24 @@ import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
 import { variavel } from '../../services/Variavel'
+import { mask } from 'vue-the-mask'
+import { VMoney } from 'v-money'
 
 export default {
   name: 'App',
+  directives: { mask, money: VMoney },
   components: {
     Header
   },
   data () {
     return {
+      money: {
+        decimal: ',',
+        thousands: '.',
+        prefix: 'R$ ',
+        suffix: '',
+        precision: 2
+      },
       instrutores: [],
       cpfInstrutores: [],
       programaProcurado: '',
