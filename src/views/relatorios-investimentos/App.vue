@@ -16,7 +16,7 @@
         <div class="card-left-superior" >
           <div class="card" style="height: auto; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-left" class="card-title" >R$ {{relatorio.investParticipantes}}</h3>
+              <h3 id="txt-saida-card-left" class="card-title" >R$ {{formatPrice(relatorio.investParticipantes)}}</h3>
               <h6>Investimento em total com participantes</h6>
             </div>
           </div>
@@ -25,7 +25,7 @@
         <div class="card-central-superior" >
           <div class="card" style="height: auto; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-central" class="card-title">R$ {{relatorio.investInstrutores}}</h3>
+              <h3 id="txt-saida-card-central" class="card-title">R$ {{formatPrice(relatorio.investInstrutores)}}</h3>
               <h6>Investimento total com instrutores</h6>
             </div>
           </div>
@@ -34,7 +34,7 @@
         <div class="card-right-superior" >
           <div class="card" style="height: auto; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-right" class="card-title">R$ {{relatorio.investTotal}}</h3>
+              <h3 id="txt-saida-card-right" class="card-title">R$ {{formatPrice(relatorio.investTotal)}}</h3>
               <h6 id="txt-cards-valor-total">Investimento total com o programa</h6>
             </div>
           </div>
@@ -62,7 +62,7 @@
           <div class="card-left-inferior" id="dataSelecionada">
             <div class="card" style="height: 100%; width: 100%">
               <div class="card-body">
-                <h3 id="txt-saida-card-left" class="card-title">R$ {{relatorioPeriodo.investParticipantesPeriodoSelecionado}}</h3>
+                <h3 id="txt-saida-card-left" class="card-title">R$ {{formatPrice(relatorioPeriodo.investParticipantesPeriodoSelecionado)}}</h3>
                 <h6>Investimento total em participantes no periodo</h6>
               </div>
             </div>
@@ -71,7 +71,7 @@
           <div class="card-central-inferior" id="dataSelecionada">
             <div class="card">
               <div class="card-body" style="height: 100%; width: 100%">
-                <h3 id="txt-saida-card-central" class="card-title">R$ {{relatorioPeriodo.investInstrutoresPeriodoSelecionado}}</h3>
+                <h3 id="txt-saida-card-central" class="card-title">R$ {{formatPrice(relatorioPeriodo.investInstrutoresPeriodoSelecionado)}}</h3>
                 <h6>Investimento total em instrutores no periodo</h6>
               </div>
             </div>
@@ -80,7 +80,7 @@
           <div class="card-right-inferior" id="dataSelecionada">
             <div class="card" style="height: auto; width: 100%">
               <div class="card-body">
-                <h3 id="txt-saida-card-right" class="card-title">R$ {{relatorioPeriodo.investTotalPeriodoSelecionado}}</h3>
+                <h3 id="txt-saida-card-right" class="card-title">R$ {{formatPrice(relatorioPeriodo.investTotalPeriodoSelecionado)}}</h3>
                 <h6 id="txt-cards-valor-total">Investimento total do periodo</h6>
               </div>
             </div>
@@ -204,7 +204,10 @@ export default {
         this.selecionarData()
       }
     },
-
+    formatPrice(value) {
+      let val = (value / 1).toFixed(2).replace(".", ",");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    },
     downloadRelatorioPDF () {
       location.href = variavelBack +  'investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
     },
@@ -296,14 +299,17 @@ h3 {
 }
 
 #txt-saida-card-left {
+  font-size: 35px !important;
   color: #ab0045;
 }
 
 #txt-saida-card-central {
+  font-size: 35px !important;
   color: #ffb600;
 }
 
 #txt-saida-card-right {
+  font-size: 35px !important;
   color: #090b2e;
 }
 
@@ -747,7 +753,7 @@ h6 {
   }
 
   #txt-saida-card-right {
-    font-size: 3.5rem !important;
+    font-size: 35px !important;
   }
 
   #txt-cards-valor-total {
