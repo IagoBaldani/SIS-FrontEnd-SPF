@@ -17,25 +17,25 @@
                     </div>
                     <div>
                         <label for="bolsaAuxilio" class="form-label mb-0 mt-3 titulo">Bolsa auxílio</label>
-                        <input class="form-control" maxlength="12" v-on:keyup="formatPrice(value)" v-money="money" id="inputBolsaAuxilio" v-bind:value="'R$ ' + cargos.bolsa.toFixed(2)"/>
+                        <input class="form-control" maxlength="12" v-money="money" id="inputBolsaAuxilio" v-bind:value="cargos.bolsa.toFixed(2)"/>
                         <p id="erroBolsa" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBolsaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="beneficios" class="form-label mb-0 mt-3 titulo">Benefícios</label>
-                        <input type="text" v-money="money" maxlength="12" name="beneficios" class="form-control" v-bind:value="cargos.beneficio" id="inputBeneficios"/>
+                        <input type="text" v-money="money" maxlength="12" name="beneficios" class="form-control" v-bind:value="cargos.beneficio.toFixed(2)" id="inputBeneficios"/>
                         <p id="erroBeneficios" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBeneficiosQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="convenio" class="form-label mb-0 mt-3 titulo">Convênio</label>
-                        <input type="text" v-money="money" maxlength="12" class="form-control" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
+                        <input type="text" v-money="money" maxlength="12" class="form-control" name="convenio" v-bind:value="cargos.convenio.toFixed(2)" id="inputConvenio"/>
                         <p id="erroConvenio" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroConvenioQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div class="mb-5">
                         <label for="horaExtra" class="form-label mb-0 mt-3 titulo">Hora extra</label>
-                        <input type="text" v-money="money"  maxlength="12" class="form-control" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
+                        <input type="text" v-money="money"  maxlength="12" class="form-control" name="horaExtra" v-bind:value="cargos.horaExtra.toFixed(2)" id="inputHoraExtra" />
                         <p id="erroHoraExtra" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroHoraExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
@@ -43,25 +43,25 @@
                 <div class="col-xl-4">
                     <div>
                         <label for="beneficioLegislacao" class="form-label mb-0 titulo">Benefício legislação</label>
-                        <input type="text" v-money="money" maxlength="12" class="form-control" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
+                        <input type="text" v-money="money" maxlength="12" class="form-control" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao.toFixed(2)" id="inputBeneficioLegislacao" />
                         <p id="erroBeneficioLegislacao" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBeneficioLegislacaoQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoEsporadica" class="form-label mb-0 mt-3 titulo">Remuneração esporádica</label>
-                        <input name="remuneracaoEsporadica"  maxlength="12" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunEsporadica" id="inputRemuneracaoEsporadica" />
+                        <input name="remuneracaoEsporadica"  maxlength="12" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunEsporadica.toFixed(2)" id="inputRemuneracaoEsporadica" />
                         <p id="erroRemuneracaoEsporadica" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroRemuneracaoEsporadicaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoExtra" class="form-label mb-0 mt-3 titulo">Remuneração extra</label>
-                        <input name="remuneracaoExtra" maxlength="12" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunExtra" id="inputRemuneracaoExtra">
+                        <input name="remuneracaoExtra" maxlength="12" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunExtra.toFixed(2)" id="inputRemuneracaoExtra">
                         <p id="erroRemuneracaoExtra" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroRemuneracaoExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div> 
                         <label class="form-label mb-0 mt-3 titulo">Alura</label>
-                        <input name="alura" type="text" maxlength="12" v-money="money" class="form-control" v-bind:value="cargos.alura" id="inputAlura">
+                        <input name="alura" type="text" maxlength="12" v-money="money" class="form-control" v-bind:value="cargos.alura.toFixed(2)" id="inputAlura">
                         <p id="erroAlura" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroAluraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
@@ -235,7 +235,7 @@ export default {
       this.cargoForm.convenio = document.querySelector('#inputConvenio').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.cargoForm.horaExtra = document.querySelector('#inputHoraExtra').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.cargoForm.beneficioLegislacao = document.querySelector('#inputBeneficioLegislacao').value.replace('R$ ', '').replace('.', '').replace(',', '.')
-      this.cargoForm.remunEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value.replace('R$ ', '').replace(' ', '').replace(',', '.')
+      this.cargoForm.remunEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.cargoForm.remunExtra = document.querySelector('#inputRemuneracaoExtra').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.cargoForm.alura = document.querySelector('#inputAlura').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       if (this.validaCampos()) {
@@ -248,10 +248,6 @@ export default {
     abrirModalCadastro () {
       document.getElementById('abreModalInvisivelCadastro').click()
       },
-     formatPrice(value) {
-      let val = document.getElementById("inputBolsaAuxilio").style.backgroundColor = "#F4A460";
-      
-    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')

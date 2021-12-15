@@ -11,31 +11,31 @@
                 <div class="col-xl-4">
                     <div>
                         <label for="cargoInput" class="form-label mb-0 titulo">Cargo</label>
-                        <input class="form-control"  v-bind:value="cargos.cargo" type="text" name="cargo" id="inputCargo"/>
+                        <input class="form-control" v-bind:value="cargos.cargo" type="text" name="cargo" id="inputCargo"/>
                         <p id="erroCargo" class="erro none">Por favor, selecione um cargo</p>
                         <p id="erroCargoCadastrado" class="erro none">Este cargo já está cadastrada, por favor insira outro</p>
                     </div>
                     <div>
                         <label for="bolsaAuxilio" class="form-label mb-0 mt-3 titulo">Bolsa auxílio</label>
-                        <input type="text" name="bolsaAuxilio" class="form-control"  v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" v-bind:value="cargos.bolsa" id="inputBolsaAuxilio"/>
+                        <input type="text" name="bolsaAuxilio" class="form-control" v-money="money" v-bind:value="cargos.bolsa" id="inputBolsaAuxilio"/>
                         <p id="erroBolsa" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBolsaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="beneficios" class="form-label mb-0 mt-3 titulo">Benefícios</label>
-                        <input type="text" name="beneficios"  v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" class="form-control" v-bind:value="cargos.beneficio" id="inputBeneficios" />
+                        <input type="text" name="beneficios" v-money="money" class="form-control" v-bind:value="cargos.beneficio" id="inputBeneficios" />
                         <p id="erroBeneficios" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBeneficiosQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="convenio" class="form-label mb-0 mt-3 titulo">Convênio</label>
-                        <input type="text" class="form-control" v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
+                        <input type="text" class="form-control" v-money="money" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
                         <p id="erroConvenio" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroConvenioQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div class="mb-5">
                         <label for="horaExtra" class="form-label mb-0 mt-3 titulo">Hora extra</label>
-                        <input type="text" class="form-control"  v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
+                        <input type="text" class="form-control" v-money="money" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
                         <p id="erroHoraExtra" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroHoraExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
@@ -43,25 +43,25 @@
                 <div class="col-xl-4">
                     <div>
                         <label for="beneficioLegislacao" class="form-label mb-0 titulo">Benefício legislação</label>
-                        <input type="text" class="form-control"  v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
+                        <input type="text" class="form-control" v-money="money" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
                         <p id="erroBeneficioLegislacao" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBeneficioLegislacaoQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoEsporadica" class="form-label mb-0 mt-3 titulo">Remuneração esporádica</label>
-                        <input name="remuneracaoEsporadica" type="text" class="form-control"  v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" v-bind:value="cargos.remunEsporadica" id="inputRemuneracaoEsporadica" />
+                        <input name="remuneracaoEsporadica" type="text" class="form-control" v-money="money" v-bind:value="cargos.remunEsporadica" id="inputRemuneracaoEsporadica" />
                         <p id="erroRemuneracaoEsporadica" class="erro none">Por favor, preencha este campo </p>
                         <p id="erroRemuneracaoEsporadicaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoExtra" class="form-label mb-0 mt-3 titulo">Remuneração extra</label>
-                        <input name="remuneracaoExtra" type="text" class="form-control"  v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" v-bind:value="cargos.remunExtra" id="inputRemuneracaoExtra">
+                        <input name="remuneracaoExtra" type="text" class="form-control" v-money="money" v-bind:value="cargos.remunExtra" id="inputRemuneracaoExtra">
                         <p id="erroRemuneracaoExtra" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroRemuneracaoExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label class="form-label mb-0 mt-3 titulo">Alura</label>
-                        <input name="alura" type="text" class="form-control"  v-mask="['R$ ## ###,##', 'R$ # ###,##', 'R$ ##,##', 'R$ #,##', 'R$ ,##', 'R$ ,#']" v-bind:value="cargos.alura" id="inputAlura">
+                        <input name="alura" type="text" class="form-control" v-money="money" v-bind:value="cargos.alura" id="inputAlura">
                         <p id="erroAlura" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroAluraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
@@ -173,15 +173,23 @@ import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
 import { variavel } from '../../services/Variavel'
 import { mask } from 'vue-the-mask'
+import { VMoney } from 'v-money'
 
 export default {
   name: 'App',
-  directives: { mask },
+  directives: { mask, money: VMoney },
   components: {
     Header
   },
   data () {
     return {
+      money: {
+        decimal: ',',
+        thousands: '.',
+        prefix: 'R$ ',
+        suffix: '',
+        precision: 2
+      },
       cargos: {
         cargo: '',
         bolsa: '',
@@ -266,14 +274,14 @@ export default {
     },
     processarDados () {
       let dados = this.pegaDadosUrl()
-      this.cargoForm.bolsa = this.cargoForm.bolsa.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.beneficio = this.cargoForm.beneficio.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.horaExtra = this.cargoForm.horaExtra.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.convenio = this.cargoForm.convenio.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.beneficioLegislacao = this.cargoForm.beneficioLegislacao.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.remunEsporadica = this.cargoForm.remunEsporadica.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.remunExtra = this.cargoForm.remunExtra.replace('R$ ', '').replace(',', '.').replace(' ', '')
-      this.cargoForm.alura = this.cargoForm.alura.replace('R$ ', '').replace(',', '.').replace(' ', '')      
+      this.cargoForm.bolsa = this.cargoForm.bolsa.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.beneficio = this.cargoForm.beneficio.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.horaExtra = this.cargoForm.horaExtra.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.convenio = this.cargoForm.convenio.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.beneficioLegislacao = this.cargoForm.beneficioLegislacao.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.remunEsporadica = this.cargoForm.remunEsporadica.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.remunExtra = this.cargoForm.remunExtra.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.alura = this.cargoForm.alura.replace('R$ ', '').replace('.', '').replace(',', '.')      
       if (dados.tipo == 'cadastro') {
         http
           .post('remuneracao', this.cargoForm)
