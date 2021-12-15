@@ -503,6 +503,7 @@ export default {
       var curriculo = document.getElementById('fileCurriculo').value
       var disc = document.getElementById('fileDisc').value
       var observacao = document.getElementById('inputObservacao').value
+      console.log(curriculo)
       let erro = 0
       if (nome == '') {
         document.querySelector('#nomeErro').classList.remove('none')
@@ -568,18 +569,18 @@ export default {
       } else {
         document.querySelector('#observacaoErro').classList.add('none')
       }
-        // if (curriculo == '') {
-        //   document.querySelector('#curriculoErro').classList.remove('none')
-        //   erro = 1
-        // } else {
-        //   document.querySelector('#curriculoErro').classList.add('none')
-        // }
-        // if (disc == '') {
-        //   document.querySelector('#discFileErro').classList.remove('none')
-        //   erro = 1
-        // } else {
-        //   document.querySelector('#discFileErro').classList.add('none')
-        // }
+      if (curriculo == '' && this.tipo != 'edicao') {
+        document.querySelector('#curriculoErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#curriculoErro').classList.add('none')
+      }
+      if (disc == '' && this.tipo != 'edicao') {
+        document.querySelector('#discFileErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#discFileErro').classList.add('none')
+      }
       if (erro == 1) {
         return false
       } else if (erro == 0) {
