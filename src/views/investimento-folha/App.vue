@@ -162,7 +162,6 @@
                   id="mesAnoModal"
                   type="date"
                   class="form-control"
-                  placeholder="MM/YY"
                   aria-label="Sizing example input"
                   aria-describedby="inputGroup-sizing-lg"
                 />
@@ -173,12 +172,9 @@
                   <label class="modalconteudo">Remuneração</label>
                   <div class="input-group input-group-lg">
                     <input
-                      @input="formatarRemuneracao()"
+                      @change="escutaQuantidades"
                       id="remuneracaoModal"
                       class="form-control"
-                      placeholder="R$"
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
                   <p id="erroRemun" class="erro none">O campo remuneração não pode ser vazio</p>
@@ -188,10 +184,9 @@
                   <label class="modalconteudo">Encargos</label>
                   <div class="input-group input-group-lg">
                     <input
-                      @input="formatarEncargos()"
+                      @change="escutaQuantidades"
                       id="encargosModal"
                       class="form-control"
-                      placeholder="R$"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-lg"
                     />
@@ -206,9 +201,10 @@
                   <div class="input-group input-group-lg">
                     <input
                       id="beneficiosModal"
-                      @input="formatarBeneficios()"
+                      @change="escutaQuantidades"
+                      type="text"
                       class="form-control"
-                      placeholder="R$"
+                      v-money="money"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-lg"
                     />
@@ -221,12 +217,10 @@
                   <div class="input-group input-group-lg">
                     <input
                       id="inputQtdTotal"
+                      :value="qtdTotal.toFixed(2)"
                       disabled
                       type="text"
                       class="form-control"
-                      placeholder="R$"
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
                 </div>
@@ -255,7 +249,7 @@
                 >
                   CONFIRMAR
                 </button>
-                <button type="button" id="fechaModal" data-bs-dismiss="modal" class="none"></button> 
+                <button type="button" id="fechaModal" data-bs-dismiss="modal" class="none"></button>
               </div>
               <div class="col-xl-5"></div>
             </div>
@@ -305,7 +299,7 @@ export default {
       participantes: [],
       cpfParticipantes: [],
       programas: [],
-      turmas: [], 
+      turmas: [],
       programaProcurado: '',
       turmaProcurada: '',
       form: {
@@ -316,9 +310,8 @@ export default {
         beneficios: '',
         descricao: ''
       },
-      qtdTotal: {
-        qtdTotal: ''
-      },
+      qtdTotal: 0,
+
       qtdSalario: {
         qtdSalario: ''
       }
@@ -465,16 +458,16 @@ export default {
     inserirInvestimento () {
       this.form.cpf = document.getElementById('nomeModal').value
       this.form.mesAno = document.querySelector('#mesAnoModal').value
-      this.form.remuneracao = document.querySelector('#remuneracaoModal').value.replace(',', '.')
-      this.form.encargos = document.querySelector('#encargosModal').value.replace(',', '.')
-      this.form.beneficios = document.querySelector('#beneficiosModal').value.replace(',', '.')
+      this.form.remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.form.encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.form.beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.form.descricao = document.querySelector('#descricaoModal').value
       console.log(this.form)
       http.post('/investimento-folha', this.form).then(response => {
         this.abrirModal()
         setTimeout(function () {
           window.location.href = variavel.href = 'investimento-folha'
-        }, 1500) 
+        }, 1500)
       })
     },
     pegarSalario () {
@@ -491,9 +484,12 @@ export default {
     },
 
     escutaQuantidades () {
-      let remuneracao = document.querySelector('#remuneracaoModal').value.replace(',', '')
-      let encargos = document.querySelector('#encargosModal').value.replace(',', '')
-      let beneficios = document.querySelector('#beneficiosModal').value.replace(',', '')
+      let remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.') // não está funcionando a matemática aqui
+
+      console.log(remuneracao)
+      // console.log(remuneracao)
+      let encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      let beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.carregaQuantidade(remuneracao, encargos, beneficios)
     },
     formatarRemuneracao () {
@@ -545,9 +541,9 @@ export default {
       this.escutaQuantidades()
     },
     carregaQuantidade (remun, encarg, benef) {
-      remun = parseInt(remun)
-      encarg = parseInt(encarg)
-      benef = parseInt(benef)
+      remun = parseFloat(remun)
+      encarg = parseFloat(encarg)
+      benef = parseFloat(benef)
 
       if (isNaN(remun)) {
         remun = 0
@@ -558,12 +554,7 @@ export default {
       if (isNaN(benef)) {
         benef = 0
       }
-      let qtdTotal = 0
-      qtdTotal += remun + encarg + benef
-      qtdTotal = qtdTotal + ''
-      qtdTotal = qtdTotal.replace(/([0-9]{2})$/g, ',$1')
-      let elQtdTotal = document.querySelector('#inputQtdTotal')
-      elQtdTotal.value = qtdTotal
+      this.qtdTotal = remun + encarg + benef
     },
 
     mudaVisibilidade () {

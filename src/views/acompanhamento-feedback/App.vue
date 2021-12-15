@@ -31,7 +31,7 @@
                         </div>
                         <div>
                             <!--<input class="input-file" type="file">-->
-                            <p class="form-label mb-0 fw-bold titulo d-block">Insira o arquivo do DISC</p>
+                            <p class="form-label mb-0 fw-bold titulo d-block">Insira o arquivo</p>
                              <input type="file" class="form-control" id="campoDisc" 
                              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                         </div>
@@ -78,7 +78,7 @@
                             <textarea v-model="feedbackModal.anotacao" disabled class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
                         <div class="col-lg-6 none" id="downloadModal">
-                            <h4 class="fw-bold titulo mb-3" >Download DISC:</h4>
+                            <h4 class="fw-bold titulo mb-3" >Download arquivo:</h4>
                             <a v-on:click="download()" id="oioi" class="btn-registrar pointer" > DOWNLOAD</a>
                         </div>
                     </div>

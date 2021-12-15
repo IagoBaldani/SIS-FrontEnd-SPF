@@ -152,9 +152,6 @@
                 id="mesAnoModal"
                 type="date"
                 class="form-control"
-                placeholder="MM/YY"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-lg"
               />
             </div>
             <p id="erroData" class="erro none">O campo data não pode ser vazio</p>
@@ -163,12 +160,11 @@
                 <label id="modalconteudo">Valor Hora</label>
                 <div class="input-group input-group-lg">
                   <input
-                    @input="formatarValorHora()"
+                    @change="escutaQuantidades"
                     id="valorHoraModal"
+                    type="text"
+                    v-money="money"
                     class="form-control"
-                    placeholder="R$"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
                   />
                 </div>
                 <p id="erroValorHora" class="erro none">O campo valor hora não pode ser vazio</p>
@@ -195,13 +191,11 @@
                 <div class="input-group input-group-lg">
                   <input
                     id="inputQtdTotal"
-                    readonly
+                    :value="qtdTotal.toFixed(2)"
                     disabled
                     type="text"
+                    v-money="money"
                     class="form-control"
-                    placeholder="R$"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
                   />
                 </div>
               </div>
@@ -277,9 +271,8 @@ export default {
         valorHora: '',
         horasTrabalhadas: ''
       },
-      qtdTotal: {
-        qtdTotal: ''
-      }
+      qtdTotal: 0
+
     }
   },
   beforeMount () {
@@ -301,7 +294,7 @@ export default {
           (this.instrutores = response.data)
           this.mudaVisibilidade()
           this.pegarSalario()
-        }) 
+        })
     },
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()
@@ -373,13 +366,12 @@ export default {
       } else {
         this.inserirInvestimento()
         document.querySelector('#fechaModal').click()
-        window.location.reload()
       }
     },
     inserirInvestimento () {
       this.form.cpf = document.querySelector('#nomeModal').value
       this.form.mesAno = document.querySelector('#mesAnoModal').value
-      this.form.valorHora = document.querySelector('#valorHoraModal').value.replace(',', '.')
+      this.form.valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.', '').replace(',','.')
       this.form.horasTrabalhadas = document.querySelector(
         '#horasTrabalhadasModal'
       ).value
@@ -389,7 +381,7 @@ export default {
           this.abrirModal()
           setTimeout(function () {
             window.location.href = variavel.href = 'investimento-instrutor'
-          }, 1500) 
+          }, 1500)
         })
     },
 
@@ -402,7 +394,7 @@ export default {
     },
 
     escutaQuantidades () {
-      let valorHora = document.querySelector('#valorHoraModal').value.replace('.', '').replace(',', '.')
+      let valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.','').replace(',','.')
       let quantidadeHora = document.querySelector('#horasTrabalhadasModal')
         .value
       console.log(valorHora)
@@ -420,13 +412,9 @@ export default {
         valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
       }
 
-      elemento.value = valor
-      if (valor == 'NaN') elemento.value = ''
-      this.escutaQuantidades()
-    },
-    carregaQuantidade (valorHora, quantidadeHora) {
-      valorHora = parseFloat(valorHora)
-      quantidadeHora = parseFloat(quantidadeHora)
+    carregaQuantidade (valor, quantidade) {
+      valor = parseFloat(valor)
+      quantidade = parseInt(quantidade)
 
       if (isNaN(valorHora)) {
         valorHora = 0
@@ -434,14 +422,7 @@ export default {
       if (isNaN(quantidadeHora)) {
         quantidadeHora = 0
       }
-
-      let qtdTotal = 0
-      qtdTotal = valorHora * quantidadeHora
-      qtdTotal = qtdTotal + ''
-      qtdTotal = qtdTotal.replace(/([0-9]{2})$/g, ',$1')
-      qtdTotal = qtdTotal.replace('.', '')
-      let elQtdTotal = document.querySelector('#inputQtdTotal')
-      elQtdTotal.value = qtdTotal
+      this.qtdTotal = valor * quantidade
     },
 
     mostrarInstrutor () {
