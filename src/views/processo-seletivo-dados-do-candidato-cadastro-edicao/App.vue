@@ -73,14 +73,15 @@
         </div>
         <div class="col-md-4">
           <div class="mb-3">
-            <label class="label-form">Processo Seletivo</label>
+           <!--  <label class="label-form">Processo Seletivo</label>
             <select id="inputProcessoSeletivo" class="form-select" :value-="candidato.processoSeletivoId">
               <option selected value="0">Selecione o Processo Seletivo</option>
               <template v-for="processo in processosSeletivos" v-bind:key="processo">
-                <option v-bind:value="processo.id" v-if="processo.status != 'FINALIZADA'" selected>{{ processo.id }} - {{ processo.nome }}</option>
+                <option v-bind:value="processo.id" v-if="processo.status != 'FINALIZADA'">{{ processo.id }} - {{ processo.nome }}</option> 
               </template>
-            </select>
-            <p id="processoErro" class="none erro">Por favor, preencha o campo processo seletivo</p>
+            </select> -->
+            <!-- <input type="txt"  class="form-control" id="inputProcesso" disabled display="none" v-bind:value="this.idRetorno" /> -->
+            <!-- <p id="processoErro" class="none erro">Por favor, preencha o campo processo seletivo</p> -->
           </div>
           <div class="mb-3">
             <label class="label-form">Prova prática</label>
@@ -166,7 +167,7 @@
                                 <li>Nome: <span class="titulo"> {{ candidatoForm.nome }} </span></li>
                                 <li>Contato: <span class="titulo"> {{ candidatoForm.telefone }} </span></li>
                                 <li>Fonte de Recrutamento: <span class="titulo"> {{ candidatoForm.fonteRecrutamento}} </span></li>
-                                <li>Data de Agendamento: <span class="titulo">{{ candidatoForm.dataAgendamento }}</span></li>
+                                <li>Data de Agendamento: <span class="titulo">{{ this.formataDataParaMostrar(candidatoForm.dataAgendamento) }}</span></li>
                                 <li>Observação: <span class="titulo">{{ candidatoForm.observacao }}</span></li>
                                 <li>Status: <span class="titulo">{{ candidatoForm.status }}</span></li>
                                 <li>Processo Seletivo: <span class="titulo">{{ candidatoForm.idProcessoSeletivo}}</span></li>
@@ -253,7 +254,8 @@ export default {
       statusProcesso: '',
       idRetorno: '',
       tipoReq: '',
-      statusParticipante: '' 
+      statusParticipante: '',
+      idRetornoNome:'', 
     }
   },
   beforeMount () {
@@ -266,6 +268,9 @@ export default {
     this.idRetorno = dadosUrl.idProcesso
     this.statusProcesso = dadosUrl.statusProcesso
     this.statusParticipante = dadosUrl.statusParticipante
+    
+
+
     console.log(this.tipoReq)
     if (tipo == 'edicao') {
       this.getCandidato(id)
@@ -299,7 +304,7 @@ export default {
       this.candidatoForm.notaDisc = document.querySelector('#inputDisc').value
       this.candidatoForm.observacao = document.querySelector('#inputObservacao').value
       this.candidatoForm.status = document.querySelector('#status').value
-      this.candidatoForm.idProcessoSeletivo = document.querySelector('#inputProcessoSeletivo').value
+      this.candidatoForm.idProcessoSeletivo = this.idRetorno
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -327,11 +332,14 @@ export default {
       const dados = this.pegaDadosUrl()
       let id = dados.id
       let tipo = dados.tipo
-      var discAtualizar = document.getElementById('fileDisc').value
-      console.log(discAtualizar)
-      var curriculoAtualizar = document.getElementById('fileCurriculo').value
-      if (tipo == 'edicao' && discAtualizar != '' && curriculoAtualizar != '') {
+      var discAtualizar = document.getElementById('fileDisc').files[0]
+      var curriculoAtualizar = document.getElementById('fileCurriculo').files[0]
+      
+      if (tipo == 'edicao' && discAtualizar !=undefined && curriculoAtualizar !=undefined) {
         console.log('editando completo')
+        console.log(curriculoAtualizar)
+        console.log(discAtualizar)
+        
         var formDataAtualizar = new FormData()  
         formDataAtualizar.append('id', this.candidatoForm.id)
         formDataAtualizar.append('nome', this.candidatoForm.nome)
@@ -342,7 +350,7 @@ export default {
         formDataAtualizar.append('notaDisc', this.candidatoForm.notaDisc)
         formDataAtualizar.append('observacao', this.candidatoForm.observacao)
         formDataAtualizar.append('status', this.candidatoForm.status)
-        formDataAtualizar.append('idProcessoSeletivo', this.candidatoForm.idProcessoSeletivo)
+        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('disc', discAtualizar)
         formDataAtualizar.append('curriculo', curriculoAtualizar)
         http
@@ -360,7 +368,7 @@ export default {
           .catch(error => {
             console.log(error)
           })
-      } else if (tipo == 'edicao' && discAtualizar == '' && curriculoAtualizar != '') {
+      } else if (tipo == 'edicao' && discAtualizar ==undefined && curriculoAtualizar !=undefined) {
         console.log('editando com curriculo')
         formDataAtualizar = new FormData()  
         formDataAtualizar.append('id', this.candidatoForm.id)
@@ -372,7 +380,7 @@ export default {
         formDataAtualizar.append('notaDisc', this.candidatoForm.notaDisc)
         formDataAtualizar.append('observacao', this.candidatoForm.observacao)
         formDataAtualizar.append('status', this.candidatoForm.status)
-        formDataAtualizar.append('idProcessoSeletivo', this.candidatoForm.idProcessoSeletivo)
+        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('curriculo', curriculoAtualizar)
         http
           .put(`candidato/${id}`, formDataAtualizar, {
@@ -389,7 +397,7 @@ export default {
           .catch(error => {
             console.log(error)
           })
-      } else if (tipo == 'edicao' && discAtualizar != '' && curriculoAtualizar == '') {
+      } else if (tipo == 'edicao' && discAtualizar !=undefined && curriculoAtualizar ==undefined) {
         console.log('editando com disc')
         formDataAtualizar = new FormData()  
         formDataAtualizar.append('id', this.candidatoForm.id)
@@ -401,7 +409,7 @@ export default {
         formDataAtualizar.append('notaDisc', this.candidatoForm.notaDisc)
         formDataAtualizar.append('observacao', this.candidatoForm.observacao)
         formDataAtualizar.append('status', this.candidatoForm.status)
-        formDataAtualizar.append('idProcessoSeletivo', this.candidatoForm.idProcessoSeletivo)
+        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('disc', discAtualizar)
         http
           .put(`candidato/${id}`, formDataAtualizar, {
@@ -418,8 +426,8 @@ export default {
           .catch(error => {
             console.log(error)
           })
-      } else if (tipo == 'edicao' && discAtualizar == '' && curriculoAtualizar == '') {
-        console.log('editando sem nada')
+      } else if (tipo == 'edicao' && discAtualizar ==undefined && curriculoAtualizar ==undefined) {
+        console.log('editando sem curriculo sem disc')
         formDataAtualizar = new FormData()  
         formDataAtualizar.append('id', this.candidatoForm.id)
         formDataAtualizar.append('nome', this.candidatoForm.nome)
@@ -430,7 +438,7 @@ export default {
         formDataAtualizar.append('notaDisc', this.candidatoForm.notaDisc)
         formDataAtualizar.append('observacao', this.candidatoForm.observacao)
         formDataAtualizar.append('status', this.candidatoForm.status)
-        formDataAtualizar.append('idProcessoSeletivo', this.candidatoForm.idProcessoSeletivo)
+        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         http
           .put(`candidato/${id}`, formDataAtualizar, {
             headers: {
@@ -459,7 +467,7 @@ export default {
         formData.append('notaDisc', this.candidatoForm.notaDisc)
         formData.append('observacao', this.candidatoForm.observacao)
         formData.append('status', this.candidatoForm.status)
-        formData.append('idProcessoSeletivo', this.candidatoForm.idProcessoSeletivo)
+        formData.append('idProcessoSeletivo', this.idRetorno)
         formData.append('disc', disc)
         formData.append('curriculo', curriculo)
         http
@@ -489,7 +497,7 @@ export default {
       var fonteRecrutamento = document.getElementById('inputFonteDeRecrutamento').value
       var dataAgendamento = document.getElementById('inputDataAgendamento').value
       var resultado = document.getElementById('status').value
-      var processoSeletivo = document.getElementById('inputProcessoSeletivo').value
+      // var processoSeletivo = document.getElementById('inputProcessoSeletivo').value
       var provaPratica = document.getElementById('inputProvaPratica').value
       var discNota = document.getElementById('inputDisc').value
       var curriculo = document.getElementById('fileCurriculo').value
@@ -530,12 +538,12 @@ export default {
       } else {
         document.querySelector('#resultadoErro').classList.add('none')
       }
-      if (processoSeletivo == 0) {
-        document.querySelector('#processoErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#processoErro').classList.add('none')
-      }
+      // if (processoSeletivo == 0) {
+      //   document.querySelector('#processoErro').classList.remove('none')
+      //   erro = 1
+      // } else {
+      //   document.querySelector('#processoErro').classList.add('none')
+      // }
       if (provaPratica == '') {
         document.querySelector('#provaErro').classList.remove('none')
         erro = 1
@@ -560,18 +568,18 @@ export default {
       } else {
         document.querySelector('#observacaoErro').classList.add('none')
       }
-        if (curriculo == '') {
-          document.querySelector('#curriculoErro').classList.remove('none')
-          erro = 1
-        } else {
-          document.querySelector('#curriculoErro').classList.add('none')
-        }
-        if (disc == '') {
-          document.querySelector('#discFileErro').classList.remove('none')
-          erro = 1
-        } else {
-          document.querySelector('#discFileErro').classList.add('none')
-        }
+        // if (curriculo == '') {
+        //   document.querySelector('#curriculoErro').classList.remove('none')
+        //   erro = 1
+        // } else {
+        //   document.querySelector('#curriculoErro').classList.add('none')
+        // }
+        // if (disc == '') {
+        //   document.querySelector('#discFileErro').classList.remove('none')
+        //   erro = 1
+        // } else {
+        //   document.querySelector('#discFileErro').classList.add('none')
+        // }
       if (erro == 1) {
         return false
       } else if (erro == 0) {
