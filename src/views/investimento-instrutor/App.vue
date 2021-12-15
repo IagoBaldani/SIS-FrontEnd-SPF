@@ -163,10 +163,8 @@
                 <label id="modalconteudo">Valor Hora</label>
                 <div class="input-group input-group-lg">
                   <input
-                    v-model="form.valorHora"
-                    @input="escutaQuantidades"
+                    @input="formatarValorHora()"
                     id="valorHoraModal"
-                    type="number"
                     class="form-control"
                     placeholder="R$"
                     aria-label="Sizing example input"
@@ -180,8 +178,6 @@
                 <label id="modalconteudo">Horas trabalhadas</label>
                 <div class="input-group input-group-lg">
                   <input
-                    v-model="form.horasTrabalhadas"
-                    @input="escutaQuantidades"
                     id="horasTrabalhadasModal"
                     type="number"
                     class="form-control"
@@ -200,9 +196,8 @@
                   <input
                     id="inputQtdTotal"
                     readonly
-                    v-model="form.qtdTotal"
                     disabled
-                    type="number"
+                    type="text"
                     class="form-control"
                     placeholder="R$"
                     aria-label="Sizing example input"
@@ -384,7 +379,7 @@ export default {
     inserirInvestimento () {
       this.form.cpf = document.querySelector('#nomeModal').value
       this.form.mesAno = document.querySelector('#mesAnoModal').value
-      this.form.valorHora = document.querySelector('#valorHoraModal').value
+      this.form.valorHora = document.querySelector('#valorHoraModal').value.replace(',', '.')
       this.form.horasTrabalhadas = document.querySelector(
         '#horasTrabalhadasModal'
       ).value
@@ -407,25 +402,44 @@ export default {
     },
 
     escutaQuantidades () {
-      let valorHora = document.querySelector('#valorHoraModal').value
+      let valorHora = document.querySelector('#valorHoraModal').value.replace('.', '').replace(',', '.')
       let quantidadeHora = document.querySelector('#horasTrabalhadasModal')
         .value
+      console.log(valorHora)
       this.carregaQuantidade(valorHora, quantidadeHora)
     },
+    formatarValorHora () {
+      var elemento = document.getElementById('valorHoraModal')
+      var valor = elemento.value
+      valor = valor + ''
+      valor = parseInt(valor.replace(/[\D]+/g, ''))
+      valor = valor + ''
+      valor = valor.replace(/([0-9]{2})$/g, ',$1')
 
-    carregaQuantidade (valor, quantidade) {
-      valor = parseInt(valor)
-      quantidade = parseInt(quantidade)
-
-      if (isNaN(valor)) {
-        valor = 0
+      if (valor.length > 6) {
+        valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
       }
-      if (isNaN(quantidade)) {
-        quantidade = 0
+
+      elemento.value = valor
+      if (valor == 'NaN') elemento.value = ''
+      this.escutaQuantidades()
+    },
+    carregaQuantidade (valorHora, quantidadeHora) {
+      valorHora = parseFloat(valorHora)
+      quantidadeHora = parseFloat(quantidadeHora)
+
+      if (isNaN(valorHora)) {
+        valorHora = 0
+      }
+      if (isNaN(quantidadeHora)) {
+        quantidadeHora = 0
       }
 
       let qtdTotal = 0
-      qtdTotal = valor * quantidade
+      qtdTotal = valorHora * quantidadeHora
+      qtdTotal = qtdTotal + ''
+      qtdTotal = qtdTotal.replace(/([0-9]{2})$/g, ',$1')
+      qtdTotal = qtdTotal.replace('.', '')
       let elQtdTotal = document.querySelector('#inputQtdTotal')
       elQtdTotal.value = qtdTotal
     },
