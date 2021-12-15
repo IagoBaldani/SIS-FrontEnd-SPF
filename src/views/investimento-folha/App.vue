@@ -173,10 +173,8 @@
                   <label class="modalconteudo">Remuneração</label>
                   <div class="input-group input-group-lg">
                     <input
-                      @input="escutaQuantidades"
+                      @input="formatarRemuneracao()"
                       id="remuneracaoModal"
-                      type="text"
-                      v-money="money"
                       class="form-control"
                       placeholder="R$"
                       aria-label="Sizing example input"
@@ -190,10 +188,8 @@
                   <label class="modalconteudo">Encargos</label>
                   <div class="input-group input-group-lg">
                     <input
-                      @input="escutaQuantidades"
+                      @input="formatarEncargos()"
                       id="encargosModal"
-                      type="text"
-                      v-money="money"
                       class="form-control"
                       placeholder="R$"
                       aria-label="Sizing example input"
@@ -210,11 +206,9 @@
                   <div class="input-group input-group-lg">
                     <input
                       id="beneficiosModal"
-                      @input="escutaQuantidades"
-                      type="text"
+                      @input="formatarBeneficios()"
                       class="form-control"
                       placeholder="R$"
-                      v-money="money"
                       aria-label="Sizing example input"
                       aria-describedby="inputGroup-sizing-lg"
                     />
@@ -229,7 +223,6 @@
                       id="inputQtdTotal"
                       disabled
                       type="text"
-                      v-money="money"
                       class="form-control"
                       placeholder="R$"
                       aria-label="Sizing example input"
@@ -306,8 +299,7 @@ export default {
       money: {
         decimal: ',',
         thousands: '.',
-        prefix: 'R$ ',
-        suffix: '',
+        prefix: 'R$',
         precision: 2
       },
       participantes: [],
@@ -473,9 +465,9 @@ export default {
     inserirInvestimento () {
       this.form.cpf = document.getElementById('nomeModal').value
       this.form.mesAno = document.querySelector('#mesAnoModal').value
-      this.form.remuneracao = document.querySelector('#remuneracaoModal').value
-      this.form.encargos = document.querySelector('#encargosModal').value
-      this.form.beneficios = document.querySelector('#beneficiosModal').value
+      this.form.remuneracao = document.querySelector('#remuneracaoModal').value.replace(',', '.')
+      this.form.encargos = document.querySelector('#encargosModal').value.replace(',', '.')
+      this.form.beneficios = document.querySelector('#beneficiosModal').value.replace(',', '.')
       this.form.descricao = document.querySelector('#descricaoModal').value
       console.log(this.form)
       http.post('/investimento-folha', this.form).then(response => {
@@ -499,12 +491,59 @@ export default {
     },
 
     escutaQuantidades () {
-      let remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.') // não está funcionando a matemática aqui
-      let encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
-      let beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      let remuneracao = document.querySelector('#remuneracaoModal').value.replace(',', '')
+      let encargos = document.querySelector('#encargosModal').value.replace(',', '')
+      let beneficios = document.querySelector('#beneficiosModal').value.replace(',', '')
       this.carregaQuantidade(remuneracao, encargos, beneficios)
     },
+    formatarRemuneracao () {
+      var elemento = document.getElementById('remuneracaoModal')
+      var valor = elemento.value
+      valor = valor + ''
+      valor = parseInt(valor.replace(/[\D]+/g, ''))
+      valor = valor + ''
+      valor = valor.replace(/([0-9]{2})$/g, ',$1')
 
+      if (valor.length > 6) {
+        valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
+      }
+
+      elemento.value = valor
+      if (valor == 'NaN') elemento.value = ''
+      this.escutaQuantidades()
+    },
+    formatarEncargos () {
+      var elemento = document.getElementById('encargosModal')
+      var valor = elemento.value
+      valor = valor + ''
+      valor = parseInt(valor.replace(/[\D]+/g, ''))
+      valor = valor + ''
+      valor = valor.replace(/([0-9]{2})$/g, ',$1')
+
+      if (valor.length > 6) {
+        valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
+      }
+
+      elemento.value = valor
+      if (valor == 'NaN') elemento.value = ''
+      this.escutaQuantidades()
+    },
+    formatarBeneficios () {
+      var elemento = document.getElementById('beneficiosModal')
+      var valor = elemento.value
+      valor = valor + ''
+      valor = parseInt(valor.replace(/[\D]+/g, ''))
+      valor = valor + ''
+      valor = valor.replace(/([0-9]{2})$/g, ',$1')
+
+      if (valor.length > 6) {
+        valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
+      }
+
+      elemento.value = valor
+      if (valor == 'NaN') elemento.value = ''
+      this.escutaQuantidades()
+    },
     carregaQuantidade (remun, encarg, benef) {
       remun = parseInt(remun)
       encarg = parseInt(encarg)
@@ -521,6 +560,8 @@ export default {
       }
       let qtdTotal = 0
       qtdTotal += remun + encarg + benef
+      qtdTotal = qtdTotal + ''
+      qtdTotal = qtdTotal.replace(/([0-9]{2})$/g, ',$1')
       let elQtdTotal = document.querySelector('#inputQtdTotal')
       elQtdTotal.value = qtdTotal
     },
