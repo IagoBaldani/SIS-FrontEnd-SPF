@@ -17,7 +17,7 @@
                     </div>
                     <div>
                         <label for="bolsaAuxilio" class="form-label mb-0 mt-3 titulo">Bolsa auxílio</label>
-                        <input class="form-control" maxlength="12" v-on:keyup="formatPrice(value)" v-money="money" id="inputBolsaAuxilio" v-bind:value="'R$ ' + cargos.bolsa"/>
+                        <input class="form-control" maxlength="12" v-on:keyup="formatPrice(value)" v-money="money" id="inputBolsaAuxilio" v-bind:value="'R$ ' + cargos.bolsa.toFixed(2)"/>
                         <p id="erroBolsa" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBolsaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
@@ -219,7 +219,7 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     let id = dadosUrl.id
     let tipo = dadosUrl.tipo
-
+    
     if (tipo == 'edicao') {
       this.getCargo(id)
     }
@@ -235,7 +235,7 @@ export default {
       this.cargoForm.convenio = document.querySelector('#inputConvenio').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.cargoForm.horaExtra = document.querySelector('#inputHoraExtra').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.cargoForm.beneficioLegislacao = document.querySelector('#inputBeneficioLegislacao').value.replace('R$ ', '').replace('.', '').replace(',', '.')
-      this.cargoForm.remunEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargoForm.remunEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value.replace('R$ ', '').replace(' ', '').replace(',', '.')
       this.cargoForm.remunExtra = document.querySelector('#inputRemuneracaoExtra').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.cargoForm.alura = document.querySelector('#inputAlura').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       if (this.validaCampos()) {
@@ -436,7 +436,7 @@ export default {
         document.querySelector('#erroCargoCadastrado').classList.add('none')
         return true
       }
-    }
+    },
   }
 }
 </script>
