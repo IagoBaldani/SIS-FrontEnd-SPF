@@ -11,31 +11,31 @@
                 <div class="col-xl-4">
                     <div>
                         <label for="cargoInput" class="form-label mb-0 titulo">Cargo</label>
-                        <input class="form-control"  v-bind:value="cargos.cargo" type="text" name="cargo" id="inputCargo"/>
+                        <input class="form-control" v-bind:value="cargos.cargo" type="text" name="cargo" id="inputCargo"/>
                         <p id="erroCargo" class="erro none">Por favor, selecione um cargo </p>
                         <p id="erroCargoCadastrado" class="erro none">Este cargo já está cadastrada, por favor insira outro</p>
                     </div>
                     <div>
                         <label for="bolsaAuxilio" class="form-label mb-0 mt-3 titulo">Bolsa auxílio</label>
-                         <input class="form-control" v-money="money" id="inputBolsaAuxilio" v-bind:value="cargos.bolsa"/>
+                        <input class="form-control" maxlength="12" v-on:keyup="formatPrice(value)" v-money="money" id="inputBolsaAuxilio" v-bind:value="'R$ ' + cargos.bolsa"/>
                         <p id="erroBolsa" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBolsaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="beneficios" class="form-label mb-0 mt-3 titulo">Benefícios</label>
-                        <input type="text" v-money="money" name="beneficios" class="form-control" v-bind:value="cargos.beneficio" id="inputBeneficios"/>
+                        <input type="text" v-money="money" maxlength="12" name="beneficios" class="form-control" v-bind:value="cargos.beneficio" id="inputBeneficios"/>
                         <p id="erroBeneficios" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBeneficiosQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="convenio" class="form-label mb-0 mt-3 titulo">Convênio</label>
-                        <input type="text" v-money="money" class="form-control" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
+                        <input type="text" v-money="money" maxlength="12" class="form-control" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
                         <p id="erroConvenio" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroConvenioQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div class="mb-5">
                         <label for="horaExtra" class="form-label mb-0 mt-3 titulo">Hora extra</label>
-                        <input type="text" v-money="money" class="form-control" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
+                        <input type="text" v-money="money"  maxlength="12" class="form-control" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
                         <p id="erroHoraExtra" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroHoraExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
@@ -43,25 +43,25 @@
                 <div class="col-xl-4">
                     <div>
                         <label for="beneficioLegislacao" class="form-label mb-0 titulo">Benefício legislação</label>
-                        <input type="text" v-money="money" class="form-control" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
+                        <input type="text" v-money="money" maxlength="12" class="form-control" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
                         <p id="erroBeneficioLegislacao" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBeneficioLegislacaoQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoEsporadica" class="form-label mb-0 mt-3 titulo">Remuneração esporádica</label>
-                        <input name="remuneracaoEsporadica" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunEsporadica" id="inputRemuneracaoEsporadica" />
+                        <input name="remuneracaoEsporadica"  maxlength="12" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunEsporadica" id="inputRemuneracaoEsporadica" />
                         <p id="erroRemuneracaoEsporadica" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroRemuneracaoEsporadicaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoExtra" class="form-label mb-0 mt-3 titulo">Remuneração extra</label>
-                        <input name="remuneracaoExtra" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunExtra" id="inputRemuneracaoExtra">
+                        <input name="remuneracaoExtra" maxlength="12" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunExtra" id="inputRemuneracaoExtra">
                         <p id="erroRemuneracaoExtra" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroRemuneracaoExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div> 
                         <label class="form-label mb-0 mt-3 titulo">Alura</label>
-                        <input name="alura" type="text" v-money="money" class="form-control" v-bind:value="cargos.alura" id="inputAlura">
+                        <input name="alura" type="text" maxlength="12" v-money="money" class="form-control" v-bind:value="cargos.alura" id="inputAlura">
                         <p id="erroAlura" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroAluraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
@@ -247,6 +247,10 @@ export default {
     },
     abrirModalCadastro () {
       document.getElementById('abreModalInvisivelCadastro').click()
+      },
+     formatPrice(value) {
+      let val = document.getElementById("inputBolsaAuxilio").style.backgroundColor = "#F4A460";
+      
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
