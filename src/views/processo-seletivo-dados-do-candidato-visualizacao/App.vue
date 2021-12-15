@@ -31,11 +31,11 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Status</label>
-                                <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na primeira fase" v-if="candidato.status=='APROVADO_1_FASE'">
-                                <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na segunda fase" v-else-if="candidato.status=='APROVADO_2_FASE'">
-                                <input name="status" type="text" class="form-control reprovado" id="disabledTextInput" placeholder="Reprovado na primeira fase" v-else-if="candidato.status=='REPROVADO_1_FASE'">
-                                <input name="status" type="text" class="form-control reprovado" id="disabledTextInput" placeholder="Reprovado na segunda fase" v-else-if="candidato.status=='REPROVADO_2_FASE'">
-                                <input name="status" type="text" class="form-control standby" id="disabledTextInput" placeholder="StandBy" v-else-if="candidato.status=='STANDBY'">
+                                <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na primeira fase" v-if="this.statusCandidato =='APROVADO_1_FASE'">
+                                <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na segunda fase" v-else-if="this.statusCandidato=='APROVADO_2_FASE'">
+                                <input name="status" type="text" class="form-control reprovado" id="disabledTextInput" placeholder="Reprovado na primeira fase" v-else-if="this.statusCandidato=='REPROVADO_1_FASE'">
+                                <input name="status" type="text" class="form-control reprovado" id="disabledTextInput" placeholder="Reprovado na segunda fase" v-else-if="this.statusCandidato=='REPROVADO_2_FASE'">
+                                <input name="status" type="text" class="form-control standby" id="disabledTextInput" placeholder="StandBy" v-else-if="this.statusCandidato=='STANDBY'">
                                 <input name="status" type="text" class="form-control" id="disabledTextInput" placeholder="Sem status" v-else>
                             </div>
                         </fieldset>
@@ -91,7 +91,8 @@ export default {
       candidato: {},
       id: {},
       statusProcesso: '',
-      idRetorno: ''
+      idRetorno: '',
+      statusCandidato: ''
     }
   },
   beforeMount () {
@@ -102,6 +103,7 @@ export default {
     this.getCandidato(this.id)
     this.idRetorno = dadosUrl.idProcesso
     this.statusProcesso = dadosUrl.statusProcesso
+    this.statusCandidato = dadosUrl.statusCandidato
   },
   methods: {
     getCandidato (id) {
