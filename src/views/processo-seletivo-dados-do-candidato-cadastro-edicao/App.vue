@@ -95,7 +95,7 @@
             <p id="discErro" class="none erro">Por favor, preencha o campo DISC</p>
           </div>
 
-          <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="acao()"></p>
+          <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="validaForm()"></p>
 
           <div class="mb-3">
             <label class="label-form mb-0 titulo">Currículo candidato</label><br>
@@ -560,7 +560,6 @@ export default {
       } else {
         document.querySelector('#observacaoErro').classList.add('none')
       }
-      if (this.tipo == 'cadastro') {
         if (curriculo == '') {
           document.querySelector('#curriculoErro').classList.remove('none')
           erro = 1
@@ -573,13 +572,17 @@ export default {
         } else {
           document.querySelector('#discFileErro').classList.add('none')
         }
-      }
       if (erro == 1) {
         return false
       } else if (erro == 0) {
         document.getElementById('verificaCampos').click()
       }
     },
+    formataDataParaMostrar (data) {
+    const dataPreForm = new Date(data)
+    const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+    return dataFormatada
+  },
     pegaInstrutores () {
       http
         .get('processo-seletivo')
@@ -590,11 +593,6 @@ export default {
           console.log(error)
         })
     }
-  },
-  formataDataParaMostrar (data) {
-    const dataPreForm = new Date(data)
-    const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-    return dataFormatada
   }
 }
 
