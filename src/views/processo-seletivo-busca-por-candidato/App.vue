@@ -4,8 +4,9 @@
     <div class="container-fluid px-5">
       <!-- Título da Página -->
       <div class="row justify-content-evenly">
-        <div class="col-lg-b6 mb-2 mt-2">
-          <h1 class="mt-3 mb-3">Busca por candidato:</h1>
+        <div class="col-lg-b6 mb-2 mt-2 d-flex justify-content-between">
+          <h1 class="mt-3 mb-3 spc">Busca por candidato:</h1>
+          <h1 class="mt-3 mb-3">Processo seletivo: {{ nomeDoProcessoCorreto }}</h1>
         </div>
         <div class="col-lg-6"></div>
       </div>
@@ -122,7 +123,9 @@ export default {
     return {
       candidatos: [],
       statusProcesso: '',
-      idProcessoSeletivo: ''
+      idProcessoSeletivo: '',
+      nomeProcesso:'',
+      nomeDoProcessoCorreto:'' 
     }
   },
   beforeMount () {
@@ -131,17 +134,19 @@ export default {
     let idProcesso = dadosUrl.id
     this.idProcessoSeletivo = idProcesso
     this.statusProcesso = dadosUrl.status
-    console.log(this.statusProcesso)
+    this.nomeProcesso = dadosUrl.nomeProcesso 
     if (idProcesso != null && idProcesso != '') {
       this.getListaDaFormacao(idProcesso)
     } else {
       this.getLista()
     }
+    this.getListaDeProcessos() 
   },
   beforeUpdate () {
     if(this.statusProcesso == 'FINALIZADA'){
        document.querySelector('#cadastrar').classList.add('invisivel')
-     } 
+     }
+     
   },
   methods: {
     filtraDados () {
@@ -179,6 +184,17 @@ export default {
           aviso.classList.remove('invisivel')
         }
       }
+    },
+    getListaDeProcessos () {
+      http
+        .get(`processo-seletivo/${this.idProcessoSeletivo}`)
+        .then(response => {
+          this.nomeProcesso = response.data
+          this.nomeDoProcessoCorreto = this.nomeProcesso.nome
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     getLista () {
       http
