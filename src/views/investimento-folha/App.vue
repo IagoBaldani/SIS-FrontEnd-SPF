@@ -101,9 +101,10 @@
     <div class="container overflow-hidden">
       <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
         <div class="botõesfinais col-xl-5">
-          <div data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <div >
             <button
               id="botaoAdicionarManualmente"
+              data-bs-toggle="modal" data-bs-target="#exampleModal"
               type="button"
               class="btn-lg btnAdicionar none"
               v-on:click="mostrarParticipantes()"
@@ -173,6 +174,7 @@
                   <div class="input-group input-group-lg">
                     <input
                       @change="escutaQuantidades"
+                      v-money="money"
                       id="remuneracaoModal"
                       class="form-control"
                     />
@@ -187,8 +189,7 @@
                       @change="escutaQuantidades"
                       id="encargosModal"
                       class="form-control"
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-lg"
+                      v-money="money"
                     />
                   </div>
                   <p id="erroEncargos" class="erro none">Por favor digite um valor válido, se for o caso digite 0</p>
@@ -205,8 +206,6 @@
                       type="text"
                       class="form-control"
                       v-money="money"
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
                   <p id="erroBeneficios" class="erro none">Por favor digite um valor válido, se for o caso digite 0</p>
@@ -218,6 +217,7 @@
                     <input
                       id="inputQtdTotal"
                       :value="qtdTotal.toFixed(2)"
+                      v-money="money"
                       disabled
                       type="text"
                       class="form-control"
@@ -293,7 +293,7 @@ export default {
       money: {
         decimal: ',',
         thousands: '.',
-        prefix: 'R$',
+        prefix: 'R$ ',
         precision: 2
       },
       participantes: [],
@@ -484,61 +484,10 @@ export default {
     },
 
     escutaQuantidades () {
-      let remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.') // não está funcionando a matemática aqui
-
-      console.log(remuneracao)
-      // console.log(remuneracao)
+      let remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       let encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       let beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.carregaQuantidade(remuneracao, encargos, beneficios)
-    },
-    formatarRemuneracao () {
-      var elemento = document.getElementById('remuneracaoModal')
-      var valor = elemento.value
-      valor = valor + ''
-      valor = parseInt(valor.replace(/[\D]+/g, ''))
-      valor = valor + ''
-      valor = valor.replace(/([0-9]{2})$/g, ',$1')
-
-      if (valor.length > 6) {
-        valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
-      }
-
-      elemento.value = valor
-      if (valor == 'NaN') elemento.value = ''
-      this.escutaQuantidades()
-    },
-    formatarEncargos () {
-      var elemento = document.getElementById('encargosModal')
-      var valor = elemento.value
-      valor = valor + ''
-      valor = parseInt(valor.replace(/[\D]+/g, ''))
-      valor = valor + ''
-      valor = valor.replace(/([0-9]{2})$/g, ',$1')
-
-      if (valor.length > 6) {
-        valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
-      }
-
-      elemento.value = valor
-      if (valor == 'NaN') elemento.value = ''
-      this.escutaQuantidades()
-    },
-    formatarBeneficios () {
-      var elemento = document.getElementById('beneficiosModal')
-      var valor = elemento.value
-      valor = valor + ''
-      valor = parseInt(valor.replace(/[\D]+/g, ''))
-      valor = valor + ''
-      valor = valor.replace(/([0-9]{2})$/g, ',$1')
-
-      if (valor.length > 6) {
-        valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
-      }
-
-      elemento.value = valor
-      if (valor == 'NaN') elemento.value = ''
-      this.escutaQuantidades()
     },
     carregaQuantidade (remun, encarg, benef) {
       remun = parseFloat(remun)

@@ -90,14 +90,15 @@
       <div class="teste row g-2 g-lg-3">
         <div
           class="botãoFinal col-xl-7"
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          
         >
           <button
             id="botaoAdicionarManualmente"
             type="button"
             class="btn-lg btnAdicionar none"
             v-on:click="mostrarInstrutor()"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
           >
             ADICIONAR SALÁRIO
           </button>
@@ -145,7 +146,7 @@
                 >
               </select>
             </div>
-            <p id="erroNome" class="erro none">Por favor selecione um participante</p>
+            <p id="erroNome" class="erro none">Por favor selecione um instrutor</p>
             <label id="modalconteudo">Data</label>
             <div class="input-group input-group-lg">
               <input
@@ -174,11 +175,10 @@
                 <label id="modalconteudo">Horas trabalhadas</label>
                 <div class="input-group input-group-lg">
                   <input
+                    @input="escutaQuantidades"
                     id="horasTrabalhadasModal"
                     type="number"
                     class="form-control"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
                   />
                 </div>
                 <p id="erroHoras" class="erro none">O campo horas trabalhadas não pode ser vazio</p>
@@ -395,33 +395,32 @@ export default {
 
     escutaQuantidades () {
       let valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.','').replace(',','.')
-      let quantidadeHora = document.querySelector('#horasTrabalhadasModal')
-        .value
-      console.log(valorHora)
+      let quantidadeHora = document.querySelector('#horasTrabalhadasModal').value
+      console.log(quantidadeHora)
       this.carregaQuantidade(valorHora, quantidadeHora)
     },
-    formatarValorHora () {
-      var elemento = document.getElementById('valorHoraModal')
-      var valor = elemento.value
-      valor = valor + ''
-      valor = parseInt(valor.replace(/[\D]+/g, ''))
-      valor = valor + ''
-      valor = valor.replace(/([0-9]{2})$/g, ',$1')
+    // formatarValorHora () {
+    //   var elemento = document.getElementById('valorHoraModal')
+    //   var valor = elemento.value
+    //   valor = valor + ''
+    //   valor = parseInt(valor.replace(/[\D]+/g, ''))
+    //   valor = valor + ''
+    //   valor = valor.replace(/([0-9]{2})$/g, ',$1')
 
-      if (valor.length > 6) {
-        valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
-      }
-    },
+    //   if (valor.length > 6) {
+    //     valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
+    //   }
+    // },
 
     carregaQuantidade (valor, quantidade) {
       valor = parseFloat(valor)
       quantidade = parseInt(quantidade)
 
-      if (isNaN(valorHora)) {
-        valorHora = 0
+      if (isNaN(valor)) {
+        valor = 0
       }
-      if (isNaN(quantidadeHora)) {
-        quantidadeHora = 0
+      if (isNaN(quantidade)) {
+        quantidade = 0
       }
       this.qtdTotal = valor * quantidade
     },
