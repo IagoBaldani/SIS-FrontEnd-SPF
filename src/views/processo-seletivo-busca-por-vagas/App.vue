@@ -8,6 +8,7 @@
           <h1 class="mt-3 mb-3">Busca por processos seletivos:</h1>
         </div>
         <div class="col-lg-6"></div>
+        
       </div>
       <div class="row justify-content-evenly">
         <div class="col-lg-5">
