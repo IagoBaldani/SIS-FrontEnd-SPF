@@ -89,15 +89,13 @@ export default {
 
     this.getProcessoSeletivo(id)
   },
-  mounted () {
-    this.carregaQuantidade()
-  },
   methods: {
     getProcessoSeletivo (id) {
       http
         .get(`processo-seletivo/${id}`)
         .then(response => {
           this.processoSeletivo = response.data
+          this.total = this.processoSeletivo.qtdAprendiz + this.processoSeletivo.qtdEstagiario + this.processoSeletivo.qtdTrainee
         })
         .catch(error => {
           console.log(error)
@@ -119,13 +117,6 @@ export default {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
-    },
-    carregaQuantidade () {
-       let qtdAprendiz = document.querySelector('#qtdAprendiz').value
-       let qtdTrainee = document.querySelector('#qtdTrainee').value
-       let qtdEstagiario = document.querySelector('#qtdAprendiz').value
-       this.total = qtdAprendiz + qtdTrainee + qtdEstagiario
-       console.log(this.total)
     },
   }
 }

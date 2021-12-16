@@ -335,7 +335,7 @@ export default {
       var discAtualizar = document.getElementById('fileDisc').files[0]
       var curriculoAtualizar = document.getElementById('fileCurriculo').files[0]
       
-      if (tipo == 'edicao' && discAtualizar !=undefined && curriculoAtualizar !=undefined) {
+      if (tipo == 'edicao' && discAtualizar != undefined && curriculoAtualizar != undefined) {
         console.log('editando completo')
         console.log(curriculoAtualizar)
         console.log(discAtualizar)
@@ -500,10 +500,10 @@ export default {
       // var processoSeletivo = document.getElementById('inputProcessoSeletivo').value
       var provaPratica = document.getElementById('inputProvaPratica').value
       var discNota = document.getElementById('inputDisc').value
-      var curriculo = document.getElementById('fileCurriculo').value
-      var disc = document.getElementById('fileDisc').value
+      var curriculo = document.getElementById('fileCurriculo').files.length
+      var disc = document.getElementById('fileDisc').files.length
       var observacao = document.getElementById('inputObservacao').value
-      console.log(curriculo)
+      console.log(this.tipoReq)
       let erro = 0
       if (nome == '') {
         document.querySelector('#nomeErro').classList.remove('none')
@@ -569,15 +569,16 @@ export default {
       } else {
         document.querySelector('#observacaoErro').classList.add('none')
       }
-      if (curriculo == '' && this.tipo != 'edicao') {
+      if (curriculo == 0 && this.tipoReq == 'cadastro') {
         document.querySelector('#curriculoErro').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#curriculoErro').classList.add('none')
       }
-      if (disc == '' && this.tipo != 'edicao') {
+      if (disc == 0 && this.tipoReq == 'cadastro') {
         document.querySelector('#discFileErro').classList.remove('none')
         erro = 1
+        console.log('entrei errado mesmo')
       } else {
         document.querySelector('#discFileErro').classList.add('none')
       }
