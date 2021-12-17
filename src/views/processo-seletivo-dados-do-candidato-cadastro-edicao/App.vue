@@ -248,7 +248,13 @@ export default {
         idProcessoSeletivo: '',
         disc: '',
         curriculo: '',
-        dataFormatadaCerta: ''
+        dataFormatadaCerta: '',
+        email: '',
+        periodoCurso: '',
+        dataConclusao: '',
+        duracaoCurso: '',
+        endereco: '',
+        indicacaoVaga: ''
       },
       processosSeletivos: {},
       statusProcesso: '',
