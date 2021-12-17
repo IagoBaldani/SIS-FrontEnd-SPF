@@ -96,31 +96,31 @@
             <div class="row">
               <div class="col">
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Cargo: {{ cargoForm.cargo }}</span>
+                  <span id="cargoModal" class="informacoes-modal"></span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Bolsa auxílio: {{ cargoForm.bolsa }} </span>
+                  <span id="bolsaModal" class="informacoes-modal"></span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Benefícios: {{ cargoForm.beneficio }}</span>
+                  <span id="beneficioModal" class="informacoes-modal"></span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Convenio: {{ cargoForm.convenio }}</span>
+                  <span id="convenioModal" class="informacoes-modal"></span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Hora extra: {{ cargoForm.horaExtra }}</span>
+                  <span id="horaExtraModal" class="informacoes-modal"></span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Benefício Legislação: {{ cargoForm.beneficioLegislacao }}</span>
+                  <span id="beneficioLegislacaoModal" class="informacoes-modal"></span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Remuneração esporádica: {{ cargoForm.remunEsporadica }}</span>
+                  <span id="remunEsporadicaModal" class="informacoes-modal"></span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Remuneração extra: {{ cargoForm.remunExtra }}</span>
+                  <span id="remunExtraModal" class="informacoes-modal"></span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Alura: {{ cargoForm.alura }}</span>
+                  <span id="aluraModal" class="informacoes-modal"></span>
                 </div>
               </div>
             </div>
@@ -201,17 +201,6 @@ export default {
         remunExtra: '',
         alura: ''
       },
-      cargoForm: {
-        cargo: '',
-        bolsa: '',
-        beneficio: '',
-        convenio: '',
-        horaExtra: '',
-        beneficioLegislacao: '',
-        remunEsporadica: '',
-        remunExtra: '',
-        alura: ''
-      },
       cargosCadastrados: []
     }
   },
@@ -229,15 +218,25 @@ export default {
   },
   methods: {
     registrarDados () {
-      this.cargoForm.cargo = document.querySelector('#inputCargo').value
-      this.cargoForm.bolsa = document.querySelector('#inputBolsaAuxilio').value
-      this.cargoForm.beneficio = document.querySelector('#inputBeneficios').value
-      this.cargoForm.convenio = document.querySelector('#inputConvenio').value
-      this.cargoForm.horaExtra = document.querySelector('#inputHoraExtra').value
-      this.cargoForm.beneficioLegislacao = document.querySelector('#inputBeneficioLegislacao').value
-      this.cargoForm.remunEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value
-      this.cargoForm.remunExtra = document.querySelector('#inputRemuneracaoExtra').value
-      this.cargoForm.alura = document.querySelector('#inputAlura').value
+      this.cargos.cargo = document.querySelector('#inputCargo').value
+      this.cargos.bolsa = document.querySelector('#inputBolsaAuxilio').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargos.beneficio = document.querySelector('#inputBeneficios').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargos.convenio = document.querySelector('#inputConvenio').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargos.horaExtra = document.querySelector('#inputHoraExtra').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargos.beneficioLegislacao = document.querySelector('#inputBeneficioLegislacao').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargos.remunEsporadica = document.querySelector('#inputRemuneracaoEsporadica').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargos.remunExtra = document.querySelector('#inputRemuneracaoExtra').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.cargos.alura = document.querySelector('#inputAlura').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+
+      document.querySelector('#cargoModal').innerText = 'Cargo: ' + this.cargos.cargo
+      document.querySelector('#bolsaModal').innerText = ('Bolsa auxílio: R$ ' + this.cargos.bolsa).replace('.',',')
+      document.querySelector('#beneficioModal').innerText = ('Benefícios: R$ ' + this.cargos.beneficio).replace('.',',')
+      document.querySelector('#convenioModal').innerText = ('Convenio: R$ ' + this.cargos.convenio).replace('.',',')
+      document.querySelector('#horaExtraModal').innerText = ('Hora extra: R$ ' + this.cargos.horaExtra).replace('.',',')
+      document.querySelector('#beneficioLegislacaoModal').innerText = ('Benefício Legislação: R$ ' + this.cargos.beneficioLegislacao).replace('.',',')
+      document.querySelector('#remunEsporadicaModal').innerText = ('Remuneração esporádica: R$ ' + this.cargos.remunEsporadica).replace('.',',')
+      document.querySelector('#remunExtraModal').innerText = ('Remuneração extra: R$ ' + this.cargos.remunExtra).replace('.',',')
+      document.querySelector('#aluraModal').innerText = ('Alura: R$ ' + this.cargos.alura).replace('.',',')
     },
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()
@@ -273,18 +272,10 @@ export default {
       })
     },
     processarDados () {
-      let dados = this.pegaDadosUrl()
-      this.cargoForm.bolsa = this.cargoForm.bolsa.replace('R$ ', '').replace('.', '').replace(',', '.')
-      this.cargoForm.beneficio = this.cargoForm.beneficio.replace('R$ ', '').replace('.', '').replace(',', '.')
-      this.cargoForm.horaExtra = this.cargoForm.horaExtra.replace('R$ ', '').replace('.', '').replace(',', '.')
-      this.cargoForm.convenio = this.cargoForm.convenio.replace('R$ ', '').replace('.', '').replace(',', '.')
-      this.cargoForm.beneficioLegislacao = this.cargoForm.beneficioLegislacao.replace('R$ ', '').replace('.', '').replace(',', '.')
-      this.cargoForm.remunEsporadica = this.cargoForm.remunEsporadica.replace('R$ ', '').replace('.', '').replace(',', '.')
-      this.cargoForm.remunExtra = this.cargoForm.remunExtra.replace('R$ ', '').replace('.', '').replace(',', '.')
-      this.cargoForm.alura = this.cargoForm.alura.replace('R$ ', '').replace('.', '').replace(',', '.')      
+      let dados = this.pegaDadosUrl()     
       if (dados.tipo == 'cadastro') {
         http
-          .post('remuneracao', this.cargoForm)
+          .post('remuneracao', this.cargos)
           .then(response => {
             this.abrirModalCadastro()
             setTimeout(function () {
@@ -296,7 +287,7 @@ export default {
           })
       } else if (dados.tipo == 'edicao') {
         http
-          .put(`remuneracao/${dados.id}`, this.cargoForm)
+          .put(`remuneracao/${dados.id}`, this.cargos)
           .then(response => {
             this.abrirModal()
             setTimeout(function () {

@@ -65,7 +65,7 @@
           <fieldset disabled>
             <div>
               <label class="form-label mb-0 mt-3 titulo">Participantes totais</label>
-              <input name="qtdTotal" type="text" class="form-control" id="inputQtdTotal" placeholder="Quantidade total" disabled readonly v-model="formacoes.qtdTotal"/>
+              <input name="qtdTotal" type="text" class="form-control" id="inputQtdTotal" placeholder="Quantidade total" disabled readonly :value="qtdTotal"/>
             </div>
           </fieldset>
         </div>
@@ -221,9 +221,8 @@ export default {
         tipoDaPagina: ''
       },
       instrutores: {},
-      qtdTotal: {
       qtdTotal: ''
-      }
+
     }
   },
   beforeMount () {
@@ -236,7 +235,7 @@ export default {
     this.tipoTela = tipo
     if (tipo == 'edicao') {
       this.getProcesso(id)
-      this.formacoes.qtdTotal = this.formacoes.qtdTrainee + this.formacoes.qtdEstagiario + this.formacoes.qtdAprendiz
+      // this.formacoes.qtdTotal = this.formacoes.qtdTrainee + this.formacoes.qtdEstagiario + this.formacoes.qtdAprendiz
       this.tipo.tipoDaPagina = 'edicao'
     }
   },
@@ -265,10 +264,8 @@ export default {
         qtdA = 0
       }
 
-      let qtdTotal = 0
-      qtdTotal += qtdE + qtdT + qtdA
-      let elQtdTotal = document.querySelector('#inputQtdTotal')
-      elQtdTotal.value = qtdTotal
+      this.qtdTotal = qtdE + qtdT + qtdA
+      
     },
     geraFormulario () {
       this.formacoesForm.nome = document.querySelector('#inputNome').value
@@ -379,6 +376,7 @@ export default {
         .get(`processo-seletivo/${id}`)
         .then(response => {
           this.formacoes = response.data
+          this.qtdTotal = response.data.qtdTrainee + response.data.qtdEstagiario + response.data.qtdAprendiz
         })
         .catch(error => {
           console.log(error)
