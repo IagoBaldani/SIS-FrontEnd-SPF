@@ -52,8 +52,7 @@
         <div class="col-xl-4">
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputTerminoGraduacao">Término da graduação</label>
-              <input  class="form-control" id="inputTerminoGraduacao"  type="date" v-model="cadastroParticipanteForm.terminoGraduacao">
-              <p id="erroTerminoGraduacao" class="none erro">Por favor, preencha este campo</p>
+              <input  class="form-control" id="inputTerminoGraduacao"  type="date" :placeholder="formataDataParaMostrar(candidato.dataConclusao)" disabled>
             </div>
             <div class="mb-3">
                 <label for="cargo"  id="selectRemuneracao" class="form-label fw-bold h5 titulo">Cargo</label>
@@ -137,7 +136,7 @@
                 <li>Nota na prova lógica: <span class="titulo"> {{candidato.testeLogico}}</span> </li>
                 <li>Instituição de Ensino: <span class="titulo"> {{cadastroParticipanteForm.instituicaoEnsino}} </span></li>
                 <li>Curso: <span class="titulo"> {{cadastroParticipanteForm.curso}} </span></li>
-                <li>Término da Graduação: <span class="titulo"> {{formataDataParaMostrar(cadastroParticipanteForm.terminoGraduacao)}} </span></li>
+                <li>Término da Graduação: <span class="titulo"> {{formataDataParaMostrar(candidato.dataConclusao)}} </span></li>
                 <li>Cargo: <span class="titulo">{{ cargo.cargo }}</span></li>
                 <li>Email: <span class="titulo">{{ cadastroParticipanteForm.email }}</span></li>
                 <!-- <li>Salário: <span class="titulo"> {{participante.salario}}</span></li> -->
@@ -254,7 +253,6 @@ export default {
       formData.append('cpf', this.cadastroParticipanteForm.cpf) 
       formData.append('instituicaoEnsino', this.cadastroParticipanteForm.instituicaoEnsino)
       formData.append('curso', this.cadastroParticipanteForm.curso) 
-      formData.append('terminoGraduacao', document.getElementById('inputTerminoGraduacao').value)
       formData.append('idRemuneracao', this.remuneracao.id)
       formData.append('idCandidato', this.id)
       formData.append('idPrograma', document.getElementById('selectTurma').value)
@@ -338,7 +336,6 @@ export default {
       var cpf = document.getElementById('inputCpf').value
       var instituicaoEnsino = document.getElementById('inputInstEnsino').value
       var curso = document.getElementById('inputCurso').value
-      var terminoGraduacao = document.getElementById('inputTerminoGraduacao').value
       var cargo = document.getElementById('filtro-programa').value
       var email = document.getElementById('inputEmail').value
       var turma = document.getElementById('selectTurma').value
@@ -367,12 +364,6 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroCurso').classList.add('none')
-      }
-      if (terminoGraduacao == '') {
-        document.querySelector('#erroTerminoGraduacao').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroTerminoGraduacao').classList.add('none')
       }
       if (cargo == '') {
         document.querySelector('#erroCargo').classList.remove('none')

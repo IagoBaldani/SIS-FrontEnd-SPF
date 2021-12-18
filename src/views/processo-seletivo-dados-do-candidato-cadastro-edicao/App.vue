@@ -36,6 +36,18 @@
           </div>
 
           <div class="mt-4 mb-3">
+            <label class="label-form" >Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="inputEmail"
+              :value="candidato.email"
+            />
+            <p id="emailErro" class="none erro">Por favor, preencha o campo Email</p>
+            <p id="emailErroValidacao" class="none erro">Por favor, insira um e-mail válido</p>
+          </div>
+
+          <div class="mt-4 mb-3">
             <label class="label-form" >Fonte de recrutamento</label>
             <input
               type="text"
@@ -47,7 +59,18 @@
           </div>
 
           <div class="mt-4 mb-3">
-            <label class="label-form">Data agendamento</label>
+            <label class="label-form" >Indicação</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputIndicacao"
+              :value="candidato.indicacaoVaga"
+            />
+            <p id="indicacaoErro" class="none erro">Por favor, preencha o campo Indicação</p>
+          </div>
+
+          <div class="mt-4 mb-3">
+            <label class="label-form">Data de contato</label>
             <input
               type="date"
               class="form-control"
@@ -55,8 +78,20 @@
               placeholder="2021/02/15"
               :value="candidato.dataAgendamento"
             />
-            <p id="dataErro" class="none erro">Por favor, preencha o campo data agendamento</p>
+            <p id="dataErro" class="none erro">Por favor, preencha o campo Data de contato</p>
           </div>
+
+          <div class="mt-4 mb-3">
+            <label class="label-form" >Endereço</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputEndereco"
+              :value="candidato.endereco"
+            />
+            <p id="enderecoErro" class="none erro">Por favor, preencha o campo Endereço</p>
+          </div>
+
           <div class="mt-0">
             <label class="label-form titulo mb-0">Resultado</label>
             <select class="form-select" :value="candidato.status" id="status">
@@ -70,6 +105,7 @@
             </select>
             <p id="resultadoErro" class="none erro">Por favor, preencha o campo resultado</p>
           </div>
+
         </div>
         <div class="col-md-4">
           <div class="mb-3">
@@ -90,10 +126,49 @@
             <p id="erroProvaPratica" class="none erro">A nota deve ser entre 0 - 10</p>
           </div>
 
-          <div class="mb-3">
-            <label class="label-form">DISC</label>
-            <input type="text" class="form-control" id="inputDisc" v-mask="['d:## i:## s:## c:##']"  placeholder="Digite a nota do DISC" :value="candidato.notaDisc"/>
-            <p id="discErro" class="none erro">Por favor, preencha o campo DISC</p>
+          <div class="mt-4 mb-3">
+            <label class="label-form">Data de conclusão</label>
+            <input
+              type="date"
+              class="form-control"
+              id="inputDataConclusao"
+              placeholder="2021/02/15"
+              :value="candidato.dataConclusao"
+            />
+            <p id="dataErro" class="none erro">Por favor, preencha o campo data conclusao</p>
+          </div>
+
+          <div class="mt-4 mb-3">
+            <label class="label-form" >Semestre cursado</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputSemestreCursado"
+              :value="candidato.semestreFaculdade"
+            />
+            <p id="semestreErro" class="none erro">Por favor, preencha o campo Semestre cursado</p>
+          </div>
+
+          <div class="mt-4 mb-3">
+            <label class="label-form" >Período Cursado</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputPeriodoCursado"
+              :value="candidato.periodoCurso"
+            />
+            <p id="periodoErro" class="none erro">Por favor, preencha o campo Periodo cursado</p>
+          </div>
+
+          <div class="mt-4 mb-3">
+            <label class="label-form" >Duração do curso</label>
+            <input
+              type="text"
+              class="form-control"
+              id="inputDuracaoCurso"
+              :value="candidato.duracaoCurso"
+            />
+            <p id="Erro" class="none erro">Por favor, preencha o campo Duração do curso</p>
           </div>
 
           <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal"></p>
@@ -167,10 +242,17 @@
                                 <li>Nome: <span class="titulo"> {{ candidato.nome }} </span></li>
                                 <li>Contato: <span class="titulo"> {{ candidato.telefone }} </span></li>
                                 <li>Fonte de Recrutamento: <span class="titulo"> {{ candidato.fonteRecrutamento}} </span></li>
-                                <li>Data de Agendamento: <span class="titulo">{{ this.formataDataParaMostrar(candidato.dataAgendamento) }}</span></li>
+                                <li>Indicação: <span class="titulo">{{ candidato.indicacaoVaga}}</span></li>
+                                <li>Data de Contato: <span class="titulo">{{ this.formataDataParaMostrar(candidato.dataAgendamento) }}</span></li>
                                 <li>Observação: <span class="titulo">{{ candidato.observacao }}</span></li>
                                 <li>Status: <span class="titulo">{{ candidato.status }}</span></li>
                                 <li>Processo Seletivo: <span class="titulo">{{ candidato.idProcessoSeletivo}}</span></li>
+                                <li>Email: <span class="titulo">{{ candidato.email}}</span></li>
+                                <li>Semestre cursado: <span class="titulo">{{ candidato.semestreFaculdade}}</span></li>
+                                <li>Período Cursado: <span class="titulo">{{ candidato.periodoCurso}}</span></li>
+                                <li>Duração do curso: <span class="titulo">{{ candidato.duracaoCurso}}</span></li>
+                                <li>Data conclusao: <span class="titulo">{{  this.formataDataParaMostrar(candidato.dataConclusao)}}</span></li>
+                                <li>Endereço: <span class="titulo">{{ candidato.endereco}}</span></li>
                             </ul>
                         </div>
                         <div class="mt-3 modal-footer border-0 justify-content-around">
@@ -235,12 +317,34 @@ export default {
   data () {
     return {
       candidato: {},
+      candidatoForm: {
+        id: '',
+        nome: '',
+        telefone: '',
+        fonteRecrutamento: '',
+        dataAgendamento: '',
+        testeLogico: '',
+        notaDisc: '',
+        observacao: '',
+        status: '',
+        idProcessoSeletivo: '',
+        disc: '',
+        curriculo: '',
+        dataFormatadaCerta: '',
+        email: '',
+        periodoCurso: '',
+        dataConclusao: '',
+        duracaoCurso: '',
+        endereco: '',
+        indicacaoVaga: ''
+      },
       processosSeletivos: {},
       statusProcesso: '',
       idRetorno: '',
       tipoReq: '',
       statusParticipante: '',
-      idRetornoNome:'', 
+      idRetornoNome:'',
+      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     }
   },
   beforeMount () {
@@ -286,10 +390,16 @@ export default {
       this.candidato.fonteRecrutamento = document.querySelector('#inputFonteDeRecrutamento').value
       this.candidato.dataAgendamento = document.querySelector('#inputDataAgendamento').value
       this.candidato.testeLogico = document.querySelector('#inputProvaPratica').value
-      this.candidato.notaDisc = document.querySelector('#inputDisc').value
       this.candidato.observacao = document.querySelector('#inputObservacao').value
       this.candidato.status = document.querySelector('#status').value
       this.candidato.idProcessoSeletivo = this.idRetorno
+      this.candidato.email = document.querySelector('#inputEmail').value
+      this.candidato.semestreFaculdade = document.querySelector('#inputSemestreCursado').value
+      this.candidato.periodoCurso = document.querySelector('#inputPeriodoCursado').value
+      this.candidato.dataConclusao = document.querySelector('#inputDataConclusao').value
+      this.candidato.duracaoCurso = document.querySelector('#inputDuracaoCurso').value
+      this.candidato.endereco = document.querySelector('#inputEndereco').value
+      this.candidato.indicacaoVaga = document.querySelector('#inputIndicacao').value
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -332,12 +442,20 @@ export default {
         formDataAtualizar.append('telefone', this.candidato.telefone)
         formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
         formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
-        formDataAtualizar.append('notaDisc', this.candidato.notaDisc)
         formDataAtualizar.append('observacao', this.candidato.observacao)
         formDataAtualizar.append('status', this.candidato.status)
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('disc', discAtualizar)
         formDataAtualizar.append('curriculo', curriculoAtualizar)
+        formDataAtualizar.append('email', this.candidato)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
+        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
+        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('endereco', this.candidato.endereco)
+        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
+        
+
         http
           .put(`candidato/${id}`, formDataAtualizar, {
             headers: {
@@ -362,11 +480,17 @@ export default {
         formDataAtualizar.append('telefone', this.candidato.telefone)
         formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
         formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
-        formDataAtualizar.append('notaDisc', this.candidato.notaDisc)
         formDataAtualizar.append('observacao', this.candidato.observacao)
         formDataAtualizar.append('status', this.candidato.status)
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('curriculo', curriculoAtualizar)
+        formDataAtualizar.append('email', this.candidato)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
+        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
+        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('endereco', this.candidato.endereco)
+        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
         http
           .put(`candidato/${id}`, formDataAtualizar, {
             headers: {
@@ -391,11 +515,17 @@ export default {
         formDataAtualizar.append('telefone', this.candidato.telefone)
         formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
         formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
-        formDataAtualizar.append('notaDisc', this.candidato.notaDisc)
         formDataAtualizar.append('observacao', this.candidato.observacao)
         formDataAtualizar.append('status', this.candidato.status)
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('disc', discAtualizar)
+        formDataAtualizar.append('email', this.candidato)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
+        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
+        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('endereco', this.candidato.endereco)
+        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
         http
           .put(`candidato/${id}`, formDataAtualizar, {
             headers: {
@@ -420,10 +550,16 @@ export default {
         formDataAtualizar.append('telefone', this.candidato.telefone)
         formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
         formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
-        formDataAtualizar.append('notaDisc', this.candidato.notaDisc)
         formDataAtualizar.append('observacao', this.candidato.observacao)
         formDataAtualizar.append('status', this.candidato.status)
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
+        formDataAtualizar.append('email', this.candidato)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
+        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
+        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('endereco', this.candidato.endereco)
+        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
         http
           .put(`candidato/${id}`, formDataAtualizar, {
             headers: {
@@ -449,12 +585,18 @@ export default {
         formData.append('telefone', this.candidato.telefone)
         formData.append('dataAgendamento', this.candidato.dataAgendamento)
         formData.append('testeLogico', this.candidato.testeLogico)
-        formData.append('notaDisc', this.candidato.notaDisc)
         formData.append('observacao', this.candidato.observacao)
         formData.append('status', this.candidato.status)
         formData.append('idProcessoSeletivo', this.idRetorno)
         formData.append('disc', disc)
         formData.append('curriculo', curriculo)
+        formData.append('email', this.candidato)
+        formData.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formData.append('periodoCurso', this.candidato.periodoCurso)
+        formData.append('dataConclusao', this.candidato.dataConclusao)
+        formData.append('duracaoCurso', this.candidato.duracaoCurso)
+        formData.append('endereco', this.candidato.endereco)
+        formData.append('indicacaoVaga', this.candidato.indicacaoVaga)
         http
           .post('candidato', formData, {
             headers: {
@@ -484,10 +626,17 @@ export default {
       var resultado = document.getElementById('status').value
       // var processoSeletivo = document.getElementById('inputProcessoSeletivo').value
       var provaPratica = document.getElementById('inputProvaPratica').value
-      var discNota = document.getElementById('inputDisc').value
       var curriculo = document.getElementById('fileCurriculo').files.length
       var disc = document.getElementById('fileDisc').files.length
       var observacao = document.getElementById('inputObservacao').value
+      var email = document.querySelector('#inputEmail').value
+      var semestre = document.querySelector('#inputSemestreCursado').value
+      var periodo = document.querySelector('#inputPeriodoCursado').value
+      var dataConclusao = document.querySelector('#inputDataConclusao').value
+      var duracaoCurso = document.querySelector('#inputDuracaoCurso').value
+      var endereco = document.querySelector('#inputEndereco').value   
+      var indicacao = document.querySelector('#inputIndicacao').value
+    
       let erro = 0
       if (nome == '') {
         document.querySelector('#nomeErro').classList.remove('none')
@@ -530,6 +679,30 @@ export default {
       // } else {
       //   document.querySelector('#processoErro').classList.add('none')
       // }
+      if (!this.reg.test(email) && email != '') {
+        erro = 1
+        document.querySelector('#emailErroValidacao').classList.remove('none')
+      } else {
+        document.querySelector('#emailErroValidacao').classList.add('none')
+      }
+      if (email == '') {
+        document.querySelector('#emailErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#emailErro').classList.add('none')
+      }
+      if (endereco == '') {
+        document.querySelector('#enderecoErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#enderecoErro').classList.add('none')
+      }
+      if (indicacao == '') {
+        document.querySelector('#indicacaoErro').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#indicacaoErro').classList.add('none')
+      }
       if (provaPratica == '') {
         document.querySelector('#provaErro').classList.remove('none')
         erro = 1
@@ -541,12 +714,6 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroProvaPratica').classList.add('none')
-      }
-      if (discNota == '') {
-        document.querySelector('#discErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#discErro').classList.add('none')
       }
       if (observacao == '') {
         document.querySelector('#observacaoErro').classList.remove('none')
