@@ -180,7 +180,6 @@
                     />
                   </div>
                   <p id="erroRemun" class="erro none">O campo remuneração não pode ser vazio</p>
-                  <p id="erroRemunQuantidade" class="erro none">Valor alto demais!</p>
                 </div>
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Encargos</label>
@@ -192,8 +191,6 @@
                       v-money="money"
                     />
                   </div>
-                  <p id="erroEncargos" class="erro none">Por favor digite um valor válido, se for o caso digite 0</p>
-                  <p id="erroEncargosQuantidade" class="erro none">Valor alto demais!</p>
                 </div>
               </div>
               <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
@@ -208,8 +205,7 @@
                       v-money="money"
                     />
                   </div>
-                  <p id="erroBeneficios" class="erro none">Por favor digite um valor válido, se for o caso digite 0</p>
-                  <p id="erroBeneficiosQuantidade" class="erro none">Valor alto demais!</p>
+                  <p id="erroBeneficios" class="erro none">Por favor digite um valor válido</p>
                 </div>
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Total</label>
@@ -365,10 +361,13 @@ export default {
     validaFormModal () {
       var participante = document.querySelector('#nomeModal').value
       var dataLancamento = document.querySelector('#mesAnoModal').value
-      var remuneracao = document.querySelector('#remuneracaoModal').value
-      var encargos = document.querySelector('#encargosModal').value
-      var beneficios = document.querySelector('#beneficiosModal').value
+      var remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      var encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      var beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       var observacao = document.querySelector('#descricaoModal').value
+      console.log(remuneracao)
+      console.log(encargos)
+      console.log(beneficios)
       let erro = 0
       if (participante == 'Participante') {
         document.querySelector('#erroNome').classList.remove('none')
@@ -382,41 +381,17 @@ export default {
       } else {
         document.querySelector('#erroData').classList.add('none')
       }
-      if (remuneracao == '') {
+      if (remuneracao == 0.00) {
         document.querySelector('#erroRemun').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroRemun').classList.add('none')
       }
-      if (remuneracao > 10000) {
-        document.querySelector('#erroRemunQuantidade').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroRemunQuantidade').classList.add('none')
-      }
-      if (encargos == '') {
-        document.querySelector('#erroEncargos').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroEncargos').classList.add('none')
-      }
-      if (encargos > 10000) {
-        document.querySelector('#erroEncargosQuantidade').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroEncargosQuantidade').classList.add('none')
-      }
-      if (beneficios == '') {
+      if (beneficios == 0.00) {
         document.querySelector('#erroBeneficios').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroBeneficios').classList.add('none')
-      }
-      if (beneficios > 10000) {
-        document.querySelector('#erroBeneficiosQuantidade').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroBeneficiosQuantidade').classList.add('none')
       }
       if (observacao == '') {
         document.querySelector('#erroObservacao').classList.remove('none')

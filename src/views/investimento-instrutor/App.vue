@@ -169,7 +169,6 @@
                   />
                 </div>
                 <p id="erroValorHora" class="erro none">O campo valor hora não pode ser vazio</p>
-                <p id="erroValorHoraQuantidade" class="erro none">Valor alto demais!</p>
               </div>
               <div class="modalitens col-xl-6">
                 <label id="modalconteudo">Horas trabalhadas</label>
@@ -182,7 +181,6 @@
                   />
                 </div>
                 <p id="erroHoras" class="erro none">O campo horas trabalhadas não pode ser vazio</p>
-                <p id="erroHorasQuantidade" class="erro none">Valor alto demais!</p>
               </div>
             </div>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
@@ -322,8 +320,8 @@ export default {
     validaFormModal () {
       var participante = document.querySelector('#nomeModal').value
       var dataLancamento = document.querySelector('#mesAnoModal').value
-      var valorHora = document.querySelector('#valorHoraModal').value
-      var horasTrabalhadas = document.querySelector('#horasTrabalhadasModal').value
+      var valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      var horasTrabalhadas = document.querySelector('#horasTrabalhadasModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       let erro = 0
       if (participante == 'Instrutor') {
         document.querySelector('#erroNome').classList.remove('none')
@@ -337,29 +335,17 @@ export default {
       } else {
         document.querySelector('#erroData').classList.add('none')
       }
-      if (valorHora == '') {
+      if (valorHora == 0.0) {
         document.querySelector('#erroValorHora').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroValorHora').classList.add('none')
       }
-      if (valorHora > 10000) {
-        document.querySelector('#erroValorHoraQuantidade').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroValorHoraQuantidade').classList.add('none')
-      }
-      if (horasTrabalhadas == '') {
+      if (horasTrabalhadas == 0.0) {
         document.querySelector('#erroHoras').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroHoras').classList.add('none')
-      }
-      if (horasTrabalhadas > 1000) {
-        document.querySelector('#erroHorasQuantidade').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroHorasQuantidade').classList.add('none')
       }
       if (erro == 1) {
         return false
@@ -371,7 +357,7 @@ export default {
     inserirInvestimento () {
       this.form.cpf = document.querySelector('#nomeModal').value
       this.form.mesAno = document.querySelector('#mesAnoModal').value
-      this.form.valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.', '').replace(',','.')
+      this.form.valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.form.horasTrabalhadas = document.querySelector(
         '#horasTrabalhadasModal'
       ).value
@@ -394,24 +380,11 @@ export default {
     },
 
     escutaQuantidades () {
-      let valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.','').replace(',','.')
+      let valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       let quantidadeHora = document.querySelector('#horasTrabalhadasModal').value
       console.log(quantidadeHora)
       this.carregaQuantidade(valorHora, quantidadeHora)
     },
-    // formatarValorHora () {
-    //   var elemento = document.getElementById('valorHoraModal')
-    //   var valor = elemento.value
-    //   valor = valor + ''
-    //   valor = parseInt(valor.replace(/[\D]+/g, ''))
-    //   valor = valor + ''
-    //   valor = valor.replace(/([0-9]{2})$/g, ',$1')
-
-    //   if (valor.length > 6) {
-    //     valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, '.$1,$2')
-    //   }
-    // },
-
     carregaQuantidade (valor, quantidade) {
       valor = parseFloat(valor)
       quantidade = parseInt(quantidade)
