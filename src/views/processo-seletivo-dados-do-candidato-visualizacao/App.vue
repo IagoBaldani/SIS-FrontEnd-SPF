@@ -23,7 +23,7 @@
                             </div>
                              <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Email</label>
-                                <input name="emailCandidato" type="email" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.email">
+                                <input name="emailCandidato" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.email">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Fonte de Recrutamento</label>
@@ -60,15 +60,15 @@
                         <fieldset disabled> 
                           <div class="mb-3">
                               <label class="form-label mb-0 titulo">Data de conclusão</label>
-                              <input name="dataConclusao" type="date" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.dataConclusao">
+                              <input name="dataConclusao" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="formataDataParaMostrar(candidato.dataConclusao)">
                             </div>
                             <div class="mb-3">
                               <label class="form-label mb-0 titulo">Semestre Cursado</label>
-                              <input name="semestreCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.semestreCursado">
+                              <input name="semestreCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.semestre">
                             </div>
                             <div class="mb-3">
                               <label class="form-label mb-0 titulo">Periodo Cursado</label>
-                              <input name="peridodoCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.peridodoCursado">
+                              <input name="peridodoCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.periodoCurso">
                             </div>
                             <div class="mb-3">
                               <label class="form-label mb-0 titulo">Duração do Curso</label>
