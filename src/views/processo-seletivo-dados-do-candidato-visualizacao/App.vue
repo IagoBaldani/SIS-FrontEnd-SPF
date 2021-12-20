@@ -21,13 +21,29 @@
                                 <label class="form-label mb-0 titulo">Contato</label>
                                 <input name="contato" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.telefone">
                             </div>
+                             <div class="mb-3">
+                                <label class="form-label mb-0 titulo">Email</label>
+                                <input name="emailCandidato" type="email" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.email">
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Fonte de Recrutamento</label>
                                 <input name="fonteRecrutamento" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.fonteRecrutamento">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label mb-0 titulo">Data Agendamento</label>
+                             <label class="form-label mb-0 titulo">indicacao</label>
+                                <input name="indicacao" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.indicacaoVaga">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label mb-0 titulo">Data de Contato</label>
                                 <input name="dataAgendamento" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="formataDataParaMostrar(candidato.dataAgendamento)">
+                            </div>
+                             <div class="mb-3">
+                                <label class="form-label mb-0 titulo">Endereço</label>
+                                <input name="endereco" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.endereco">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label mb-0 titulo">Prova prática</label>
+                                <input name="provaPratica" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.testeLogico">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Status</label>
@@ -41,19 +57,28 @@
                         </fieldset>
                     </div>
                     <div class="col-lg-4">
-                        <fieldset disabled>
+                        <fieldset disabled> 
+                          <div class="mb-3">
+                              <label class="form-label mb-0 titulo">Data de conclusão</label>
+                              <input name="dataConclusao" type="date" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.dataConclusao">
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label mb-0 titulo">Semestre Cursado</label>
+                              <input name="semestreCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.semestreCursado">
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label mb-0 titulo">Periodo Cursado</label>
+                              <input name="peridodoCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.peridodoCursado">
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label mb-0 titulo">Duração do Curso</label>
+                              <input name="duracaoDoCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.duracaoCurso">
+                            </div>
                             <div class="mb-3">
                               <label class="form-label mb-0 titulo">Processo Seletivo</label>
-                              <input name="provaPratica" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.processoSeletivo">
+                              <input name="processoSeletivo" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.processoSeletivo">
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label mb-0 titulo">Prova prática</label>
-                                <input name="provaPratica" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.testeLogico">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label mb-0 titulo">DISC</label>
-                                <input name="disc" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.notaDisc">
-                            </div>
+                            
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo ">Currículo candidato</label><br>
                                 <p @click="downloadCurriculo"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">curriculo.pdf</p>
