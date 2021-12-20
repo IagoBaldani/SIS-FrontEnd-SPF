@@ -1,5 +1,5 @@
 <template>
-  <Header :link="`../processo-seletivo-busca-por-candidato?id=${this.idRetorno}` 
+  <Header :link="`../processo-seletivo-busca-por-candidato?id=${this.idRetorno}`
     + `&status=${this.statusProcesso}`"   />
   <main>
     <div class="container-fluid">
@@ -113,7 +113,7 @@
             <select id="inputProcessoSeletivo" class="form-select" :value-="candidato.processoSeletivoId">
               <option selected value="0">Selecione o Processo Seletivo</option>
               <template v-for="processo in processosSeletivos" v-bind:key="processo">
-                <option v-bind:value="processo.id" v-if="processo.status != 'FINALIZADA'">{{ processo.id }} - {{ processo.nome }}</option> 
+                <option v-bind:value="processo.id" v-if="processo.status != 'FINALIZADA'">{{ processo.id }} - {{ processo.nome }}</option>
               </template>
             </select> -->
             <!-- <input type="txt"  class="form-control" id="inputProcesso" disabled display="none" v-bind:value="this.idRetorno" /> -->
@@ -134,6 +134,7 @@
               id="inputDataConclusao"
               placeholder="2021/02/15"
               :value="candidato.dataConclusao"
+              @change="habilitaCampos()"
             />
             <p id="dataErro" class="none erro">Por favor, preencha o campo data conclusao</p>
           </div>
@@ -145,6 +146,7 @@
               class="form-control"
               id="inputSemestreCursado"
               :value="candidato.semestreFaculdade"
+              disabled
             />
             <p id="semestreErro" class="none erro">Por favor, preencha o campo Semestre cursado</p>
           </div>
@@ -156,6 +158,7 @@
               class="form-control"
               id="inputPeriodoCursado"
               :value="candidato.periodoCurso"
+              disabled
             />
             <p id="periodoErro" class="none erro">Por favor, preencha o campo Periodo cursado</p>
           </div>
@@ -167,6 +170,7 @@
               class="form-control"
               id="inputDuracaoCurso"
               :value="candidato.duracaoCurso"
+              disabled
             />
             <p id="Erro" class="none erro">Por favor, preencha o campo Duração do curso</p>
           </div>
@@ -334,6 +338,7 @@ export default {
         email: '',
         periodoCurso: '',
         dataConclusao: '',
+        semestreFaculdade: '',
         duracaoCurso: '',
         endereco: '',
         indicacaoVaga: ''
@@ -343,7 +348,7 @@ export default {
       idRetorno: '',
       tipoReq: '',
       statusParticipante: '',
-      idRetornoNome:'',
+      idRetornoNome: '',
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     }
   },
@@ -357,8 +362,6 @@ export default {
     this.idRetorno = dadosUrl.idProcesso
     this.statusProcesso = dadosUrl.statusProcesso
     this.statusParticipante = dadosUrl.statusParticipante
-    
-
 
     console.log(this.tipoReq)
     if (tipo == 'edicao') {
@@ -430,13 +433,13 @@ export default {
       var discAtualizar = document.getElementById('fileDisc').files[0]
       var curriculoAtualizar = document.getElementById('fileCurriculo').files[0]
       var dataConclusao = document.getElementById('inputDataConclusao').value
-      
-      if (tipo == 'edicao' && discAtualizar != undefined && curriculoAtualizar != undefined) {
+
+      if (tipo == 'edicao' && discAtualizar != undefined && curriculoAtualizar != undefined && dataConclusao != '') {
         console.log('editando completo')
         console.log(curriculoAtualizar)
         console.log(discAtualizar)
-        
-        var formDataAtualizar = new FormData()  
+
+        var formDataAtualizar = new FormData()
         formDataAtualizar.append('id', this.id)
         formDataAtualizar.append('nome', this.candidato.nome)
         formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
@@ -451,11 +454,10 @@ export default {
         formDataAtualizar.append('email', this.candidato.email)
         formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
-        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
+        formDataAtualizar.append('dataConclusao', dataConclusao)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('endereco', this.candidato.endereco)
         formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
-        
 
         http
           .put(`candidato/${id}`, formDataAtualizar, {
@@ -467,14 +469,14 @@ export default {
             this.abrirModal()
             setTimeout(function () {
               window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
-            }, 1500) 
+            }, 1500)
           })
           .catch(error => {
             console.log(error)
           })
-      } else if (tipo == 'edicao' && discAtualizar ==undefined && curriculoAtualizar !=undefined) {
-        console.log('editando com curriculo')
-        formDataAtualizar = new FormData()  
+      } else if (tipo == 'edicao' && discAtualizar == undefined && curriculoAtualizar != undefined && dataConclusao == '') {
+        console.log('editando sem disc e dataConclusão')
+        formDataAtualizar = new FormData()
         formDataAtualizar.append('id', this.candidato.id)
         formDataAtualizar.append('nome', this.candidato.nome)
         formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
@@ -488,7 +490,6 @@ export default {
         formDataAtualizar.append('email', this.candidato.email)
         formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
-        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('endereco', this.candidato.endereco)
         formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
@@ -502,14 +503,151 @@ export default {
             this.abrirModal()
             setTimeout(function () {
               window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
-            }, 1500) 
+            }, 1500)
           })
           .catch(error => {
             console.log(error)
           })
-      } else if (tipo == 'edicao' && discAtualizar !=undefined && curriculoAtualizar ==undefined) {
-        console.log('editando com disc')
-        formDataAtualizar = new FormData()  
+      } else if (tipo == 'edicao' && discAtualizar == undefined && curriculoAtualizar == undefined && dataConclusao == '') {
+        console.log('editando sem curriculo sem disc sem data')
+        formDataAtualizar = new FormData()
+        formDataAtualizar.append('id', this.candidato.id)
+        formDataAtualizar.append('nome', this.candidato.nome)
+        formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
+        formDataAtualizar.append('telefone', this.candidato.telefone)
+        formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
+        formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
+        formDataAtualizar.append('observacao', this.candidato.observacao)
+        formDataAtualizar.append('status', this.candidato.status)
+        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
+        formDataAtualizar.append('email', this.candidato.email)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
+        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('endereco', this.candidato.endereco)
+        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
+        http
+          .put(`candidato/${id}`, formDataAtualizar, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
+            }, 1500)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } else if (tipo == 'edicao' && discAtualizar == undefined && curriculoAtualizar == undefined && dataConclusao != '') {
+        console.log('editando com curriculo com disc sem data')
+        formDataAtualizar = new FormData()
+        formDataAtualizar.append('id', this.candidato.id)
+        formDataAtualizar.append('nome', this.candidato.nome)
+        formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
+        formDataAtualizar.append('telefone', this.candidato.telefone)
+        formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
+        formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
+        formDataAtualizar.append('observacao', this.candidato.observacao)
+        formDataAtualizar.append('status', this.candidato.status)
+        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
+        formDataAtualizar.append('email', this.candidato.email)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
+        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('dataConclusao', dataConclusao)
+        formDataAtualizar.append('endereco', this.candidato.endereco)
+        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
+        http
+          .put(`candidato/${id}`, formDataAtualizar, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
+            }, 1500)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } else if (tipo == 'edicao' && discAtualizar == undefined && curriculoAtualizar != undefined && dataConclusao != '') {
+        console.log('editando com curriculo e data conclusao e sem disc')
+        formDataAtualizar = new FormData()
+        formDataAtualizar.append('id', this.candidato.id)
+        formDataAtualizar.append('nome', this.candidato.nome)
+        formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
+        formDataAtualizar.append('telefone', this.candidato.telefone)
+        formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
+        formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
+        formDataAtualizar.append('observacao', this.candidato.observacao)
+        formDataAtualizar.append('status', this.candidato.status)
+        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
+        formDataAtualizar.append('curriculo', curriculoAtualizar)
+        formDataAtualizar.append('email', this.candidato.email)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
+        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
+        formDataAtualizar.append('endereco', this.candidato.endereco)
+        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
+        http
+          .put(`candidato/${id}`, formDataAtualizar, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
+            }, 1500)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } else if (tipo == 'edicao' && discAtualizar != undefined && curriculoAtualizar != undefined && dataConclusao == '') {
+        console.log('editando com curriculo com disc e sem data')
+        formDataAtualizar = new FormData()
+        formDataAtualizar.append('id', this.candidato.id)
+        formDataAtualizar.append('nome', this.candidato.nome)
+        formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
+        formDataAtualizar.append('telefone', this.candidato.telefone)
+        formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
+        formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
+        formDataAtualizar.append('observacao', this.candidato.observacao)
+        formDataAtualizar.append('status', this.candidato.status)
+        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
+        formDataAtualizar.append('disc', discAtualizar)
+        formDataAtualizar.append('curriculo', curriculoAtualizar)
+        formDataAtualizar.append('email', this.candidato.email)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
+        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('endereco', this.candidato.endereco)
+        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
+        http
+          .put(`candidato/${id}`, formDataAtualizar, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
+            }, 1500)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      } else if (tipo == 'edicao' && discAtualizar != undefined && curriculoAtualizar == undefined && dataConclusao == '') {
+        console.log('editando com disc e sem curriculo e data')
+        formDataAtualizar = new FormData()
         formDataAtualizar.append('id', this.candidato.id)
         formDataAtualizar.append('nome', this.candidato.nome)
         formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
@@ -523,7 +661,6 @@ export default {
         formDataAtualizar.append('email', this.candidato.email)
         formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
-        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('endereco', this.candidato.endereco)
         formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
@@ -537,14 +674,14 @@ export default {
             this.abrirModal()
             setTimeout(function () {
               window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
-            }, 1500) 
+            }, 1500)
           })
           .catch(error => {
             console.log(error)
           })
-      } else if (tipo == 'edicao' && discAtualizar ==undefined && curriculoAtualizar ==undefined && dataConclusao == '' ) {
-        console.log('editando sem curriculo sem disc')
-        formDataAtualizar = new FormData()  
+      } else if (tipo == 'edicao' && discAtualizar != undefined && curriculoAtualizar == undefined && dataConclusao != '') {
+        console.log('editando com disc, data e sem curriculo')
+        formDataAtualizar = new FormData()
         formDataAtualizar.append('id', this.candidato.id)
         formDataAtualizar.append('nome', this.candidato.nome)
         formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
@@ -554,10 +691,12 @@ export default {
         formDataAtualizar.append('observacao', this.candidato.observacao)
         formDataAtualizar.append('status', this.candidato.status)
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
+        formDataAtualizar.append('disc', discAtualizar)
         formDataAtualizar.append('email', this.candidato.email)
         formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('dataConclusao', dataConclusao)
         formDataAtualizar.append('endereco', this.candidato.endereco)
         formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
         http
@@ -570,85 +709,12 @@ export default {
             this.abrirModal()
             setTimeout(function () {
               window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
-            }, 1500) 
+            }, 1500)
           })
           .catch(error => {
             console.log(error)
           })
-      } 
-       else if (tipo == 'edicao' && discAtualizar ==undefined && curriculoAtualizar ==undefined && dataConclusao != '' ) {
-        console.log('editando sem curriculo sem disc')
-        formDataAtualizar = new FormData()  
-        formDataAtualizar.append('id', this.candidato.id)
-        formDataAtualizar.append('nome', this.candidato.nome)
-        formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
-        formDataAtualizar.append('telefone', this.candidato.telefone)
-        formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
-        formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
-        formDataAtualizar.append('observacao', this.candidato.observacao)
-        formDataAtualizar.append('status', this.candidato.status)
-        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
-        formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
-        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
-        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
-        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
-        formDataAtualizar.append('endereco', this.candidato.endereco)
-        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
-        http
-          .put(`candidato/${id}`, formDataAtualizar, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          })
-          .then(response => {
-            this.abrirModal()
-            setTimeout(function () {
-              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
-            }, 1500) 
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
-      
-      else if (tipo == 'edicao' && discAtualizar ==undefined && curriculoAtualizar !=undefined && dataConclusao != '') {
-        console.log('editando com curriculo')
-        formDataAtualizar = new FormData()  
-        formDataAtualizar.append('id', this.candidato.id)
-        formDataAtualizar.append('nome', this.candidato.nome)
-        formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
-        formDataAtualizar.append('telefone', this.candidato.telefone)
-        formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
-        formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
-        formDataAtualizar.append('observacao', this.candidato.observacao)
-        formDataAtualizar.append('status', this.candidato.status)
-        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
-        formDataAtualizar.append('curriculo', curriculoAtualizar)
-        formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
-        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
-        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
-        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
-        formDataAtualizar.append('endereco', this.candidato.endereco)
-        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
-        http
-          .put(`candidato/${id}`, formDataAtualizar, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          })
-          .then(response => {
-            this.abrirModal()
-            setTimeout(function () {
-              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
-            }, 1500) 
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
-      else if (tipo == 'cadastro') {
+      } else if (tipo == 'cadastro') {
         var formData = new FormData()
         var disc = document.getElementById('fileDisc').files[0]
         var curriculo = document.getElementById('fileCurriculo').files[0]
@@ -680,8 +746,9 @@ export default {
             this.abrirModalCriacao()
             console.log(this.idRetorno)
             console.log(this.statusProcesso)
+            console.log(this.dataConclusao)
             setTimeout(function () {
-              // window.location.href = variavel.href = 'processo-seletivo-busca-por-candidato' + '?id=' + this.idRetorno +  
+              // window.location.href = variavel.href = 'processo-seletivo-busca-por-candidato' + '?id=' + this.idRetorno +
               //   + '&status=' + this.statusProcesso
               window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
             }, 1521)
@@ -689,6 +756,19 @@ export default {
           .catch(error => {
             console.log(error)
           })
+      }
+    },
+    habilitaCampos () {
+      let dataConclusao = document.querySelector('#inputDataConclusao').value
+
+      if (dataConclusao == '' || dataConclusao == null) {
+        document.querySelector('#inputDuracaoCurso').setAttribute('disabled')
+        document.querySelector('#inputPeriodoCursado').setAttribute('disabled')
+        document.querySelector('#inputSemestreCursado').setAttribute('disabled')
+      } else {
+        document.querySelector('#inputDuracaoCurso').removeAttribute('disabled')
+        document.querySelector('#inputPeriodoCursado').removeAttribute('disabled')
+        document.querySelector('#inputSemestreCursado').removeAttribute('disabled')
       }
     },
     validaForm () {
@@ -707,9 +787,9 @@ export default {
       var periodo = document.querySelector('#inputPeriodoCursado').value
       var dataConclusao = document.querySelector('#inputDataConclusao').value
       var duracaoCurso = document.querySelector('#inputDuracaoCurso').value
-      var endereco = document.querySelector('#inputEndereco').value   
+      var endereco = document.querySelector('#inputEndereco').value
       var indicacao = document.querySelector('#inputIndicacao').value
-    
+
       let erro = 0
       if (nome == '') {
         document.querySelector('#nomeErro').classList.remove('none')
@@ -814,10 +894,10 @@ export default {
       }
     },
     formataDataParaMostrar (data) {
-    const dataPreForm = new Date(data)
-    const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-    return dataFormatada
-  },
+      const dataPreForm = new Date(data)
+      const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
+      return dataFormatada
+    },
     pegaInstrutores () {
       http
         .get('processo-seletivo')
