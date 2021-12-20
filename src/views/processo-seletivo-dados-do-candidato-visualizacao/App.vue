@@ -60,7 +60,8 @@
                         <fieldset disabled> 
                           <div class="mb-3">
                               <label class="form-label mb-0 titulo">Data de conclusão</label>
-                              <input name="dataConclusao" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="formataDataParaMostrar(candidato.dataConclusao)">
+                              <input name="dataConclusao" type="text" class="form-control" id="disabledTextInput"  v-if="this.candidato.dataConclusao == null" placeholder="">
+                              <input name="dataConclusao" type="text" class="form-control" id="disabledTextInput"  v-else-if="this.candidato.dataConclusao != null" v-bind:placeholder="formataDataParaMostrar(candidato.dataConclusao)">
                             </div>
                             <div class="mb-3">
                               <label class="form-label mb-0 titulo">Semestre Cursado</label>
@@ -136,6 +137,7 @@ export default {
         .get(`candidato/${id}`)
         .then(response => {
           this.candidato = response.data
+          console.log(this.candidato.dataConclusao)
         })
         .catch(error => {
           console.log(error)

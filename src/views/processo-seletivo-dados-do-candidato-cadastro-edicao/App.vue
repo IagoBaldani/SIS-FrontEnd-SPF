@@ -575,7 +575,44 @@ export default {
           .catch(error => {
             console.log(error)
           })
-      } else if (tipo == 'edicao' && discAtualizar ==undefined && curriculoAtualizar !=undefined && dataConclusao != '') {
+      } 
+       else if (tipo == 'edicao' && discAtualizar ==undefined && curriculoAtualizar ==undefined && dataConclusao != '' ) {
+        console.log('editando sem curriculo sem disc')
+        formDataAtualizar = new FormData()  
+        formDataAtualizar.append('id', this.candidato.id)
+        formDataAtualizar.append('nome', this.candidato.nome)
+        formDataAtualizar.append('fonteRecrutamento', this.candidato.fonteRecrutamento)
+        formDataAtualizar.append('telefone', this.candidato.telefone)
+        formDataAtualizar.append('dataAgendamento', this.candidato.dataAgendamento)
+        formDataAtualizar.append('testeLogico', this.candidato.testeLogico)
+        formDataAtualizar.append('observacao', this.candidato.observacao)
+        formDataAtualizar.append('status', this.candidato.status)
+        formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
+        formDataAtualizar.append('email', this.candidato.email)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
+        formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
+        formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
+        formDataAtualizar.append('endereco', this.candidato.endereco)
+        formDataAtualizar.append('indicacaoVaga', this.candidato.indicacaoVaga)
+        http
+          .put(`candidato/${id}`, formDataAtualizar, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = variavel.href = 'processo-seletivo-busca-por-vagas'
+            }, 1500) 
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+      
+      else if (tipo == 'edicao' && discAtualizar ==undefined && curriculoAtualizar !=undefined && dataConclusao != '') {
         console.log('editando com curriculo')
         formDataAtualizar = new FormData()  
         formDataAtualizar.append('id', this.candidato.id)
