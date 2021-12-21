@@ -31,9 +31,9 @@
                         </div>
                         <div>
                             <!--<input class="input-file" type="file">-->
-                            <p class="form-label mb-0 fw-bold titulo d-block">Insira o arquivo</p>
+                            <p class="form-label mb-0 fw-bold titulo d-block">Insira o DISC</p>
                              <input type="file" class="form-control" id="campoDisc" 
-                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                             accept="application/pdf">
                         </div>
                         <button class="btn-registrar mt-4 " type="button" @click="validadorDeCampos()" >REGISTRAR</button>
                     </form>

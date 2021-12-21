@@ -368,7 +368,6 @@ export default {
     this.pegaInstrutores()
   },
   mounted () {
-    this.habilitaCamposEdicao()
     this.selectResultado()
   },
   methods: {
@@ -423,6 +422,7 @@ export default {
         .get(`candidato/${id}`)
         .then(response => {
           this.candidato = response.data
+          this.habilitaCamposEdicao(this.candidato)
         })
         .catch(error => {
           console.log(error)
@@ -775,14 +775,11 @@ export default {
         document.querySelector('#inputSemestreCursado').removeAttribute('disabled')
       }
     },
-    habilitaCamposEdicao () {
-      let dataConclusao = this.candidato.dataConclusao
+    habilitaCamposEdicao (candidato) {
+      let dataConclusao = candidato.dataConclusao
       const dados = this.pegaDadosUrl()
-      let tipo = dados.tipo
-      let d1 = new Date(dataConclusao)
-      if (tipo == 'edicao' && d1 == 'Invalid Date') {
-        console.log('foi feita uma gambiarra ' + d1 + ' ' + dataConclusao)
-      } else {
+      let tipo = dados.tipo      
+      if (tipo == 'edicao' && dataConclusao != null) {
         document.querySelector('#inputDuracaoCurso').removeAttribute('disabled')
         document.querySelector('#inputPeriodoCursado').removeAttribute('disabled')
         document.querySelector('#inputSemestreCursado').removeAttribute('disabled')
