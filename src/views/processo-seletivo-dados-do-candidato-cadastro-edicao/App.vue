@@ -94,14 +94,13 @@
 
           <div class="mt-0">
             <label class="label-form titulo mb-0">Resultado</label>
-            <select class="form-select" :value="candidato.status" id="status">
-              <!-- <option value="candadidato.status" selected >{{ candidato.status }}</option> -->
-              <option value="SEM_STATUS" >Sem status</option>
-              <option value="APROVADO_1_FASE" class="aprovado">Aprovado 1ª fase</option>
-              <option value="REPROVADO_1_FASE" class="reprovado">Reprovado 1ª fase</option>
-              <option value="APROVADO_2_FASE" class="aprovado">Aprovado 2ª fase</option>
-              <option value="REPROVADO_2_FASE" class="reprovado">Reprovado 2ª fase</option>
-              <option value="STANDBY" class="standby">Stand By</option>
+            <select class="form-select" id="status">
+              <option value="SEM_STATUS" id="semStatus">Sem status</option>
+              <option value="APROVADO_1_FASE" class="aprovado" id="aprovado1Fase">Aprovado 1ª fase</option>
+              <option value="REPROVADO_1_FASE" class="reprovado" id="reprovado1Fase">Reprovado 1ª fase</option>
+              <option value="APROVADO_2_FASE" class="aprovado" id="aprovado2Fase">Aprovado 2ª fase</option>
+              <option value="REPROVADO_2_FASE" class="reprovado" id="reprovado2Fase">Reprovado 2ª fase</option>
+              <option value="STANDBY" class="standby" id="standby">Stand By</option>
             </select>
             <p id="resultadoErro" class="none erro">Por favor, preencha o campo resultado</p>
           </div>
@@ -127,9 +126,8 @@
           </div>
 
           <div class="mt-4 mb-3">
-            <label class="label-form">Data de conclusão</label>
-            <input
-              type="date"
+            <label  class="label-form">Data de conclusão</label>
+            <input type="date"
               class="form-control"
               id="inputDataConclusao"
               placeholder="2021/02/15"
@@ -140,12 +138,12 @@
           </div>
 
           <div class="mt-4 mb-3">
-            <label class="label-form" >Semestre cursado</label>
+            <label  class="label-form" >Semestre cursado</label>
             <input
               type="text"
               class="form-control"
               id="inputSemestreCursado"
-              :value="candidato.semestreFaculdade"
+              :value="candidato.semestre"
               disabled
             />
             <p id="semestreErro" class="none erro">Por favor, preencha o campo Semestre cursado</p>
@@ -252,7 +250,7 @@
                                 <li>Status: <span class="titulo">{{ candidato.status }}</span></li>
                                 <li>Processo Seletivo: <span class="titulo">{{ candidato.idProcessoSeletivo}}</span></li>
                                 <li>Email: <span class="titulo">{{ candidato.email}}</span></li>
-                                <li>Semestre cursado: <span class="titulo">{{ candidato.semestreFaculdade}}</span></li>
+                                <li>Semestre cursado: <span class="titulo">{{ candidato.semestre}}</span></li>
                                 <li>Período Cursado: <span class="titulo">{{ candidato.periodoCurso}}</span></li>
                                 <li>Duração do curso: <span class="titulo">{{ candidato.duracaoCurso}}</span></li>
                                 <li>Data conclusao: <span class="titulo">{{  this.formataDataParaMostrar(candidato.dataConclusao)}}</span></li>
@@ -369,6 +367,10 @@ export default {
     }
     this.pegaInstrutores()
   },
+  mounted () {
+    this.habilitaCamposEdicao()
+    this.selectResultado()
+  },
   methods: {
     acao () {
       let modal = document.querySelector('.modal')
@@ -397,7 +399,7 @@ export default {
       this.candidato.status = document.querySelector('#status').value
       this.candidato.idProcessoSeletivo = this.idRetorno
       this.candidato.email = document.querySelector('#inputEmail').value
-      this.candidato.semestreFaculdade = document.querySelector('#inputSemestreCursado').value
+      this.candidato.semestre = document.querySelector('#inputSemestreCursado').value
       this.candidato.periodoCurso = document.querySelector('#inputPeriodoCursado').value
       this.candidato.dataConclusao = document.querySelector('#inputDataConclusao').value
       this.candidato.duracaoCurso = document.querySelector('#inputDuracaoCurso').value
@@ -452,7 +454,7 @@ export default {
         formDataAtualizar.append('disc', discAtualizar)
         formDataAtualizar.append('curriculo', curriculoAtualizar)
         formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestre)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
         formDataAtualizar.append('dataConclusao', dataConclusao)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
@@ -488,7 +490,7 @@ export default {
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('curriculo', curriculoAtualizar)
         formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestre)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('endereco', this.candidato.endereco)
@@ -521,7 +523,7 @@ export default {
         formDataAtualizar.append('status', this.candidato.status)
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestre)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('endereco', this.candidato.endereco)
@@ -554,7 +556,7 @@ export default {
         formDataAtualizar.append('status', this.candidato.status)
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestre)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('dataConclusao', dataConclusao)
@@ -589,7 +591,7 @@ export default {
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('curriculo', curriculoAtualizar)
         formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestre)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('dataConclusao', this.candidato.dataConclusao)
@@ -625,7 +627,7 @@ export default {
         formDataAtualizar.append('disc', discAtualizar)
         formDataAtualizar.append('curriculo', curriculoAtualizar)
         formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestre)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('endereco', this.candidato.endereco)
@@ -659,7 +661,7 @@ export default {
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('disc', discAtualizar)
         formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestre)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('endereco', this.candidato.endereco)
@@ -693,7 +695,7 @@ export default {
         formDataAtualizar.append('idProcessoSeletivo', this.idRetorno)
         formDataAtualizar.append('disc', discAtualizar)
         formDataAtualizar.append('email', this.candidato.email)
-        formDataAtualizar.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formDataAtualizar.append('semestreFaculdade', this.candidato.semestre)
         formDataAtualizar.append('periodoCurso', this.candidato.periodoCurso)
         formDataAtualizar.append('duracaoCurso', this.candidato.duracaoCurso)
         formDataAtualizar.append('dataConclusao', dataConclusao)
@@ -730,7 +732,7 @@ export default {
         formData.append('disc', disc)
         formData.append('curriculo', curriculo)
         formData.append('email', this.candidato.email)
-        formData.append('semestreFaculdade', this.candidato.semestreFaculdade)
+        formData.append('semestreFaculdade', this.candidato.semestre)
         formData.append('periodoCurso', this.candidato.periodoCurso)
         formData.append('dataConclusao', this.candidato.dataConclusao)
         formData.append('duracaoCurso', this.candidato.duracaoCurso)
@@ -760,11 +762,26 @@ export default {
     },
     habilitaCampos () {
       let dataConclusao = document.querySelector('#inputDataConclusao').value
-
-      if (dataConclusao == '' || dataConclusao == null) {
+      let d1 = new Date(dataConclusao)
+      const dados = this.pegaDadosUrl()
+      let tipo = dados.tipo
+      if (dataConclusao == 'Invalid Date' && tipo == 'cadastro') {
         document.querySelector('#inputDuracaoCurso').setAttribute('disabled')
         document.querySelector('#inputPeriodoCursado').setAttribute('disabled')
         document.querySelector('#inputSemestreCursado').setAttribute('disabled')
+      } else {
+        document.querySelector('#inputDuracaoCurso').removeAttribute('disabled')
+        document.querySelector('#inputPeriodoCursado').removeAttribute('disabled')
+        document.querySelector('#inputSemestreCursado').removeAttribute('disabled')
+      }
+    },
+    habilitaCamposEdicao () {
+      let dataConclusao = this.candidato.dataConclusao
+      const dados = this.pegaDadosUrl()
+      let tipo = dados.tipo
+      let d1 = new Date(dataConclusao)
+      if (tipo == 'edicao' && d1 == 'Invalid Date') {
+        console.log('foi feita uma gambiarra ' + d1 + ' ' + dataConclusao)
       } else {
         document.querySelector('#inputDuracaoCurso').removeAttribute('disabled')
         document.querySelector('#inputPeriodoCursado').removeAttribute('disabled')
@@ -907,6 +924,23 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    selectResultado () {
+      const dados = this.pegaDadosUrl()
+      let statusCandidato = dados.statusCandidato
+      if (statusCandidato == 'SEM_STATUS') {
+        document.querySelector('#semStatus').setAttribute('selected', 'selected')
+      } else if (statusCandidato == 'APROVADO_1_FASE') {
+        document.querySelector('#aprovado1Fase').setAttribute('selected', 'selected')
+      } else if (statusCandidato == 'REPROVADO_1_FASE') {
+        document.querySelector('#reprovado1Fase').setAttribute('selected', 'selected')
+      } else if (statusCandidato == 'APROVADO_2_FASE') {
+        document.querySelector('#aprovado2Fase').setAttribute('selected', 'selected')
+      } else if (statusCandidato == 'REPROVADO_2_FASE') {
+        document.querySelector('#reprovado2Fase').setAttribute('selected', 'selected')
+      } else if (statusCandidato == 'STANDBY') {
+        document.querySelector('#standby').setAttribute('selected', 'selected')
+      }
     }
   }
 }
