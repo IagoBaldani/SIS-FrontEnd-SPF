@@ -61,6 +61,7 @@
              <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputDataEntregaDocumentos">Entrega dos documentos</label>
               <input  class="form-control" id="inputDataEntregaDocumentos"  type="date" v-model="cadastroParticipanteForm.dataEntrega">
+               <p id="erroDataEntrega" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
                 <label for="cargo"  id="selectRemuneracao" class="form-label fw-bold h5 titulo">Cargo</label>
@@ -349,6 +350,7 @@ export default {
       var cargo = document.getElementById('filtro-programa').value
       var email = document.getElementById('inputEmail').value
       var turma = document.getElementById('selectTurma').value
+      var dataEntrega = document.getElementById('inputDataEntregaDocumentos').value
       let erro = 0
       if (cpf == '') {
         document.querySelector('#erroCpf').classList.remove('none')
@@ -398,6 +400,12 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroTurma').classList.add('none')
+      }
+      if (dataEntrega == ''){
+         document.querySelector('#erroDataEntrega').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDataEntrega').classList.add('none')
       }
       if (erro == 1) {
         return false

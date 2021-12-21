@@ -56,6 +56,18 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo"
+                >Indicação</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.indicacao"
+                type="text"
+                disabled
+                readonly
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo"
                 >Nota na prova de lógica</label
               >
               <input
@@ -85,6 +97,18 @@
               <input
                 class="form-control disabledTextInput"
                 v-bind:value="participante.curso"
+                type="text"
+                disabled
+                readonly
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo"
+                >Data de Entrega</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="formataDataParaMostrar(participante.dataEntrega)"
                 type="text"
                 disabled
                 readonly

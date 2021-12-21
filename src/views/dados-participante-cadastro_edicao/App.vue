@@ -58,11 +58,13 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputIndicacao">Indicação</label>
-              <input  class="form-control" id="inputIndicacao" type="text" v-bind:value="participante.fonteRecrutamento">
+              <input  class="form-control" id="inputIndicacao" type="text" v-bind:value="participante.indicacao">
+              <p id="erroDataEntregaDocumentos" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputDataEntregaDocumentos">Entrega dos documentos</label>
-              <input  class="form-control" id="inputDataEntregaDocumentos"  type="date" >
+              <input  class="form-control" id="inputDataEntregaDocumentos"  type="date" v-bind:value="participante.dataEntrega" >
+              <p id="erroIndicacao" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mb-3">
                             <label class="form-label fw-bold h5 titulo">TCE</label>
@@ -98,6 +100,7 @@
               <input id="participanteDataFimGraduacao"
                 class="form-control disabledTextInput"
                 v-bind:value="participante.dataFimGraduacao"
+                disabled
                 type="date"
               />
               <p id="erroTerminoGraduacao" class="none erro">Por favor, preencha este campo</p>
@@ -244,6 +247,8 @@ export default {
       var curso = document.getElementById('participanteCurso').value
       var terminoGraduacao = document.getElementById('participanteDataFimGraduacao').value
       var observacao = document.getElementById('participanteObservacao').value
+      var dataEntrega = document.getElementById('inputDataEntregaDocumentos').value
+      var indicacao = document.getElementById('inputIndicacao').value
       let erro = 0
       if (nome == '') {
         document.querySelector('#erroNome').classList.remove('none')
@@ -308,6 +313,18 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroObservacao').classList.add('none')
+      }
+      if (dataEntrega == '') {
+        document.querySelector('#erroDataEntregaDocumentos').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroDataEntregaDocumentos').classList.add('none')
+      }
+      if (indicacao == '') {
+        document.querySelector('#erroIndicacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroIndicacao').classList.add('none')
       }
       if (erro == 1) {
         return false
