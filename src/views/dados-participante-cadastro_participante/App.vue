@@ -35,8 +35,8 @@
               <input  class="form-control" id="inputFonteRecrutamento" disabled :placeholder="candidato.fonteRecrutamento" type="text">
             </div>
              <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Indicação</label>
-              <input  class="form-control" id="inputFonteRecrutamento" disabled :placeholder="candidato.indicacao" type="text">
+              <label class="form-label fw-bold mb-0 titulo" for="inputIndicacao">Indicação</label>
+              <input  class="form-control" id="inputIndicacao" disabled :placeholder="candidato.indicacao" type="text">
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputNotaLogica">Nota na prova de lógica</label>
@@ -213,7 +213,7 @@ export default {
         idCandidato: '',
         idPrograma: '',
         email: '',
-        dataEntrega: '',
+        dataEntrega: ''
       },
       nomeProgramaCandidato: {
         id: '',
@@ -226,7 +226,7 @@ export default {
   methods: {
     buscarTurmasDeUmaFormacao () {
       http.get(`candidato/programa-candidato-turmas/${this.nomeProgramaCandidato.nome}`)
-        .then(response => (this.turmasProgramaCandidatos = response.data)) 
+        .then(response => (this.turmasProgramaCandidatos = response.data))
     },
     buscarTurmaPorId () {
       var idPrograma = document.querySelector('#selectTurma').value
@@ -236,7 +236,7 @@ export default {
     buscarCargoPorId () {
       var idCargo = document.getElementById('filtro-programa').value
       http.get(`remuneracao/${idCargo}`)
-        .then(response => (this.cargo = response.data)) 
+        .then(response => (this.cargo = response.data))
     },
     validaCampos () {
       let campos = document.querySelectorAll('input')
@@ -251,27 +251,27 @@ export default {
         document.getElementById('abreModal').click()
       } else {
         document.querySelector('#preencha').classList.remove('none')
-      }     
+      }
     },
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()
     },
     enviarDados () {
-      var formData = new FormData() 
+      var formData = new FormData()
       var arquivo = document.getElementById('fileTce').files[0]
-      formData.append('cpf', this.cadastroParticipanteForm.cpf) 
+      formData.append('cpf', this.cadastroParticipanteForm.cpf)
       formData.append('instituicaoEnsino', this.cadastroParticipanteForm.instituicaoEnsino)
-      formData.append('curso', this.cadastroParticipanteForm.curso) 
+      formData.append('curso', this.cadastroParticipanteForm.curso)
       formData.append('idRemuneracao', this.remuneracao.id)
       formData.append('idCandidato', this.id)
       formData.append('idPrograma', document.getElementById('selectTurma').value)
-      formData.append('email', this.cadastroParticipanteForm.email) 
+      formData.append('email', this.cadastroParticipanteForm.email)
       formData.append('tce', arquivo)
       formData.append('dataEntrega', this.cadastroParticipanteForm.dataEntrega)
       http
-        .post('participante/salvarParticipante', formData, { 
+        .post('participante/salvarParticipante', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data' 
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then(response => {
@@ -318,28 +318,28 @@ export default {
       if (cpf == '00000000000') {
         console.log('cpf zerado')
         return false
-      } 
+      }
       for (var i = 1; i <= 9; i++) {
         Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i)
       }
       Resto = (Soma * 10) % 11
       if ((Resto == 10) || (Resto == 11)) {
         Resto = 0
-      }  
+      }
       if (Resto != parseInt(cpf.substring(9, 10))) {
         return false
-      } 
+      }
       Soma = 0
       for (i = 1; i <= 10; i++) {
         Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (12 - i)
-      } 
+      }
       Resto = (Soma * 10) % 11
       if ((Resto == 10) || (Resto == 11)) {
         Resto = 0
-      }  
+      }
       if (Resto != parseInt(cpf.substring(10, 11))) {
         return false
-      } 
+      }
       return true
     },
     validaForm () {
@@ -425,18 +425,18 @@ export default {
       .then(response => {
         this.candidato = response.data
         console.log(this.candidato.dataConclusao)
-        })
+      })
 
     http.get('remuneracao/cargos')
       .then(response => (this.cargos = response.data))
 
     http.get('candidato/buscar-instrutor')
       .then(response => (this.instrutores = response.data))
-    
+
     http.get(`candidato/programa-candidato-nome/${this.id}`)
-      .then(response => (this.nomeProgramaCandidato = response.data))  
+      .then(response => (this.nomeProgramaCandidato = response.data))
   }
-  
+
 }
 </script>
 

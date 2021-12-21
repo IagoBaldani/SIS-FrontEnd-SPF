@@ -20,7 +20,7 @@
               <input id="participanteNome"
                 class="form-control disabledTextInput"
                 v-bind:value="participante.nome"
-                type="text" 
+                type="text"
               />
               <p id="erroNome" class="none erro">Por favor, preencha este campo</p>
             </div>
@@ -52,15 +52,17 @@
               <p id="erroEmailInvalido" class="none erro">Por favor, insira um e-mail válido</p>
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo"
-                >Fonte recrutamento</label
-              >
-              <input id="participanteFonteRecrutamento"
-                class="form-control disabledTextInput"
-                v-bind:value="participante.fonteRecrutamento"
-                type="text"
-              />
+              <label class="form-label fw-bold mb-0 titulo">Fonte recrutamento</label>
+              <input id="participanteFonteRecrutamento" class="form-control disabledTextInput" v-bind:value="participante.fonteRecrutamento" type="text"/>
               <p id="erroFonte" class="none erro">Por favor, preencha este campo</p>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo" for="inputIndicacao">Indicação</label>
+              <input  class="form-control" id="inputIndicacao" type="text" v-bind:value="participante.fonteRecrutamento">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo" for="inputDataEntregaDocumentos">Entrega dos documentos</label>
+              <input  class="form-control" id="inputDataEntregaDocumentos"  type="date" >
             </div>
             <div class="mb-3">
                             <label class="form-label fw-bold h5 titulo">TCE</label>
@@ -76,7 +78,7 @@
                             <p id="erroTce" class="none erro">Por favor, preencha este campo</p>
                         </div>
         <div class="col-xl-4">
-         <button 
+         <button
             type="button"
             class="btn submit form-control"
             v-on:click="validaForm()"
@@ -139,8 +141,8 @@
           </fieldset>
         </div>
       </div>
-    </div>  
-  </form>  
+    </div>
+  </form>
     <!-- fim do formulário -->
 
     <!-- Modal de confirmação -->
@@ -157,7 +159,7 @@
         </div>
     </div>
   </main>
- 
+
 </template>
 
 <script>
@@ -319,8 +321,8 @@ export default {
       return dataFormatada
     },
     processaRequisicoes () {
-      var formData = new FormData() 
-      var comprovanteRematricula = document.getElementById('file').files[0] 
+      var formData = new FormData()
+      var comprovanteRematricula = document.getElementById('file').files[0]
       this.atualizaStatusForm.nome = document.getElementById('participanteNome').value
       this.atualizaStatusForm.cpf = this.participante.cpf
       this.atualizaStatusForm.telefone = document.getElementById('participanteTelefone').value
@@ -339,11 +341,11 @@ export default {
       formData.append('dataFimGraduacao', this.atualizaStatusForm.dataFimGraduacao)
       formData.append('observacao', this.atualizaStatusForm.observacao)
       formData.append('email', this.atualizaStatusForm.email)
-      formData.append('tce', comprovanteRematricula)     
+      formData.append('tce', comprovanteRematricula)
       http
         .put('participante/atualizaParticipante', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data' 
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then(response => {
@@ -369,8 +371,8 @@ export default {
       }
     }
   }
-} 
- 
+}
+
 </script>
 
 <style>
