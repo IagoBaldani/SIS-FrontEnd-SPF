@@ -34,6 +34,10 @@
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Fonte recrutamento</label>
               <input  class="form-control" id="inputFonteRecrutamento" disabled :placeholder="candidato.fonteRecrutamento" type="text">
             </div>
+             <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Indicação</label>
+              <input  class="form-control" id="inputFonteRecrutamento" disabled :placeholder="candidato.indicacao" type="text">
+            </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputNotaLogica">Nota na prova de lógica</label>
               <input  class="form-control" id="inputNotaLogica" disabled :placeholder="candidato.testeLogico" type="number" min="0" max="10">
@@ -52,7 +56,11 @@
         <div class="col-xl-4">
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputTerminoGraduacao">Término da graduação</label>
-              <input  class="form-control" id="inputTerminoGraduacao"  type="date" :placeholder="formataDataParaMostrar(candidato.dataConclusao)" disabled>
+              <input  class="form-control" id="inputTerminoGraduacao"  type="text" :placeholder="formataDataParaMostrar(candidato.dataConclusao)" disabled>
+            </div>
+             <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo" for="inputDataEntregaDocumentos">Entrega dos documentos</label>
+              <input  class="form-control" id="inputDataEntregaDocumentos"  type="date" v-model="cadastroParticipanteForm.dataEntrega">
             </div>
             <div class="mb-3">
                 <label for="cargo"  id="selectRemuneracao" class="form-label fw-bold h5 titulo">Cargo</label>
@@ -204,7 +212,8 @@ export default {
         idRemuneracao: '',
         idCandidato: '',
         idPrograma: '',
-        email: ''
+        email: '',
+        dataEntrega: '',
       },
       nomeProgramaCandidato: {
         id: '',
@@ -258,6 +267,7 @@ export default {
       formData.append('idPrograma', document.getElementById('selectTurma').value)
       formData.append('email', this.cadastroParticipanteForm.email) 
       formData.append('tce', arquivo)
+      formData.append('dataEntrega', this.cadastroParticipanteForm.dataEntrega)
       http
         .post('participante/salvarParticipante', formData, { 
           headers: {
@@ -412,8 +422,11 @@ export default {
   },
   mounted () {
     http.get(`participante/candidato/${this.id}`)
-      .then(response => (this.candidato = response.data))
-    
+      .then(response => {
+        this.candidato = response.data
+        console.log(this.candidato.dataConclusao)
+        })
+
     http.get('remuneracao/cargos')
       .then(response => (this.cargos = response.data))
 
