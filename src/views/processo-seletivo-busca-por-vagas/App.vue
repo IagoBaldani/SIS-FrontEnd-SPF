@@ -8,7 +8,7 @@
           <h1 class="mt-3 mb-3">Busca por processos seletivos:</h1>
         </div>
         <div class="col-lg-6"></div>
-        
+
       </div>
       <div class="row justify-content-evenly">
         <div class="col-lg-5">
@@ -46,31 +46,35 @@
               "
             >
               <tbody class="processosSeletivos">
-                <tr
-                  class="processo"
-                  v-for="(processo, index) in processosSeletivos"
-                  :key="processo"
-                >
-                  <th class="font-weight-normal" scope="row">
-                    {{ ++index }}
-                  </th>
-                  <td class="info-nome">{{ processo.nome }}</td>
-                  <td v-bind:class="(processo.status == 'EM_ANDAMENTO')?'em-andamento':'finalizado'" class="statusProcesso">{{processo.status}}</td>
-                  <td>
-                    <a :href="'processo-seletivo-dados-da-vaga-visualizacao?id=' + processo.id">
-                      <img src="../../assets/imgs/visibility_white_24dp.svg" alt=""/>
-                    </a>
-                  </td>
-                  <td>
-                    <a  class="editor" v-on:click="habilitaEdicao(processo.status, processo.id)" >
+              <tr
+                class="processo"
+                v-for="(processo, index) in processosSeletivos"
+                :key="processo"
+              >
+                <th class="font-weight-normal" scope="row">
+                  {{ ++index }}
+                </th>
+                <td class="info-nome">{{ processo.nome }}</td>
+                <td v-bind:class="(processo.status == 'EM_ANDAMENTO')?'em-andamento':'finalizado'"
+                    class="statusProcesso">{{ processo.status }}
+                </td>
+                <td>
+                  <a :href="'processo-seletivo-dados-da-vaga-visualizacao?id=' + processo.id">
+                    <img src="../../assets/imgs/visibility_white_24dp.svg" alt=""/>
+                  </a>
+                </td>
+                <td>
+                  <a class="editor" v-on:click="habilitaEdicao(processo.status, processo.id)">
                     <!-- <a class="none" id="validadorEdicao" :href="'/processo-seletivo-dados-da-vaga-cadastro-edicao?id=' + processo.id + '&tipo=edicao'"/> -->
                     <img src="../../assets/imgs/settings_white_24dp.svg" alt=""/>
-                    </a>
-                  </td>
-                  <td>
-                    <a :href="'/processo-seletivo-busca-por-candidato?id=' + processo.id + '&status=' + processo.status"><img src="../../assets/imgs/Pattern.svg" alt="" /></a>
-                  </td>
-                </tr>
+                  </a>
+                </td>
+                <td>
+                  <a
+                    :href="'/processo-seletivo-busca-por-candidato?id=' + processo.id + '&status=' + processo.status"><img
+                    src="../../assets/imgs/Pattern.svg" alt=""/></a>
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
@@ -90,17 +94,19 @@
       </div>
     </div>
     <!-- Modal com lembrete de bloqueio de edição  -->
-     <p class="none" id="abreModalInvisivelEdicao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoEdicao" ></p>
-    <div class="modal fade mt-5"  id="modalConfirmacaoEdicao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-size">
-            <div class="modal-content p-5 grey-background">
-                <div class="row mb-5">
-                    <div class="col">
-                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Não é possivel editar um processo-seletivo já finalizado</h3>
-                    </div>
-                </div>
+    <p class="none" id="abreModalInvisivelEdicao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoEdicao"></p>
+    <div class="modal fade mt-5" id="modalConfirmacaoEdicao" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog modal-size">
+        <div class="modal-content p-5 grey-background">
+          <div class="row mb-5">
+            <div class="col">
+              <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Não é possivel editar um
+                processo-seletivo já finalizado</h3>
             </div>
+          </div>
         </div>
+      </div>
     </div>
   </main>
 </template>
@@ -135,7 +141,6 @@ export default {
 
       var listaDeValores = []
 
-      console.log(campoFiltro.value)
       var processos = document.querySelectorAll('.processo')
 
       if (campoFiltro.value.length >= 0) {
@@ -156,7 +161,6 @@ export default {
             listaDeValores.push(i)
           }
 
-          console.log(listaDeValores)
 
           if (!listaDeValores.length == 0) {
             aviso.classList.add('invisivel')
@@ -173,21 +177,19 @@ export default {
       }
     },
     habilitaEdicao (processo, idProcesso) {
-      this.idSelecionado = idProcesso 
-      console.log(this.idSelecionado)
-      console.log(idProcesso)
-      if(processo != 'FINALIZADA') {  
-        // document.querySelector('#validadorEdicao').click() 
-        window.location.href="/processo-seletivo-dados-da-vaga-cadastro-edicao?id=" + idProcesso + "&tipo=edicao"
+      this.idSelecionado = idProcesso
+      if (processo != 'FINALIZADA') {
+        // document.querySelector('#validadorEdicao').click()
+        window.location.href = '/processo-seletivo-dados-da-vaga-cadastro-edicao?id=' + idProcesso + '&tipo=edicao'
       } else {
         this.abrirModalEdicao()
         setTimeout(function () {
-         document.location.reload(true)
+          document.location.reload(true)
         }, 1521)
       }
     },
-    abrirModalEdicao() {
-      document.getElementById('abreModalInvisivelEdicao').click()  
+    abrirModalEdicao () {
+      document.getElementById('abreModalInvisivelEdicao').click()
     },
 
     getListaDeProcessos () {
@@ -212,6 +214,7 @@ export default {
   padding: 0;
   text-decoration: none;
 }
+
 :root {
   /* Cores principais - Botões e telas */
   --color-background-screen: #ebebeb;
@@ -248,14 +251,14 @@ body {
 
 /* Scroll */
 .my-custom-scrollbar {
-position: relative;
-height: 52vh;
-overflow: auto;
+  position: relative;
+  height: 52vh;
+  overflow: auto;
 }
 
 .table-wrapper-scroll-y {
-display: block;
-height: 52vh;
+  display: block;
+  height: 52vh;
 }
 
 /* Input de busca */
@@ -271,9 +274,11 @@ height: 52vh;
   font-size: 20px;
   text-align: center;
 }
-.editor{
+
+.editor {
   cursor: pointer;
 }
+
 /* Table - Coluna Processo Seletivo Java */
 .search-table tbody > tr > td:nth-child(2) {
   font-weight: 500;
@@ -327,7 +332,7 @@ height: 52vh;
   color: var(--color-red-progress) !important;
 }
 
-.formacao-em-andamento{
+.formacao-em-andamento {
   color: yellow !important;
 }
 
@@ -388,10 +393,12 @@ height: 52vh;
 .recarregar:hover {
   background-color: #141863 !important;
 }
+
 a {
   color: white;
   text-decoration: none;
 }
+
 a:hover {
   color: white !important;
   text-decoration: none !important;

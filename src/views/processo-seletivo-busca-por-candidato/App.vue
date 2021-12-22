@@ -64,7 +64,7 @@
                   <td>
                     <a :href="'/processo-seletivo-dados-do-candidato-visualizacao?id=' + candidato.id
                      + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
-                     + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status" 
+                     + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status"
                     >
                       <img
                         src="../../assets/imgs/account_circle_white_24dp.svg"
@@ -73,8 +73,8 @@
                     </a>
                   </td>
                   <td>
-                    <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id 
-                      + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso=' 
+                    <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id
+                      + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
                       + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status" >
                       <img
                         src="../../assets/imgs/manage_accounts_white_24dp.svg"
@@ -98,7 +98,7 @@
             class="button-footer mt-5 submit"
             id="cadastrar"
             type="button">
-            <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?tipo=cadastro' + '&statusProcesso=' + this.statusProcesso + '&idProcesso=' 
+            <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?tipo=cadastro' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
                       + this.idProcessoSeletivo"
             >
               Cadastrar novo candidato
@@ -125,7 +125,7 @@ export default {
       statusProcesso: '',
       idProcessoSeletivo: '',
       nomeProcesso:'',
-      nomeDoProcessoCorreto:'' 
+      nomeDoProcessoCorreto:''
     }
   },
   beforeMount () {
@@ -134,19 +134,19 @@ export default {
     let idProcesso = dadosUrl.id
     this.idProcessoSeletivo = idProcesso
     this.statusProcesso = dadosUrl.status
-    this.nomeProcesso = dadosUrl.nomeProcesso 
+    this.nomeProcesso = dadosUrl.nomeProcesso
     if (idProcesso != null && idProcesso != '') {
       this.getListaDaFormacao(idProcesso)
     } else {
       this.getLista()
     }
-    this.getListaDeProcessos() 
+    this.getListaDeProcessos()
   },
   beforeUpdate () {
     if(this.statusProcesso == 'FINALIZADA'){
        document.querySelector('#cadastrar').classList.add('invisivel')
      }
-     
+
   },
   methods: {
     filtraDados () {
@@ -154,7 +154,6 @@ export default {
       aviso.classList.add('invisivel')
       var campoFiltro = document.querySelector('#filtrar-tabela')
       var listaDeValores = []
-      console.log(campoFiltro.value)
       var processos = document.querySelectorAll('.processo')
       if (campoFiltro.value.length >= 0) {
         for (var i = 0; i < processos.length; i++) {
@@ -170,7 +169,6 @@ export default {
             aviso.classList.add('invisivel')
             listaDeValores.push(i)
           }
-          console.log(listaDeValores)
           if (!listaDeValores.length == 0) {
             aviso.classList.add('invisivel')
           } else {

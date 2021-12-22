@@ -189,7 +189,6 @@ export default {
   },
   methods: {
     putPrograma () {
-      console.log(this.programaForm)
       http.put('programa', this.programaForm)
         .then(response => {
           if (response.status == 200) {
@@ -241,11 +240,9 @@ export default {
       }
       this.turmas.forEach(turma => {
         if (turma.nomeTurma == nomeTurma) {
-          console.log('Turma ja existente')
           erro = 1
           document.querySelector('#erroTurmaCadastrada').classList.remove('none')
           if (nomeTurma == this.programa.turma) {
-            console.log('Não tem erro')
             erro = 0
             document.querySelector('#erroTurmaCadastrada').classList.add('none')
           }
@@ -270,7 +267,7 @@ export default {
     getPrograma () {
       http.get(`programa/${this.id}`)
         .then(response => {
-          console.log(this.programa = response.data)
+          this.programa = response.data
         })
         .catch(error => {
           console.log(error)
@@ -285,7 +282,7 @@ export default {
     },
     getTurmasDoProcesso () {
       http.get(`programa/buscar-programas-por-nome/${this.programa.nome}`)
-        .then(response => console.log(this.turmas = response.data))
+        .then(response => this.turmas = response.data)
     },
     abrirModaln () {
       document.getElementById('abreModalInvisivel').click()

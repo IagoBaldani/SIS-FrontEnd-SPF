@@ -70,7 +70,7 @@
           </fieldset>
         </div>
         <!-- botao invisivel para abrir formulario -->
-        <p id="verificaCampos" class="none" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="geraFormulario()"></p> 
+        <p id="verificaCampos" class="none" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="geraFormulario()"></p>
         <div class="col-xl-2"></div>
       </div>
       <div class="row justify-content-evenly">
@@ -265,7 +265,7 @@ export default {
       }
 
       this.qtdTotal = qtdE + qtdT + qtdA
-      
+
     },
     geraFormulario () {
       this.formacoesForm.nome = document.querySelector('#inputNome').value
@@ -402,10 +402,8 @@ export default {
       const dadosUrl = this.pegaDadosUrl()
       var tipo = dadosUrl.tipo
       var id = dadosUrl.id
-      console.log(tipo)
       if (tipo == 'edicao') {
         this.formacoesForm.status = 'EM_ANDAMENTO'
-        console.log(tipo)
         http
           .put(`processo-seletivo/${id}`, this.formacoesForm)
           .then(response => {

@@ -119,7 +119,6 @@ export default {
 
       var listaDeValores = []
 
-      console.log(campoFiltro.value)
       var processos = document.querySelectorAll('.processo')
 
       if (campoFiltro.value.length >= 0) {
@@ -140,7 +139,6 @@ export default {
             listaDeValores.push(i)
           }
 
-          console.log(listaDeValores)
 
           if (!listaDeValores.length == 0) {
             aviso.classList.add('invisivel')

@@ -59,7 +59,7 @@
                         <p id="erroRemuneracaoExtra" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroRemuneracaoExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
-                    <div> 
+                    <div>
                         <label class="form-label mb-0 mt-3 titulo">Alura</label>
                         <input name="alura" type="text" maxlength="12" v-money="money" class="form-control" v-bind:value="cargos.alura.toFixed(2)" id="inputAlura">
                         <p id="erroAlura" class="erro none">Por favor, preencha este campo</p>
@@ -79,7 +79,7 @@
                 <div class="col-xl-2"></div>
             </div>
         </div>
-  
+
     <!--Model-->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog modal-dialog-centered">
@@ -208,7 +208,7 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     let id = dadosUrl.id
     let tipo = dadosUrl.tipo
-    
+
     if (tipo == 'edicao') {
       this.getCargo(id)
     }
@@ -272,7 +272,6 @@ export default {
     },
     getCargosCadastrados () {
       http.get('remuneracao/lista').then(response => {
-        console.log(this.cargosCadastrados = response.data)
       })
     },
     processarDados () {

@@ -361,7 +361,6 @@ export default {
     this.statusProcesso = dadosUrl.statusProcesso
     this.statusParticipante = dadosUrl.statusParticipante
 
-    console.log(this.tipoReq)
     if (tipo == 'edicao') {
       this.getCandidato(id)
     }
@@ -437,9 +436,6 @@ export default {
       var dataConclusao = document.getElementById('inputDataConclusao').value
 
       if (tipo == 'edicao' && discAtualizar != undefined && curriculoAtualizar != undefined && dataConclusao != '') {
-        console.log('editando completo')
-        console.log(curriculoAtualizar)
-        console.log(discAtualizar)
 
         var formDataAtualizar = new FormData()
         formDataAtualizar.append('id', this.id)
@@ -477,7 +473,6 @@ export default {
             console.log(error)
           })
       } else if (tipo == 'edicao' && discAtualizar == undefined && curriculoAtualizar != undefined && dataConclusao == '') {
-        console.log('editando sem disc e dataConclusão')
         formDataAtualizar = new FormData()
         formDataAtualizar.append('id', this.candidato.id)
         formDataAtualizar.append('nome', this.candidato.nome)
@@ -511,7 +506,6 @@ export default {
             console.log(error)
           })
       } else if (tipo == 'edicao' && discAtualizar == undefined && curriculoAtualizar == undefined && dataConclusao == '') {
-        console.log('editando sem curriculo sem disc sem data')
         formDataAtualizar = new FormData()
         formDataAtualizar.append('id', this.candidato.id)
         formDataAtualizar.append('nome', this.candidato.nome)
@@ -778,7 +772,7 @@ export default {
     habilitaCamposEdicao (candidato) {
       let dataConclusao = candidato.dataConclusao
       const dados = this.pegaDadosUrl()
-      let tipo = dados.tipo      
+      let tipo = dados.tipo
       if (tipo == 'edicao' && dataConclusao != null) {
         document.querySelector('#inputDuracaoCurso').removeAttribute('disabled')
         document.querySelector('#inputPeriodoCursado').removeAttribute('disabled')

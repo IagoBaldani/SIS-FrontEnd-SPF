@@ -52,19 +52,25 @@
               <input  class="form-control" id="inputCurso" type="text" v-model="cadastroParticipanteForm.curso">
               <p id="erroCurso" class="none erro">Por favor, preencha este campo</p>
             </div>
+            <div class="mt-5">
+              <button v-on:click="validaForm(), buscarTurmaPorId(), buscarCargoPorId()" type="button" class="btn submit form-control mt-5" >
+                CONFIRMAR
+              </button>
+              <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="popularCargoTurma()" ></p>
+            </div>
         </div>
         <div class="col-xl-4">
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputTerminoGraduacao">Término da graduação</label>
-              <input  class="form-control" id="inputTerminoGraduacao"  type="text" :placeholder="formataDataParaMostrar(candidato.dataConclusao)" disabled>
-            </div>
-             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputDataEntregaDocumentos">Entrega dos documentos</label>
-              <input  class="form-control" id="inputDataEntregaDocumentos"  type="date" v-model="cadastroParticipanteForm.dataEntrega">
-               <p id="erroDataEntrega" class="none erro">Por favor, preencha este campo</p>
+              <input  class="form-control" id="inputTerminoGraduacao"  type="date" v-model="candidato.dataConclusao" disabled>
             </div>
             <div class="mb-3">
-                <label for="cargo"  id="selectRemuneracao" class="form-label fw-bold h5 titulo">Cargo</label>
+              <label class="form-label fw-bold mb-0 titulo" for="inputDataEntregaDocumentos">Entrega dos documentos</label>
+              <input  class="form-control" id="inputDataEntregaDocumentos"  type="date" v-model="cadastroParticipanteForm.dataEntrega">
+              <p id="erroDataEntrega" class="none erro">Por favor, preencha este campo</p>
+            </div>
+            <div class="mb-3">
+                <label for="cargo"  id="selectRemuneracao" class="form-label fw-bold titulo">Cargo</label>
                 <select class="form-select" id="filtro-programa" v-model="remuneracao.id">
                     <option v-for="cargo in cargos" :value="cargo.id" :key="cargo.id" >{{ cargo.nome }}</option>
                 </select>
@@ -77,8 +83,8 @@
               <p id="erroEmailInvalido" class="none erro">Por favor, insira um e-mail válido</p>
             </div>
             <div class="mb-3">
-                <label class="form-label fw-bold h5 titulo">TCE</label>
-                <input id="fileTce" type="file" accept="application/pdf"/>
+                <label class="form-label fw-bold titulo">TCE</label>
+                <input id="fileTce" type="file" accept="application/pdf" class="form-control"/>
                 <label for="file" class="btn-file d-flex justify-content-between">
                 </label>
             </div>
@@ -112,16 +118,16 @@
             </div> -->
         </div>
       </div>
-      <div class="row justify-content-evenly">
-        <div class="col-xl-4 ">
-          <button v-on:click="validaForm(), buscarTurmaPorId(), buscarCargoPorId()" type="button" class="btn submit form-control" >
-            CONFIRMAR
-          </button>
-          <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="popularCargoTurma()" ></p>
-        </div>
-        <div class="col-xl-4"></div>
-        <div class="col-xl-2"></div>
-      </div>
+<!--      <div class="row justify-content-evenly">-->
+<!--        <div class="col-xl-4 ">-->
+<!--          <button v-on:click="validaForm(), buscarTurmaPorId(), buscarCargoPorId()" type="button" class="btn submit form-control" >-->
+<!--            CONFIRMAR-->
+<!--          </button>-->
+<!--          <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="popularCargoTurma()" ></p>-->
+<!--        </div>-->
+<!--        <div class="col-xl-4"></div>-->
+<!--        <div class="col-xl-2"></div>-->
+<!--      </div>-->
     </div>
     <!-- fim do formulário -->
   <!-- modal -->
@@ -312,12 +318,10 @@ export default {
     validaCpf (cpf) {
       cpf = cpf.replaceAll('.', '')
       cpf = cpf.replace('-', '')
-      console.log(cpf)
       var Soma
       var Resto
       Soma = 0
       if (cpf == '00000000000') {
-        console.log('cpf zerado')
         return false
       }
       for (var i = 1; i <= 9; i++) {
@@ -359,7 +363,6 @@ export default {
         document.querySelector('#erroCpf').classList.add('none')
       }
       if (!this.validaCpf(cpf) && cpf != '') {
-        console.log('validei o cpf')
         erro = 1
         document.querySelector('#erroCpfInvalido').classList.remove('none')
       } else {
@@ -402,7 +405,7 @@ export default {
         document.querySelector('#erroTurma').classList.add('none')
       }
       if (dataEntrega == ''){
-         document.querySelector('#erroDataEntrega').classList.remove('none')
+        document.querySelector('#erroDataEntrega').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroDataEntrega').classList.add('none')
@@ -432,7 +435,6 @@ export default {
     http.get(`participante/candidato/${this.id}`)
       .then(response => {
         this.candidato = response.data
-        console.log(this.candidato.dataConclusao)
       })
 
     http.get('remuneracao/cargos')
@@ -464,9 +466,6 @@ body{
 }
 .ativo{
   color: green;
-}
-#fileTce{
-  margin-left: 15px;
 }
 .inativo{
   color: darkred;

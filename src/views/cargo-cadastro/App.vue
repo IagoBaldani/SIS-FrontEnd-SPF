@@ -80,7 +80,7 @@
                 <div class="col-xl-2"></div>
             </div>
         </div>
-  
+
     <!--Model-->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog modal-dialog-centered">
@@ -268,11 +268,11 @@ export default {
     },
     getCargosCadastrados () {
       http.get('remuneracao/lista').then(response => {
-        console.log(this.cargosCadastrados = response.data)
+        this.cargosCadastrados = response.data
       })
     },
     processarDados () {
-      let dados = this.pegaDadosUrl()     
+      let dados = this.pegaDadosUrl()
       if (dados.tipo == 'cadastro') {
         http
           .post('remuneracao', this.cargos)

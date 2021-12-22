@@ -32,7 +32,7 @@
                         <div>
                             <!--<input class="input-file" type="file">-->
                             <p class="form-label mb-0 fw-bold titulo d-block">Insira o DISC</p>
-                             <input type="file" class="form-control" id="campoDisc" 
+                             <input type="file" class="form-control" id="campoDisc"
                              accept="application/pdf">
                         </div>
                         <button class="btn-registrar mt-4 " type="button" @click="validadorDeCampos()" >REGISTRAR</button>
@@ -180,7 +180,7 @@ export default {
         anotacoes: '',
         disc: {}
       },
-      id: {},     
+      id: {},
       indiceModal: {}
     }
   },
@@ -218,7 +218,7 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroObs').classList.add('none')
-      } 
+      }
       if (erro == 1) {
         return false
       } else {
@@ -251,21 +251,20 @@ export default {
       http
         .post(`feedback/novo/${this.id}`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data' 
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then((response) => {
           this.abrirModal()
           setTimeout(function () {
-            document.location.reload(true) 
+            document.location.reload(true)
           }, 1500)
         })
         .catch((error) => {
           console.log(error)
         })
-    }, 
+    },
     validacaoDownload () {
-      console.log(this.feedbackModal)
       if (this.feedbackModal.download == false) {
         document.getElementById('downloadModal').classList.add('none')
       } else {
@@ -274,12 +273,12 @@ export default {
     },
     // método para deletar o o feedback.
     deleteById () {
-      http  
+      http
         .delete(`/feedback/deletar/${this.feedbackModal.id}`)
         .then((response) => {
           this.abrirModalExclusao()
           setTimeout(function () {
-            document.location.reload(true) 
+            document.location.reload(true)
           }, 1500)
         })
         .catch((error) => {
@@ -288,7 +287,6 @@ export default {
     },
     // endereço da API para fazer donwload  do arquivo
     download () {
-      console.log(this.feedbackModal.id)
       location.href = variavelBack + `feedback/download/${this.feedbackModal.id}`
     },
     abrirModal () {

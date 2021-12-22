@@ -190,7 +190,6 @@ export default {
       var contador = 0
       let aviso = document.querySelector('.aviso')
       var qtdLinhas = linhas.length
-      console.log(linhas)
 
       for (i = 0; i < linhas.length; i++) {
         if (arrayBoolLinhas[i][0] && arrayBoolLinhas[i][1]) {

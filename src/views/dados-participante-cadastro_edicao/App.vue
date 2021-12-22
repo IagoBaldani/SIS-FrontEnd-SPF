@@ -226,7 +226,7 @@ export default {
     getCargo (cpf) {
       http.get(`participante/completo/${cpf}`)
         .then(response => {
-          console.log(this.participante = response.data)
+          this.participante = response.data
         })
         .catch(error => {
           console.log(error)

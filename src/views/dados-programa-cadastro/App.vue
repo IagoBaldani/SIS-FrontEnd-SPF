@@ -193,7 +193,7 @@ export default {
             this.abrirModal()
             setTimeout(function () {
               window.location.href = variavel.href = 'dados-programa-busca'
-            }, 1500) 
+            }, 1500)
           }
         })
         .catch(error => {
@@ -261,7 +261,7 @@ export default {
     },
     getProcesso () {
       http.get(`processo-seletivo/${this.id}`)
-        .then(response => console.log(this.processo = response.data))
+        .then(response => this.processo = response.data)
     },
     getInstrutor () {
       http.get('instrutor/status/ATIVO')
@@ -288,7 +288,7 @@ export default {
     },
     getTurmasDoProcesso () {
       http.get(`programa/buscar-programas-por-processo/${this.id}`)
-        .then(response => console.log(this.turmas = response.data))
+        .then(response => this.turmas = response.data)
     },
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)

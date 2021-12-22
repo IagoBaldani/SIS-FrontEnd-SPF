@@ -319,7 +319,6 @@ export default {
   },
   methods: {
     filtrarDados () {
-      console.log('Entrei aqui')
       http
         .get(
           'investimento-folha/' +
@@ -338,13 +337,11 @@ export default {
       this.turmaProcurada = document.querySelector('.filtro-turma').value
       let erro = 0
       if (this.programaProcurado == '') {
-        console.log('Erro programa')
         erro = 1
       } else {
         erro = 0
       }
       if (this.turmaProcurada == '') {
-        console.log('Erro turma')
         erro = 1
       } else {
         erro = 0
@@ -365,9 +362,6 @@ export default {
       var encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       var beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       var observacao = document.querySelector('#descricaoModal').value
-      console.log(remuneracao)
-      console.log(encargos)
-      console.log(beneficios)
       let erro = 0
       if (participante == 'Participante') {
         document.querySelector('#erroNome').classList.remove('none')
@@ -424,7 +418,6 @@ export default {
     },
     getTurmas () {
       let turmas = document.querySelector('.filtro-programa').value
-      console.log(turmas)
       http.get(`relatorios/turmas/${turmas}`)
         .then(response => {
           this.turmas = response.data
@@ -437,7 +430,6 @@ export default {
       this.form.encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.form.beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.form.descricao = document.querySelector('#descricaoModal').value
-      console.log(this.form)
       http.post('/investimento-folha', this.form).then(response => {
         this.abrirModal()
         setTimeout(function () {

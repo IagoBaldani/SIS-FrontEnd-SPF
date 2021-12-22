@@ -1,6 +1,6 @@
 <template>
         <main>
-            <Header :link="`../processo-seletivo-busca-por-candidato?id=${this.idRetorno}` 
+            <Header :link="`../processo-seletivo-busca-por-candidato?id=${this.idRetorno}`
               + `&status=${this.statusProcesso}`"   />
             <div class="container-fluid" >
                 <div class="row mt-5 justify-content-evenly">
@@ -57,7 +57,7 @@
                         </fieldset>
                     </div>
                     <div class="col-lg-4">
-                        <fieldset disabled> 
+                        <fieldset disabled>
                           <div class="mb-3">
                               <label class="form-label mb-0 titulo">Data de conclusão</label>
                               <input name="dataConclusao" type="text" class="form-control" id="disabledTextInput"  v-if="this.candidato.dataConclusao == null" placeholder="">
@@ -79,7 +79,7 @@
                               <label class="form-label mb-0 titulo">Processo Seletivo</label>
                               <input name="processoSeletivo" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.processoSeletivo">
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo ">Currículo candidato</label><br>
                                 <p @click="downloadCurriculo"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">curriculo.pdf</p>
@@ -137,7 +137,6 @@ export default {
         .get(`candidato/${id}`)
         .then(response => {
           this.candidato = response.data
-          console.log(this.candidato.dataConclusao)
         })
         .catch(error => {
           console.log(error)

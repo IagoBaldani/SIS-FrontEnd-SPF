@@ -50,7 +50,7 @@
                         type="button"
                         class="bt"
                         v-on:click="validaForm()"
-                        
+
                       >
                     <button type="button" class="btn submit form-control" >
                         CONFIRMAR
@@ -176,35 +176,33 @@ export default {
     validaCpf (cpf) {
       cpf = cpf.replaceAll('.', '')
       cpf = cpf.replace('-', '')
-      console.log(cpf)
       var Soma
       var Resto
       Soma = 0
       if (cpf == "00000000000") {
-        console.log('cpf zerado')
         return false
-      } 
-      for (var i=1; i<=9; i++) {
-        Soma = Soma + parseInt(cpf.substring(i-1, i)) * (11 - i)
+      }
+      for (var i = 1; i <= 9; i++) {
+        Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i)
       }
       Resto = (Soma * 10) % 11
       if ((Resto == 10) || (Resto == 11)) {
         Resto = 0
-      }  
+      }
       if (Resto != parseInt(cpf.substring(9, 10))) {
         return false
-      } 
+      }
       Soma = 0
       for (var i = 1; i <= 10; i++) {
         Soma = Soma + parseInt(cpf.substring(i-1, i)) * (12 - i)
-      } 
+      }
       Resto = (Soma * 10) % 11
       if ((Resto == 10) || (Resto == 11)) {
         Resto = 0
-      }  
+      }
       if (Resto != parseInt(cpf.substring(10, 11))) {
         return false
-      } 
+      }
       return true
     },
     validaForm () {
@@ -236,7 +234,6 @@ export default {
         document.querySelector('#erroCpf').classList.add('none')
       }
       if (!this.validaCpf(cpf) && cpf != '') {
-        console.log('validei o cpf')
         erro = 1
         document.querySelector('#erroCpfInvalido').classList.remove('none')
       } else {
@@ -297,7 +294,6 @@ export default {
       //       console.log(error)
       //     })
       // } else {
-      console.log(this.instrutorForm.cpf)
       http
         .post('instrutor', this.instrutorForm)
         .then(response => {

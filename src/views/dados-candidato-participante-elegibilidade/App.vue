@@ -43,9 +43,9 @@
                 <th class="info-nome" scope="row" width="200">{{candidato.nome}}</th>
                 <td id="info-processo">{{candidato.processoSeletivo}}</td>
                 <td id="info-status">{{candidato.status}}</td>
-                <td class="imagem rounded" width="30">
+                <td class="imagem rounded">
                   <a :href="'/dados-participante-cadastro_participante?id=' + candidato.id">
-                    <img src="@/assets/imgs/usuario.svg" alt="Imagem" />
+                    <img src="@/assets/imgs/account_circle_white_24dp.svg" alt="Imagem" class="img-selecionar"/>
                   </a>
                 </td>
               </tr>
@@ -91,7 +91,6 @@ export default {
 
       var listaDeValores = []
 
-      console.log(campoFiltro.value)
       var processos = document.querySelectorAll('.candidatoAprovado')
 
       if (campoFiltro.value.length >= 0) {
@@ -112,7 +111,6 @@ export default {
             listaDeValores.push(i)
           }
 
-          console.log(listaDeValores)
 
           if (!listaDeValores.length == 0) {
             aviso.classList.add('invisivel')
@@ -256,6 +254,16 @@ body {
   display: block;
   height: 55vh;
 }
+
+.candidatoAprovado {
+  height: 25px;
+}
+
+.img-selecionar {
+  height: 25px;
+  width: 50px;
+}
+
 /* Início das Cores de Status do Participante */
 /* Estilo de fonte */
 .aprovado,

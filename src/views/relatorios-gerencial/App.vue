@@ -557,7 +557,7 @@ export default {
 
     totalFormacoes: function () {
       http.get('relatorios/formacoesEmAndamento').then((response) => {
-        console.log((this.formacoesTotal = response.data))
+        this.formacoesTotal = response.data
       })
     },
     validaForm () {
@@ -588,7 +588,7 @@ export default {
       }
       if (erro > 0) {
         return false
-      } else if (formacao != 'null' && turma != 'null' && escopo != 'null') { 
+      } else if (formacao != 'null' && turma != 'null' && escopo != 'null') {
         this.redirecionamento()
       }
     }

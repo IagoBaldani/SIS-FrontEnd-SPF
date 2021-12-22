@@ -141,7 +141,6 @@ export default {
       let expressao = new RegExp(nomeProcurado, 'i')
       dadosLinhas.forEach(dadosLinha => {
         const boolLinha = []
-        console.log(dadosLinha)
         if (expressao.test(dadosLinha[0]) || nomeProcurado == '') {
           boolLinha.push(true)
         } else {

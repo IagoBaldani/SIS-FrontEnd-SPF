@@ -49,7 +49,7 @@
                         type="button"
                         class="bt"
                         @click.prevent="enviarDados()"
-                        
+
                       >
                     <button type="button" v-on:click="validaForm()" class="btn submit form-control" >
                         CONFIRMAR
@@ -237,7 +237,6 @@ export default {
       let tipo = dados.tipo
       this.instrutorForm.status = this.instrutor.status
       if (tipo == 'edicao') {
-        console.log(this.instrutorForm.cpf)
         http
           .put(`instrutor/altera/${cpf}`, this.instrutorForm)
           .then(response => {

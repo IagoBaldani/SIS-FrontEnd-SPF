@@ -154,7 +154,7 @@ export default {
   data () {
     return {
       participante: {}, // objeto para receber as informações do participante.
-      
+
       form: {
         resultado: 'EFETIVADO',
         dataAlteracao: '',
@@ -168,7 +168,6 @@ export default {
 
   beforeMount () {
     this.id = this.pegaDadosUrl().id
-    console.log(this.id)
     this.getParticipanteNome()
     Funcoes.verificaToken()
   },
@@ -187,7 +186,7 @@ export default {
     // método para enviar o formdata com os campos do formulário e com o arquivo
     postForm () {
       var formData = new FormData()
-      var comprovanteRematricula = document.getElementById('file').files[0] 
+      var comprovanteRematricula = document.getElementById('file').files[0]
       formData.append('resultado', this.form.resultado)
       formData.append('dataAlteracao', this.form.dataAlteracao)
       formData.append('cargoEfetivado', this.form.cargoEfetivado)
@@ -197,14 +196,13 @@ export default {
       http
         .post(`ciclo/registrociclofinal/${this.id}`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data' 
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then((response) => {
           document.querySelector('#abreModalInvisivel').click()
           setTimeout(function () {
-            console.log(id)
-            location.href = '/acompanhamento-ciclo/App.vue?id=' + id 
+            location.href = '/acompanhamento-ciclo/App.vue?id=' + id
           }, 1500)
         })
         .catch((error) => {
@@ -259,13 +257,13 @@ export default {
         erro = false
       } else {
         document.querySelector('#erroData').classList.add('none')
-      }  
+      }
       if (document.querySelector('#cargo-efetivado').value == '') {
         document.querySelector('#erroCargo').classList.remove('none')
         erro = false
       } else {
         document.querySelector('#erroCargo').classList.add('none')
-      }  
+      }
       if (document.querySelector('#file').files.length == 0) {
         document.querySelector('#erroArquivo').classList.remove('none')
         erro = false

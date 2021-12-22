@@ -142,7 +142,6 @@ export default {
     },
     getTurmas () {
       let turmas = document.querySelector('#filtro-programa').value
-      console.log(turmas)
       http.get(`relatorios/turmas/${turmas}`)
         .then(response => {
           this.turmas = response.data

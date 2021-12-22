@@ -137,7 +137,6 @@ export default {
     },
     alteraStatus () {
       let cpf = this.instrutor.cpf
-      console.log(cpf)
       http.put(`instrutor/status/altera/${cpf}`)
         .then(res => {
           this.instrutor = res.data
@@ -147,10 +146,10 @@ export default {
           }, 1521)
         })
         .catch(erro => {
-          console.log(`Erro: ${erro}`) 
+          console.log(`Erro: ${erro}`)
         })
     },
-    
+
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')

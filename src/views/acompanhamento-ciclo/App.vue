@@ -32,13 +32,13 @@
                         </fieldset>
                         <div class="mb-3" id="campo">
                             <label for="data-alteracao" class="form-label fw-bold h5 titulo">Data da alteração</label>
-                            
+
                             <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao"/>
                             <p class="fw-bold erro mb-0 none" id="erroData">Preencha este campo!</p>
                         </div>
                         <div class="mb-3" id="campo">
                             <label for="cargo" class="form-label fw-bold h5 titulo">Cargo</label>
-                            
+
                             <select class="form-select" id="filtro-programa" v-model="form.cargo">
                                 <!--<option value="0" id="cargo" selected disabled>Selecione o Cargo</option>-->
                                 <option :value="cargo.cargo" v-for="cargo in cargos" :key="cargo.id">{{ cargo.cargo }}</option>
@@ -48,7 +48,7 @@
 
                         <div class="mb-3" id="campo">
                             <label class="form-label fw-bold h5 titulo">Comprovante de rematrícula/conclusão</label>
-                            
+
                             <input id="file" @change="formatoUpload()" class="none"  type="file" accept="application/pdf"/>
                             <label for="file" class="btn-file d-flex justify-content-between" id="input-file">
                                 <div class="w-100" >
@@ -165,13 +165,13 @@ export default {
   },
   data () {
     return {
-      conclusoes: [], // Array de conclusão, usado para receber as informações do getConclusoes 
+      conclusoes: [], // Array de conclusão, usado para receber as informações do getConclusoes
       cargos: [], //  popula o comboBox para selecionar o cargo do participante
       conclusaoModal: '', // objeto usado para popular o modal com as informações selecionadas
-      id: {}, 
+      id: {},
       participante: {}, // objeto para salvar as informações do participante.
 
-      form: { // objeto para usar no Body para enviar as requisições. 
+      form: { // objeto para usar no Body para enviar as requisições.
         resultado: 'NAO_REAJUSTE_SALARIO',
         dataAlteracao: '',
         cargo: '',
@@ -203,7 +203,7 @@ export default {
     },
     // retorna os cargos adicionados no baanco de dados.
     getCargos () {
-      http 
+      http
         .get('remuneracao/lista')
         .then((response) => {
           this.cargos = response.data
@@ -245,16 +245,14 @@ export default {
       //   } else {
       //     console.log(campo.querySelector('input, select').value)
       //     campo.querySelector('#preencha').classList.add('none')
-          
+
       //   }
       // })
       // console.log(campoVazio)\
       if (this.form.dataAlteracao == '') {
-        console.log(this.form.dataAlteracao)
         document.querySelector('#erroData').classList.remove('none')
         campoVazio = 1;
       } else {
-        console.log(this.form.dataAlteracao)
         document.querySelector('#erroData').classList.add('none')
       }
       if (campos[1].querySelector('select').value == '') {
@@ -272,7 +270,7 @@ export default {
 
       if (campoVazio == 0) {
         var formData = new FormData()
-        var comprovanteRematricula = document.getElementById('file').files[0] 
+        var comprovanteRematricula = document.getElementById('file').files[0]
         formData.append('resultado', this.form.resultado)
         formData.append('dataAlteracao', this.form.dataAlteracao)
         formData.append('cargo', this.form.cargo)
@@ -292,8 +290,8 @@ export default {
           .catch((error) => {
             console.log(error)
           })
-        
-      }    
+
+      }
     },
     // carrega o modal com as informações dos ciclos, e cria a tabela com os indices corretos.
     carregaModal (conclusao, index) {
@@ -322,7 +320,7 @@ export default {
 
       return data
     },
-    // captura o arquivo no input 
+    // captura o arquivo no input
     formatoUpload () {
       var texto = document.querySelector('#nome-arquivo')
       let file = document.getElementById('file')

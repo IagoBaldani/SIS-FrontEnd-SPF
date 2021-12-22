@@ -90,7 +90,7 @@
       <div class="teste row g-2 g-lg-3">
         <div
           class="botãoFinal col-xl-7"
-          
+
         >
           <button
             id="botaoAdicionarManualmente"
@@ -382,7 +382,6 @@ export default {
     escutaQuantidades () {
       let valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       let quantidadeHora = document.querySelector('#horasTrabalhadasModal').value
-      console.log(quantidadeHora)
       this.carregaQuantidade(valorHora, quantidadeHora)
     },
     carregaQuantidade (valor, quantidade) {
@@ -403,7 +402,7 @@ export default {
         .get(
           `instrutor/instrutores/${this.programaProcurado}/${this.turmaProcurada}`
         )
-        .then(response => console.log((this.cpfInstrutores = response.data)))
+        .then(response => this.cpfInstrutores = response.data)
     },
     getProgramas () {
       http.get('relatorios/formacoes')
@@ -416,7 +415,6 @@ export default {
     },
     getTurmas () {
       let turmas = document.querySelector('.filtro-programa').value
-      console.log(turmas)
       http.get(`relatorios/turmas/${turmas}`)
         .then(response => {
           this.turmas = response.data
