@@ -1,11 +1,12 @@
 <template>
-  <Header />
+  <Header link="../processo-seletivo-busca-por-vagas"/>
   <main>
     <div class="container-fluid px-5">
       <!-- Título da Página -->
       <div class="row justify-content-evenly">
-        <div class="col-lg-b6 mb-2 mt-2">
-          <h1 class="mt-3 mb-3">Busca por candidato:</h1>
+        <div class="col-lg-b6 mb-2 mt-2 d-flex justify-content-between">
+          <h1 class="mt-3 mb-3 spc">Busca por candidato:</h1>
+          <h1 class="mt-3 mb-3">Processo seletivo: {{ nomeDoProcessoCorreto }}</h1>
         </div>
         <div class="col-lg-6"></div>
       </div>
@@ -38,7 +39,6 @@
             </button>
           </div>
           <div class="search-table table-wrapper-scroll-y my-custom-scrollbar">
-            <!--  -->
             <table
               class="
                 table table-bordered
@@ -62,7 +62,10 @@
                   <td class="sem-status" v-if="candidato.status == 'SEM_STATUS'">Sem Status</td>
                   <td class="stand" v-if="candidato.status == 'STANDBY'">Standby</td>
                   <td>
-                    <a :href="'/processo-seletivo-dados-do-candidato-visualizacao?id=' + candidato.id">
+                    <a :href="'/processo-seletivo-dados-do-candidato-visualizacao?id=' + candidato.id
+                     + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
+                     + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status"
+                    >
                       <img
                         src="../../assets/imgs/account_circle_white_24dp.svg"
                         alt=""
@@ -70,7 +73,9 @@
                     </a>
                   </td>
                   <td>
-                    <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id + '&tipo=edicao'">
+                    <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id
+                      + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
+                      + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status" >
                       <img
                         src="../../assets/imgs/manage_accounts_white_24dp.svg"
                         alt=""
@@ -92,9 +97,10 @@
           <button
             class="button-footer mt-5 submit"
             id="cadastrar"
-            type="button"
-          >
-            <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?tipo=cadastro'">
+            type="button">
+            <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?tipo=cadastro' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
+                      + this.idProcessoSeletivo"
+            >
               Cadastrar novo candidato
             </a>
           </button>
@@ -115,18 +121,32 @@ export default {
   },
   data () {
     return {
-      candidatos: []
+      candidatos: [],
+      statusProcesso: '',
+      idProcessoSeletivo: '',
+      nomeProcesso:'',
+      nomeDoProcessoCorreto:''
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
     let idProcesso = dadosUrl.id
+    this.idProcessoSeletivo = idProcesso
+    this.statusProcesso = dadosUrl.status
+    this.nomeProcesso = dadosUrl.nomeProcesso
     if (idProcesso != null && idProcesso != '') {
       this.getListaDaFormacao(idProcesso)
     } else {
       this.getLista()
     }
+    this.getListaDeProcessos()
+  },
+  beforeUpdate () {
+    if(this.statusProcesso == 'FINALIZADA'){
+       document.querySelector('#cadastrar').classList.add('invisivel')
+     }
+
   },
   methods: {
     filtraDados () {
@@ -134,7 +154,6 @@ export default {
       aviso.classList.add('invisivel')
       var campoFiltro = document.querySelector('#filtrar-tabela')
       var listaDeValores = []
-      console.log(campoFiltro.value)
       var processos = document.querySelectorAll('.processo')
       if (campoFiltro.value.length >= 0) {
         for (var i = 0; i < processos.length; i++) {
@@ -150,7 +169,6 @@ export default {
             aviso.classList.add('invisivel')
             listaDeValores.push(i)
           }
-          console.log(listaDeValores)
           if (!listaDeValores.length == 0) {
             aviso.classList.add('invisivel')
           } else {
@@ -164,6 +182,17 @@ export default {
           aviso.classList.remove('invisivel')
         }
       }
+    },
+    getListaDeProcessos () {
+      http
+        .get(`processo-seletivo/${this.idProcessoSeletivo}`)
+        .then(response => {
+          this.nomeProcesso = response.data
+          this.nomeDoProcessoCorreto = this.nomeProcesso.nome
+        })
+        .catch(error => {
+          console.log(error)
+        })
     },
     getLista () {
       http
@@ -256,6 +285,10 @@ body {
 }
 .home.btn-header {
   background-color: var(--color-yellow-principal);
+}
+.divBtn {
+  display: none;
+
 }
 .rollback.btn-header {
   background-color: var(--color-magenta-principal);

@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header link="../home"/>
     <main>
         <!--Escrita de busca por participantes-->
         <div class="container-fluid">
@@ -12,13 +12,11 @@
             <!--ComboBox de Programa de formação-->
             <div class="row justify-content-evenly mb-5">
                 <form class="col-lg-4 d-flex flex-column justify-content-between">
-                    <div class="comboBox w-100" id="programas">
-                        <select class="form-select" id="filtro-programa" v-model="programaSelecionado">
-                            <option value="0" class="programa-form" selected disabled>Programa de formação</option>
-                            <option :value="''">Nenhum</option>
+                        <select class="form-select" id="filtro-programa" required>
+                            <option value="0" disabled hidden selected >Programa de formação</option>
+                            <option :value="''">Todos</option>
                             <option :value="programa.nome" v-for="programa in programas" v-bind:key="programa">{{programa.nome}}</option>
                         </select>
-                    </div>
                     <button @click="filtraDados()" type="button" value="BUSCAR" class="btn w-100 fs-5 mt-3 btn-primary botao">BUSCAR</button>
                 </form>
 
@@ -26,7 +24,7 @@
                 <div class="col-lg-7" id="participantes">
                     <div class="aviso">
                         <h4 class="titulo fw-bold"> Não foi encontrado nenhum resultado com os parâmetros informados </h4>
-                        <button @click="recarregaLista()" class="mt-3 form-control recarregar">RECARREGAR LISTA</button>
+                        <button onclick="window.location.reload()" class="mt-3 form-control recarregar">RECARREGAR LISTA</button>
                     </div>
                     <div class="scroll-tabela">
                         <table class="table mb-0 table-bordered tabela">

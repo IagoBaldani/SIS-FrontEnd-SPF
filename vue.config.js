@@ -36,6 +36,12 @@ module.exports = {
       title: 'Programa de Formação - Cadastro e Edição',
       chunks: ['chunk-vendors', 'chunk-common', 'dados-programa-cadastro_edicao']
     },
+    'dados-programa-cadastro': {
+      entry: './src/views/dados-programa-cadastro/main.js',
+      template: 'public/index.html',
+      title: 'Programa de Formação - Cadastro',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-programa-cadastro']
+    },
     'dados-programa-processo-seletivo': {
       entry: './src/views/dados-programa-processo-seletivo/main.js',
       template: 'public/index.html',
@@ -174,6 +180,12 @@ module.exports = {
       title: 'Dados da vaga - Cadastro/Edição',
       chunks: ['chunk-vendors', 'chunk-common', 'processo-seletivo-dados-da-vaga-cadastro-edicao']
     },
+    'dados-instrutor-cadastro': {
+      entry: './src/views/dados-instrutor-cadastro/main.js',
+      template: 'public/index.html',
+      title: 'Dados Instrutor -  Cadastro',
+      chunks: ['chunk-vendors', 'chunk-common', 'dados-instrutor-cadastro']
+    },
     'processo-seletivo-dados-da-vaga-visualizacao': {
       entry: './src/views/processo-seletivo-dados-da-vaga-visualizacao/main.js',
       template: 'public/index.html',
@@ -246,6 +258,11 @@ module.exports = {
       title: 'Cargos | Edição',
       chunks: ['chunk-vendors', 'chunk-common', 'cargo-cadastro-edicao']
     },
-   
+    'cargo-cadastro': {
+      entry: './src/views/cargo-cadastro/main.js',
+      template: 'public/index.html',
+      title: 'Cargos',
+      chunks: ['chunk-vendors', 'chunk-common', 'cargo-cadastro']
+    },
   }
 }

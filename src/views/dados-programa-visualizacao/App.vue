@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../dados-programa-busca"/>
   <main>
     <div class="container-fluid">
       <div class="row mt-4 justify-content-evenly">
@@ -136,12 +136,26 @@
       </div>
     </div>
   </div>
+  <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração efetuada com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { variavel } from '../../services/Variavel'
 
 export default {
   name: 'App',
@@ -169,6 +183,9 @@ export default {
           console.log(error)
         })
     },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -193,7 +210,10 @@ export default {
       http.put(`programa/altera-status/${this.id}`, null)
         .then(response => {
           if (response.status == '200') {
-            window.location.href = '/dados-programa-busca'
+            this.abrirModal()
+            setTimeout(function () {
+              window.location.href = variavel.href = 'dados-programa-busca'
+            }, 1500) 
           } 
         })
     }
@@ -328,7 +348,4 @@ textarea {
   font-size: 21px;
 }
 
-.modal-content {
-  height: 80vh !important;
-}
 </style>

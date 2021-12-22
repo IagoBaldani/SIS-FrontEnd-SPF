@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../relatorios-gerencial"/>
   <main>
     <div id="relatorio">
       <!-- divisão criada para titulo e cards -->
@@ -20,19 +20,19 @@
             <!-- card de participantes ativos -->
             <h2 id="part-ativos">{{relatorio.participantesAtivos}}</h2>
             <p class="descricao">
-              Participantes ativos em todos os programas de formação.
+              Participantes ativos no programa {{relatorio.programadeformacao}} e na turma {{relatorio.turma}}.
             </p>
           </div>
           <div class="partEfetivados ">
             <!-- card de participantes efetivados -->
             <h2 id="part-efetivados">{{relatorio.participantesEfetivados}}</h2>
-            <p class="descricao">Participantes efetivados na empresa.</p>
+            <p class="descricao">Participantes efetivados no programa {{relatorio.programadeformacao}} e na turma {{relatorio.turma}}.</p>
           </div>
           <div class="dataConclusão ">
             <!-- card da data de conclusão -->
             <h2 id="data-conclusão">{{relatorio.dataConclusao}}</h2>
             <p class="descricao">
-              Data do ultimo ciclo de conclusões (não efetivados).
+              Data do ultimo ciclo de conclusões do programa {{relatorio.programadeformacao}} e na turma {{relatorio.turma}}.
             </p>
           </div>
         </div>
@@ -52,6 +52,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
+import { variavelBack} from '../../services/VariavelBack'
 
 export default {
   name: 'App',
@@ -93,11 +94,11 @@ export default {
     },
 
     downloadRelatorioPDF () {
-      location.href = 'http://localhost:8081/api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
+      location.href = variavelBack +  'conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/pdf'
     },
 
     downloadRelatorioXLSX () {
-      location.href = 'http://localhost:8081/api/conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
+      location.href = variavelBack +  'conclusoes/formacao=' + this.parametrosUrl.formacao + '/turma=' + this.parametrosUrl.turma + '/xlsx'
     }
   }
 }
@@ -186,6 +187,7 @@ body {
   border: 1px solid #CCC;
   border-radius: 5px;
   box-shadow: 4px 4px 4px #ccc;
+  background-color: white;
 } 
 
 /* alinhando conteudo de participantes ativos no programa */

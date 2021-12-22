@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../dados-participante-busca"/>
   <main>
     <!-- ínicio do formulário -->
     <div class="container-fluid" id="participante">
@@ -24,9 +24,10 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">CPF</label>
-              <input
+              <input id="cpfDoparticipante"
                 class="form-control disabledTextInput"
                 v-bind:value="formataCpfparaMostrar(participante.cpf)"
+                v-mask="['###.###.###-##']"
                 type="text"
               />
             </div>
@@ -34,8 +35,9 @@
               <label class="form-label fw-bold mb-0 titulo">Contato</label>
               <input
                 class="form-control disabledTextInput"
-                v-bind:value="participante.telefone"
+                v-bind:value="formataTelefoneparaMostrar(participante.telefone)"
                 type="tel"
+                v-mask="['(##) # ####-####']"
                 disabled
                 readonly
               />
@@ -47,6 +49,18 @@
               <input
                 class="form-control disabledTextInput"
                 v-bind:value="participante.fonteRecrutamento"
+                type="text"
+                disabled
+                readonly
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold mb-0 titulo"
+                >Indicação</label
+              >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="participante.indicacao"
                 type="text"
                 disabled
                 readonly
@@ -89,13 +103,24 @@
               />
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo">TCE</label><br />
-              <a href="#"
-                ><img
-                  src="@/assets/imgs/file_download_black_24dp.svg"
-                  alt=""
-                />tce.xls</a
+              <label class="form-label fw-bold mb-0 titulo"
+                >Data de Entrega</label
               >
+              <input
+                class="form-control disabledTextInput"
+                v-bind:value="formataDataParaMostrar(participante.dataEntrega)"
+                type="text"
+                disabled
+                readonly
+              />
+            </div>
+            <div class="mb-3">
+                <label class="form-label mb-0 titulo">Donwload DISC</label><br>
+                <p ><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download" v-on:click="downloadDisc()">DISC</p>
+            </div>
+            <div class="mb-3">
+                <label target="_blank" class="form-label mb-0 titulo">Donwload TCE</label><br>
+                <a><img  src="../../assets/imgs/file_upload_black_24dp.svg" class="download"  v-on:click="downloadTce()">TCE</a>
             </div>
           </fieldset>
         </div>
@@ -319,8 +344,13 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { mask } from 'vue-the-mask'
+import { variavel } from '../../services/Variavel'
+import { variavelBack} from '../../services/VariavelBack'
+
 
 export default {
+  directives: { mask },
   name: 'App',
   components: {
     Header
@@ -358,7 +388,7 @@ export default {
     getCargo (cpf) {
       http.get(`participante/completo/${cpf}`)
         .then(response => {
-          console.log(this.participante = response.data)
+          (this.participante = response.data)
         })
         .catch(error => {
           console.log(error)
@@ -369,11 +399,18 @@ export default {
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
     },
-    download () {
-      location.href = `http://localhost:8081/api/feedback/download/${this.id}`
+
+    downloadTce () {
+      window.open( variavelBack + `participante/downloadTce/${this.participante.cpf}`)
+    },
+    downloadDisc () {
+      location.href = variavelBack + `participante/downloadDisc/${this.participante.cpf}`
     },
     formataCpfparaMostrar (cpf) {
       return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+    },
+    formataTelefoneparaMostrar (telefone) {
+      return telefone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $3-$4')
     },
     processaRequisicoes (statusAtivo) {
       this.atualizaStatusForm.cpf = this.participante.cpf
@@ -386,7 +423,7 @@ export default {
       http
         .put('participante/atualizaStatus', this.atualizaStatusForm)
         .then(response => {
-          window.location.href = 'http://localhost:8080/dados-participante-busca'
+          window.location.href = variavel.href = 'dados-participante-busca'
         })
         .catch(error => {
           console.log(error)
@@ -429,6 +466,10 @@ body {
   color: #737373;
 }
 
+.pointer{
+  cursor: pointer;
+}
+
 .disabledTextInput {
   background-color: #d3caca !important;
   border: 1px solid #bcb3b3 !important;
@@ -445,6 +486,7 @@ textarea {
 
 .download {
   transform: rotate(180deg) !important;
+  cursor:pointer !important;
 }
 
 .modal-body,
@@ -492,7 +534,24 @@ textarea {
 .rounded-circle {
   width: 150px;
 }
+.btn-registrar{
+    margin-bottom: 0;
+    width:100%;
+    padding: 5px 5px;
+    background-color: #ffb700 !important;
+    color: white;
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+    border-style: none;
+    font-size: 20px;
 
+}
+.btn-registrar:hover{
+    background-color: #634700;
+    transition: 300ms;
+     color: white;
+}
 @media (max-width: 1200px) {
   .rounded-circle {
     margin-bottom: 3em;

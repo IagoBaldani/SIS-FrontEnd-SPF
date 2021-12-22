@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header :link="`../acompanhamento-gerencial?id=${this.id}`"/>
     <main>
         <div class="container-fluid">
             <div class="row justify-content-evenly mt-5 mb-3">
@@ -20,23 +20,24 @@
                     <form>
                         <div class="mb-3">
                             <p for="anotacao" class="form-label fw-bold mb-0 titulo">Data do Feedback</p>
-                            <input v-model="form.data" type="date" class="form-control" id="anotacao"
+                            <input v-model="form.data" type="date" class="form-control" id="dataFeed"
                                 placeholder="Digite a data do feedback">
+                                <p class="erro none" id="erroData" >Coloque uma data válida</p>
                         </div>
                         <div class="mb-3">
                             <label for="anotacoes" class="form-label mb-0 fw-bold titulo">Anotações</label>
                             <textarea v-model="form.anotacoes" rows="8" class="form-control mb-3" id="anotacoes"></textarea>
+                            <p class="erro none" id="erroObs" >Coloque uma observação</p>
                         </div>
-                        <div class="input-group">
+                        <div>
                             <!--<input class="input-file" type="file">-->
-                             <input type="file" class="form-control" id="disc" 
-                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                            <p class="form-label mb-0 fw-bold titulo d-block">Insira o DISC</p>
+                             <input type="file" class="form-control" id="campoDisc"
+                             accept="application/pdf">
                         </div>
-                        <button class="btn-registrar mt-4 " type="button" @click="postForm()" >REGISTRAR</button>
-                        <p class="none h4 mt-3" id="aguarde">Enviando formulário, aguarde...</p>
-                        <p class="none h4 enviado mt-3" id="enviado">Formulário enviado</p>
-                        <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
+                        <button class="btn-registrar mt-4 " type="button" @click="validadorDeCampos()" >REGISTRAR</button>
                     </form>
+                    <p id="invisivel" v-on:click="postForm()"></p>
                 </div>
                 <div class="col-lg-7">
                     <div class="master-table">
@@ -47,7 +48,7 @@
                                 <tr v-for="(feedback, index) in feedbacks" :key="feedback">
                                     <td scope="row">{{++index}}</td>
                                     <td>{{feedback.anotacao}}</td>
-                                    <td @click="carregaModal(feedback, index)" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
+                                    <td @click="carregaModal(feedback, index), validacaoDownload()" id="tdcomlink" data-bs-toggle="modal" data-bs-target="#anotmodal" for="imglogo">
                                         <img class="imgicon" name="imglogo" src="@/assets/imgs/visibility_white_24dp.svg"></td>
                                 </tr>
                             </tbody>
@@ -76,9 +77,9 @@
                             <h4 class="fw-bold titulo">Anotações do feedback</h4>
                             <textarea v-model="feedbackModal.anotacao" disabled class="mb-2 textarea disabled nomeCol" rows="6"></textarea>
                         </div>
-                        <div class="col-lg-6" >
-                            <h4 class="fw-bold titulo mb-3" >Download DISC:</h4>
-                            <a @click="download()" id="oioi" class="btn-registrar pointer" > DOWNLOAD</a>
+                        <div class="col-lg-6 none" id="downloadModal">
+                            <h4 class="fw-bold titulo mb-3" >Download arquivo:</h4>
+                            <a v-on:click="download()" id="oioi" class="btn-registrar pointer" > DOWNLOAD</a>
                         </div>
                     </div>
                     <div class="row">
@@ -129,6 +130,33 @@
                 </div>
             </div>
         </div>
+        <!-- Modal de confirmação -->
+  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Feedback cadastrado  com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Exclusão -->
+    <p class="none" id="abreModalInvisivelExclusao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoExclusao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacaoExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabelExclusao">Feedback excluído com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </main>
 </template>
 
@@ -136,7 +164,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
-
+import { variavelBack } from '../../services/VariavelBack'
 export default {
   name: 'App',
   components: {
@@ -152,11 +180,10 @@ export default {
         anotacoes: '',
         disc: {}
       },
-      id: {},     
+      id: {},
       indiceModal: {}
     }
   },
-
   beforeMount () {
     this.id = this.pegaDadosUrl().id
     this.getParticipanteNome()
@@ -175,6 +202,29 @@ export default {
           console.log(error)
         })
     },
+    validadorDeCampos () {
+      var campoData = document.getElementById('dataFeed').value
+      var campoDisc = document.getElementById('campoDisc').value
+      var campoObs = document.getElementById('anotacoes').value
+      let erro = 0
+      if (campoData == '') {
+        document.querySelector('#erroData').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroData').classList.add('none')
+      }
+      if (campoObs == '') {
+        document.querySelector('#erroObs').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroObs').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        document.getElementById('invisivel').click()
+      }
+    },
     // metodo para retornar os feedbacks.
     getFeedback () {
       http
@@ -188,48 +238,48 @@ export default {
     },
     //  metodo para enviar o post com o form
     postForm () {
-      let campos = document.querySelectorAll('input')
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0) {
-        document.querySelector('#preencha').classList.add('none')
-        document.querySelector('#aguarde').classList.remove('none')
-        var formData = new FormData()
-        var disc = document.getElementById('disc').files[0]
+      var formData = new FormData()
+      var disc = document.getElementById('campoDisc').files[0]
+      if (disc != null) {
         formData.append('data', this.form.data)
         formData.append('anotacoes', this.form.anotacoes)
         formData.append('disc', disc)
-        http
-          .post(`feedback/novo/${this.id}`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data' 
-            }
-          })
-          .then((response) => {
-            this.getFeedback()
-            document.querySelector('#aguarde').classList.add('none')
-            document.querySelector('#enviado').classList.remove('none')
-            setTimeout(function () {
-              document.querySelector('#enviado').classList.add('none')
-            }, 2000)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
       } else {
-        document.querySelector('#preencha').classList.remove('none')
+        formData.append('data', this.form.data)
+        formData.append('anotacoes', this.form.anotacoes)
       }
-    }, 
+      http
+        .post(`feedback/novo/${this.id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then((response) => {
+          this.abrirModal()
+          setTimeout(function () {
+            document.location.reload(true)
+          }, 1500)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    validacaoDownload () {
+      if (this.feedbackModal.download == false) {
+        document.getElementById('downloadModal').classList.add('none')
+      } else {
+        document.getElementById('downloadModal').classList.remove('none')
+      }
+    },
     // método para deletar o o feedback.
     deleteById () {
-      http  
+      http
         .delete(`/feedback/deletar/${this.feedbackModal.id}`)
         .then((response) => {
-          this.getFeedback()
+          this.abrirModalExclusao()
+          setTimeout(function () {
+            document.location.reload(true)
+          }, 1500)
         })
         .catch((error) => {
           console.log(error)
@@ -237,9 +287,14 @@ export default {
     },
     // endereço da API para fazer donwload  do arquivo
     download () {
-      location.href = `http://localhost:8081/api/feedback/download/${this.feedbackModal.id}`
+      location.href = variavelBack + `feedback/download/${this.feedbackModal.id}`
     },
-
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    abrirModalExclusao () {
+      document.getElementById('abreModalInvisivelExclusao').click()
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -422,6 +477,7 @@ textarea  {
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 
 .enviado {
@@ -456,5 +512,9 @@ textarea  {
 .pointer {
   cursor: pointer;
   background-color: #FFB700 !important
+}
+.erro {
+  color: red;
+  font-weight: bold;
 }
 </style>

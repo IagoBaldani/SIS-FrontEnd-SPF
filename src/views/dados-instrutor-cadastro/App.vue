@@ -25,8 +25,9 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">CPF</label>
-                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" v-mask="['###.###.###-##']" disabled v-model="instrutor.cpf" type="text" />
+                            <input class="form-control" id="inputCpf" placeholder="xxx.xxx.xxx-xx" :v-model="instrutor.cpf" v-mask="['###.###.###-##']" type="text" />
                             <p id="erroCpf" class="none erro">Por favor, preencha este campo</p>
+                            <p id="erroCpfInvalido" class="none erro">Por favor, insira um CPF válido</p>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold mb-0 titulo">Email corporativo</label>
@@ -37,7 +38,7 @@
                 </div>
                 <div class="col-xl-4">
                   <p id="invisivel" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal" @click="enviarDados()"></p>
+                        data-bs-target="#exampleModal" v-on:click="enviarDados()"></p>
                 </div>
                 <div class="col-xl-2">
                 </div>
@@ -48,10 +49,10 @@
                      <div
                         type="button"
                         class="bt"
-                        @click.prevent="enviarDados()"
+                        v-on:click="validaForm()"
 
                       >
-                    <button type="button" v-on:click="validaForm()" class="btn submit form-control" >
+                    <button type="button" class="btn submit form-control" >
                         CONFIRMAR
                     </button>
                      </div>
@@ -74,11 +75,8 @@
         <div class="modal-content">
           <div class="modal-body d-flex justify-content-between">
             <div>
-              <h1 class="modal-title form-label fw-bold mb-0 titulo" v-if="instrutorForm.id == ''">
+              <h1 class="modal-title form-label fw-bold mb-0 titulo">
                 Deseja confirmar o cadastro?
-              </h1>
-              <h1 class="modal-title form-label fw-bold mb-0 titulo" v-else>
-                Deseja confirmar a edição do instrutor?
               </h1>
             </div>
             <div class="conteudomodal">
@@ -104,15 +102,14 @@
         </div>
       </div>
     </div>
-
-     <!-- Modal de confirmação -->
-  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
     <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-size">
+        <div class="modal-dialog modal-size h-5">
             <div class="modal-content p-5 grey-background">
                 <div class="row mb-5">
                     <div class="col">
-                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração Efetuada com sucesso</h3>
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Cadastro efetuado com sucesso</h3>
                     </div>
                 </div>
             </div>
@@ -128,6 +125,7 @@ import { http } from '../../services/Config'
 import { mask } from 'vue-the-mask'
 import { variavel } from '../../services/Variavel'
 
+
 export default {
   directives: { mask },
   name: 'App',
@@ -142,8 +140,7 @@ export default {
         nome: '',
         status: '',
         cpf: '',
-        telefone: '',
-        status: ''
+        telefone: ''
       },
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     }
@@ -162,6 +159,7 @@ export default {
   methods: {
     enviarDados () {
       this.instrutorForm.nome = document.querySelector('#inputNome').value
+      this.instrutorForm.status = 'ATIVO'
       this.instrutorForm.cpf = document.getElementById('inputCpf').value
       this.instrutorForm.telefone = document.querySelector('#inputTelefone').value
       this.instrutorForm.email = document.querySelector('#inputEmail').value
@@ -175,26 +173,42 @@ export default {
           console.log(`Erro: ${erro}`)
         })
     },
-    abrirModal () {
-      document.getElementById('abreModalInvisivel').click()
-    },
-    pegaDadosUrl () {
-      var query = location.search.slice(1)
-      var partes = query.split('&')
-      var data = {}
-
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=')
-        var chave = chaveValor[0]
-        var valor = chaveValor[1]
-        data[chave] = valor
-      })
-
-      return data
+    validaCpf (cpf) {
+      cpf = cpf.replaceAll('.', '')
+      cpf = cpf.replace('-', '')
+      var Soma
+      var Resto
+      Soma = 0
+      if (cpf == "00000000000") {
+        return false
+      }
+      for (var i = 1; i <= 9; i++) {
+        Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i)
+      }
+      Resto = (Soma * 10) % 11
+      if ((Resto == 10) || (Resto == 11)) {
+        Resto = 0
+      }
+      if (Resto != parseInt(cpf.substring(9, 10))) {
+        return false
+      }
+      Soma = 0
+      for (var i = 1; i <= 10; i++) {
+        Soma = Soma + parseInt(cpf.substring(i-1, i)) * (12 - i)
+      }
+      Resto = (Soma * 10) % 11
+      if ((Resto == 10) || (Resto == 11)) {
+        Resto = 0
+      }
+      if (Resto != parseInt(cpf.substring(10, 11))) {
+        return false
+      }
+      return true
     },
     validaForm () {
       var nome = document.getElementById('inputNome').value
       var contato = document.getElementById('inputTelefone').value
+      var cpf = document.getElementById('inputCpf').value
       var email = document.getElementById('inputEmail').value
       let erro = 0
       if (nome == '') {
@@ -212,6 +226,18 @@ export default {
         erro = 1
       } else {
         document.querySelector('#erroTamanho').classList.add('none')
+      }
+      if (cpf == '') {
+        document.querySelector('#erroCpf').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroCpf').classList.add('none')
+      }
+      if (!this.validaCpf(cpf) && cpf != '') {
+        erro = 1
+        document.querySelector('#erroCpfInvalido').classList.remove('none')
+      } else {
+        document.querySelector('#erroCpfInvalido').classList.add('none')
       }
       if (email == '') {
         document.querySelector('#erroEmail').classList.remove('none')
@@ -231,36 +257,54 @@ export default {
         document.getElementById('invisivel').click()
       }
     },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    pegaDadosUrl () {
+      var query = location.search.slice(1)
+      var partes = query.split('&')
+      var data = {}
+
+      partes.forEach(function (parte) {
+        var chaveValor = parte.split('=')
+        var chave = chaveValor[0]
+        var valor = chaveValor[1]
+        data[chave] = valor
+      })
+
+      return data
+    },
+    formataCpfparaMostrar (cpf) {
+      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1$2$3$4')
+    },
     processaRequisicoes () {
       const dados = this.pegaDadosUrl()
       let cpf = dados.id
-      let tipo = dados.tipo
-      this.instrutorForm.status = this.instrutor.status
-      if (tipo == 'edicao') {
-        http
-          .put(`instrutor/altera/${cpf}`, this.instrutorForm)
-          .then(response => {
-            this.abrirModal()
-            setTimeout(function () {
-              window.location.href = variavel.href = 'dados-instrutor-busca'
-            }, 1521)
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      } else {
-        http
-          .post('instrutor', this.instrutorForm)
-          .then(response => {
-            this.abrirModal()
-            setTimeout(function () {
-              window.location.href = variavel.href = 'dados-instrutor-busca'
-            }, 1521)
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+      // if (tipo == 'edicao') {
+      //   console.log(this.instrutorForm.cpf)
+      //   http
+      //     .put(`instrutor/altera/${cpf}`, this.instrutorForm)
+      //     .then(response => {
+      //       this.abrirModal()
+      //       setTimeout(function () {
+      //         window.location.href = 'dados-instrutor-busca'
+      //       }, 1521)
+      //     })
+      //     .catch(error => {
+      //       console.log(error)
+      //     })
+      // } else {
+      http
+        .post('instrutor', this.instrutorForm)
+        .then(response => {
+          this.abrirModal()
+          setTimeout(function () {
+            window.location.href =  variavel.href ='dados-instrutor-busca'
+          }, 1521)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }
@@ -288,6 +332,10 @@ body{
   font-size: 20px;
 }
 
+.subtitulo{
+    color: #737373;
+}
+
 .erro {
   color: red;
   font-weight: bold;
@@ -295,10 +343,6 @@ body{
 
 .none {
   display: none;
-}
-
-.subtitulo{
-    color: #737373;
 }
 
 textarea{
@@ -309,11 +353,13 @@ textarea{
   background-color: #D3CACA !important;
   border: 1px solid #BCB3B3 !important;
 }
+
 .modal-size {
-    height:25px  !important;
+    height:5px  !important;
     width: 801px !important;
     max-width: 801px !important;
 }
+
 .modal {
   display: none;
 }
@@ -332,7 +378,6 @@ button .largura {
 }
 
 .modal-body{
-  min-height: 55vh;
   flex-direction: column;
   width: 100%;
 }

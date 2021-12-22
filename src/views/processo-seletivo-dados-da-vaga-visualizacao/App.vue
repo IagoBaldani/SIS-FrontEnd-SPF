@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../processo-seletivo-busca-por-vagas"/>
   <main>
     <div class="container-fluid">
       <div class="row justify-content-evenly">
@@ -44,15 +44,19 @@
           <fieldset disabled>
             <div class="form-group mb-3">
               <label>Quantidade de Estagiários</label>
-              <input type="text" class="form-control" v-model="processoSeletivo.qtdEstagiario" disabled/>
+              <input type="number" class="form-control" id="qtdEstagiario" v-model="processoSeletivo.qtdEstagiario" disabled/>
             </div>
             <div class="form-group mb-3">
               <label>Quantidade de Trainees</label>
-              <input type="text" class="form-control" v-model="processoSeletivo.qtdTrainee" disabled/>
+              <input type="number" class="form-control" id="qtdTrainee" v-model="processoSeletivo.qtdTrainee" disabled/>
             </div>
             <div class="form-group mb-3">
               <label>Quantidade de Aprendizes</label>
-              <input type="text" class="form-control" v-model="processoSeletivo.qtdAprendiz" disabled/>
+              <input type="number" class="form-control"  id="qtdAprendiz" v-model="processoSeletivo.qtdAprendiz" disabled/>
+            </div>
+             <div class="form-group mb-3">
+              <label>Quantidade de Participantes</label>
+              <input  class="form-control" id="inputQtdTotal" v-model="this.total" disabled/> 
             </div>
           </fieldset>
       </div>
@@ -73,12 +77,13 @@ export default {
   },
   data () {
     return {
-      processoSeletivo: {}
+      processoSeletivo: {},
+      total: ''
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
-
+   
     const dadosUrl = this.pegaDadosUrl()
     let id = dadosUrl.id
 
@@ -90,6 +95,7 @@ export default {
         .get(`processo-seletivo/${id}`)
         .then(response => {
           this.processoSeletivo = response.data
+          this.total = this.processoSeletivo.qtdAprendiz + this.processoSeletivo.qtdEstagiario + this.processoSeletivo.qtdTrainee
         })
         .catch(error => {
           console.log(error)
@@ -111,7 +117,7 @@ export default {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
-    }
+    },
   }
 }
 </script>

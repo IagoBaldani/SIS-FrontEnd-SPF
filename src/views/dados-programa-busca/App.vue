@@ -1,6 +1,6 @@
 <template>
 <div>
-    <Header/>
+    <Header link="../informacoes-gerais-gerencial"/>
     <main>
         <div class="container-fluid">
             <div class="row justify-content-evenly mt-4 mb-3">
@@ -29,14 +29,14 @@
                     <div class="aviso">
                         <h4 class="titulo fw-bold"> Não foi encontrado nenhum resultado com os parâmetros
                             informados </h4>
-                        <button class="mt-3 form-control recarregar" @click="recarregaLista"> RECARREGAR LISTA
+                        <button class="mt-3 form-control recarregar" onclick="window.location.reload()"> RECARREGAR LISTA
                         </button>
                     </div>
                     <div class="table-wrapper-scroll-y my-custom-scrollbar">
                         <table class="table table-bordered tabela mt-4 " id="tab">
                             <tbody align="center">
-                            <tr class="programa" v-for="programa in programas" v-bind:key="programa">
-                                <th scope="row" width="50">{{ programa.id }}</th>
+                            <tr class="programa" v-for="(programa, index) in programas" v-bind:key="programa">
+                                <th scope="row" width="50">{{++index}}</th>
                                 <td id="info-nome"> {{ programa.nome }}</td>
                                 <td>{{ programa.turma }}</td>
                                 <td id="info-status" class="info-status"
@@ -64,7 +64,7 @@
                     <input value="BUSCAR" type="button" class="mt-5 form-control submit" @click="filtraDados"/>
                 </div>
                 <div class="col-xl-7 justify-content-end d-flex">
-                    <a href="/dados-programa-cadastro_edicao?tipo=cadastro"
+                    <a href="/dados-programa-processo-seletivo"
                        class="mt-5 form-control cadastro d-flex justify-content-center"> NOVO CADASTRO
                     </a>
                 </div>
@@ -141,7 +141,6 @@ export default {
       let expressao = new RegExp(nomeProcurado, 'i')
       dadosLinhas.forEach(dadosLinha => {
         const boolLinha = []
-        console.log(dadosLinha)
         if (expressao.test(dadosLinha[0]) || nomeProcurado == '') {
           boolLinha.push(true)
         } else {

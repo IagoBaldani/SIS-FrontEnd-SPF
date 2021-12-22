@@ -1,5 +1,5 @@
 <template>
-    <Header link="../dados-programa-busca"/>
+    <Header link="../dados-programa-processo-seletivo"/>
     <main>
         <div class="container-fluid">
             <div class="row mt-4 justify-content-evenly">
@@ -12,23 +12,24 @@
             <div class="row d-flex justify-content-evenly">
                 <div class="col-xl-4">
                     <div class="mb-3">
-                        <label for="nome" class="form-label fw-bold mb-0 titulo">Nome</label>
+                        <label for="processo" class="form-label fw-bold mb-0 titulo">Nome</label>
                         <input
                             type="text"
                             class="form-control"
-                            id="nome"
+                            id="processo"
                             disabled
-                            :value="programa.nome"
+                            required
+                            :value="processo.nome"
                         />
                     </div>
                     <div class="mb-3">
                         <label for="inicio" class="form-label fw-bold mb-0 titulo">Início do Programa</label>
                         <input
-                            class="form-control"
                             type="date"
+                            class="form-control"
                             id="inicio"
                             required
-                            :value="programa.inicio"
+                            placeholder="dd/MM/yyyy"
                         />
                         <p id="erroDataInicio" class="erro none">Por favor insira uma data válida</p>
                     </div>
@@ -39,16 +40,17 @@
                             class="form-control"
                             id="termino"
                             required
-                            :value="programa.termino"
+                            placeholder="dd/MM/yyyy"
                         />
                         <p id="erroDataTermino" class="erro none">Por favor insira uma data válida</p>
                         <p id="erroDataInicioTermino" class="erro none">A data de término deve ser posterior a data de inicio</p>
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label fw-bold mb-0 titulo">Instrutor</label>
-                        <select class="form-select" id="instrutores" v-model="programa.nomeCoordenador">
+                        <select class="form-select" id="instrutores">
+                            <option disabled selected value="">Instrutor</option>
                             <option
-                                id="coordenador"
+                                id="instrutor"
                                 v-for="instrutor in instrutores"
                                 v-bind:value="instrutor.nome"
                                 v-bind:key="instrutor.cpf"
@@ -64,9 +66,7 @@
                             type="text"
                             class="form-control"
                             id="turma"
-                            v-on:click="getTurmasDoProcesso()"
                             required
-                            :value="programa.turma"
                         />
                         <p id="erroTurma" class="erro none">Por favor insira uma turma</p>
                         <p id="erroTurmaCadastrada" class="erro none">Esta turma já está cadastrada, por favor insira outra</p>
@@ -108,16 +108,16 @@
                         <div class="mt-3">
                             <ul class="fw-bold subtitulo text-start">
                                 Informações gerais:
-                                <li>Nome: <span class="titulo"> {{ this.programaForm.nome }} </span></li>
-                                <li>Início do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.dataInicio)}}</span></li>
-                                <li>Término do Programa: <span class="titulo">{{ this.formataDataParaExibicao(programaForm.dataFim)}}</span></li>
+                                <li>Nome: <span class="titulo"> {{ programaForm.nome }} </span></li>
+                                <li>Início do Programa: <span class="titulo">{{this.formataDataParaExibicao(programaForm.inicio)}}</span></li>
+                                <li>Término do Programa: <span class="titulo">{{this.formataDataParaExibicao(programaForm.termino)}}</span></li>
                                 <li>Instrutor: <span class="titulo">{{ programaForm.instrutor }}</span></li>
                                 <li>Turma: <span class="titulo">{{ programaForm.turma }}</span></li>
                             </ul>
                         </div>
                         <div class="mt-3 modal-footer border-0 justify-content-around">
                             <div>
-                                <button type="button" class="btn submit-modal" v-on:click="putPrograma()">
+                                <button type="button" class="btn submit-modal" v-on:click="postPrograma">
                                     CONFIRMAR
                                 </button>
                             </div>
@@ -132,15 +132,14 @@
             </div>
         </div>
     </div>
-
     <!-- Modal de confirmação -->
-  <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
     <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-size">
             <div class="modal-content p-5 grey-background">
                 <div class="row mb-5">
                     <div class="col">
-                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Alteração Efetuada com sucesso</h3>
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Criação efetuada com sucesso</h3>
                     </div>
                 </div>
             </div>
@@ -152,10 +151,9 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
-import { mask } from 'vue-the-mask'
+import { variavel } from '../../services/Variavel'
 
 export default {
-  directives: { mask },
   name: 'App',
   components: {
     Header
@@ -167,11 +165,11 @@ export default {
       turmas: [],
       instrutores: [],
       programa: {},
+      processo: {},
       programaForm: {
-        id: '',
         nome: '',
-        dataInicio: '',
-        dataFim: '',
+        inicio: '',
+        termino: '',
         instrutor: '',
         turma: ''
       }
@@ -181,26 +179,29 @@ export default {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
-    this.programaForm.id = dadosUrl.id
-    this.getPrograma()
+    this.getTurmasDoProcesso()
   },
   mounted () {
+    this.getProcesso()
     this.getInstrutor()
   },
   methods: {
-    putPrograma () {
-      http.put('programa', this.programaForm)
+    postPrograma () {
+      http.post('programa', this.programaForm)
         .then(response => {
           if (response.status == 200) {
             this.abrirModal()
             setTimeout(function () {
-              window.location.href = '/dados-programa-busca'
-            }, 1521)
+              window.location.href = variavel.href = 'dados-programa-busca'
+            }, 1500)
           }
         })
         .catch(error => {
           console.log(error)
         })
+    },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
     },
     validaForm () {
       let dataInicio = document.querySelector('#inicio').value
@@ -242,10 +243,6 @@ export default {
         if (turma.nomeTurma == nomeTurma) {
           erro = 1
           document.querySelector('#erroTurmaCadastrada').classList.remove('none')
-          if (nomeTurma == this.programa.turma) {
-            erro = 0
-            document.querySelector('#erroTurmaCadastrada').classList.add('none')
-          }
         }
       })
       if (erro == 1) {
@@ -255,6 +252,17 @@ export default {
         document.querySelector('#chamaModal').click()
       }
     },
+    enviarDados () {
+      this.programaForm.nome = document.querySelector('#processo').value
+      this.programaForm.inicio = document.querySelector('#inicio').value
+      this.programaForm.termino = document.querySelector('#termino').value
+      this.programaForm.instrutor = document.querySelector('#instrutores').value
+      this.programaForm.turma = document.querySelector('#turma').value
+    },
+    getProcesso () {
+      http.get(`processo-seletivo/${this.id}`)
+        .then(response => this.processo = response.data)
+    },
     getInstrutor () {
       http.get('instrutor/status/ATIVO')
         .then(response => {
@@ -263,29 +271,6 @@ export default {
         .catch(error => {
           console.log(error)
         })
-    },
-    getPrograma () {
-      http.get(`programa/${this.id}`)
-        .then(response => {
-          this.programa = response.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-    enviarDados () {
-      this.programaForm.nome = document.getElementById('nome').value
-      this.programaForm.dataInicio = document.getElementById('inicio').value
-      this.programaForm.dataFim = document.getElementById('termino').value
-      this.programaForm.instrutor = document.getElementById('instrutores').value
-      this.programaForm.turma = document.getElementById('turma').value
-    },
-    getTurmasDoProcesso () {
-      http.get(`programa/buscar-programas-por-nome/${this.programa.nome}`)
-        .then(response => this.turmas = response.data)
-    },
-    abrirModaln () {
-      document.getElementById('abreModalInvisivel').click()
     },
     pegaDadosUrl () {
       var query = location.search.slice(1)
@@ -301,10 +286,13 @@ export default {
 
       return data
     },
+    getTurmasDoProcesso () {
+      http.get(`programa/buscar-programas-por-processo/${this.id}`)
+        .then(response => this.turmas = response.data)
+    },
     formataDataParaExibicao (data) {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
-
       return dataFormatada
     }
   }
@@ -319,6 +307,7 @@ body {
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 
 .none {
@@ -354,10 +343,7 @@ textarea {
     max-width: 575px !important;
 
 }
-.modal-size {
-    width: 801px !important;
-    max-width: 801px !important;
-}
+
 .status-encerrado, .erro{
     color: darkred;
     font-weight: bold;
@@ -423,4 +409,5 @@ textarea {
     min-height: 40vh;
     font-size: 21px;
 }
+
 </style>

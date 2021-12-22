@@ -1,6 +1,7 @@
 <template>
         <main>
-            <Header />
+            <Header :link="`../processo-seletivo-busca-por-candidato?id=${this.idRetorno}`
+              + `&status=${this.statusProcesso}`"   />
             <div class="container-fluid" >
                 <div class="row mt-5 justify-content-evenly">
                     <div class="div-titulo col-lg-4">
@@ -20,45 +21,67 @@
                                 <label class="form-label mb-0 titulo">Contato</label>
                                 <input name="contato" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.telefone">
                             </div>
+                             <div class="mb-3">
+                                <label class="form-label mb-0 titulo">Email</label>
+                                <input name="emailCandidato" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.email">
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Fonte de Recrutamento</label>
                                 <input name="fonteRecrutamento" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.fonteRecrutamento">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label mb-0 titulo">Data Agendamento</label>
+                             <label class="form-label mb-0 titulo">indicacao</label>
+                                <input name="indicacao" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.indicacaoVaga">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label mb-0 titulo">Data de Contato</label>
                                 <input name="dataAgendamento" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="formataDataParaMostrar(candidato.dataAgendamento)">
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label mb-0 titulo">Curso</label>
-                                <input name="curso" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.curso">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label mb-0 titulo">Status</label>
-                                <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na primeira fase" v-if="candidato.status=='APROVADO_1_FASE'">
-                                <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na segunda fase" v-else-if="candidato.status=='APROVADO_2_FASE'">
-                                <input name="status" type="text" class="form-control reprovado" id="disabledTextInput" placeholder="Reprovado na primeira fase" v-else-if="candidato.status=='REPROVADO_1_FASE'">
-                                <input name="status" type="text" class="form-control reprovado" id="disabledTextInput" placeholder="Reprovado na segunda fase" v-else-if="candidato.status=='REPROVADO_2_FASE'">
-                                <input name="status" type="text" class="form-control standby" id="disabledTextInput" placeholder="StandBy" v-else-if="candidato.status=='STANDBY'">
-                                <input name="status" type="text" class="form-control" id="disabledTextInput" placeholder="Sem status" v-else>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <div class="col-lg-4">
-                        <fieldset disabled>
-                            <div class="mb-3">
-                              <label class="form-label mb-0 titulo">Processo Seletivo</label>
-                              <input name="provaPratica" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.processoSeletivo">
+                             <div class="mb-3">
+                                <label class="form-label mb-0 titulo">Endereço</label>
+                                <input name="endereco" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.endereco">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label mb-0 titulo">Prova prática</label>
                                 <input name="provaPratica" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.testeLogico">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label mb-0 titulo">DISC</label>
-                                <input name="disc" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.notaDisc">
+                                <label class="form-label mb-0 titulo">Status</label>
+                                <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na primeira fase" v-if="this.statusCandidato =='APROVADO_1_FASE'">
+                                <input name="status" type="text" class="form-control aprovado" id="disabledTextInput" placeholder="Aprovado na segunda fase" v-else-if="this.statusCandidato=='APROVADO_2_FASE'">
+                                <input name="status" type="text" class="form-control reprovado" id="disabledTextInput" placeholder="Reprovado na primeira fase" v-else-if="this.statusCandidato=='REPROVADO_1_FASE'">
+                                <input name="status" type="text" class="form-control reprovado" id="disabledTextInput" placeholder="Reprovado na segunda fase" v-else-if="this.statusCandidato=='REPROVADO_2_FASE'">
+                                <input name="status" type="text" class="form-control standby" id="disabledTextInput" placeholder="StandBy" v-else-if="this.statusCandidato=='STANDBY'">
+                                <input name="status" type="text" class="form-control" id="disabledTextInput" placeholder="Sem status" v-else>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-4">
+                        <fieldset disabled>
+                          <div class="mb-3">
+                              <label class="form-label mb-0 titulo">Data de conclusão</label>
+                              <input name="dataConclusao" type="text" class="form-control" id="disabledTextInput"  v-if="this.candidato.dataConclusao == null" placeholder="">
+                              <input name="dataConclusao" type="text" class="form-control" id="disabledTextInput"  v-else-if="this.candidato.dataConclusao != null" v-bind:placeholder="formataDataParaMostrar(candidato.dataConclusao)">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label mb-0 titulo">Currículo candidato</label><br>
+                              <label class="form-label mb-0 titulo">Semestre Cursado</label>
+                              <input name="semestreCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.semestre">
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label mb-0 titulo">Periodo Cursado</label>
+                              <input name="peridodoCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.periodoCurso">
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label mb-0 titulo">Duração do Curso</label>
+                              <input name="duracaoDoCursado" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.duracaoCurso">
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label mb-0 titulo">Processo Seletivo</label>
+                              <input name="processoSeletivo" type="text" class="form-control" id="disabledTextInput" v-bind:placeholder="candidato.processoSeletivo">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label mb-0 titulo ">Currículo candidato</label><br>
                                 <p @click="downloadCurriculo"><img src="../../assets/imgs/file_upload_black_24dp.svg" class="download">curriculo.pdf</p>
                             </div>
                             <div class="mb-3">
@@ -82,6 +105,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
+import { variavelBack } from '../../services/VariavelBack'
 
 export default {
   name: 'App',
@@ -91,7 +115,10 @@ export default {
   data () {
     return {
       candidato: {},
-      id: {}
+      id: {},
+      statusProcesso: '',
+      idRetorno: '',
+      statusCandidato: ''
     }
   },
   beforeMount () {
@@ -99,8 +126,10 @@ export default {
 
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
-
     this.getCandidato(this.id)
+    this.idRetorno = dadosUrl.idProcesso
+    this.statusProcesso = dadosUrl.statusProcesso
+    this.statusCandidato = dadosUrl.statusCandidato
   },
   methods: {
     getCandidato (id) {
@@ -126,10 +155,10 @@ export default {
       return data
     },
     downloadDisc () {
-      location.href = `http://localhost:8081/api/candidato/download-disc/${this.id}`
+      window.location.href = variavelBack + `candidato/download-disc/${this.id}`
     },
     downloadCurriculo () {
-      location.href = `http://localhost:8081/api/candidato/download-curriculo/${this.id}`
+      window.location.href = variavelBack + `candidato/download-curriculo/${this.id}`
     },
     formataDataParaMostrar (data) {
       const dataPreForm = new Date(data)
@@ -174,6 +203,7 @@ textarea{
 
 .download{
     transform: rotate(180deg) !important;
+    cursor:pointer;
 }
 
 .subtitulo{

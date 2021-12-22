@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../home"/>
   <main>
     <div class="container-fluid px-5">
       <!-- Título da Página -->
@@ -18,7 +18,6 @@
                 type="text"
                 class="form-control mb-3"
                 id="filtrar-tabela"
-                placeholder="Estágiario 1"
                 @input="filtraDados"
               />
             </div>
@@ -82,7 +81,7 @@
             id="cadastrar"
             type="button"
           >
-          <a class="button-footer submit" :href="'/cargo-cadastro-edicao?tipo=cadastro'">
+          <a class="button-footer submit" :href="'/cargo-cadastro?tipo=cadastro'">
             CADASTRAR NOVO CARGO
           </a>
           </button>
@@ -120,7 +119,6 @@ export default {
 
       var listaDeValores = []
 
-      console.log(campoFiltro.value)
       var processos = document.querySelectorAll('.processo')
 
       if (campoFiltro.value.length >= 0) {
@@ -141,7 +139,6 @@ export default {
             listaDeValores.push(i)
           }
 
-          console.log(listaDeValores)
 
           if (!listaDeValores.length == 0) {
             aviso.classList.add('invisivel')

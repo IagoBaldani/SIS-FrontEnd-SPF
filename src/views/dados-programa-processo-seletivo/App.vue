@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../dados-programa-busca"/>
   <main>
     <div class="container-fluid px-5">
       <!-- Título da Página -->
@@ -41,7 +41,7 @@
             <!--  -->
             <table
               class="
-                table table-bordered 
+                table table-bordered
               "
             >
               <tbody class="processosSeletivos">
@@ -60,7 +60,7 @@
                   </td>
                   <td id="icones">
                     <a
-                      href="/dados-programa-cadastro_edicao?tipo=cadastro"
+                      :href="'/dados-programa-cadastro?id=' + processo.id"
                     >
                       <img
                         src="@/assets/imgs/preview_white_24dp.svg"
@@ -79,7 +79,7 @@
       <div class="row justify-content-between">
         <!-- Botão de busca -->
         <div class="col-xl-4"></div>
-        
+
       </div>
     </div>
   </main>
@@ -116,39 +116,37 @@ export default {
       aviso.classList.add('invisivel')
       var campoFiltro = document.querySelector('#filtrar-tabela')
       var listaDeValores = []
-      console.log(campoFiltro.value) 
-      var processos = document.querySelectorAll('.processo') 
+      var processos = document.querySelectorAll('.processo')
       if (campoFiltro.value.length >= 0) {
         for (var i = 0; i < processos.length; i++) {
           var processo = processos[i]
-          var tdNome = processo.querySelector('.info-nome') 
-          var nome = tdNome.textContent 
-          var expressao = new RegExp(campoFiltro.value, 'i') 
+          var tdNome = processo.querySelector('.info-nome')
+          var nome = tdNome.textContent
+          var expressao = new RegExp(campoFiltro.value, 'i')
           if (!expressao.test(nome)) {
-            processo.classList.add('invisivel') 
-            aviso.classList.remove('invisivel') 
+            processo.classList.add('invisivel')
+            aviso.classList.remove('invisivel')
           } else {
-            processo.classList.remove('invisivel') 
-            aviso.classList.add('invisivel') 
-            listaDeValores.push(i) 
+            processo.classList.remove('invisivel')
+            aviso.classList.add('invisivel')
+            listaDeValores.push(i)
           }
-          console.log(listaDeValores) 
           if (!listaDeValores.length == 0) {
-            aviso.classList.add('invisivel') 
+            aviso.classList.add('invisivel')
           } else {
-            aviso.classList.remove('invisivel') 
+            aviso.classList.remove('invisivel')
           }
         }
       } else {
         for (var j = 0; j < processos.length; j++) {
           var processo2 = processos[j]
-          processo2.classList.remove('invisivel') 
-          aviso.classList.remove('invisivel') 
+          processo2.classList.remove('invisivel')
+          aviso.classList.remove('invisivel')
         }
       }
     }
   }
-} 
+}
 </script>
 
 <style>

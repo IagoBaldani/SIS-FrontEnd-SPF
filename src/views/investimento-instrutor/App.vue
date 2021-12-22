@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../investimento-folha"/>
   <div class="container">
     <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
       <div class="col-xl-4">
@@ -23,31 +23,25 @@
               required
             >
               <option selected disabled value="">Formação</option>
-              <option>Java</option>
-              <option>Cobol</option>
-              <option>.Net</option>
-              <option>Mobile</option>
-              <option>Mainframe</option>
-              <option>Infraestrutura</option>
+              <option id="programa" v-bind:value="programa.nomePrograma" v-for="programa in programas" v-bind:key="programa">{{programa.nomePrograma}}</option>
             </select>
           </div>
           <div class="col-md-3">
             <select
               class="filtro-turma turmas form-select mt-4"
               id="validationDefault04"
+              v-on:click="getTurmas()"
               required
             >
               <option selected disabled value="">Turmas</option>
-              <option>Turma I</option>
-              <option>Turma II</option>
-              <option>Turma III</option>
+              <option id="turma" v-bind:value="turma.id" v-for="turma in turmas" v-bind:key="turma.id">{{turma.nomeTurma}}</option>
             </select>
           </div>
           <div class="col-md-3">
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="filtrarDados()"
+              v-on:click="validaForm()"
             >
               Pesquisar
             </button>
@@ -92,24 +86,25 @@
       <div class="mensagem col-xl-12">
         Por favor, filtre os campos Formação e Turma para continuar
       </div>
-    </div>
-    <div class="container overflow-hidden botoes">
+       <div class="container overflow-hidden botoes">
       <div class="teste row g-2 g-lg-3">
         <div
           class="botãoFinal col-xl-7"
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+
         >
           <button
             id="botaoAdicionarManualmente"
             type="button"
-            class="btn-lg"
+            class="btn-lg btnAdicionar none"
             v-on:click="mostrarInstrutor()"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
           >
-            ADICIONAR MANUALMENTE
+            ADICIONAR SALÁRIO
           </button>
         </div>
       </div>
+    </div>
     </div>
   </div>
   <!-- Modal -->
@@ -142,6 +137,7 @@
                 aria-label="Default select example"
                 id="nomeModal"
               >
+                <option selected disabled>Instrutor</option>
                 <option
                   :value="cpfInstrutor.cpfInstrutor"
                   v-for="cpfInstrutor in cpfInstrutores"
@@ -150,46 +146,41 @@
                 >
               </select>
             </div>
-            <label id="modalconteudo">Mês e ano</label>
+            <p id="erroNome" class="erro none">Por favor selecione um instrutor</p>
+            <label id="modalconteudo">Data</label>
             <div class="input-group input-group-lg">
               <input
                 id="mesAnoModal"
                 type="date"
                 class="form-control"
-                placeholder="MM/YY"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-lg"
               />
             </div>
+            <p id="erroData" class="erro none">O campo data não pode ser vazio</p>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
               <div class="modalitens col-xl-6">
                 <label id="modalconteudo">Valor Hora</label>
                 <div class="input-group input-group-lg">
                   <input
-                    v-model="form.valorHora"
-                    @input="escutaQuantidades"
+                    @change="escutaQuantidades"
                     id="valorHoraModal"
-                    type="number"
+                    type="text"
+                    v-money="money"
                     class="form-control"
-                    placeholder="R$"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
                   />
                 </div>
+                <p id="erroValorHora" class="erro none">O campo valor hora não pode ser vazio</p>
               </div>
               <div class="modalitens col-xl-6">
                 <label id="modalconteudo">Horas trabalhadas</label>
                 <div class="input-group input-group-lg">
                   <input
-                    v-model="form.horasTrabalhadas"
                     @input="escutaQuantidades"
                     id="horasTrabalhadasModal"
                     type="number"
                     class="form-control"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
                   />
                 </div>
+                <p id="erroHoras" class="erro none">O campo horas trabalhadas não pode ser vazio</p>
               </div>
             </div>
             <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
@@ -198,14 +189,11 @@
                 <div class="input-group input-group-lg">
                   <input
                     id="inputQtdTotal"
-                    readonly
-                    v-model="form.qtdTotal"
+                    :value="qtdTotal.toFixed(2)"
                     disabled
-                    type="number"
+                    type="text"
+                    v-money="money"
                     class="form-control"
-                    placeholder="R$"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg"
                   />
                 </div>
               </div>
@@ -214,14 +202,14 @@
           <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 modal-footer">
             <div class="row-xl-5">
               <button
-                v-on:click="inserirInvestimento()"
+                v-on:click="validaFormModal()"
                 id="confirmar"
                 type="button"
                 class="btn btn-secondary"
-                data-bs-dismiss="modal"
               >
                 CONFIRMAR
               </button>
+              <button id="fechaModal" type="button" data-bs-dismiss="modal" class="none"></button>
             </div>
             <div class="col-xl-5"></div>
           </div>
@@ -229,23 +217,50 @@
       </div>
     </div>
   </div>
+  <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Inserção efetuada com sucesso</h3>
+                        <h4 class="mt-4 modal-title fw-bold titulo text-center" id="redirecionar">Redirecionando...</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { variavel } from '../../services/Variavel'
+import { mask } from 'vue-the-mask'
+import { VMoney } from 'v-money'
 
 export default {
   name: 'App',
+  directives: { mask, money: VMoney },
   components: {
     Header
   },
   data () {
     return {
+      money: {
+        decimal: ',',
+        thousands: '.',
+        prefix: 'R$ ',
+        suffix: '',
+        precision: 2
+      },
       instrutores: [],
       cpfInstrutores: [],
       programaProcurado: '',
+      programas: [],
+      turmas: [],
       turmaProcurada: '',
       salarios: [],
       form: {
@@ -254,19 +269,18 @@ export default {
         valorHora: '',
         horasTrabalhadas: ''
       },
-      qtdTotal: {
-        qtdTotal: ''
-      }
+      qtdTotal: 0
+
     }
   },
   beforeMount () {
     Funcoes.verificaToken()
+    this.getProgramas()
   },
   methods: {
     filtrarDados () {
       this.programaProcurado = document.querySelector('.filtro-programa').value
       this.turmaProcurada = document.querySelector('.filtro-turma').value
-      this.mudaVisibilidade()
       http
         .get(
           'instrutor/buscar-instrutor/' +
@@ -276,20 +290,85 @@ export default {
         )
         .then(response => {
           (this.instrutores = response.data)
+          this.mudaVisibilidade()
           this.pegarSalario()
-        }) 
+        })
     },
-
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    validaForm () {
+      this.programaProcurado = document.querySelector('.filtro-programa').value
+      this.turmaProcurada = document.querySelector('.filtro-turma').value
+      let erro = 0
+      if (this.programaProcurado == '') {
+        erro = 1
+      } else {
+        erro = 0
+      }
+      if (this.turmaProcurada == '') {
+        erro = 1
+      } else {
+        erro = 0
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.filtrarDados()
+      }
+    },
+    validaFormModal () {
+      var participante = document.querySelector('#nomeModal').value
+      var dataLancamento = document.querySelector('#mesAnoModal').value
+      var valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      var horasTrabalhadas = document.querySelector('#horasTrabalhadasModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      let erro = 0
+      if (participante == 'Instrutor') {
+        document.querySelector('#erroNome').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNome').classList.add('none')
+      }
+      if (dataLancamento == '') {
+        document.querySelector('#erroData').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroData').classList.add('none')
+      }
+      if (valorHora == 0.0) {
+        document.querySelector('#erroValorHora').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroValorHora').classList.add('none')
+      }
+      if (horasTrabalhadas == 0.0) {
+        document.querySelector('#erroHoras').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroHoras').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.inserirInvestimento()
+        document.querySelector('#fechaModal').click()
+      }
+    },
     inserirInvestimento () {
       this.form.cpf = document.querySelector('#nomeModal').value
       this.form.mesAno = document.querySelector('#mesAnoModal').value
-      this.form.valorHora = document.querySelector('#valorHoraModal').value
+      this.form.valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.form.horasTrabalhadas = document.querySelector(
         '#horasTrabalhadasModal'
       ).value
       http
         .post('/instrutor/salvar-invest', this.form)
-        .then(response => console.log(response.data))
+        .then(response => {
+          this.abrirModal()
+          setTimeout(function () {
+            window.location.href = variavel.href = 'investimento-instrutor'
+          }, 1500)
+        })
     },
 
     pegarSalario () {
@@ -301,14 +380,12 @@ export default {
     },
 
     escutaQuantidades () {
-      let valorHora = document.querySelector('#valorHoraModal').value
-      let quantidadeHora = document.querySelector('#horasTrabalhadasModal')
-        .value
+      let valorHora = document.querySelector('#valorHoraModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      let quantidadeHora = document.querySelector('#horasTrabalhadasModal').value
       this.carregaQuantidade(valorHora, quantidadeHora)
     },
-
     carregaQuantidade (valor, quantidade) {
-      valor = parseInt(valor)
+      valor = parseFloat(valor)
       quantidade = parseInt(quantidade)
 
       if (isNaN(valor)) {
@@ -317,11 +394,7 @@ export default {
       if (isNaN(quantidade)) {
         quantidade = 0
       }
-
-      let qtdTotal = 0
-      qtdTotal = valor * quantidade
-      let elQtdTotal = document.querySelector('#inputQtdTotal')
-      elQtdTotal.value = qtdTotal
+      this.qtdTotal = valor * quantidade
     },
 
     mostrarInstrutor () {
@@ -329,14 +402,31 @@ export default {
         .get(
           `instrutor/instrutores/${this.programaProcurado}/${this.turmaProcurada}`
         )
-        .then(response => console.log((this.cpfInstrutores = response.data)))
+        .then(response => this.cpfInstrutores = response.data)
     },
-
+    getProgramas () {
+      http.get('relatorios/formacoes')
+        .then(response => {
+          this.programas = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    getTurmas () {
+      let turmas = document.querySelector('.filtro-programa').value
+      http.get(`relatorios/turmas/${turmas}`)
+        .then(response => {
+          this.turmas = response.data
+        })
+    },
     mudaVisibilidade () {
       let mensagem = document.querySelector('.mensagem')
       let extremo = document.querySelector('.extremo')
+      let botao = document.querySelector('#botaoAdicionarManualmente')
 
       mensagem.style.display = 'none'
+      botao.style.display = 'flex'
       extremo.style.display = 'flex'
     },
 
@@ -344,6 +434,12 @@ export default {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
+    },
+
+    mostrarBtnAdicionar () {
+      let btnAdicionar = document.querySelector('.btnAdicionar')
+
+      btnAdicionar.style.display = 'flex'
     }
   }
 }
@@ -352,6 +448,15 @@ export default {
 <style>
 body {
   background: #ebebeb;
+}
+
+.erro {
+  color: red;
+  font-weight: bold;
+}
+
+.none {
+  display: none;
 }
 
 .tela {
@@ -394,6 +499,10 @@ body {
   font-weight: bold;
   color: #ffffff;
   border: none;
+}
+
+.btnAdicionar {
+  display: none;
 }
 
 #filtro-nome {
@@ -524,6 +633,17 @@ body {
 #exampleModalLabel {
   font-family: Montserrat;
   font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  font-weight: bold;
+  text-align: center;
+}
+
+#redirecionar {
+  font-family: Montserrat;
+  font-size: 30px;
   font-style: normal;
   font-weight: 700;
   line-height: 24px;

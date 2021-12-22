@@ -1,5 +1,5 @@
 <template>
-    <Header/>
+    <Header :link="`../acompanhamento-ciclo?id=${this.id}`"/>
     <main>
         <div class="container-fluid">
             <div class="row justify-content-evenly mt-5 mb-3">
@@ -19,7 +19,7 @@
                         <fieldset class="mb-3">
                             <legend class="form-label fw-bold h5 titulo">Resultado (Efetivado)</legend>
                             <div class="radio-item">
-                                <input type="radio" name="reajuste" value="EFETIVADO" id="sim" class="me-2" v-model="form.resultado">
+                                <input type="radio" checked name="reajuste" value="EFETIVADO" id="sim" class="me-2" v-model="form.resultado">
                                 <label for="sim" class="me-5">Sim</label>
                             </div>
                             <div class="radio-item">
@@ -30,10 +30,12 @@
                         <div class="mb-3">
                             <label for="data-alteracao" class="form-label fw-bold h5 titulo">Data</label>
                             <input type="date" class="form-control" id="data-alteracao" v-model="form.dataAlteracao">
+                            <p class="fw-bold erro mt-0 none" id="erroData">Selecione uma data!</p>
                         </div>
                         <div class="mb-3">
                             <label id="menes" for="cargo-efetivado" class="form-label fw-bold h5 titulo">Cargo efetivado</label>
-                            <input type="text" class="form-control" id="cargo-efetivado" placeholder="Analista Desenvolvedor Java" v-model="form.cargoEfetivado">
+                            <input type="text" class="form-control" id="cargo-efetivado" v-model="form.cargoEfetivado">
+                            <p class="fw-bold erro mt-0 none" id="erroCargo">Preencha este campo!</p>
                         </div>
                     </form>
                 </div>
@@ -52,6 +54,7 @@
                                 </div>
                                 <div id="btn-close" class="clear-file none">X</div>
                             </label>
+                            <p class="fw-bold erro mt-0 none" id="erroArquivo">Selecione um arquivo!</p>
                         </div>
                         <div class="mb-3">
                             <label for="observacoes"  class="form-label fw-bold h5 titulo">Observações</label>
@@ -61,20 +64,34 @@
                 </div>
             </div>
             <div class="row justify-content-evenly">
-                <div class="col-lg-4"></div>
-                <div class="col-lg-7 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-50" @click="validaCampos()">REGISTRAR</button>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-danger sis-red-btn fw-bold fs-5 mt-3 w-100" @click="validaCampos()">REGISTRAR</button>
                     <p id="abreModal" data-bs-toggle="modal" data-bs-target="#modalUltimoCiclo" class="none"></p>
+                </div>
+                <div class="col-lg-7 d-flex justify-content-end">
                 </div>
             </div>
             <div class="row justify-content-evenly">
-                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                </div>
                 <div class="col-lg-7 d-flex justify-content-end">
-                    <p class="erro h4 none mt-3" id="preencha">Preencha todos os campos!</p>
                 </div>
             </div>
         </div>
     </main>
+
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Conclusão salva com sucesso</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="modalUltimoCiclo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-size">
@@ -87,7 +104,7 @@
                 <div class="row mb-5">
                     <div class="col-lg-7">
                         <div class="mb-4">
-                            <h4 class="fw-bold titulo">Reajuste salarial</h4>
+                            <h4 class="fw-bold titulo">Resultado</h4>
                             <p class="grey-font h4">{{ form.resultado }}</p>
                         </div>
                         <div class="mb-4">
@@ -99,6 +116,10 @@
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Comprovante de rematrícula/ conclusão</h4>
                             <p class="grey-font h4 text-decoration-underline" @click="download()">comprovante.pdf</p>
+                        </div>
+                        <div class="mb-4">
+                            <h4 class="fw-bold titulo">Observação:</h4>
+                            <p class="grey-font h4 ellipsis-overflow">{{ form.campoObservacao }}</p>
                         </div>
                     </div>
                 </div>
@@ -124,7 +145,7 @@
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
-
+import { variavelBack } from '../../services/VariavelBack'
 export default {
   name: 'App',
   components: {
@@ -133,15 +154,15 @@ export default {
   data () {
     return {
       participante: {}, // objeto para receber as informações do participante.
-      
+
       form: {
-        resultado: '',
+        resultado: 'EFETIVADO',
         dataAlteracao: '',
         cargoEfetivado: '',
         comprovante: '',
         campoObservacao: ''
       },
-      id: {}
+      id: ''
     }
   },
 
@@ -165,24 +186,28 @@ export default {
     // método para enviar o formdata com os campos do formulário e com o arquivo
     postForm () {
       var formData = new FormData()
-      var comprovanteRematricula = document.getElementById('file').files[0] 
+      var comprovanteRematricula = document.getElementById('file').files[0]
       formData.append('resultado', this.form.resultado)
       formData.append('dataAlteracao', this.form.dataAlteracao)
       formData.append('cargoEfetivado', this.form.cargoEfetivado)
       formData.append('comprovante', comprovanteRematricula)
       formData.append('campoObservacao', this.form.campoObservacao)
+      var id = this.id
       http
         .post(`ciclo/registrociclofinal/${this.id}`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data' 
+            'Content-Type': 'multipart/form-data'
           }
         })
         .then((response) => {
+          document.querySelector('#abreModalInvisivel').click()
+          setTimeout(function () {
+            location.href = '/acompanhamento-ciclo/App.vue?id=' + id
+          }, 1500)
         })
         .catch((error) => {
           console.log(error)
         })
-      location.href = `../acompanhamento-ciclo/App.vue?id=${this.id}`  
     },
 
     carregaModal (conclusao) {
@@ -222,23 +247,32 @@ export default {
     },
     //  Endereço da API para fazer download do arquivo
     download () {
-      location.href = `http://localhost:8081/api/ciclo/download/${this.conclusaoModal.id}`
+      location.href = variavelBack + `ciclo/download/${this.conclusaoModal.id}`
     },
     // funcão que valida os campos, caso estejam vazios uma notificação é exibida.
     validaCampos () {
-      let campos = document.querySelectorAll('input')
-      let campoVazio = 0
-      campos.forEach(element => {
-        if (!element.value) {
-          campoVazio = 1
-        }
-      })
-      if (campoVazio == 0) {
-        document.querySelector('#preencha').classList.add('none')
-        document.getElementById('abreModal').click()
+      var erro = true
+      if (this.form.dataAlteracao == '') {
+        document.querySelector('#erroData').classList.remove('none')
+        erro = false
       } else {
-        document.querySelector('#preencha').classList.remove('none')
-      }     
+        document.querySelector('#erroData').classList.add('none')
+      }
+      if (document.querySelector('#cargo-efetivado').value == '') {
+        document.querySelector('#erroCargo').classList.remove('none')
+        erro = false
+      } else {
+        document.querySelector('#erroCargo').classList.add('none')
+      }
+      if (document.querySelector('#file').files.length == 0) {
+        document.querySelector('#erroArquivo').classList.remove('none')
+        erro = false
+      } else {
+        document.querySelector('#erroArquivo').classList.add('none')
+      }
+      if (erro) {
+        document.querySelector('#abreModal').click()
+      }
     }
   }
 }
@@ -444,6 +478,7 @@ export default {
 
 .erro {
   color: red;
+  font-weight: bold;
 }
 
 .enviado {

@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../home"/>
   <main id="mainModal">
     <!-- Início Select Relatório -->
     <section class="relatorio_main container">
@@ -16,7 +16,7 @@
             aria-label="Default select example"
             v-on:click="totalFormacoes()"
           >
-            <option name="formacao" class="relatorio_opcao" disabled selected>
+            <option name="formacao" value="null" class="relatorio_opcao" disabled selected>
               Programa de formação
             </option>
             <option
@@ -28,6 +28,7 @@
               {{ formacao.nomePrograma }}
             </option>
           </select>
+          <p id="progFormacao" class="erro none">Por favor, selecione um programa de formação</p>
 
           <!-- Select Turma -->
           <select
@@ -38,7 +39,7 @@
             aria-label="Default select example"
             v-on:click="buscarTurmasDeUmaFormacao()"
           >
-            <option class="relatorio_opcao" disabled selected>Turma</option>
+            <option class="relatorio_opcao" value="null" disabled selected>Turma</option>
             <option
               class="relatorio_opcao"
               v-for="(turma, id) in turmasPrograma"
@@ -47,6 +48,7 @@
               {{ turma.nomeTurma }}
             </option>
           </select>
+          <p id="progTurma" class="erro none">Por favor, selecione uma turma</p>
 
           <!-- Select Escopo do relatório -->
           <select
@@ -56,7 +58,7 @@
             class="form-select p-2 mb-3"
             aria-label="Default select example"
           >
-            <option class="relatorio_opcao" disabled selected>
+            <option class="relatorio_opcao" value="null" disabled selected>
               Escopo do relatório
             </option>
             <option class="relatorio_opcao">Alura</option>
@@ -64,12 +66,13 @@
             <option class="relatorio_opcao">Conclusões</option>
             <option class="relatorio_opcao">Investimentos</option>
           </select>
+          <p id="progEscopo" class="erro none">Por favor, selecione o escopo do relatório</p>
         </label>
         <!-- Select Botão -->
         <input
-          v-on:click="redirecionamento()"
+          v-on:click="validaForm()"
           id="botao"
-          type="submit"
+          type="button"
           class="relatorio_button"
           value="BUSCAR"
         />
@@ -239,6 +242,7 @@
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
+              onclick="window.location.reload()"
             >
               Fechar
             </button>
@@ -334,6 +338,7 @@
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
+              onclick="window.location.reload()"
             >
               Fechar
             </button>
@@ -389,6 +394,7 @@
                 <thead class="modal_table-thead">
                   <tr>
                     <th>Programa de formação</th>
+                    <th>Nome da turma</th>
                   </tr>
                 </thead>
               </table>
@@ -404,6 +410,7 @@
                     v-bind:key="id"
                   >
                     <td>{{ formacoes.nomePrograma }}</td>
+                    <td>{{ formacoes.nomeTurma }}</td>
                     <td class="modal_table-imagem-forAndamento rounded">
                       <img src="@/assets/imgs/usuario.svg" alt="Imagem" />
                     </td>
@@ -421,6 +428,7 @@
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
+              onclick="window.location.reload()"
             >
               Fechar
             </button>
@@ -437,6 +445,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
+import { variavel } from '../../services/Variavel'
 export default {
   name: 'App',
   components: {
@@ -454,7 +463,9 @@ export default {
       filtroAtivos: '',
       filtroEfetivados: '',
       filtroFormacoes: '',
-      nomePrograma: ''
+      nomePrograma: '',
+      nomeTurma: '',
+      erros: []
     }
   },
   beforeMount () {
@@ -508,21 +519,21 @@ export default {
       var escopo = document.getElementById('select3').value
       var formulario = document.getElementById('formSelect')
       if (escopo == 'Alura') {
-        formulario.action = encodeURI('http://localhost:8080/relatorios-alura')
+        formulario.action = encodeURI( window.location.href =  variavel.href ='/relatorios-alura')
         formulario.submit()
       } else if (escopo == 'Avaliações') {
         formulario.action = encodeURI(
-          'http://localhost:8080/relatorios-avaliacoes'
+          window.location.href =  variavel.href ='relatorios-avaliacoes'
         )
         formulario.submit()
       } else if (escopo == 'Conclusões') {
         formulario.action = encodeURI(
-          'http://localhost:8080/relatorios-conclusoes'
+          window.location.href =  variavel.href ='relatorios-conclusoes'
         )
         formulario.submit()
       } else if (escopo == 'Investimentos') {
         formulario.action = encodeURI(
-          'http://localhost:8080/relatorios-investimentos'
+          window.location.href =  variavel.href ='relatorios-investimentos'
         )
         formulario.submit()
       }
@@ -546,8 +557,40 @@ export default {
 
     totalFormacoes: function () {
       http.get('relatorios/formacoesEmAndamento').then((response) => {
-        console.log((this.formacoesTotal = response.data))
+        this.formacoesTotal = response.data
       })
+    },
+    validaForm () {
+      var formacao = document.getElementById('select1').value
+      var turma = document.getElementById('select2').value
+      var escopo = document.getElementById('select3').value
+      let erro = 0
+      if (formacao == 'null') {
+        document.querySelector('#progFormacao').classList.remove('none')
+        erro = 1
+      } else {
+        erro = 0
+        document.querySelector('#progFormacao').classList.add('none')
+      }
+      if (turma == 'null') {
+        document.querySelector('#progTurma').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#progTurma').classList.add('none')
+        erro = 0
+      }
+      if (escopo == 'null') {
+        document.querySelector('#progEscopo').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#progEscopo').classList.add('none')
+        erro = 0
+      }
+      if (erro > 0) {
+        return false
+      } else if (formacao != 'null' && turma != 'null' && escopo != 'null') {
+        this.redirecionamento()
+      }
     }
   }
 }
@@ -559,6 +602,16 @@ main .dados_gerais-divCard {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.none {
+  display: none;
+}
+
+.erro {
+  color: red;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .dados_gerais-main .card {

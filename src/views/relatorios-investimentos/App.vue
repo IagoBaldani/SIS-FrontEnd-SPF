@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../relatorios-gerencial"/>
 
   <main>
 
@@ -16,7 +16,7 @@
         <div class="card-left-superior" >
           <div class="card" style="height: auto; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-left" class="card-title" >R$ {{relatorio.investParticipantes}}</h3>
+              <h3 id="txt-saida-card-left" class="card-title" >R$ {{formatPrice(relatorio.investParticipantes)}}</h3>
               <h6>Investimento em total com participantes</h6>
             </div>
           </div>
@@ -25,7 +25,7 @@
         <div class="card-central-superior" >
           <div class="card" style="height: auto; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-central" class="card-title">R$ {{relatorio.investInstrutores}}</h3>
+              <h3 id="txt-saida-card-central" class="card-title">R$ {{formatPrice(relatorio.investInstrutores)}}</h3>
               <h6>Investimento total com instrutores</h6>
             </div>
           </div>
@@ -34,7 +34,7 @@
         <div class="card-right-superior" >
           <div class="card" style="height: auto; width: 100%">
             <div class="card-body">
-              <h3 id="txt-saida-card-right" class="card-title">R$ {{relatorio.investTotal}}</h3>
+              <h3 id="txt-saida-card-right" class="card-title">R$ {{formatPrice(relatorio.investTotal)}}</h3>
               <h6 id="txt-cards-valor-total">Investimento total com o programa</h6>
             </div>
           </div>
@@ -48,9 +48,11 @@
             <input type="date" id="dataInicial" name="dataInicial" ref="dataInicial"/>
             <label class="labelData">até</label>
             <input type="date" id="dataFinal" name="dataFinal" ref="dataFinal"/>
-
+            <p id="dataInicioSelect" class="erro none"> Por favor selecione uma data de início válida </p>
+            <p id="dataFinalSelect" class="erro none"> Por favor selecione uma data de término válida </p>
+            <p id="dataInvalida" class="erro none"> A data de término deve ser posterior a data de inicio </p>
             <!-- Botão consultar data -->
-            <input id="bottonConsultaData" class="btn btn-primary btn-lg"  v-on:click="selecionarData()" value="CONSULTAR">
+            <input id="bottonConsultaData" type="button" class="btn btn-primary btn-lg"  v-on:click="validaSelectData()" value="CONSULTAR">
           </div>
        </form>
 
@@ -60,7 +62,7 @@
           <div class="card-left-inferior" id="dataSelecionada">
             <div class="card" style="height: 100%; width: 100%">
               <div class="card-body">
-                <h3 id="txt-saida-card-left" class="card-title">R$ {{relatorioPeriodo.investParticipantesPeriodoSelecionado}}</h3>
+                <h3 id="txt-saida-card-left" class="card-title">R$ {{formatPrice(relatorioPeriodo.investParticipantesPeriodoSelecionado)}}</h3>
                 <h6>Investimento total em participantes no periodo</h6>
               </div>
             </div>
@@ -69,7 +71,7 @@
           <div class="card-central-inferior" id="dataSelecionada">
             <div class="card">
               <div class="card-body" style="height: 100%; width: 100%">
-                <h3 id="txt-saida-card-central" class="card-title">R$ {{relatorioPeriodo.investInstrutoresPeriodoSelecionado}}</h3>
+                <h3 id="txt-saida-card-central" class="card-title">R$ {{formatPrice(relatorioPeriodo.investInstrutoresPeriodoSelecionado)}}</h3>
                 <h6>Investimento total em instrutores no periodo</h6>
               </div>
             </div>
@@ -78,7 +80,7 @@
           <div class="card-right-inferior" id="dataSelecionada">
             <div class="card" style="height: auto; width: 100%">
               <div class="card-body">
-                <h3 id="txt-saida-card-right" class="card-title">R$ {{relatorioPeriodo.investTotalPeriodoSelecionado}}</h3>
+                <h3 id="txt-saida-card-right" class="card-title">R$ {{formatPrice(relatorioPeriodo.investTotalPeriodoSelecionado)}}</h3>
                 <h6 id="txt-cards-valor-total">Investimento total do periodo</h6>
               </div>
             </div>
@@ -92,7 +94,7 @@
           <button
             id="botao_pdf"
             type="button"
-            class="btn btn-primary btn-lg"
+            class="btn btn-primary btn-lg none"
             v-on:click="downloadRelatorioPDF()">GERAR PDF
           </button>
         </div>
@@ -101,7 +103,7 @@
           <button
             id="botao_xlsx"
             type="button"
-            class="btn btn-primary btn-lg"
+            class="btn btn-primary btn-lg none"
             v-on:click="downloadRelatorioXLSX()">GERAR XLSX
           </button>
         </div>
@@ -114,6 +116,7 @@
 import Header from '@/components/Header.vue'
 import { http } from '../../services/Config'
 import Funcoes from '../../services/Funcoes'
+import { variavelBack} from '../../services/VariavelBack'
 
 export default {
   name: 'App',
@@ -163,15 +166,54 @@ export default {
 
       http
         .get('investimentos/investimentoPeriodoSelecionado/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal)
-        .then(response => (this.relatorioPeriodo = response.data))
+        .then(response => {
+          this.relatorioPeriodo = response.data
+          document.querySelector('#botao_pdf').classList.remove('none')
+          document.querySelector('#botao_xlsx').classList.remove('none')
+        })
     },
 
+    validaSelectData () {
+      this.dataInicial = this.$refs.dataInicial.value
+      this.dataFinal = this.$refs.dataFinal.value
+      let erro = 0
+      if (this.dataInicial == '') {
+        document.querySelector('#dataInicioSelect').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#dataInicioSelect').classList.add('none')
+        erro = 0
+      }
+      if (this.dataFinal == '') {
+        document.querySelector('#dataFinalSelect').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#dataFinalSelect').classList.add('none')
+        erro = 0
+      }
+      if (this.dataFinal < this.dataInicial && this.dataInicial != '' && this.dataFinal != '') {
+        erro = 1
+        document.querySelector('#dataInvalida').classList.remove('none')
+      } else {
+        erro = 0
+        document.querySelector('#dataInvalida').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.selecionarData()
+      }
+    },
+    formatPrice(value) {
+      let val = (value / 1).toFixed(2).replace(".", ",");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    },
     downloadRelatorioPDF () {
-      location.href = 'http://localhost:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
+      location.href = variavelBack +  'investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/pdf'
     },
 
     downloadRelatorioXLSX () {
-      location.href = 'http://localhost:8081/api/investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/xlsx'
+      location.href = variavelBack + 'investimentos/' + this.parametrosUrl.formacao + '/' + this.parametrosUrl.turma + '/' + this.dataInicial + '/' + this.dataFinal + '/xlsx'
     }
   }
 }
@@ -196,6 +238,17 @@ html {
 body {
   background-color: #ebebeb !important;
   
+}
+
+.none {
+  display: none;
+}
+
+.erro {
+  color: red;
+  font-size: 18px;
+  padding-left: 32px;
+  font-weight: bold;
 }
 
 /* Relatório - Investimento */
@@ -246,14 +299,17 @@ h3 {
 }
 
 #txt-saida-card-left {
+  font-size: 35px !important;
   color: #ab0045;
 }
 
 #txt-saida-card-central {
+  font-size: 35px !important;
   color: #ffb600;
 }
 
 #txt-saida-card-right {
+  font-size: 35px !important;
   color: #090b2e;
 }
 
@@ -697,7 +753,7 @@ h6 {
   }
 
   #txt-saida-card-right {
-    font-size: 3.5rem !important;
+    font-size: 35px !important;
   }
 
   #txt-cards-valor-total {

@@ -3,7 +3,7 @@
       <main>
         <div class="container-fluid">
             <div class="row justify-content-evenly">
-                <h3 class="titulo col-xl-4 mt-5">Edição cargo:</h3>
+                <h3 class="titulo col-xl-4 mt-5">Cadastro cargo:</h3>
                 <div class="col-xl-4"></div>
                 <div class="col-xl-2"></div>
             </div>
@@ -12,30 +12,30 @@
                     <div>
                         <label for="cargoInput" class="form-label mb-0 titulo">Cargo</label>
                         <input class="form-control" v-bind:value="cargos.cargo" type="text" name="cargo" id="inputCargo"/>
-                        <p id="erroCargo" class="erro none">Por favor, selecione um cargo </p>
+                        <p id="erroCargo" class="erro none">Por favor, selecione um cargo</p>
                         <p id="erroCargoCadastrado" class="erro none">Este cargo já está cadastrada, por favor insira outro</p>
                     </div>
                     <div>
                         <label for="bolsaAuxilio" class="form-label mb-0 mt-3 titulo">Bolsa auxílio</label>
-                        <input class="form-control" maxlength="12" v-money="money" id="inputBolsaAuxilio" v-bind:value="cargos.bolsa.toFixed(2)"/>
+                        <input type="text" name="bolsaAuxilio" class="form-control" v-money="money" v-bind:value="cargos.bolsa" id="inputBolsaAuxilio"/>
                         <p id="erroBolsa" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBolsaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="beneficios" class="form-label mb-0 mt-3 titulo">Benefícios</label>
-                        <input type="text" v-money="money" maxlength="12" name="beneficios" class="form-control" v-bind:value="cargos.beneficio.toFixed(2)" id="inputBeneficios"/>
+                        <input type="text" name="beneficios" v-money="money" class="form-control" v-bind:value="cargos.beneficio" id="inputBeneficios" />
                         <p id="erroBeneficios" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBeneficiosQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="convenio" class="form-label mb-0 mt-3 titulo">Convênio</label>
-                        <input type="text" v-money="money" maxlength="12" class="form-control" name="convenio" v-bind:value="cargos.convenio.toFixed(2)" id="inputConvenio"/>
+                        <input type="text" class="form-control" v-money="money" name="convenio" v-bind:value="cargos.convenio" id="inputConvenio"/>
                         <p id="erroConvenio" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroConvenioQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div class="mb-5">
                         <label for="horaExtra" class="form-label mb-0 mt-3 titulo">Hora extra</label>
-                        <input type="text" v-money="money"  maxlength="12" class="form-control" name="horaExtra" v-bind:value="cargos.horaExtra.toFixed(2)" id="inputHoraExtra" />
+                        <input type="text" class="form-control" v-money="money" name="horaExtra" v-bind:value="cargos.horaExtra" id="inputHoraExtra" />
                         <p id="erroHoraExtra" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroHoraExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
@@ -43,25 +43,25 @@
                 <div class="col-xl-4">
                     <div>
                         <label for="beneficioLegislacao" class="form-label mb-0 titulo">Benefício legislação</label>
-                        <input type="text" v-money="money" maxlength="12" class="form-control" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao.toFixed(2)" id="inputBeneficioLegislacao" />
+                        <input type="text" class="form-control" v-money="money" name="beneficioLegislacao" v-bind:value="cargos.beneficioLegislacao" id="inputBeneficioLegislacao" />
                         <p id="erroBeneficioLegislacao" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroBeneficioLegislacaoQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoEsporadica" class="form-label mb-0 mt-3 titulo">Remuneração esporádica</label>
-                        <input name="remuneracaoEsporadica"  maxlength="12" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunEsporadica.toFixed(2)" id="inputRemuneracaoEsporadica" />
-                        <p id="erroRemuneracaoEsporadica" class="erro none">Por favor, preencha este campo</p>
+                        <input name="remuneracaoEsporadica" type="text" class="form-control" v-money="money" v-bind:value="cargos.remunEsporadica" id="inputRemuneracaoEsporadica" />
+                        <p id="erroRemuneracaoEsporadica" class="erro none">Por favor, preencha este campo </p>
                         <p id="erroRemuneracaoEsporadicaQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label for="remuneracaoExtra" class="form-label mb-0 mt-3 titulo">Remuneração extra</label>
-                        <input name="remuneracaoExtra" maxlength="12" type="text" v-money="money" class="form-control" v-bind:value="cargos.remunExtra.toFixed(2)" id="inputRemuneracaoExtra">
+                        <input name="remuneracaoExtra" type="text" class="form-control" v-money="money" v-bind:value="cargos.remunExtra" id="inputRemuneracaoExtra">
                         <p id="erroRemuneracaoExtra" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroRemuneracaoExtraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
                     <div>
                         <label class="form-label mb-0 mt-3 titulo">Alura</label>
-                        <input name="alura" type="text" maxlength="12" v-money="money" class="form-control" v-bind:value="cargos.alura.toFixed(2)" id="inputAlura">
+                        <input name="alura" type="text" class="form-control" v-money="money" v-bind:value="cargos.alura" id="inputAlura">
                         <p id="erroAlura" class="erro none">Por favor, preencha este campo</p>
                         <p id="erroAluraQuantidade" class="erro none">Por favor, coloque um valor maior ou igual a 0</p>
                     </div>
@@ -71,8 +71,9 @@
             <div class="row justify-content-evenly">
                 <div class="col-xl-4">
                     <div>
-                        <button type="button" class="btn-confirmar btn"  @click="registrarDados">CONFIRMAR</button>
+                        <button type="button" class="btn-confirmar btn"  v-on:click="validaCampos()">CONFIRMAR</button>
                         <p data-bs-toggle="modal" data-bs-target="#exampleModal" class="none" id="abreModal"></p>
+                        <p id="formDados" @click="registrarDados()"></p>
                     </div>
                 </div>
                 <div class="col-xl-4"></div>
@@ -127,7 +128,7 @@
         </div>
         <div class="modal-footer border-0 justify-content-around">
           <div>
-            <button type="button" class="btn submit" @click="processarDados">CONFIRMAR</button>
+            <button id="botaoModal" type="button" class="btn" @click="processarDados">CONFIRMAR</button>
           </div>
           <div>
             <button type="button" class="btn cancel" data-bs-dismiss="modal">CANCELAR</button>
@@ -208,7 +209,6 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     let id = dadosUrl.id
     let tipo = dadosUrl.tipo
-
     if (tipo == 'edicao') {
       this.getCargo(id)
     }
@@ -237,17 +237,13 @@ export default {
       document.querySelector('#remunEsporadicaModal').innerText = ('Remuneração esporádica: R$ ' + this.cargos.remunEsporadica).replace('.',',')
       document.querySelector('#remunExtraModal').innerText = ('Remuneração extra: R$ ' + this.cargos.remunExtra).replace('.',',')
       document.querySelector('#aluraModal').innerText = ('Alura: R$ ' + this.cargos.alura).replace('.',',')
-
-      if (this.validaCampos()) {
-        document.querySelector('#abreModal').click()
-      }
     },
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()
     },
     abrirModalCadastro () {
       document.getElementById('abreModalInvisivelCadastro').click()
-      },
+    },
     pegaDadosUrl () {
       var query = location.search.slice(1)
       var partes = query.split('&')
@@ -272,6 +268,7 @@ export default {
     },
     getCargosCadastrados () {
       http.get('remuneracao/lista').then(response => {
+        this.cargosCadastrados = response.data
       })
     },
     processarDados () {
@@ -427,11 +424,12 @@ export default {
       }
       if (erro == 1) {
         return false
-      } else {
-        document.querySelector('#erroCargoCadastrado').classList.add('none')
-        return true
       }
-    },
+      document.querySelector('#erroCargoCadastrado').classList.add('none')
+      document.querySelector('#formDados').click()
+      document.querySelector('#abreModal').click()
+      return true
+    }
   }
 }
 </script>
@@ -514,6 +512,16 @@ body{
   justify-content: flex-start;
   align-items: center;
   padding: 80px;
+}
+
+#botaoModal {
+  background-color: #ab0045;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 5px !important;
+  width: 350px;
+  height: 50px;
+  font-size: 25px !important;
 }
 
 .alinharDiv {

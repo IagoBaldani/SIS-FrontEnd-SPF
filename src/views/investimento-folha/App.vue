@@ -1,5 +1,5 @@
 <template>
-  <Header />
+  <Header link="../home"/>
   <div class="container">
     <div class="row g-2 g-lg-3">
       <div class="col-xl-4">
@@ -23,31 +23,25 @@
               required
             >
               <option selected disabled value="">Formação</option>
-              <option>Java</option>
-              <option>Cobol</option>
-              <option>.Net</option>
-              <option>Mobile</option>
-              <option>Mainframe</option>
-              <option>Infraestrutura</option>
+              <option id="programa" v-bind:value="programa.nomePrograma" v-for="programa in programas" v-bind:key="programa">{{programa.nomePrograma}}</option>
             </select>
           </div>
           <div class="col-xl-3">
             <select
               class="filtro-turma turmas form-select mt-4"
               id="validationDefault04"
+              v-on:click="getTurmas()"
               required
             >
               <option selected disabled value="">Turmas</option>
-              <option>Turma I</option>
-              <option>Turma II</option>
-              <option>Turma III</option>
+              <option id="turma" v-bind:value="turma.id" v-for="turma in turmas" v-bind:key="turma.id">{{turma.nomeTurma}}</option>
             </select>
           </div>
           <div class="col-xl-2">
             <button
               class="botaoConfirmar btn btn-primary mt-4"
               type="button"
-              v-on:click="filtrarDados()"
+              v-on:click="validaForm()"
             >
               Pesquisar
             </button>
@@ -107,14 +101,15 @@
     <div class="container overflow-hidden">
       <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
         <div class="botõesfinais col-xl-5">
-          <div data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <div >
             <button
               id="botaoAdicionarManualmente"
+              data-bs-toggle="modal" data-bs-target="#exampleModal"
               type="button"
-              class="btn-lg"
+              class="btn-lg btnAdicionar none"
               v-on:click="mostrarParticipantes()"
             >
-              ADICIONAR MANUALMENTE
+              ADICIONAR SALÁRIO
             </button>
           </div>
         </div>
@@ -152,6 +147,7 @@
                   aria-label="Default select example"
                   id="nomeModal"
                 >
+                  <option selected disabled>Participante</option>
                   <option
                     :value="cpfParticipante.cpfParticipante"
                     v-for="cpfParticipante in cpfParticipantes"
@@ -160,43 +156,39 @@
                   >
                 </select>
               </div>
-              <label class="modalconteudo">Mês e ano</label>
+              <p id="erroNome" class="erro none">Por favor selecione um participante</p>
+              <label class="modalconteudo">Data</label>
               <div class="input-group input-group-lg">
                 <input
                   id="mesAnoModal"
                   type="date"
                   class="form-control"
-                  placeholder="MM/YY"
                   aria-label="Sizing example input"
                   aria-describedby="inputGroup-sizing-lg"
                 />
               </div>
+              <p id="erroData" class="erro none">O campo data não pode ser vazio</p>
               <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Remuneração</label>
                   <div class="input-group input-group-lg">
                     <input
-                      @input="escutaQuantidades"
+                      @change="escutaQuantidades"
+                      v-money="money"
                       id="remuneracaoModal"
-                      type="number"
                       class="form-control"
-                      placeholder="R$"
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
+                  <p id="erroRemun" class="erro none">O campo remuneração não pode ser vazio</p>
                 </div>
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Encargos</label>
                   <div class="input-group input-group-lg">
                     <input
-                      @input="escutaQuantidades"
+                      @change="escutaQuantidades"
                       id="encargosModal"
-                      type="number"
                       class="form-control"
-                      placeholder="R$"
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-lg"
+                      v-money="money"
                     />
                   </div>
                 </div>
@@ -207,26 +199,24 @@
                   <div class="input-group input-group-lg">
                     <input
                       id="beneficiosModal"
-                      @input="escutaQuantidades"
-                      type="number"
+                      @change="escutaQuantidades"
+                      type="text"
                       class="form-control"
-                      placeholder="R$"
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-lg"
+                      v-money="money"
                     />
                   </div>
+                  <p id="erroBeneficios" class="erro none">Por favor digite um valor válido</p>
                 </div>
                 <div class="modalitens col-xl-6">
                   <label class="modalconteudo">Total</label>
                   <div class="input-group input-group-lg">
                     <input
                       id="inputQtdTotal"
+                      :value="qtdTotal.toFixed(2)"
+                      v-money="money"
                       disabled
-                      type="number"
+                      type="text"
                       class="form-control"
-                      placeholder="R$"
-                      aria-label="Sizing example input"
-                      aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
                 </div>
@@ -241,6 +231,7 @@
                       aria-describedby="inputGroup-sizing-lg"
                     />
                   </div>
+                  <p id="erroObservacao" class="erro none">Por favor, preencha este campo</p>
                 </div>
               </div>
             </div>
@@ -250,11 +241,11 @@
                   id="confirmar"
                   type="button"
                   class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                  v-on:click="inserirInvestimento()"
+                  v-on:click="validaFormModal()"
                 >
                   CONFIRMAR
                 </button>
+                <button type="button" id="fechaModal" data-bs-dismiss="modal" class="none"></button>
               </div>
               <div class="col-xl-5"></div>
             </div>
@@ -263,22 +254,48 @@
       </div>
     </div>
   </div>
+  <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Inserção efetuada com sucesso</h3>
+                        <h4 class="mt-4 modal-title fw-bold titulo text-center" id="redirecionar">Redirecionando...</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import Header from '@/components/Header.vue'
 import Funcoes from '../../services/Funcoes'
 import { http } from '../../services/Config'
+import { variavel } from '../../services/Variavel'
+import { mask } from 'vue-the-mask'
+import { VMoney } from 'v-money'
 
 export default {
   name: 'App',
+  directives: { mask, money: VMoney },
   components: {
     Header
   },
   data () {
     return {
+      money: {
+        decimal: ',',
+        thousands: '.',
+        prefix: 'R$ ',
+        precision: 2
+      },
       participantes: [],
       cpfParticipantes: [],
+      programas: [],
+      turmas: [],
       programaProcurado: '',
       turmaProcurada: '',
       form: {
@@ -289,9 +306,8 @@ export default {
         beneficios: '',
         descricao: ''
       },
-      qtdTotal: {
-        qtdTotal: ''
-      },
+      qtdTotal: 0,
+
       qtdSalario: {
         qtdSalario: ''
       }
@@ -299,26 +315,91 @@ export default {
   },
   beforeMount () {
     Funcoes.verificaToken()
+    this.getProgramas()
   },
   methods: {
     filtrarDados () {
-      this.programaProcurado = document.querySelector('.filtro-programa').value
-      this.turmaProcurada = document.querySelector('.filtro-turma').value
-      
       http
         .get(
           'investimento-folha/' +
-            this.programaProcurado +
-            '/' +
-            this.turmaProcurada
+          this.programaProcurado +
+          '/' +
+          this.turmaProcurada
         )
         .then(response => {
           (this.participantes = response.data)
           this.pegarSalario()
+          this.mudaVisibilidade()
         })
-      this.mudaVisibilidade()
     },
-
+    validaForm () {
+      this.programaProcurado = document.querySelector('.filtro-programa').value
+      this.turmaProcurada = document.querySelector('.filtro-turma').value
+      let erro = 0
+      if (this.programaProcurado == '') {
+        erro = 1
+      } else {
+        erro = 0
+      }
+      if (this.turmaProcurada == '') {
+        erro = 1
+      } else {
+        erro = 0
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.filtrarDados()
+      }
+    },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
+    },
+    validaFormModal () {
+      var participante = document.querySelector('#nomeModal').value
+      var dataLancamento = document.querySelector('#mesAnoModal').value
+      var remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      var encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      var beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      var observacao = document.querySelector('#descricaoModal').value
+      let erro = 0
+      if (participante == 'Participante') {
+        document.querySelector('#erroNome').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroNome').classList.add('none')
+      }
+      if (dataLancamento == '') {
+        document.querySelector('#erroData').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroData').classList.add('none')
+      }
+      if (remuneracao == 0.00) {
+        document.querySelector('#erroRemun').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroRemun').classList.add('none')
+      }
+      if (beneficios == 0.00) {
+        document.querySelector('#erroBeneficios').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroBeneficios').classList.add('none')
+      }
+      if (observacao == '') {
+        document.querySelector('#erroObservacao').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroObservacao').classList.add('none')
+      }
+      if (erro == 1) {
+        return false
+      } else {
+        this.inserirInvestimento()
+        document.getElementById('fechaModal').click()
+      }
+    },
     mostrarParticipantes () {
       http
         .get(
@@ -326,18 +407,36 @@ export default {
         )
         .then(response => (this.cpfParticipantes = response.data))
     },
-
+    getProgramas () {
+      http.get('relatorios/formacoes')
+        .then(response => {
+          this.programas = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    getTurmas () {
+      let turmas = document.querySelector('.filtro-programa').value
+      http.get(`relatorios/turmas/${turmas}`)
+        .then(response => {
+          this.turmas = response.data
+        })
+    },
     inserirInvestimento () {
       this.form.cpf = document.getElementById('nomeModal').value
       this.form.mesAno = document.querySelector('#mesAnoModal').value
-      this.form.remuneracao = document.querySelector('#remuneracaoModal').value
-      this.form.encargos = document.querySelector('#encargosModal').value
-      this.form.beneficios = document.querySelector('#beneficiosModal').value
+      this.form.remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.form.encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      this.form.beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.form.descricao = document.querySelector('#descricaoModal').value
       http.post('/investimento-folha', this.form).then(response => {
+        this.abrirModal()
+        setTimeout(function () {
+          window.location.href = variavel.href = 'investimento-folha'
+        }, 1500)
       })
     },
-
     pegarSalario () {
       let salario = 0
       this.participantes.forEach(participante => {
@@ -352,16 +451,15 @@ export default {
     },
 
     escutaQuantidades () {
-      let remuneracao = document.querySelector('#remuneracaoModal').value
-      let encargos = document.querySelector('#encargosModal').value
-      let beneficios = document.querySelector('#beneficiosModal').value
+      let remuneracao = document.querySelector('#remuneracaoModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      let encargos = document.querySelector('#encargosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
+      let beneficios = document.querySelector('#beneficiosModal').value.replace('R$ ', '').replace('.', '').replace(',', '.')
       this.carregaQuantidade(remuneracao, encargos, beneficios)
     },
-
     carregaQuantidade (remun, encarg, benef) {
-      remun = parseInt(remun)
-      encarg = parseInt(encarg)
-      benef = parseInt(benef)
+      remun = parseFloat(remun)
+      encarg = parseFloat(encarg)
+      benef = parseFloat(benef)
 
       if (isNaN(remun)) {
         remun = 0
@@ -372,17 +470,16 @@ export default {
       if (isNaN(benef)) {
         benef = 0
       }
-      let qtdTotal = 0
-      qtdTotal += remun + encarg + benef
-      let elQtdTotal = document.querySelector('#inputQtdTotal')
-      elQtdTotal.value = qtdTotal
+      this.qtdTotal = remun + encarg + benef
     },
 
     mudaVisibilidade () {
       let mensagem = document.querySelector('.mensagem')
       let extremo = document.querySelector('.extremo')
+      let botao = document.querySelector('#botaoAdicionarManualmente')
 
       mensagem.style.display = 'none'
+      botao.style.display = 'flex'
       extremo.style.display = 'flex'
     },
 
@@ -390,6 +487,12 @@ export default {
       const dataPreForm = new Date(data)
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
       return dataFormatada
+    },
+
+    mostrarBtnAdicionar () {
+      let btnAdicionar = document.querySelector('.btnAdicionar')
+
+      btnAdicionar.style.display = 'flex'
     }
   }
 }
@@ -398,6 +501,15 @@ export default {
 <style>
 body {
   background: #ebebeb;
+}
+
+.erro {
+  color: red;
+  font-weight: bold;
+}
+
+.none {
+  display: none;
 }
 
 #botaoFolha {
@@ -440,6 +552,10 @@ body {
 }
 
 .extremo {
+  display: none;
+}
+
+.none {
   display: none;
 }
 
@@ -582,6 +698,17 @@ body {
   text-align: center;
 }
 
+#redirecionar {
+  font-family: Montserrat;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  font-weight: bold;
+  text-align: center;
+}
+
 #confirmar {
   background: #ab0045;
   font-weight: bold;
@@ -607,6 +734,10 @@ body {
   #botaoAdicionarManualmente {
     width: max-content;
     margin-left: 0px;
+  }
+
+  .btnAdicionar {
+    display: none;
   }
 }
 

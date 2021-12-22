@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <Header link="../informacoes-gerais-gerencial"/>
     <main>
       <div class="container-fluid">
         <div class="row justify-content-evenly mt-4 mb-3">
@@ -12,12 +12,12 @@
         <div class="row justify-content-evenly">
           <div class="col-xl-4">
             <div class="mb-3">
+              <label>Nome</label>
               <input
                 name="filtro"
                 type="text"
                 class="form-control mt-4"
                 id="filtro-nome"
-                placeholder="Nome"
               />
             </div>
             <div class="mb-3">
@@ -35,7 +35,7 @@
               </h4>
               <button
                 class="mt-3 form-control recarregar"
-                @click="recarregaLista"
+                onclick="window.location.reload()"
               >
                 RECARREGAR LISTA
               </button>
@@ -43,10 +43,10 @@
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
               <table class="table table-bordered tabela mt-4">
                 <tbody align="center">
-                  <tr id="instrutor" v-for="instrutor in instrutores" :key="instrutor">
-                    <th scope="row" width="50">{{ instrutor.cpf }}</th>
+                  <tr id="instrutor" v-for="(instrutor,index) in instrutores" :key="instrutor">
+                     <td scope="row">{{++index}}</td>
                     <td id="info-nome">{{ instrutor.nome }}</td>
-                    <td id="info-status" v-bind:class="instrutor.status == 'ATIVO' ? 'ativo' : 'inativo'">
+                    <td id="info-status" width="320" v-bind:class="instrutor.status == 'ATIVO' ? 'ativo' : 'inativo'">
                       {{ (instrutor.status == 'ATIVO'?'Ativo':'Inativo')}}
                     </td>
                     <td class="imagem rounded" width="50">
@@ -73,7 +73,7 @@
           </div>
           <div class="col-xl-7 justify-content-end d-flex">
             <a
-              href="/dados-instrutor-cadastro_edicao"
+              href="/dados-instrutor-cadastro"
               class="mt-5 form-control cadastro d-flex justify-content-center"
             >
               NOVO CADASTRO
@@ -190,7 +190,6 @@ export default {
       var contador = 0
       let aviso = document.querySelector('.aviso')
       var qtdLinhas = linhas.length
-      console.log(linhas)
 
       for (i = 0; i < linhas.length; i++) {
         if (arrayBoolLinhas[i][0] && arrayBoolLinhas[i][1]) {
@@ -284,6 +283,9 @@ a{
 }
 .campo-tabela{
     color: #737373 !important;
+}
+#info-nome{
+  font-weight: 500;
 }
 
 .submit, .cadastro, .recarregar{
