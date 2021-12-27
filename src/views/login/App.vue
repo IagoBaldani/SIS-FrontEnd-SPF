@@ -1,7 +1,7 @@
 <template>
     <div class="container">
       <div class="form-login">
-        <form class="formulario" >
+        <form class="formulario" @submit.stop.prevent="submit">
           <h2>Faça seu login</h2>
           <h3>(Credenciais SIS)</h3>
 
@@ -10,7 +10,7 @@
           <p id="validacaoCampos" class="none">Matricula ou senha inválida</p>
           <!-- <a href="">Esqueceu sua senha?</a> -->
 
-          <input class="submit" type="button" value="CONFIRMAR" @click="submit()"/>
+          <input class="submit" type="submit" value="CONFIRMAR"/>
         </form>        
       </div>
     </div>
