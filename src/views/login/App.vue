@@ -1,15 +1,15 @@
 <template>
     <div class="container">
       <div class="form-login">
-        <form class="formulario" @submit.stop.prevent="submit">
+        <form class="formulario" >
           <h2>Faça seu login</h2>
           <h3>(Credenciais SIS)</h3>
 
-          <input v-model="usuario" class="input" type="text" placeholder="Usuário" required />
-          <input v-model="senha" class="input" type="password" placeholder="Senha" required/>
+          <input v-model="loginInput.matricula" class="input" type="text" placeholder="Usuário" required />
+          <input v-model="loginInput.senha" class="input" type="password" placeholder="Senha" required/>
           <!-- <a href="">Esqueceu sua senha?</a> -->
 
-          <input class="submit" type="submit" value="CONFIRMAR"/>
+          <input class="submit" type="button" value="CONFIRMAR" @click="submit()"/>
         </form>
       </div>
     </div>
@@ -24,8 +24,10 @@ export default {
   name: 'App',
   data () {
     return {
-      usuario: '',
-      senha: ''
+      loginInput: {
+        matricula: '',
+        senha: ''
+      }     
     }
   },
   created () {
@@ -33,11 +35,10 @@ export default {
   },
   methods: {
     submit () {
-      http.post('auth', {
-        usuario: this.usuario,
-        senha: this.senha
-       
-      })
+      var formData = new FormData()
+      formData.append('matricula', this.loginInput.matricula)
+      formData.append('senha', this.loginInput.senha)
+      http.get('ad',formData)
         .then(response => {
           Cookie.set('login_token', response.data.token)
           window.location.href =  variavel.href = 'home'
