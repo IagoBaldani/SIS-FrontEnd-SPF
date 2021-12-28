@@ -5,8 +5,7 @@
       <!-- Título da Página -->
       <div class="row justify-content-evenly">
         <div class="col-lg-b6 mb-2 mt-2 d-flex justify-content-between">
-          <h1 class="mt-3 mb-3 spc">Busca por candidato:</h1>
-          <h1 class="mt-3 mb-3">Processo seletivo: {{ nomeDoProcessoCorreto }}</h1>
+          <h1 class="mt-3 mb-3 spc">Busca por matricula:</h1>
         </div>
         <div class="col-lg-6"></div>
       </div>
@@ -15,13 +14,7 @@
           <!-- Input para filtragem na tabela -->
           <div class="search-input">
             <div class="col-xl-9">
-              <input
-                type="text"
-                class="form-control mb-3"
-                id="filtrar-tabela"
-                placeholder="Candidato"
-                @input="filtraDados"
-              />
+              <input type="text" class="form-control mb-3" id="filtrar-tabela" placeholder="Matricula" @input="filtraDados"/>
             </div>
           </div>
         </div>
@@ -47,39 +40,18 @@
             >
               <tbody class="processosSeletivos">
                 <tr
-                  class="processo"
-                  v-for="(candidato, index) in candidatos"
-                  :key="candidato"
+                  class="matricula"
+                  v-for="(matricula, index) in matriculas"
+                  :key="matricula"
                 >
                   <th class="font-weight-normal" scope="row">
                     {{ ++index }}
                   </th>
-                  <td class="info-nome">{{ candidato.nome }}</td>
-                  <td class="aprovado" v-if="candidato.status == 'APROVADO_2_FASE'">Aprovado</td>
-                  <td class="aprovado" v-if="candidato.status == 'APROVADO_1_FASE'">Aprovado 1ª fase</td>
-                  <td class="reprovado" v-if="candidato.status == 'REPROVADO_1_FASE'">Reprovado 1ª fase</td>
-                  <td class="reprovado" v-if="candidato.status == 'REPROVADO_2_FASE'">Reprovado</td>
-                  <td class="sem-status" v-if="candidato.status == 'SEM_STATUS'">Sem Status</td>
-                  <td class="stand" v-if="candidato.status == 'STANDBY'">Standby</td>
-                  <td>
-                    <a :href="'/processo-seletivo-dados-do-candidato-visualizacao?id=' + candidato.id
-                     + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
-                     + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status"
-                    >
-                      <img
-                        src="../../assets/imgs/account_circle_white_24dp.svg"
-                        alt=""
-                      />
-                    </a>
-                  </td>
-                  <td>
-                    <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id
-                      + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
-                      + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status" >
-                      <img
-                        src="../../assets/imgs/manage_accounts_white_24dp.svg"
-                        alt=""
-                      />
+                  <td class="info-matricula">{{ matricula.matricula }}</td>
+                  <td class="info-primeiro-acesso">{{ matricula.dataPrimeiroAcesso }}</td>
+                  <td class="info-acesso">Permissão</td>
+                  <td><a :href="'/matricula-cadastro'">
+                      <img src="../../assets/imgs/delete_white_24dp.svg" alt=""/>
                     </a>
                   </td>
                 </tr>
@@ -98,10 +70,8 @@
             class="button-footer mt-5 submit"
             id="cadastrar"
             type="button">
-            <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?tipo=cadastro' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
-                      + this.idProcessoSeletivo"
-            >
-              Cadastrar novo candidato
+            <a :href="'/matricula-cadastro'">
+              Cadastraremos-eis nova matricula
             </a>
           </button>
         </div>
@@ -112,7 +82,6 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
 export default {
   name: 'App',
@@ -121,31 +90,11 @@ export default {
   },
   data () {
     return {
-      candidatos: [],
-      statusProcesso: '',
-      idProcessoSeletivo: '',
-      nomeProcesso: '',
-      nomeDoProcessoCorreto: ''
+      matriculas: []
     }
   },
   beforeMount () {
-    Funcoes.verificaToken()
-    const dadosUrl = this.pegaDadosUrl()
-    let idProcesso = dadosUrl.id
-    this.idProcessoSeletivo = idProcesso
-    this.statusProcesso = dadosUrl.status
-    this.nomeProcesso = dadosUrl.nomeProcesso
-    if (idProcesso != null && idProcesso != '') {
-      this.getListaDaFormacao(idProcesso)
-    } else {
-      this.getLista()
-    }
-    this.getListaDeProcessos()
-  },
-  beforeUpdate () {
-    if (this.statusProcesso == 'FINALIZADA') {
-      document.querySelector('#cadastrar').classList.add('invisivel')
-    }
+    this.getMatricula()
   },
   methods: {
     filtraDados () {
@@ -153,11 +102,11 @@ export default {
       aviso.classList.add('invisivel')
       var campoFiltro = document.querySelector('#filtrar-tabela')
       var listaDeValores = []
-      var processos = document.querySelectorAll('.processo')
+      var processos = document.querySelectorAll('.matricula')
       if (campoFiltro.value.length >= 0) {
         for (var i = 0; i < processos.length; i++) {
           var processo = processos[i]
-          var tdNome = processo.querySelector('.info-nome')
+          var tdNome = processo.querySelector('.info-matricula')
           var nome = tdNome.textContent
           var expressao = new RegExp(campoFiltro.value, 'i')
           if (!expressao.test(nome)) {
@@ -182,44 +131,11 @@ export default {
         }
       }
     },
-    getListaDeProcessos () {
+    getMatricula () {
       http
-        .get(`processo-seletivo/${this.idProcessoSeletivo}`)
+        .get('matricula')
         .then(response => {
-          this.nomeProcesso = response.data
-          this.nomeDoProcessoCorreto = this.nomeProcesso.nome
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-    getLista () {
-      http
-        .get('candidato/lista')
-        .then(response => {
-          this.candidatos = response.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-    pegaDadosUrl () {
-      var query = location.search.slice(1)
-      var partes = query.split('&')
-      var data = {}
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=')
-        var chave = chaveValor[0]
-        var valor = chaveValor[1]
-        data[chave] = valor
-      })
-      return data
-    },
-    getListaDaFormacao (idProcesso) {
-      http
-        .get(`candidato/lista-do-processo/${idProcesso}`)
-        .then(response => {
-          this.candidatos = response.data
+          this.matriculas = response.data
         })
         .catch(error => {
           console.log(error)
@@ -322,19 +238,17 @@ body {
 }
 /* Table - Coluna em Andamento */
 .search-table tbody > tr > td:nth-child(3) {
-  color: var(--color-green-progress);
   text-align: center;
   font-weight: 700;
 }
 /* Table - Coluna2  */
 .search-table tbody > tr > td:nth-child(4) {
-  background-color: var(--color-magenta-principal);
   font-weight: 700;
   text-align: center;
 }
 /* Table - Coluna3  */
 .search-table tbody > tr > td:nth-child(5) {
-  background-color: var(--color-yellow-principal);
+  background-color: var(--color-magenta-principal);
   font-weight: 700;
   text-align: center;
 }
