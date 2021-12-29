@@ -21,6 +21,7 @@
                               <option selected>Selecione o nível de acesso da nova matricula</option>
                               <option value="1">Nível 1 - Total acesso ao sistema</option>
                               <option value="2">Nível 2 - Apenas visualização</option>
+                              <option value="2">Nível 2 - Apenas visualização</option>
                             </select>
                         </div>
                   </div>
