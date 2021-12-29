@@ -23,6 +23,9 @@
                               <option value="2">Nível 2 - Apenas visualização</option>
                             </select>
                         </div>
+                      <div>
+                        <button class="mt-5 form-control submit" > CADASTRAR </button>
+                      </div>
                   </div>
                   <div class="col-xl-4"></div>
                   <div class="col-xl-2"></div>
@@ -64,6 +67,12 @@ body {
 
 .titulo {
     color: #090B2E;
+}
+
+.submit{
+  background-color: #AB0045 !important;
+  color: white !important;
+  font-weight: bold;
 }
 
 textarea {

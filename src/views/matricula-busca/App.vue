@@ -50,7 +50,7 @@
                   <td class="info-matricula">{{ matricula.matricula }}</td>
                   <td class="info-primeiro-acesso">{{ matricula.dataPrimeiroAcesso }}</td>
                   <td class="info-acesso">Permissão</td>
-                  <td><a :href="'/matricula-cadastro'">
+                  <td><a @click="deletar(matricula.matricula)">
                       <img src="../../assets/imgs/delete_white_24dp.svg" alt=""/>
                     </a>
                   </td>
@@ -71,7 +71,7 @@
             id="cadastrar"
             type="button">
             <a :href="'/matricula-cadastro'">
-              Cadastraremos-eis nova matricula
+              Cadastrar nova matricula
             </a>
           </button>
         </div>
@@ -136,6 +136,16 @@ export default {
         .get('matricula')
         .then(response => {
           this.matriculas = response.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    deletar (variavel) {
+      http
+        .delete(`matricula/${variavel}`)
+        .then(response => {
+          this.getMatricula()
         })
         .catch(error => {
           console.log(error)
@@ -310,10 +320,10 @@ body {
 }
 a{
   color: white;
-  text-decoration: none;
 }
 a:hover{
   color: white;
+  cursor: pointer;
 }
 #buscar {
   background-color: var(--color-magenta-principal);
