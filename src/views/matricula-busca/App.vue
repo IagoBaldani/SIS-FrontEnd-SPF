@@ -49,7 +49,8 @@
                   </th>
                   <td class="info-matricula">{{ matricula.matricula }}</td>
                   <td class="info-primeiro-acesso">{{ matricula.dataPrimeiroAcesso }}</td>
-                  <td class="info-acesso">Permissão</td>
+                  <td class="info-acesso" v-if="matricula.perfil == 'ROLE_ADMINISTRADOR'">Nível 1 - Administrador</td>
+                  <td class="info-acesso" v-else-if="matricula.perfil == 'ROLE_USUARIO'">Nível 2 - Usuário</td>
                   <td><a @click="deletar(matricula.matricula)">
                       <img src="../../assets/imgs/delete_white_24dp.svg" alt=""/>
                     </a>

@@ -14,8 +14,6 @@ export default {
     const decipher = crypto.createDecipher(alg, pwd)
     const perfil = decipher.update(perfilCriptografado, 'hex', 'utf8')
 
-    console.log(perfil)
-
     if (perfil != 'ROLE_ADMINISTRADOR') {
       return false
     } else {
