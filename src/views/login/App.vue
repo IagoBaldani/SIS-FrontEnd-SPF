@@ -20,6 +20,8 @@
 import Cookie from 'js-cookie'
 import { http } from '../../services/Config'
 import { variavel } from '../../services/Variavel'
+import Crypto from 'vue-cryptojs'
+import crypto from 'crypto'
 
 export default {
   name: 'App',
@@ -33,13 +35,13 @@ export default {
   },
   created () {
     Cookie.remove('login_token')
+    Cookie.remove('perfil_usuario')
   },
   methods: {
     submit () {
       var formData = new FormData()
       formData.append('matricula', this.loginInput.matricula)
       formData.append('senha', this.loginInput.senha)
-      console.log(formData)
       http.post('ad', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -47,10 +49,19 @@ export default {
       })
         .then(response => {
           Cookie.set('login_token', response.data.token)
+          const crypto = require('crypto')
+          const alg = 'aes-256-ctr'
+          const pwd = 'abcdabcd'
+          // eslint-disable-next-line node/no-deprecated-api
+          const cipher = crypto.createCipher(alg, pwd)
+          const crypted = cipher.update(response.data.perfil, 'utf8', 'hex')
+
+          Cookie.set('perfil_usuario', crypted)
           window.location.href = variavel.href = 'home'
         })
         .catch(erro => {
           document.getElementById('validacaoCampos').classList.remove('none')
+          console.log(this.loginInput.senha)
           console.log('Dados incorretos. Por favor, tente novamente.')
         })
     }

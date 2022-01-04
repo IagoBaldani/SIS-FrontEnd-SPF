@@ -1,5 +1,5 @@
 <template>
-  <Header link="../processo-seletivo-busca-por-vagas"/>
+  <Header link="../home"/>
   <main>
     <div class="container-fluid px-5">
       <!-- Título da Página -->
@@ -31,7 +31,7 @@
               RECARREGAR LISTA
             </button>
           </div>
-          <div class="search-table table-wrapper-scroll-y my-custom-scrollbar">
+          <div class="search-table table-wrapper-scroll-y my-custom-scrollbar" id="listaMatriculas">
             <table
               class="
                 table table-bordered
@@ -77,12 +77,27 @@
         </div>
       </div>
     </div>
+    <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalAcesso" ></p>
+    <div class="modal fade mt-5"  id="modalAcesso" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-size">
+        <div class="modal-content p-5 grey-background">
+          <div class="row mb-5">
+            <div class="col">
+              <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Nivel de acesso insuficiente</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 
 <script>
 import Header from '@/components/Header.vue'
 import { http } from '@/services/Config'
+import VerificaPerfil from '@/services/VerificaPerfil'
+
 export default {
   name: 'App',
   components: {
@@ -95,6 +110,16 @@ export default {
   },
   beforeMount () {
     this.getMatricula()
+  },
+  mounted () {
+    if (!VerificaPerfil.verificaPerfil()) {
+      document.querySelector('#listaMatriculas').classList.add('none')
+      this.abrirModal()
+      document.querySelector('#abreModalInvisivel').classList.remove('none')
+      setTimeout(function () {
+        location.href = '/home'
+      }, 1500)
+    }
   },
   methods: {
     filtraDados () {
@@ -150,6 +175,9 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
     }
   }
 }
@@ -207,6 +235,9 @@ body {
 .btn-header img,
 .logo img {
   height: 50px;
+}
+.none {
+  display: none !important;
 }
 .home.btn-header {
   background-color: var(--color-yellow-principal);
