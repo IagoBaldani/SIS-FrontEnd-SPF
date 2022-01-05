@@ -51,7 +51,7 @@
                   <td class="info-primeiro-acesso">{{ matricula.dataPrimeiroAcesso }}</td>
                   <td class="info-acesso" v-if="matricula.perfil == 'ROLE_ADMINISTRADOR'">Nível 1 - Administrador</td>
                   <td class="info-acesso" v-else-if="matricula.perfil == 'ROLE_USUARIO'">Nível 2 - Usuário</td>
-                  <td><a data-bs-toggle="modal" data-bs-target="#exampleModal" @click="defineFormMatricula(matricula.matricula)">
+                  <td><a data-bs-toggle="modal" data-bs-target="#exampleModal" @click="defineFormMatricula(matricula.matricula)" title="Excluir matricula">
                       <img src="../../assets/imgs/delete_white_24dp.svg" alt=""/>
                     </a>
                   </td>

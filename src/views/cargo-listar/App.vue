@@ -54,12 +54,12 @@
                   </th>
                   <td class="info-nome">{{cargo.cargo}}</td>
                   <td>
-                    <a :href="'/cargo-visualizar?id=' + cargo.id">
+                    <a :href="'/cargo-visualizar?id=' + cargo.id" title="Visualizar cargo">
                       <img src="../../assets/imgs/visibility_white_24dp.svg" alt=""/>
                     </a>
                   </td>
                   <td>
-                    <a :href="'/cargo-cadastro-edicao?id=' + cargo.id + '&tipo=edicao'">
+                    <a :href="'/cargo-cadastro-edicao?id=' + cargo.id + '&tipo=edicao'" title="Editar cargo">
                     <img src="../../assets/imgs/settings_white_24dp.svg" alt=""/>
                     </a>
                   </td>

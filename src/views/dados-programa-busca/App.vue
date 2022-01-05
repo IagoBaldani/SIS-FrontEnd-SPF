@@ -44,12 +44,12 @@
                                     {{(programa.status == 'ENCERRADO')?'Encerrado':'Em andamento' }}
                                 </td>
                                 <td class="imagem rounded" width="50">
-                                    <a :href="'/dados-programa-cadastro_edicao?id=' + programa.id + '&tipo=edicao'">
+                                    <a :href="'/dados-programa-cadastro_edicao?id=' + programa.id + '&tipo=edicao'" title="Editar programa">
                                         <img src="@/assets/imgs/settings_white_24dp.svg"/>
                                     </a>
                                 </td>
                                 <td class="imagem-coluna rounded" width="50">
-                                    <a :href="'/dados-programa-visualizacao?id=' + programa.id">
+                                    <a :href="'/dados-programa-visualizacao?id=' + programa.id" title="Visualizar programa">
                                         <img src="@/assets/imgs/school_white_24dp.svg">
                                     </a>
                                 </td>

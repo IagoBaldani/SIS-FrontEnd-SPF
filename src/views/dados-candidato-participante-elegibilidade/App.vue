@@ -44,7 +44,7 @@
                 <td id="info-processo">{{candidato.processoSeletivo}}</td>
                 <td id="info-status">{{candidato.status}}</td>
                 <td class="imagem rounded">
-                  <a :href="'/dados-participante-cadastro_participante?id=' + candidato.id">
+                  <a :href="'/dados-participante-cadastro_participante?id=' + candidato.id" title="Cadastrar participante">
                     <img src="@/assets/imgs/account_circle_white_24dp.svg" alt="Imagem" class="img-selecionar"/>
                   </a>
                 </td>

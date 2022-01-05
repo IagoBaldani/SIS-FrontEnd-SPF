@@ -64,7 +64,7 @@
                   <td>
                     <a :href="'/processo-seletivo-dados-do-candidato-visualizacao?id=' + candidato.id
                      + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
-                     + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status"
+                     + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status" title="Visualizar candidato"
                     >
                       <img
                         src="../../assets/imgs/account_circle_white_24dp.svg"
@@ -75,7 +75,7 @@
                   <td>
                     <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id
                       + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
-                      + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status" >
+                      + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status" title="Editar candidato">
                       <img
                         src="../../assets/imgs/manage_accounts_white_24dp.svg"
                         alt=""

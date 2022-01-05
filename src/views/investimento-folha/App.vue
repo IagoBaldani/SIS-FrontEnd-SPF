@@ -39,11 +39,11 @@
           </div>
           <div class="col-xl-2">
             <button
-              class="botaoConfirmar btn btn-primary mt-4"
+              class="botaoConfirmar btn btn-primary mt-4 fw-bold"
               type="button"
               v-on:click="validaForm()"
             >
-              Pesquisar
+              PESQUISAR
             </button>
           </div>
         </form>

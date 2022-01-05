@@ -61,6 +61,7 @@
                   <td id="icones">
                     <a
                       :href="'/dados-programa-cadastro?id=' + processo.id"
+                      title="Cadastrar programa"
                     >
                       <img
                         src="@/assets/imgs/preview_white_24dp.svg"

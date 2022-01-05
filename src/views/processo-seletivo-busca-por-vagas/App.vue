@@ -59,18 +59,18 @@
                     class="statusProcesso">{{ processo.status }}
                 </td>
                 <td>
-                  <a :href="'processo-seletivo-dados-da-vaga-visualizacao?id=' + processo.id">
+                  <a :href="'processo-seletivo-dados-da-vaga-visualizacao?id=' + processo.id" title="Visualizar vaga">
                     <img src="../../assets/imgs/visibility_white_24dp.svg" alt=""/>
                   </a>
                 </td>
                 <td>
-                  <a class="editor" v-on:click="habilitaEdicao(processo.status, processo.id)">
+                  <a class="editor" v-on:click="habilitaEdicao(processo.status, processo.id)" title="Editar vaga">
                     <!-- <a class="none" id="validadorEdicao" :href="'/processo-seletivo-dados-da-vaga-cadastro-edicao?id=' + processo.id + '&tipo=edicao'"/> -->
                     <img src="../../assets/imgs/settings_white_24dp.svg" alt=""/>
                   </a>
                 </td>
                 <td>
-                  <a
+                  <a title="Visualizar candidatos"
                     :href="'/processo-seletivo-busca-por-candidato?id=' + processo.id + '&status=' + processo.status"><img
                     src="../../assets/imgs/Pattern.svg" alt=""/></a>
                 </td>
