@@ -47,10 +47,10 @@
               </div>
               <div class="conteudomodal d-flex flex-column justify-content-center mb-5">
                 <div class="">
-                  <p class="fw-bold subtitulo text-start">Informações gerais:</p> <br>
-                  <p class="text-start subtitulo fw-bold">Matricula: <span class="titulo text-start"> {{matriculaForm.matricula}} </span></p>
-                  <p class="text-start subtitulo fw-bold" v-if="matriculaForm.perfil == 'ROLE_ADMINISTRADOR'">Perfil de acesso: <span class="titulo"> Nivel 1 - Administrador </span></p>
-                  <p class="text-start subtitulo fw-bold" v-if="matriculaForm.perfil == 'ROLE_USUARIO'">Perfil de acesso: <span class="titulo"> Nivel 2 - Usuário </span></p>
+                  <p class="fw-bold subtitulo text-start ms-5">Informações gerais:</p> <br>
+                  <p class="text-start subtitulo fw-bold ms-5">Matricula: <span class="titulo text-start"> {{matriculaForm.matricula}} </span></p>
+                  <p class="text-start subtitulo fw-bold ms-5" v-if="matriculaForm.perfil == 'ROLE_ADMINISTRADOR'">Perfil de acesso: <span class="titulo"> Nivel 1 - Administrador </span></p>
+                  <p class="text-start subtitulo fw-bold ms-5" v-if="matriculaForm.perfil == 'ROLE_USUARIO'">Perfil de acesso: <span class="titulo"> Nivel 2 - Usuário </span></p>
                 </div>
               </div>
               <div class="modal-footer border-0 justify-content-around">

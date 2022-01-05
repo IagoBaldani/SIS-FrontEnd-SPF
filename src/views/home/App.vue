@@ -66,7 +66,7 @@
                 <img src="@/assets/imgs/badge_white_48dp.svg" />
               </div>
               <div class="txt-btn-container matricula">
-                Matricula
+                Permissões
               </div>
             </div>
           </a>

@@ -51,7 +51,7 @@
                   <td class="info-primeiro-acesso">{{ matricula.dataPrimeiroAcesso }}</td>
                   <td class="info-acesso" v-if="matricula.perfil == 'ROLE_ADMINISTRADOR'">Nível 1 - Administrador</td>
                   <td class="info-acesso" v-else-if="matricula.perfil == 'ROLE_USUARIO'">Nível 2 - Usuário</td>
-                  <td><a @click="deletar(matricula.matricula)">
+                  <td><a data-bs-toggle="modal" data-bs-target="#exampleModal" @click="defineFormMatricula(matricula.matricula)">
                       <img src="../../assets/imgs/delete_white_24dp.svg" alt=""/>
                     </a>
                   </td>
@@ -91,6 +91,46 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-xl modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body d-flex justify-content-between">
+            <div>
+              <h1 class="modal-title form-label fw-bold mb-0 titulo"> Deseja excluir a seguinte matricula? </h1>
+            </div>
+            <div class="conteudomodal d-flex flex-column justify-content-center mt-5">
+              <div class="mt-5">
+                <p class="titulo fw-bold fs-3">Matricula: <span class="titulo"> {{formMatricula}} </span></p>
+              </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-around">
+              <div>
+                <button @click="deletar(formMatricula)" type="button" class="btn submit-modal">CONFIRMAR</button>
+              </div>
+              <div>
+                <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal de confirmação exclusão-->
+    <p class="none" id="abreModalConfirmacao" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-size">
+        <div class="modal-content p-5 grey-background">
+          <div class="row mb-5">
+            <div class="col">
+              <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabelConfirmacao">Matricula excluida com sucesso!</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 
@@ -106,7 +146,8 @@ export default {
   },
   data () {
     return {
-      matriculas: []
+      matriculas: [],
+      formMatricula: ''
     }
   },
   beforeMount () {
@@ -172,6 +213,10 @@ export default {
         .delete(`matricula/${variavel}`)
         .then(response => {
           this.getMatricula()
+          document.getElementById('abreModalConfirmacao').click()
+          setTimeout(function () {
+            location.href = '/matricula-busca'
+          }, 1500)
         })
         .catch(error => {
           console.log(error)
@@ -179,6 +224,9 @@ export default {
     },
     abrirModal () {
       document.getElementById('abreModalInvisivel').click()
+    },
+    defineFormMatricula (matricula) {
+      this.formMatricula = matricula
     }
   }
 }
@@ -361,7 +409,7 @@ a:hover{
   background-color: var(--color-magenta-principal);
 }
 #cadastrar {
-  background-color: var(--color-yellow-principal);
+  background-color: var(--color-yellow-principal) !important;
 }
 .btn {
   margin-top: 150px;
@@ -394,5 +442,39 @@ a:hover{
   .empty {
     height: 120px;
   }
+}
+.conteudomodal {
+  display: flex;
+  justify-content: center;
+  /*min-height: 40vh;*/
+  font-size: 21px;
+}
+.modal-body, .modal-header, .modal-footer {
+  text-align: center;
+  background-color: #EBEBEB
+}
+.modal-body{
+  /*min-height: 55vh;*/
+  flex-direction: column;
+}
+.submit-modal, .cancel-modal{
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 5px !important;
+  width: 350px;
+  font-size: 25px !important;
+}
+.submit, .submit-modal{
+  color: white !important;
+  font-weight: bold !important;
+  background-color: #AB0045 !important;
+}
+.cancel, .cancel-modal{
+  color: white !important;
+  font-weight: bold !important;
+  background-color: #FFB700 !important;
+}
+.none{
+  display: none !important;
 }
 </style>
