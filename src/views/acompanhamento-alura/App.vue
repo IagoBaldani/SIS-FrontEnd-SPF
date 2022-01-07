@@ -21,7 +21,7 @@
                                     <tr>
                                         <th scope="col" class="text-center th-id titulo">Semana</th>
                                         <th scope="col" class="text-center th-ms titulo">Horas registradas</th>
-                                        <th scope="col" class="text-center titulo">Horas Minímas</th>
+                                        <th scope="col" class="text-center titulo">Horas mínimas</th>
                                        <th scope="col" colspan="2" class="text-center titulo">Data de registro</th>
                                     </tr>
                                 </thead>
