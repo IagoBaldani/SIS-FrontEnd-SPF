@@ -47,18 +47,18 @@
                         <div class="mb-3">
                             <label for="comportamental" class="form-label fw-bold h5 titulo" >Comportamental</label>
                             <div class="input-group mb-3">
-                                <input type="number" disabled class="form-control" 
+                                <input type="number" disabled class="form-control"
                                     id="comportamental" aria-label="Recipient's username" aria-describedby="basic-addon2" :value="getMedia().toFixed(2)">
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary botao-adc" type="button" 
+                                    <button class="btn btn-outline-secondary botao-adc" type="button"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#modalComportamental">+</button>
+                                        data-bs-target="#modalComportamental" title="Teste de desempenho">+</button>
                                 </div>
                             </div>
                             <p id="erroComportamental" class="erro none">Não esqueça de preencher as notas comportamentais!</p>
                         </div>
 
-                        <button type="button" 
+                        <button type="button"
                             class="btn btn-danger sis-red-btn mt-3 mb-1 fw-bold fs-5 w-100" @click="verificaForm()">REGISTRAR</button>
                         <p id="verificaCampos" class="none" @click="postForm()"></p>
                         <p id="populaForm" class="none" @click="getMedia().toFixed(2)"></p>
@@ -101,12 +101,12 @@
                             <h4 class="fw-bold titulo">Comportamental:</h4>
                             <div>
                               <p class="grey-font h4 d-inline marginEye">{{modalDesempenho.media}}</p>
-                              <button class="btn btn-outline-secondary botao-adc" type="button" 
+                              <button class="btn btn-outline-secondary botao-adc" type="button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#serievisu" @click="carregaModal(avaliacaoModal)"><img src="@/assets/imgs/visibility_white_24dp.svg"></button>
                             </div>
                         </div>
-                      
+
                         <div class="mb-4">
                             <h4 class="fw-bold titulo">Módulo práticas ágeis:</h4>
                             <p class="grey-font h4">{{avaliacaoModal.notaPraticasAgeis}}</p>
@@ -415,7 +415,7 @@ export default {
       participante: {}, // objeto para salvar as informações do participante.
       id: {},
       media: {}, // media das notas do modal, que origina a nota Comportamental.
-      form: { // objeto para usar no Body para enviar as requisições. 
+      form: { // objeto para usar no Body para enviar as requisições.
         notaTecnica: '',
         notaPraticasAgeis: '',
         notaLideranca: '',
@@ -537,21 +537,21 @@ export default {
     },
     // função para gerar a média dos campos do modal, para exibir a nota comportamental no formulario
     getMedia () {
-      this.media = (this.form.avaliacaoDesempenhoForm.qualidade + 
+      this.media = (this.form.avaliacaoDesempenhoForm.qualidade +
         this.form.avaliacaoDesempenhoForm.adaptacao +
         this.form.avaliacaoDesempenhoForm.capTecnica +
-        this.form.avaliacaoDesempenhoForm.comunicabilidade + 
+        this.form.avaliacaoDesempenhoForm.comunicabilidade +
         this.form.avaliacaoDesempenhoForm.apPratica +
         this.form.avaliacaoDesempenhoForm.dedicacao +
         this.form.avaliacaoDesempenhoForm.cooperacao +
         this.form.avaliacaoDesempenhoForm.iniciativa +
-        this.form.avaliacaoDesempenhoForm.disciplina + 
+        this.form.avaliacaoDesempenhoForm.disciplina +
         this.form.avaliacaoDesempenhoForm.organizacao +
         this.form.avaliacaoDesempenhoForm.responsabilidade +
         this.form.avaliacaoDesempenhoForm.sociabilidade) / 12
       return this.media
     },
-    // verifica os campos do formulário, caso tenha algum vazio um paragrafo aparece para notificar.  
+    // verifica os campos do formulário, caso tenha algum vazio um paragrafo aparece para notificar.
     // função para ver se existe campo vazio no formulário
     verificaForm () {
       let notaTecnica = document.querySelector('#tecnicaNotas').value
@@ -787,7 +787,7 @@ export default {
         document.getElementById('verificaCampos').click()
         setTimeout(function () {
           document.location.reload(true)
-        }, 1500) 
+        }, 1500)
       }
     }
   }

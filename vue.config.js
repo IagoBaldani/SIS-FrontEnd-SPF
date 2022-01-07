@@ -264,5 +264,17 @@ module.exports = {
       title: 'Cargos',
       chunks: ['chunk-vendors', 'chunk-common', 'cargo-cadastro']
     },
+    'matricula-busca': {
+      entry: './src/views/matricula-busca/main.js',
+      template: 'public/index.html',
+      title: 'Cargos',
+      chunks: ['chunk-vendors', 'chunk-common', 'matricula-busca']
+    },
+    'matricula-cadastro': {
+      entry: './src/views/matricula-cadastro/main.js',
+      template: 'public/index.html',
+      title: 'Cargos',
+      chunks: ['chunk-vendors', 'chunk-common', 'matricula-cadastro']
+    }
   }
 }

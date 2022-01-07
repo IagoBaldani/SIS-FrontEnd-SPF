@@ -5,8 +5,9 @@
           <h2>Faça seu login</h2>
           <h3>(Credenciais SIS)</h3>
 
-          <input v-model="usuario" class="input" type="text" placeholder="Usuário" required />
-          <input v-model="senha" class="input" type="password" placeholder="Senha" required/>
+          <input v-model="loginInput.matricula" class="input" type="text" placeholder="Matrícula" required />
+          <input v-model="loginInput.senha" class="input" type="password" placeholder="Senha" required/>
+          <p id="validacaoCampos" class="none">Matricula ou senha inválida</p>
           <!-- <a href="">Esqueceu sua senha?</a> -->
 
           <input class="submit" type="submit" value="CONFIRMAR"/>
@@ -19,30 +20,48 @@
 import Cookie from 'js-cookie'
 import { http } from '../../services/Config'
 import { variavel } from '../../services/Variavel'
+import Crypto from 'vue-cryptojs'
+import crypto from 'crypto'
 
 export default {
   name: 'App',
   data () {
     return {
-      usuario: '',
-      senha: ''
+      loginInput: {
+        matricula: '',
+        senha: ''
+      }
     }
   },
   created () {
     Cookie.remove('login_token')
+    Cookie.remove('perfil_usuario')
   },
   methods: {
     submit () {
-      http.post('auth', {
-        usuario: this.usuario,
-        senha: this.senha
-       
+      var formData = new FormData()
+      formData.append('matricula', this.loginInput.matricula)
+      formData.append('senha', this.loginInput.senha)
+      http.post('ad', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       })
         .then(response => {
           Cookie.set('login_token', response.data.token)
-          window.location.href =  variavel.href = 'home'
+          const crypto = require('crypto')
+          const alg = 'aes-256-ctr'
+          const pwd = 'abcdabcd'
+          // eslint-disable-next-line node/no-deprecated-api
+          const cipher = crypto.createCipher(alg, pwd)
+          const crypted = cipher.update(response.data.perfil, 'utf8', 'hex')
+
+          Cookie.set('perfil_usuario', crypted)
+          window.location.href = variavel.href = 'home'
         })
         .catch(erro => {
+          document.getElementById('validacaoCampos').classList.remove('none')
+          console.log(this.loginInput.senha)
           console.log('Dados incorretos. Por favor, tente novamente.')
         })
     }
@@ -165,5 +184,13 @@ h3 {
   h3 {
     font-size: 15px;
   }
+}
+.none{
+    display: none !important;
+  }
+
+#validacaoCampos{
+  color: red !important;
+  font-weight: bold !important;
 }
 </style>

@@ -404,7 +404,7 @@ export default {
       } else {
         document.querySelector('#erroTurma').classList.add('none')
       }
-      if (dataEntrega == ''){
+      if (dataEntrega == '') {
         document.querySelector('#erroDataEntrega').classList.remove('none')
         erro = 1
       } else {

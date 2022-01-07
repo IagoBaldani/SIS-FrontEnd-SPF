@@ -50,12 +50,12 @@
                       {{ (instrutor.status == 'ATIVO'?'Ativo':'Inativo')}}
                     </td>
                     <td class="imagem rounded" width="50">
-                      <a :href="'/dados-instrutor-cadastro_edicao?id=' + instrutor.cpf + '&tipo=edicao'">
+                      <a :href="'/dados-instrutor-cadastro_edicao?id=' + instrutor.cpf + '&tipo=edicao'" title="Editar instrutor">
                        <img src="@/assets/imgs/manage_accounts_white_24dp.svg" alt="Imagem" />
                       </a>
                     </td>
                     <td class="imagem-coluna rounded" width="50">
-                      <a :href="'/dados-instrutor-visualizacao?id=' + instrutor.cpf">
+                      <a :href="'/dados-instrutor-visualizacao?id=' + instrutor.cpf" title="Visualizar instrutor">
                         <img src="@/assets/imgs/account_circle_white_24dp.svg" />
                       </a>
                     </td>

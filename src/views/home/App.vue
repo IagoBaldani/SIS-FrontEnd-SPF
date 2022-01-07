@@ -59,7 +59,17 @@
                 Cargos
               </div>
             </div>
-          </a> 
+          </a>
+          <a href="/matricula-busca">
+            <div class="btn-container">
+              <div class="icon-btn-container matricula">
+                <img src="@/assets/imgs/badge_white_48dp.svg" />
+              </div>
+              <div class="txt-btn-container matricula">
+                Permissões
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </section>
@@ -170,10 +180,10 @@ h2 {
   background: linear-gradient(45deg, #c79007, #ffb600);
 }
 
-.icon-btn-container.relatorios {
+.icon-btn-container.relatorios, .icon-btn-container.matricula {
   background-color: #090b2e;
 }
-.txt-btn-container.relatorios {
+.txt-btn-container.relatorios, .txt-btn-container.matricula {
   background: linear-gradient(45deg, #090b2e, #1d2276);
 }
 

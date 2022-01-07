@@ -98,6 +98,7 @@
               data-bs-target="#staticBackdrop1"
               class="dados_gerais-img"
               src="@/assets/imgs/visibility.svg"
+              title="Participantes ativos"
             />
           </div>
           <div class="card-body">
@@ -119,6 +120,7 @@
               data-bs-target="#staticBackdrop2"
               class="dados_gerais-img"
               src="@/assets/imgs/visiamarelo.svg"
+              title="Participantes efetivados"
             />
           </div>
           <div class="card-body">
@@ -140,6 +142,7 @@
               data-bs-target="#staticBackdrop3"
               class="dados_gerais-img"
               src="@/assets/imgs/visiazul.svg"
+              title="Visualizar programas de formação em andamento"
             />
           </div>
           <div class="card-body">

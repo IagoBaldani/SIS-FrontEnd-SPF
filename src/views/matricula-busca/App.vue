@@ -1,12 +1,11 @@
 <template>
-  <Header link="../processo-seletivo-busca-por-vagas"/>
+  <Header link="../home"/>
   <main>
     <div class="container-fluid px-5">
       <!-- Título da Página -->
       <div class="row justify-content-evenly">
         <div class="col-lg-b6 mb-2 mt-2 d-flex justify-content-between">
-          <h1 class="mt-3 mb-3 spc">Busca por candidato:</h1>
-          <h1 class="mt-3 mb-3">Processo seletivo: {{ nomeDoProcessoCorreto }}</h1>
+          <h1 class="mt-3 mb-3 spc">Busca por matricula:</h1>
         </div>
         <div class="col-lg-6"></div>
       </div>
@@ -15,13 +14,7 @@
           <!-- Input para filtragem na tabela -->
           <div class="search-input">
             <div class="col-xl-9">
-              <input
-                type="text"
-                class="form-control mb-3"
-                id="filtrar-tabela"
-                placeholder="Candidato"
-                @input="filtraDados"
-              />
+              <input type="text" class="form-control mb-3" id="filtrar-tabela" placeholder="Matricula" @input="filtraDados"/>
             </div>
           </div>
         </div>
@@ -38,7 +31,7 @@
               RECARREGAR LISTA
             </button>
           </div>
-          <div class="search-table table-wrapper-scroll-y my-custom-scrollbar">
+          <div class="search-table table-wrapper-scroll-y my-custom-scrollbar" id="listaMatriculas">
             <table
               class="
                 table table-bordered
@@ -47,39 +40,19 @@
             >
               <tbody class="processosSeletivos">
                 <tr
-                  class="processo"
-                  v-for="(candidato, index) in candidatos"
-                  :key="candidato"
+                  class="matricula"
+                  v-for="(matricula, index) in matriculas"
+                  :key="matricula"
                 >
                   <th class="font-weight-normal" scope="row">
                     {{ ++index }}
                   </th>
-                  <td class="info-nome">{{ candidato.nome }}</td>
-                  <td class="aprovado" v-if="candidato.status == 'APROVADO_2_FASE'">Aprovado</td>
-                  <td class="aprovado" v-if="candidato.status == 'APROVADO_1_FASE'">Aprovado 1ª fase</td>
-                  <td class="reprovado" v-if="candidato.status == 'REPROVADO_1_FASE'">Reprovado 1ª fase</td>
-                  <td class="reprovado" v-if="candidato.status == 'REPROVADO_2_FASE'">Reprovado</td>
-                  <td class="sem-status" v-if="candidato.status == 'SEM_STATUS'">Sem Status</td>
-                  <td class="stand" v-if="candidato.status == 'STANDBY'">Standby</td>
-                  <td>
-                    <a :href="'/processo-seletivo-dados-do-candidato-visualizacao?id=' + candidato.id
-                     + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
-                     + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status" title="Visualizar candidato"
-                    >
-                      <img
-                        src="../../assets/imgs/account_circle_white_24dp.svg"
-                        alt=""
-                      />
-                    </a>
-                  </td>
-                  <td>
-                    <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?id=' + candidato.id
-                      + '&tipo=edicao' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
-                      + this.idProcessoSeletivo + '&statusCandidato=' + candidato.status" title="Editar candidato">
-                      <img
-                        src="../../assets/imgs/manage_accounts_white_24dp.svg"
-                        alt=""
-                      />
+                  <td class="info-matricula">{{ matricula.matricula }}</td>
+                  <td class="info-primeiro-acesso">{{ matricula.dataPrimeiroAcesso }}</td>
+                  <td class="info-acesso" v-if="matricula.perfil == 'ROLE_ADMINISTRADOR'">Nível 1 - Administrador</td>
+                  <td class="info-acesso" v-else-if="matricula.perfil == 'ROLE_USUARIO'">Nível 2 - Usuário</td>
+                  <td><a data-bs-toggle="modal" data-bs-target="#exampleModal" @click="defineFormMatricula(matricula.matricula)" title="Excluir matricula">
+                      <img src="../../assets/imgs/delete_white_24dp.svg" alt=""/>
                     </a>
                   </td>
                 </tr>
@@ -98,12 +71,63 @@
             class="button-footer mt-5 submit"
             id="cadastrar"
             type="button">
-            <a :href="'/processo-seletivo-dados-do-candidato-cadastro-edicao?tipo=cadastro' + '&statusProcesso=' + this.statusProcesso + '&idProcesso='
-                      + this.idProcessoSeletivo"
-            >
-              Cadastrar novo candidato
+            <a :href="'/matricula-cadastro'">
+              Cadastrar nova matricula
             </a>
           </button>
+        </div>
+      </div>
+    </div>
+    <!-- Modal de confirmação -->
+    <p class="none" id="abreModalInvisivel" data-bs-toggle="modal" data-bs-target="#modalAcesso" ></p>
+    <div class="modal fade mt-5"  id="modalAcesso" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-size">
+        <div class="modal-content p-5 grey-background">
+          <div class="row mb-5">
+            <div class="col">
+              <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Nivel de acesso insuficiente</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-xl modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body d-flex justify-content-between">
+            <div>
+              <h1 class="modal-title form-label fw-bold mb-0 titulo"> Deseja excluir a seguinte matricula? </h1>
+            </div>
+            <div class="conteudomodal d-flex flex-column justify-content-center mt-5">
+              <div class="mt-5">
+                <p class="titulo fw-bold fs-3">Matricula: <span class="titulo"> {{formMatricula}} </span></p>
+              </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-around">
+              <div>
+                <button @click="deletar(formMatricula)" type="button" class="btn submit-modal">CONFIRMAR</button>
+              </div>
+              <div>
+                <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">CANCELAR</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal de confirmação exclusão-->
+    <p class="none" id="abreModalConfirmacao" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" ></p>
+    <div class="modal fade mt-5"  id="modalConfirmacao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-size">
+        <div class="modal-content p-5 grey-background">
+          <div class="row mb-5">
+            <div class="col">
+              <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabelConfirmacao">Matricula excluida com sucesso!</h3>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -112,8 +136,9 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import Funcoes from '../../services/Funcoes'
 import { http } from '@/services/Config'
+import VerificaPerfil from '@/services/VerificaPerfil'
+
 export default {
   name: 'App',
   components: {
@@ -121,30 +146,21 @@ export default {
   },
   data () {
     return {
-      candidatos: [],
-      statusProcesso: '',
-      idProcessoSeletivo: '',
-      nomeProcesso: '',
-      nomeDoProcessoCorreto: ''
+      matriculas: [],
+      formMatricula: ''
     }
   },
   beforeMount () {
-    Funcoes.verificaToken()
-    const dadosUrl = this.pegaDadosUrl()
-    let idProcesso = dadosUrl.id
-    this.idProcessoSeletivo = idProcesso
-    this.statusProcesso = dadosUrl.status
-    this.nomeProcesso = dadosUrl.nomeProcesso
-    if (idProcesso != null && idProcesso != '') {
-      this.getListaDaFormacao(idProcesso)
-    } else {
-      this.getLista()
-    }
-    this.getListaDeProcessos()
+    this.getMatricula()
   },
-  beforeUpdate () {
-    if (this.statusProcesso == 'FINALIZADA') {
-      document.querySelector('#cadastrar').classList.add('invisivel')
+  mounted () {
+    if (!VerificaPerfil.verificaPerfil()) {
+      document.querySelector('#listaMatriculas').classList.add('none')
+      this.abrirModal()
+      document.querySelector('#abreModalInvisivel').classList.remove('none')
+      setTimeout(function () {
+        location.href = '/home'
+      }, 1500)
     }
   },
   methods: {
@@ -153,11 +169,11 @@ export default {
       aviso.classList.add('invisivel')
       var campoFiltro = document.querySelector('#filtrar-tabela')
       var listaDeValores = []
-      var processos = document.querySelectorAll('.processo')
+      var processos = document.querySelectorAll('.matricula')
       if (campoFiltro.value.length >= 0) {
         for (var i = 0; i < processos.length; i++) {
           var processo = processos[i]
-          var tdNome = processo.querySelector('.info-nome')
+          var tdNome = processo.querySelector('.info-matricula')
           var nome = tdNome.textContent
           var expressao = new RegExp(campoFiltro.value, 'i')
           if (!expressao.test(nome)) {
@@ -182,48 +198,35 @@ export default {
         }
       }
     },
-    getListaDeProcessos () {
+    getMatricula () {
       http
-        .get(`processo-seletivo/${this.idProcessoSeletivo}`)
+        .get('matricula')
         .then(response => {
-          this.nomeProcesso = response.data
-          this.nomeDoProcessoCorreto = this.nomeProcesso.nome
+          this.matriculas = response.data
         })
         .catch(error => {
           console.log(error)
         })
     },
-    getLista () {
+    deletar (variavel) {
       http
-        .get('candidato/lista')
+        .delete(`matricula/${variavel}`)
         .then(response => {
-          this.candidatos = response.data
+          this.getMatricula()
+          document.getElementById('abreModalConfirmacao').click()
+          setTimeout(function () {
+            location.href = '/matricula-busca'
+          }, 1500)
         })
         .catch(error => {
           console.log(error)
         })
     },
-    pegaDadosUrl () {
-      var query = location.search.slice(1)
-      var partes = query.split('&')
-      var data = {}
-      partes.forEach(function (parte) {
-        var chaveValor = parte.split('=')
-        var chave = chaveValor[0]
-        var valor = chaveValor[1]
-        data[chave] = valor
-      })
-      return data
+    abrirModal () {
+      document.getElementById('abreModalInvisivel').click()
     },
-    getListaDaFormacao (idProcesso) {
-      http
-        .get(`candidato/lista-do-processo/${idProcesso}`)
-        .then(response => {
-          this.candidatos = response.data
-        })
-        .catch(error => {
-          console.log(error)
-        })
+    defineFormMatricula (matricula) {
+      this.formMatricula = matricula
     }
   }
 }
@@ -282,6 +285,9 @@ body {
 .logo img {
   height: 50px;
 }
+.none {
+  display: none !important;
+}
 .home.btn-header {
   background-color: var(--color-yellow-principal);
 }
@@ -322,19 +328,17 @@ body {
 }
 /* Table - Coluna em Andamento */
 .search-table tbody > tr > td:nth-child(3) {
-  color: var(--color-green-progress);
   text-align: center;
   font-weight: 700;
 }
 /* Table - Coluna2  */
 .search-table tbody > tr > td:nth-child(4) {
-  background-color: var(--color-magenta-principal);
   font-weight: 700;
   text-align: center;
 }
 /* Table - Coluna3  */
 .search-table tbody > tr > td:nth-child(5) {
-  background-color: var(--color-yellow-principal);
+  background-color: var(--color-magenta-principal);
   font-weight: 700;
   text-align: center;
 }
@@ -396,16 +400,16 @@ body {
 }
 a{
   color: white;
-  text-decoration: none;
 }
 a:hover{
   color: white;
+  cursor: pointer;
 }
 #buscar {
   background-color: var(--color-magenta-principal);
 }
 #cadastrar {
-  background-color: var(--color-yellow-principal);
+  background-color: var(--color-yellow-principal) !important;
 }
 .btn {
   margin-top: 150px;
@@ -438,5 +442,39 @@ a:hover{
   .empty {
     height: 120px;
   }
+}
+.conteudomodal {
+  display: flex;
+  justify-content: center;
+  /*min-height: 40vh;*/
+  font-size: 21px;
+}
+.modal-body, .modal-header, .modal-footer {
+  text-align: center;
+  background-color: #EBEBEB
+}
+.modal-body{
+  /*min-height: 55vh;*/
+  flex-direction: column;
+}
+.submit-modal, .cancel-modal{
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 5px !important;
+  width: 350px;
+  font-size: 25px !important;
+}
+.submit, .submit-modal{
+  color: white !important;
+  font-weight: bold !important;
+  background-color: #AB0045 !important;
+}
+.cancel, .cancel-modal{
+  color: white !important;
+  font-weight: bold !important;
+  background-color: #FFB700 !important;
+}
+.none{
+  display: none !important;
 }
 </style>
