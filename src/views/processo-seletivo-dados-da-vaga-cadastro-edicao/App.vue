@@ -11,12 +11,12 @@
       <div class="row justify-content-evenly">
         <div class="col-xl-4">
           <div>
-            <label class="form-label mb-0 titulo">Nome</label>
-            <input class="form-control" type="text" placeholder="Digite uma turma de Formação" v-model="formacoes.nome" id="inputNome"/>
+            <label class="form-label mb-0 titulo">Formação</label>
+            <input class="form-control" type="text" placeholder="Digite o nome da formação" v-model="formacoes.nome" id="inputNome"/>
             <p id="nomeErro" class="mb-0 erro none">Por favor, preencha o campo nome</p>
           </div>
           <div>
-            <label class="form-label mb-0 mt-3 titulo">Instrutor responsável</label>
+            <label class="form-label mb-0 mt-3 titulo">Coordenador Técnico</label>
             <select class="form-select" v-model="formacoes.nomeInstrutor" id="inputNomeInstrutor">
               <option selected value="0">Selecione um instrutor</option>
               <option v-for="instrutor in instrutores" :key="instrutor" v-bind:value="instrutor.nome">{{ instrutor.nome }}</option>
@@ -45,14 +45,14 @@
             <div class="input-group">
               <input type="number" class="form-control" placeholder="Número de estagiários" name="qtdEstagiarios" id="inputQtdEstagiarios" @input="escutaQuantidades" v-model="formacoes.qtdEstagiario"/>
             </div>
-            <p id="estagiariosErro" class="mb-0 erro none">Por favor, preencha o campo quantidade de estágiarios</p>
+            
           </div>
           <div>
             <label class="form-label mb-0 mt-3 titulo">Quantidade de trainees</label>
             <div class="input-group">
               <input type="number" class="form-control" placeholder="Número de trainees" name="qtdTrainees" id="inputQtdTrainees" @input="escutaQuantidades" v-model="formacoes.qtdTrainee"/>
             </div>
-            <p id="traineesErro" class="mb-0 erro none">Por favor, preencha o campo quantidade de trainees</p>
+            
           </div>
           <div>
             <label class="form-label mb-0 mt-3 titulo"
@@ -60,7 +60,7 @@
             <div class="input-group">
               <input type="number" class="form-control" placeholder="Número de aprendizes" name="qtdAprendizes" id="inputQtdAprendizes" @input="escutaQuantidades" v-model="formacoes.qtdAprendiz"/>
             </div>
-            <p id="aprendizesErro" class="mb-0 erro none">Por favor, preencha o campo quantidade de aprendizes</p>
+            
           </div>
           <fieldset disabled>
             <div>
@@ -77,6 +77,7 @@
         <div class="col-xl-4 ">
           <div>
             <button type="button" class="mt-4 btn-confirmar btn" v-on:click="validaForm">CONFIRMAR</button>
+            <p id="quantidadeErro" class="mb-0 erro none">Por favor, preencha algum campo quantidade para prosseguir</p>
           </div>
         </div>
         <div class="col-xl-4">
@@ -318,24 +319,24 @@ export default {
       } else {
         document.querySelector('#dataErro').classList.add('none')
       }
-      if (qtdEstagiarios == '') {
-        document.querySelector('#estagiariosErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#estagiariosErro').classList.add('none')
-      }
-      if (qtdTrainees == '') {
-        document.querySelector('#traineesErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#traineesErro').classList.add('none')
-      }
-      if (qtdAprendizes == '') {
-        document.querySelector('#aprendizesErro').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#aprendizesErro').classList.add('none')
-      }
+      // if (qtdEstagiarios == '' || qtdTrainees == '' || qtdAprendizes == '') {
+      //   document.querySelector('#quantidadeErro').classList.remove('none')
+      //   erro = 1
+      // } else {
+      //   document.querySelector('#quantidadeErro').classList.add('none')
+      // }
+      // if (qtdTrainees == '') {
+      //   document.querySelector('#traineesErro').classList.remove('none')
+      //   erro = 1
+      // } else {
+      //   document.querySelector('#traineesErro').classList.add('none')
+      // }
+      // if (qtdAprendizes == '') {
+      //   document.querySelector('#aprendizesErro').classList.remove('none')
+      //   erro = 1
+      // } else {
+      //   document.querySelector('#aprendizesErro').classList.add('none')
+      // }
       if (erro == 1) {
         return false
       } else if (erro == 0) {

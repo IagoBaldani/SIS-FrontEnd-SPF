@@ -61,7 +61,6 @@ export default {
         })
         .catch(erro => {
           document.getElementById('validacaoCampos').classList.remove('none')
-          console.log(this.loginInput.senha)
           console.log('Dados incorretos. Por favor, tente novamente.')
         })
     }

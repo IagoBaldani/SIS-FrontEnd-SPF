@@ -1,2 +1,2 @@
 
-export const variavelBack = 'http://192.168.30.162:8081/api/'
+export const variavelBack = 'http://localhost:8081/api/'
