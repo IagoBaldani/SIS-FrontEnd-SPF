@@ -49,17 +49,22 @@
 
           <div class="mt-4 mb-3">
             <label class="label-form" >Fonte de recrutamento</label>
-            <input
+            <select name="comboFonteRecrutamento" id="comboFonteRecrutamento" class="form-select">
+              <option value="Interna">Interna</option>
+              <option value="Externa">Externa</option>
+            </select>
+
+            <!-- <input
               type="text"
               class="form-control"
               id="inputFonteDeRecrutamento"
               :value="candidato.fonteRecrutamento"
-            />
+            /> -->
             <p id="fonteErro" class="none erro">Por favor, preencha o campo fonte de recrutamento</p>
           </div>
 
           <div class="mt-4 mb-3">
-            <label class="label-form" >Indicação</label>
+            <label class="label-form" >Indicação / Instituição de ensino</label>
             <input
               type="text"
               class="form-control"
@@ -162,7 +167,7 @@
           </div>
 
           <div class="mt-4 mb-3">
-            <label class="label-form" >Duração do curso</label>
+            <label class="label-form" >Duração do curso (em semestres)</label>
             <input
               type="text"
               class="form-control"
@@ -176,17 +181,15 @@
           <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal"></p>
 
           <div class="mb-3">
-            <label class="label-form mb-0 titulo">Currículo candidato</label><br>
-            <input  type="file" class="form-control" id="fileCurriculo"  accept="application/pdf">
+            <label class="label-form mb-0 titulo">Currículo candidato (PDF)</label><br>
+            <input  type="file" class="form-control" id="fileCurriculo" accept="application/pdf">
             <p v-if="tipoReq == 'edicao' " id="curriculo" class="lembrete" >Já existe um arquivo de curriculo. Deseja substituir ?</p>
             <p id="curriculoErro" class="none erro">Por favor, preencha o campo currículo</p>
           </div>
 
-          <div class="mb-3">
-            <label class="label-form mb-0 titulo">Disc xlsx</label><br>
+          <div class="mb-3" v-if="tipoReq  == 'edicao'">
+            <label class="label-form mb-0 titulo">DISC (xlsx)</label><br>
             <input type="file" class="form-control" id="fileDisc">
-            <p v-if="tipoReq  == 'edicao'" id="curriculo" class="lembrete" >Já existe um arquivo de Disc. Deseja substituir ?</p>
-            <p id="discFileErro" class="none erro">Por favor, preencha o campo DISC</p>
           </div>
 
           <div class="mb-3">
@@ -390,7 +393,7 @@ export default {
       this.candidato.id = this.candidato.id
       this.candidato.nome = document.querySelector('#inputNome').value
       this.candidato.telefone = document.querySelector('#inputContato').value
-      this.candidato.fonteRecrutamento = document.querySelector('#inputFonteDeRecrutamento').value
+      this.candidato.fonteRecrutamento = document.querySelector('#comboFonteRecrutamento').value
       this.candidato.dataAgendamento = document.querySelector('#inputDataAgendamento').value
       this.candidato.testeLogico = document.querySelector('#inputProvaPratica').value
       this.candidato.observacao = document.querySelector('#inputObservacao').value
@@ -428,15 +431,15 @@ export default {
         })
     },
     processaRequisicoes () {
+      if (this.tipoReq == 'edicao') {
       const dados = this.pegaDadosUrl()
       let id = dados.id
       let tipo = dados.tipo
       var discAtualizar = document.getElementById('fileDisc').files[0]
       var curriculoAtualizar = document.getElementById('fileCurriculo').files[0]
       var dataConclusao = document.getElementById('inputDataConclusao').value
-
+      
       if (tipo == 'edicao' && discAtualizar != undefined && curriculoAtualizar != undefined && dataConclusao != '') {
-
         var formDataAtualizar = new FormData()
         formDataAtualizar.append('id', this.id)
         formDataAtualizar.append('nome', this.candidato.nome)
@@ -710,9 +713,16 @@ export default {
           .catch(error => {
             console.log(error)
           })
-      } else if (tipo == 'cadastro') {
+        }
+      } else if(this.tipoReq == 'cadastro'){
+        const dados = this.pegaDadosUrl()
+      let id = dados.id
+      let tipo = dados.tipo
+      var curriculoAtualizar = document.getElementById('fileCurriculo').files[0]
+      var dataConclusao = document.getElementById('inputDataConclusao').value
+
+      if (tipo == 'cadastro') {
         var formData = new FormData()
-        var disc = document.getElementById('fileDisc').files[0]
         var curriculo = document.getElementById('fileCurriculo').files[0]
         formData.append('id', this.candidato.id)
         formData.append('nome', this.candidato.nome)
@@ -723,7 +733,6 @@ export default {
         formData.append('observacao', this.candidato.observacao)
         formData.append('status', this.candidato.status)
         formData.append('idProcessoSeletivo', this.idRetorno)
-        formData.append('disc', disc)
         formData.append('curriculo', curriculo)
         formData.append('email', this.candidato.email)
         formData.append('semestreFaculdade', this.candidato.semestre)
@@ -752,6 +761,7 @@ export default {
           .catch(error => {
             console.log(error)
           })
+        }
       }
     },
     habilitaCampos () {
@@ -782,13 +792,12 @@ export default {
     validaForm () {
       var nome = document.getElementById('inputNome').value
       var contato = document.getElementById('inputContato').value
-      var fonteRecrutamento = document.getElementById('inputFonteDeRecrutamento').value
+      var fonteRecrutamento = document.getElementById('comboFonteRecrutamento').value
       var dataAgendamento = document.getElementById('inputDataAgendamento').value
       var resultado = document.getElementById('status').value
       // var processoSeletivo = document.getElementById('inputProcessoSeletivo').value
       var provaPratica = document.getElementById('inputProvaPratica').value
       var curriculo = document.getElementById('fileCurriculo').files.length
-      var disc = document.getElementById('fileDisc').files.length
       var observacao = document.getElementById('inputObservacao').value
       var email = document.querySelector('#inputEmail').value
       var semestre = document.querySelector('#inputSemestreCursado').value
@@ -887,13 +896,6 @@ export default {
         erro = 1
       } else {
         document.querySelector('#curriculoErro').classList.add('none')
-      }
-      if (disc == 0 && this.tipoReq == 'cadastro') {
-        document.querySelector('#discFileErro').classList.remove('none')
-        erro = 1
-        console.log('entrei errado mesmo')
-      } else {
-        document.querySelector('#discFileErro').classList.add('none')
       }
       if (erro == 1) {
         return false

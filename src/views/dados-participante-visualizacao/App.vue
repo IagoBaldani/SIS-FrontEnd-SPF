@@ -370,7 +370,7 @@ export default {
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
     var cpf = dadosUrl.id
-    this.getCargo(cpf)
+    this.getParticipante(cpf)
   },
   methods: {
     pegaDadosUrl () {
@@ -385,7 +385,7 @@ export default {
       })
       return data
     },
-    getCargo (cpf) {
+    getParticipante (cpf) {
       http.get(`participante/completo/${cpf}`)
         .then(response => {
           (this.participante = response.data)
