@@ -111,10 +111,10 @@
             <div class="row">
               <div class="col">
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Nome: {{ formacoesForm.nome }}</span>
+                  <span class="informacoes-modal">Formação: {{ formacoesForm.nome }}</span>
                 </div>
                 <div class="alinharDiv">
-                  <span class="informacoes-modal">Instrutor: {{ formacoesForm.nomeInstrutor }}</span>
+                  <span class="informacoes-modal">Coordenador Técnico: {{ formacoesForm.nomeInstrutor }}</span>
                 </div>
                 <div class="alinharDiv">
                   <span class="informacoes-modal">Data início: {{ dataFormatada.dataIniFormatada }} </span>

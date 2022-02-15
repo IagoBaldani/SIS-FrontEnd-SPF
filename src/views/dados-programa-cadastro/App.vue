@@ -23,7 +23,7 @@
                         />
                     </div>
                     <div class="mb-3">
-                        <label for="inicio" class="form-label fw-bold mb-0 titulo">Início do Programa</label>
+                        <label for="inicio" class="form-label fw-bold mb-0 titulo">Início da Formação</label>
                         <input
                             type="date"
                             class="form-control"
@@ -34,7 +34,7 @@
                         <p id="erroDataInicio" class="erro none">Por favor insira uma data válida</p>
                     </div>
                     <div class="mb-3">
-                        <label for="termino" class="form-label fw-bold mb-0 titulo">Término do Programa</label>
+                        <label for="termino" class="form-label fw-bold mb-0 titulo">Término da Formação</label>
                         <input
                             type="date"
                             class="form-control"
@@ -46,7 +46,7 @@
                         <p id="erroDataInicioTermino" class="erro none">A data de término deve ser posterior a data de inicio</p>
                     </div>
                     <div class="mb-3 mt-3">
-                        <label class="form-label fw-bold mb-0 titulo">Instrutor</label>
+                        <label class="form-label fw-bold mb-0 titulo">Coordenador Técnico</label>
                         <select class="form-select" id="instrutores">
                             <option disabled selected value="">Instrutor</option>
                             <option
@@ -58,7 +58,7 @@
                                 {{ instrutor.nome }}
                             </option>
                         </select>
-                        <p id="erroInstrutor" class="erro none">Por favor escolha um instrutor</p>
+                        <p id="erroInstrutor" class="erro none">Por favor escolha um coordenador técnico</p>
                     </div>
                     <div class="mb-3">
                         <label for="turma" class="form-label fw-bold mb-0 titulo">Turma</label>

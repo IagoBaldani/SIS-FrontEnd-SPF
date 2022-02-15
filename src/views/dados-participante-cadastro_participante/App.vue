@@ -89,7 +89,7 @@
                 </label>
             </div>
             <div class="mb-3">
-              <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Nome do Programa</label>
+              <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Formação</label>
               <p id="idPrograma" :value="nomeProgramaCandidato.id" class="none"></p>
               <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.nome"  type="text">
             </div>
