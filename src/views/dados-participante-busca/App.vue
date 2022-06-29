@@ -116,7 +116,15 @@ export default {
         document.querySelector('#selecioneTurma').classList.remove('none')
       }
       else if (nomeProcurado == '' && programaProcurado == '0' && turmaProcurada == '0') {
-        window.location.reload(true)
+        http.get('participante')
+          .then(response => {
+            if (response.data.length == 0) {
+              document.querySelector('#recarrega').classList.remove('none')
+              document.querySelector('#naoEncontrado').classList.remove('none')
+            } else {
+              this.participantes = response
+            }          
+          })
       }
       else if (nomeProcurado == '') {
         document.querySelector('#selecioneTurma').classList.add('none')

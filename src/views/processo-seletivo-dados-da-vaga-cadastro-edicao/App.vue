@@ -177,6 +177,20 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de erro -->
+  <p class="none" id="abreModalInvisivelErro" data-bs-toggle="modal" data-bs-target="#modalErro" ></p>
+    <div class="modal fade mt-5"  id="modalErro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Criação não efetuada, processo com mesmo nome já existente!</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -249,6 +263,14 @@ export default {
     },
      abrirModal () {
       document.getElementById('abreModalInvisivel').click()
+    },
+
+    abreModalErro () {
+      document.getElementById('abreModalInvisivelErro').click()
+    },
+
+    fechaModalErro () {
+      document.getElementById('abreModalInvisivelErro').click()
     },
     carregaQuantidade (qtdE, qtdT, qtdA) {
       qtdA = parseInt(qtdA)
@@ -427,6 +449,7 @@ export default {
             }, 1521)
           })
           .catch(error => {
+            this.abreModalErro()
             console.log(error)
           })
       }
