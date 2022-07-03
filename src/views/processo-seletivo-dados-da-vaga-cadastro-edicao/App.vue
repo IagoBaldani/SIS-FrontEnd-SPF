@@ -38,6 +38,11 @@
             <p id="dataTErro" class="mt-0 erro none">Por favor, preencha o campo data término</p>
             <p id="dataErro" class="erro none">A data de término deve ser posterior a data de inicio</p>
           </div>
+          <div>
+            <label class="form-label mb-0 mt-3 titulo">Turma</label>
+            <input class="form-control" type="text" placeholder="Digite o nome da turma" v-model="formacoes.nomeTurma" id="inputTurma"/>
+            <p id="turmaErro" class="mb-0 erro none">Por favor, preencha o campo turma</p>
+          </div>
         </div>
         <div class="col-xl-4">
           <div>
@@ -68,6 +73,10 @@
               <input name="qtdTotal" type="text" class="form-control" id="inputQtdTotal" placeholder="Quantidade total" disabled readonly :value="qtdTotal"/>
             </div>
           </fieldset>
+
+          <div class="mt-3">
+            <button  type="button" v-if="this.tipoTela == 'edicao'" v-on:click="abreModalExclusao()" class="mt-4 btn btn-confirmar" >DELETAR PROCESSO SELETIVO</button>
+          </div>
         </div>
         <!-- botao invisivel para abrir formulario -->
         <p id="verificaCampos" class="none" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="geraFormulario()"></p>
@@ -81,9 +90,13 @@
           </div>
         </div>
         <div class="col-xl-4">
+
+          
           <div>
             <button type="button" v-if="this.tipoTela == 'edicao'" class="mt-4 btn btn-cancelar"  v-on:click="criaFormacao()">FINALIZAR PROCESSO SELETIVO</button>
           </div>
+
+          
         </div>
         <div class="col-xl-2"></div>
       </div>
@@ -121,6 +134,9 @@
                 </div>
                 <div class="alinharDiv">
                   <span class="informacoes-modal">Data término: {{ dataFormatada.dataFinFormatada }}</span>
+                </div>
+                <div class="alinharDiv">
+                  <span class="informacoes-modal">Turma: {{ formacoesForm.nomeTurma }}</span>
                 </div>
                 <div class="alinharDiv">
                   <span class="informacoes-modal">Quantidade de estagiários: {{ formacoesForm.qtdEstagiario }}</span>
@@ -178,6 +194,38 @@
         </div>
     </div>
 
+ <p class="none" id="abreModalInvisivelExclusao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoExclusao" ></p>
+    <div class="modal fade" id="modalConfirmacaoExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-xl modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-between">
+                    <div>
+                        <h1 class="modal-title form-label fw-bold mb-0 titulo">
+                            Deseja deletar o Processo Seletivo?
+                        </h1>
+                    </div>
+                    <div class="conteudomodal d-flex flex-column justify-content-center mb-0">
+                        <div class="mt-3 modal-footer border-0 justify-content-around">
+                            <div class="mr-3">
+                                <button type="button" class="btn submit" v-on:click="deletaProcesso()">
+                                    CONFIRMAR
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn cancel" data-bs-dismiss="modal">
+                                    CANCELAR
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de erro -->
   <p class="none" id="abreModalInvisivelErro" data-bs-toggle="modal" data-bs-target="#modalErro" ></p>
     <div class="modal fade mt-5"  id="modalErro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -212,6 +260,7 @@ export default {
         nomeInstrutor: '',
         dataInicio: '',
         dataFim: '',
+        nomeTurma: '',
         qtdEstagiario: '',
         qtdAprendiz: '',
         qtdTrainees: '',
@@ -223,6 +272,7 @@ export default {
         nomeInstrutor: '',
         dataInicio: '',
         dataFim: '',
+        nomeTurma: '',
         qtdEstagiario: '',
         qtdAprendiz: '',
         qtdTrainees: '',
@@ -295,6 +345,7 @@ export default {
       this.formacoesForm.nomeInstrutor = document.querySelector('#inputNomeInstrutor').value
       this.formacoesForm.dataInicio = document.querySelector('#inputDataIni').value
       this.formacoesForm.dataFim = document.querySelector('#inputDataFin').value
+      this.formacoesForm.nomeTurma = document.querySelector('#inputTurma').value
       this.dataFormatada.dataIniFormatada = formataDataParaExibicao(document.querySelector('#inputDataIni').value)
       this.dataFormatada.dataFinFormatada = formataDataParaExibicao(document.querySelector('#inputDataFin').value)
       this.formacoesForm.qtdEstagiario = document.querySelector('#inputQtdEstagiarios').value
@@ -453,6 +504,26 @@ export default {
             console.log(error)
           })
       }
+    },
+
+    abreModalExclusao() {
+      document.getElementById('abreModalInvisivelExclusao').click();
+    },
+
+    deletaProcesso() {
+       const dadosUrl = this.pegaDadosUrl()
+       var id = dadosUrl.id
+       http.put(`processo-seletivo/excluir/${id}`)
+        .then(response => {
+          if (response.status == 200) {
+            setTimeout(function () {
+              window.location.href = '/processo-seletivo-busca-por-vagas'
+            }, 1521)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }

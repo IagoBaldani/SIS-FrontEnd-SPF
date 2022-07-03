@@ -47,29 +47,7 @@
                     </div>
                     <div class="mb-3 mt-3">
                         <label class="form-label fw-bold mb-0 titulo">Coordenador Técnico</label>
-                        <select class="form-select" id="instrutores">
-                            <option disabled selected value="">Instrutor</option>
-                            <option
-                                id="instrutor"
-                                v-for="instrutor in instrutores"
-                                v-bind:value="instrutor.nome"
-                                v-bind:key="instrutor.cpf"
-                            >
-                                {{ instrutor.nome }}
-                            </option>
-                        </select>
-                        <p id="erroInstrutor" class="erro none">Por favor escolha um coordenador técnico</p>
-                    </div>
-                    <div class="mb-3">
-                        <label for="turma" class="form-label fw-bold mb-0 titulo">Turma</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="turma"
-                            required
-                        />
-                        <p id="erroTurma" class="erro none">Por favor insira uma turma</p>
-                        <p id="erroTurmaCadastrada" class="erro none">Esta turma já está cadastrada, por favor insira outra</p>
+                        <input type="text" disabled :value="processo.nomeInstrutor" class="form-control" id="coordenador">
                     </div>
                 </div>
                 <div class="col-xl-4"></div>
@@ -108,11 +86,10 @@
                         <div class="mt-3">
                             <ul class="fw-bold subtitulo text-start">
                                 Informações gerais:
-                                <li>Nome: <span class="titulo"> {{ programaForm.nome }} </span></li>
+                                <li>Nome: <span class="titulo"> {{ processo.nome }} </span></li>
                                 <li>Início do Programa: <span class="titulo">{{this.formataDataParaExibicao(programaForm.inicio)}}</span></li>
                                 <li>Término do Programa: <span class="titulo">{{this.formataDataParaExibicao(programaForm.termino)}}</span></li>
-                                <li>Instrutor: <span class="titulo">{{ programaForm.instrutor }}</span></li>
-                                <li>Turma: <span class="titulo">{{ programaForm.turma }}</span></li>
+                                <li>Instrutor: <span class="titulo">{{ processo.nomeInstrutor }}</span></li>
                             </ul>
                         </div>
                         <div class="mt-3 modal-footer border-0 justify-content-around">
@@ -167,11 +144,10 @@ export default {
       programa: {},
       processo: {},
       programaForm: {
-        nome: '',
+        idProcesso: '',
         inicio: '',
         termino: '',
-        instrutor: '',
-        turma: ''
+        instrutor: ''
       }
     }
   },
@@ -179,11 +155,9 @@ export default {
     Funcoes.verificaToken()
     const dadosUrl = this.pegaDadosUrl()
     this.id = dadosUrl.id
-    this.getTurmasDoProcesso()
   },
   mounted () {
     this.getProcesso()
-    this.getInstrutor()
   },
   methods: {
     postPrograma () {
@@ -201,13 +175,12 @@ export default {
         })
     },
     abrirModal () {
+      
       document.getElementById('abreModalInvisivel').click()
     },
     validaForm () {
       let dataInicio = document.querySelector('#inicio').value
       let dataFim = document.querySelector('#termino').value
-      let nomeInstrutor = document.querySelector('#instrutores').value
-      let nomeTurma = document.querySelector('#turma').value
       let erro = 0
       if (dataInicio == '') {
         document.querySelector('#erroDataInicio').classList.remove('none')
@@ -227,37 +200,17 @@ export default {
       } else {
         document.querySelector('#erroDataInicioTermino').classList.add('none')
       }
-      if (nomeInstrutor == '') {
-        document.querySelector('#erroInstrutor').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroInstrutor').classList.add('none')
-      }
-      if (nomeTurma == '') {
-        document.querySelector('#erroTurma').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroTurma').classList.add('none')
-      }
-      this.turmas.forEach(turma => {
-        if (turma.nomeTurma == nomeTurma) {
-          erro = 1
-          document.querySelector('#erroTurmaCadastrada').classList.remove('none')
-        }
-      })
       if (erro == 1) {
         return false
       } else {
-        document.querySelector('#erroTurmaCadastrada').classList.add('none')
         document.querySelector('#chamaModal').click()
+        console.log(this.processo.id)
       }
     },
     enviarDados () {
-      this.programaForm.nome = document.querySelector('#processo').value
+      this.programaForm.idProcesso = this.processo.id
       this.programaForm.inicio = document.querySelector('#inicio').value
       this.programaForm.termino = document.querySelector('#termino').value
-      this.programaForm.instrutor = document.querySelector('#instrutores').value
-      this.programaForm.turma = document.querySelector('#turma').value
     },
     getProcesso () {
       http.get(`processo-seletivo/${this.id}`)

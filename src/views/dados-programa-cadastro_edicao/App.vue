@@ -64,7 +64,7 @@
                             type="text"
                             class="form-control"
                             id="turma"
-                            v-on:click="getTurmasDoProcesso()"
+                            disabled
                             required
                             :value="programa.turma"
                         />
@@ -83,9 +83,20 @@
                             name="botao-ok"
                             class="mt-5 form-control submit"
                             v-on:click="validaForm()"/>
+                        <div class="mt-3">
+                       <input
+                            value="DELETAR PROGRAMA DE FORMAÇÃO"
+                            type="button"
+                            name="botao-deletar"
+                            class="mt-4 form-control submit"
+                            v-on:click="abreModalExclusao()"
+                           />
+                      </div>
                     </div>
                     <p id="chamaModal" hidden v-on:click="enviarDados" data-bs-toggle="modal" data-bs-target="#exampleModal"></p>
-                    <div class="col-xl-4"></div>
+                    <div class="col-xl-4">
+                      
+                    </div>
                     <div class="col-xl-2"></div>
                 </div>
         </div>
@@ -118,6 +129,38 @@
                         <div class="mt-3 modal-footer border-0 justify-content-around">
                             <div>
                                 <button type="button" class="btn submit-modal" v-on:click="putPrograma()">
+                                    CONFIRMAR
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn cancel-modal" data-bs-dismiss="modal">
+                                    CANCELAR
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p class="none" id="abreModalInvisivelExclusao" data-bs-toggle="modal" data-bs-target="#modalConfirmacaoExclusao" ></p>
+    <div class="modal fade" id="modalConfirmacaoExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-xl modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex justify-content-between">
+                    <div>
+                        <h1 class="modal-title form-label fw-bold mb-0 titulo">
+                            Deseja deletar o Programa de Formação?
+                        </h1>
+                    </div>
+                    <div class="conteudomodal d-flex flex-column justify-content-center mb-0">
+                        <div class="mt-3 modal-footer border-0 justify-content-around">
+                            <div>
+                                <button type="button" class="btn submit-modal" v-on:click="deletaPrograma()">
                                     CONFIRMAR
                                 </button>
                             </div>
@@ -169,11 +212,9 @@ export default {
       programa: {},
       programaForm: {
         id: '',
-        nome: '',
         dataInicio: '',
         dataFim: '',
-        instrutor: '',
-        turma: ''
+        instrutor: ''
       }
     }
   },
@@ -191,8 +232,9 @@ export default {
     putPrograma () {
       http.put('programa', this.programaForm)
         .then(response => {
+          console.log(response.status)
           if (response.status == 200) {
-            this.abrirModal()
+            this.abrirModaln()
             setTimeout(function () {
               window.location.href = '/dados-programa-busca'
             }, 1521)
@@ -206,7 +248,6 @@ export default {
       let dataInicio = document.querySelector('#inicio').value
       let dataFim = document.querySelector('#termino').value
       let nomeInstrutor = document.querySelector('#instrutores').value
-      let nomeTurma = document.querySelector('#turma').value
       let erro = 0
       if (dataInicio == '') {
         document.querySelector('#erroDataInicio').classList.remove('none')
@@ -232,27 +273,12 @@ export default {
       } else {
         document.querySelector('#erroInstrutor').classList.add('none')
       }
-      if (nomeTurma == '') {
-        document.querySelector('#erroTurma').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroTurma').classList.add('none')
-      }
-      this.turmas.forEach(turma => {
-        if (turma.nomeTurma == nomeTurma) {
-          erro = 1
-          document.querySelector('#erroTurmaCadastrada').classList.remove('none')
-          if (nomeTurma == this.programa.turma) {
-            erro = 0
-            document.querySelector('#erroTurmaCadastrada').classList.add('none')
-          }
-        }
-      })
       if (erro == 1) {
         return false
       } else {
         document.querySelector('#erroTurmaCadastrada').classList.add('none')
         document.querySelector('#chamaModal').click()
+        console.log(this.programa)
       }
     },
     getInstrutor () {
@@ -274,11 +300,9 @@ export default {
         })
     },
     enviarDados () {
-      this.programaForm.nome = document.getElementById('nome').value
       this.programaForm.dataInicio = document.getElementById('inicio').value
       this.programaForm.dataFim = document.getElementById('termino').value
       this.programaForm.instrutor = document.getElementById('instrutores').value
-      this.programaForm.turma = document.getElementById('turma').value
     },
     getTurmasDoProcesso () {
       http.get(`programa/buscar-programas-por-nome/${this.programa.nome}`)
@@ -306,6 +330,22 @@ export default {
       const dataFormatada = `${dataPreForm.getUTCDate()}/${dataPreForm.getUTCMonth() + 1}/${dataPreForm.getUTCFullYear()}`
 
       return dataFormatada
+    },
+    abreModalExclusao(){
+      document.getElementById('abreModalInvisivelExclusao').click();
+    },
+    deletaPrograma() {
+       http.put(`programa/excluir/${this.id}`)
+        .then(response => {
+          if (response.status == 200) {
+            setTimeout(function () {
+              window.location.href = '/dados-programa-busca'
+            }, 1521)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }

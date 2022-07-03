@@ -54,7 +54,7 @@
                 <th class="font-weight-normal" scope="row">
                   {{ ++index }}
                 </th>
-                <td class="info-nome">{{ processo.nome }}</td>
+                <td class="info-nome">{{ processo.nome + ' - ' + processo.nomeTurma }}</td>
                 <td v-bind:class="(processo.status == 'EM_ANDAMENTO')?'em-andamento':'finalizado'"
                     class="statusProcesso">{{ processo.status }}
                 </td>
@@ -133,6 +133,7 @@ export default {
     this.getListaDeProcessos()
     this.idSelecionado = ''
   },
+  
   methods: {
     filtraDados () {
       var aviso = document.querySelector('.aviso')
