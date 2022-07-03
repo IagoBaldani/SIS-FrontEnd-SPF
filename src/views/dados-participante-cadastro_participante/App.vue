@@ -53,7 +53,7 @@
               <p id="erroCurso" class="none erro">Por favor, preencha este campo</p>
             </div>
             <div class="mt-5">
-              <button v-on:click="validaForm(), buscarTurmaPorId(), buscarCargoPorId()" type="button" class="btn submit form-control mt-5" >
+              <button v-on:click="validaForm()" type="button" class="btn submit form-control mt-5" >
                 CONFIRMAR
               </button>
               <p class="none" id="verificaCampos" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="popularCargoTurma()" ></p>
@@ -90,10 +90,17 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo" for="inputFonteRecrutamento">Formação</label>
-              <p id="idPrograma" :value="nomeProgramaCandidato.id" class="none"></p>
-              <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.nome"  type="text">
+              <!-- <p id="idPrograma" :value="nomeProgramaCandidato.id" class="none"></p>
+              <input class="form-control" disabled id="nomeProgramaCandidato" :value="nomeProgramaCandidato.nome"  type="text"> -->
+                <select required class="form-select" id="selectPrograma">
+                    <option class="relatorio_opcao" disabled selected value="0">Selecione a formação</option>
+                    <option class="relatorio_opcao" v-for="(programa, id) in programas"
+                    :key="id" :value="programa.id">{{programa.nome}}
+                    </option>
+                </select>
+              <p id="erroPrograma" class="none erro">Por favor, preencha este campo</p>
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Turma</label>
                 <select required class="form-select" id="selectTurma" v-on:click="buscarTurmasDeUmaFormacao()">
                     <option class="relatorio_opcao" disabled selected value="0">Turma</option>
@@ -102,7 +109,7 @@
                     </option>
                 </select>
                 <p id="erroTurma" class="none erro">Por favor, preencha este campo</p>
-            </div>
+            </div> -->
             <!-- <div class="mb-3">
               <label class="form-label fw-bold mb-0 titulo">Coordenador Técnico</label>
               <input id="coordenador" class="form-control" type="text" >
@@ -155,7 +162,7 @@
                 <li>Cargo: <span class="titulo">{{ cargo.cargo }}</span></li>
                 <li>Email: <span class="titulo">{{ cadastroParticipanteForm.email }}</span></li>
                 <!-- <li>Salário: <span class="titulo"> {{participante.salario}}</span></li> -->
-                <li>Programa de Formação - Turma: <span class="titulo"> {{turmaSelecionada.turmas}}</span></li>
+                <li>Programa de Formação: <span class="titulo"> {{programaSelecionado.nome}}</span></li>
                 <li>Observação: <span class="titulo"> {{candidato.observacao}}</span></li>
               </ul>
             </div>
@@ -227,6 +234,8 @@ export default {
         nome: ''
       },
       turmasProgramaCandidatos: [],
+      programas: [],
+      programaSelecionado: {},
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     }
   },
@@ -245,6 +254,11 @@ export default {
       http.get(`remuneracao/${idCargo}`)
         .then(response => (this.cargo = response.data))
     },
+    buscarProgramaPorId () {
+      var idPrograma = document.getElementById('selectPrograma').value
+      http.get(`programa/buscar-programas-por-id/${idPrograma}`)
+        .then(response => (this.programaSelecionado = response.data))
+    },
     validaCampos () {
       let campos = document.querySelectorAll('input')
       let campoVazio = 0
@@ -261,6 +275,7 @@ export default {
       }
     },
     abrirModal () {
+      
       document.getElementById('abreModalInvisivel').click()
     },
     enviarDados () {
@@ -271,7 +286,7 @@ export default {
       formData.append('curso', this.cadastroParticipanteForm.curso)
       formData.append('idRemuneracao', this.remuneracao.id)
       formData.append('idCandidato', this.id)
-      formData.append('idPrograma', document.getElementById('selectTurma').value)
+      formData.append('idPrograma', document.getElementById('selectPrograma').value)
       formData.append('email', this.cadastroParticipanteForm.email)
       formData.append('tce', arquivo)
       formData.append('dataEntrega', this.cadastroParticipanteForm.dataEntrega)
@@ -348,13 +363,14 @@ export default {
       return true
     },
     validaForm () {
+      console.log(document.getElementById('selectPrograma').value)
       var cpf = document.getElementById('inputCpf').value
       var instituicaoEnsino = document.getElementById('inputInstEnsino').value
       var curso = document.getElementById('inputCurso').value
       var cargo = document.getElementById('filtro-programa').value
       var email = document.getElementById('inputEmail').value
-      var turma = document.getElementById('selectTurma').value
       var dataEntrega = document.getElementById('inputDataEntregaDocumentos').value
+      var programa = document.getElementById('selectPrograma').value
       let erro = 0
       if (cpf == '') {
         document.querySelector('#erroCpf').classList.remove('none')
@@ -398,21 +414,23 @@ export default {
       } else {
         document.querySelector('#erroEmailInvalido').classList.add('none')
       }
-      if (turma == 0) {
-        document.querySelector('#erroTurma').classList.remove('none')
-        erro = 1
-      } else {
-        document.querySelector('#erroTurma').classList.add('none')
-      }
       if (dataEntrega == '') {
         document.querySelector('#erroDataEntrega').classList.remove('none')
         erro = 1
       } else {
         document.querySelector('#erroDataEntrega').classList.add('none')
       }
+       if (programa == 0) {
+        document.querySelector('#erroPrograma').classList.remove('none')
+        erro = 1
+      } else {
+        document.querySelector('#erroPrograma').classList.add('none')
+      }
       if (erro == 1) {
         return false
       } else {
+        this.buscarCargoPorId(),
+        this.buscarProgramaPorId(),
         document.getElementById('verificaCampos').click()
       }
     },
@@ -436,6 +454,8 @@ export default {
       .then(response => {
         this.candidato = response.data
       })
+    http.get('/programa')
+      .then(response => (this.programas = response.data))
 
     http.get('remuneracao/cargos')
       .then(response => (this.cargos = response.data))

@@ -302,6 +302,20 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de erro -->
+  <p class="none" id="abreModalInvisivelErro" data-bs-toggle="modal" data-bs-target="#modalErro" ></p>
+    <div class="modal fade mt-5"  id="modalErro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-size">
+            <div class="modal-content p-5 grey-background">
+                <div class="row mb-5">
+                    <div class="col">
+                        <h3 class="modal-title fw-bold titulo text-center" id="exampleModalLabel">Criação não efetuada, candidato já cadastrado!</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </main>
 </template>
 
@@ -759,11 +773,17 @@ export default {
             }, 1521)
           })
           .catch(error => {
+            this.abreModalErro()
             console.log(error)
           })
         }
       }
     },
+
+    abreModalErro () {
+      document.getElementById('abreModalInvisivelErro').click()
+    },
+
     habilitaCampos () {
       let dataConclusao = document.querySelector('#inputDataConclusao').value
       let d1 = new Date(dataConclusao)

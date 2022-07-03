@@ -37,8 +37,7 @@
                             <tbody align="center">
                             <tr class="programa" v-for="(programa, index) in programas" v-bind:key="programa">
                                 <th scope="row" width="50">{{++index}}</th>
-                                <td id="info-nome"> {{ programa.nome }}</td>
-                                <td>{{ programa.turma }}</td>
+                                <td id="info-nome"> {{ programa.nome + ' - ' + programa.turma }}</td>
                                 <td id="info-status" class="info-status"
                                     v-bind:class="(programa.status == 'ENCERRADO')?'encerrado':'em-andamento'">
                                     {{(programa.status == 'ENCERRADO')?'Encerrado':'Em andamento' }}
